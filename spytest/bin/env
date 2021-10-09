@@ -22,7 +22,7 @@ else
     export SCID_PYTHON_BIN=$SCID/tools/ActivPython/current/bin
 fi
 
-if [ -z "$SCID_TGEN_PATH=" ]; then
+if [ -z "$SCID_TGEN_PATH" ]; then
   export SCID_TGEN_PATH=$SCID/tgen
 fi
 

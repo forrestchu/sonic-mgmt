@@ -175,7 +175,7 @@ def config_ip_addr_interface(dut, interface_name='', ip_address='', subnet='', f
                     if not is_valid_ipv6_address(ip_address):
                         st.error("Invalid IPv6 address.")
                         return False
-                command = "config interface ip add {} {}/{}".format(interface_name, ip_address, subnet)
+                command = "cfgmgr intf add {}/{} dev {}".format(ip_address, subnet, interface_name)
                 output = st.config(dut, command, skip_error_check=skip_error)
             except Exception as e:
                 st.log(e)
@@ -302,7 +302,7 @@ def delete_ip_interface(dut, interface_name, ip_address, subnet="32", family="ip
     cli_type = st.get_ui_type(dut, **kwargs)
     is_secondary_ip = kwargs.get('is_secondary_ip','no').lower()
     if cli_type == 'click':
-        command = "config interface ip remove {} {}/{}".format(interface_name, ip_address, subnet)
+        command = "cfgmgr intf del {}/{} dev {}".format(ip_address, subnet, interface_name)
         st.config(dut, command, skip_error_check=skip_error)
         return True
     elif cli_type == 'klish':
@@ -1400,8 +1400,10 @@ def config_unconfig_interface_ip_addresses(dut, if_data_list=[], config='add',cl
             st.error("Invalid IP address or family or subnet {} ".format(if_data))
             return False
         if cli_type == 'click':
-            command += "sudo config interface ip {} {} {}/{} ; ".format(config,
-                                                                if_data['name'], if_data['ip'], if_data['subnet'])
+            if config == 'remove':
+                config = 'del'
+            command = "cfgmgr intf {} {}/{} dev {}".format(config,
+                                      if_data['ip'], if_data['subnet'], if_data['name'])
         elif cli_type == 'klish':
             #config = '' if config == 'add' else 'no'
             family = 'ip' if if_data['family'] == 'ipv4' else 'ipv6'
@@ -1757,7 +1759,7 @@ def config_interface_ip_addresses(dut, if_data_list={}, config='yes', cli_type='
     if config == 'yes' or config == 'add':
         config = 'add'
     elif config == 'no' or config == 'del':
-        config = 'remove'
+        config = 'del'
     else :
         st.error("Invalid config type {}".format(config))
         return False
@@ -1775,8 +1777,8 @@ def config_interface_ip_addresses(dut, if_data_list={}, config='yes', cli_type='
             return False
 
         if cli_type == 'click':
-            cmd_str = "sudo config interface ip {} {} {}/{} ".format(config,
-                                      if_data['name'], if_data['ip'], if_data['subnet'])
+            command = "cfgmgr intf {} {}/{} dev {}".format(config,
+                                      if_data['ip'], if_data['subnet'], if_data['name'])
             command.append(cmd_str)
         elif cli_type == 'klish':
             intf_info = get_interface_number_from_name(if_data['name'])
@@ -2941,3 +2943,4 @@ def create_route_leak(dut, vrf, network, **kwargs):
         st.error("Unsupported CLI_TYPE: {}".format(cli_type))
         return False
     return True
+

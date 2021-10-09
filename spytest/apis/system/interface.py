@@ -453,7 +453,7 @@ def show_interfaces_counters(dut, interface=None, property=None, cli_type=""):
     :return:
     """
     if cli_type == "click":
-        command = 'show interfaces counters'
+        command = 'show interfaces counters -p 1'
         output = st.show(dut, command)
         if interface:
             if property:
@@ -488,7 +488,7 @@ def show_interface_counters_all(dut, cli_type=''):
     """
     cli_type = st.get_ui_type(dut, cli_type=cli_type)
     if cli_type == 'click':
-        command = "show interfaces counters -a"
+        command = "show interfaces counters -a -p 1"
         return st.show(dut, command, type=cli_type)
     elif cli_type == 'klish':
         command = "show interface counters"
@@ -524,10 +524,10 @@ def show_specific_interface_counters(dut, interface_name,  cli_type=''):
     """
     cli_type = st.get_ui_type(dut, cli_type=cli_type)
     if cli_type == 'click':
-        command = "show interfaces counters -a -i {}".format(interface_name)
+        command = "show interfaces counters -a -p 1 -i {}".format(interface_name)
         if not st.is_feature_supported("show-interfaces-counters-interface-command", dut):
             st.community_unsupported(command, dut)
-            command = "show interfaces counters -a | grep -w {}".format(interface_name)
+            command = "show interfaces counters -a -p 1 | grep -w {}".format(interface_name)
         output = st.show(dut, command)
     elif cli_type == 'klish':
         command = "show interface counters | grep \"{} \"".format(interface_name)

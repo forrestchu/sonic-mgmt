@@ -9,7 +9,9 @@ from apis.system.rest import config_rest, delete_rest ,get_rest
 
 def _has_intf_range(dut):
     if not st.is_feature_supported("intf-range", dut):
+        st.log("Not support intf range")
         return False
+    st.log("Support intf range")
     return True
 
 def set_status(dut, portlist, status, cli_type=''):

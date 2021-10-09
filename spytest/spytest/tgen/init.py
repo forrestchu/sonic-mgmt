@@ -105,8 +105,9 @@ def tg_ixia_load(version, logger, logs_path=None):
     ix_path = '' if os.path.exists(os.path.join(tgen_path, version_string)) else "ixia"
     ixnetwork = os.path.join(tgen_path, ix_path, version_string, "lib")
     hl_api = os.path.join(ixnetwork, "hltapi" if os.path.exists(os.path.join(ixnetwork,"hltapi")) else "hlapi", "library")
+
     if os.path.exists(ixnetwork) and os.path.exists(hl_api):
-        ngpf_api = os.path.join(hl_api, "common", "ixiangpf", "python")
+        ngpf_api = os.path.join(hl_api, "library", "common", "ixiangpf", "python")
         ixn_py_api = os.path.join(ixnetwork, "PythonApi")
         if version_string in ixia_hltapi_map:
             os.environ["IXIA_VERSION"] = ixia_hltapi_map[version_string]
@@ -121,10 +122,12 @@ def tg_ixia_load(version, logger, logs_path=None):
     #  9.0 onwards for BRCM
     tcl_path = os.getenv("SCID_TCL85_BIN", def_tcl_path)
     tcl_lib_path = os.path.join(tcl_path, "..", "lib")
-    ixia_root = os.path.join(tgen_path, "ixia", "all", "ixia-" + py_version)
+    ixia_root = os.path.join(tgen_path, "ixia", "all", "ixia")
+    logger.error("path tcl: {}, {}, {}".format(tcl_path, tcl_lib_path, ixia_root))
     
     ixnetwork_version = os.getenv("IXNETWORK_VERSION", version_string)
     hltapi_version = os.getenv("HLAPI_VERSION", version_string)
+    logger.error("version: {}, {}".format(ixnetwork_version, hltapi_version))
     
     if not os.path.exists(ixia_root):
         ixia_root = os.path.join(tgen_path, "ixia")
@@ -133,6 +136,7 @@ def tg_ixia_load(version, logger, logs_path=None):
     ixn_py_api = os.path.join(ixia_root, "ixnetwork", ixnetwork_version,"lib", "PythonApi")
     ixn_tcl_api_1 = os.path.join(ixia_root, "ixnetwork", ixnetwork_version,"lib", "IxTclNetwork")
     ixn_tcl_api_2 = os.path.join(ixia_root, "ixnetwork", ixnetwork_version,"lib", "TclApi", "IxTclNetwork")
+    logger.error("path tcl: {}, {}, {}".format(hlt_api, ngpf_api, ixn_py_api))
 
     os.environ["IXIA_VERSION"] = ixia_hltapi_map[version_string]
     os.environ["TCLLIBPATH"] = " ".join([hlt_api, ixn_tcl_api_1, ixn_tcl_api_2, tcl_lib_path])

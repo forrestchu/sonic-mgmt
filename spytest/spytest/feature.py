@@ -83,7 +83,7 @@ class Feature(object):
     def init_master(self):
         self.set_unsupported(feature_names)
         self.set_supported("show-interfaces-counters-interface-command")
-        self.set_supported("intf-range", "interface-mtu")
+        self.set_supported("interface-mtu")
         self.set_supported("show-kdump-status-command")
         self.set_supported("span-mirror-session")
 
@@ -105,6 +105,8 @@ class Feature(object):
 
     def init_broadcom(self):
         self.set_supported(feature_names)
+        self.set_unsupported("intf-range")
+        self.set_unsupported("vlan-range")
 
     def is_supported(self, name):
         if name not in self.supported:

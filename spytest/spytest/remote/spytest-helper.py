@@ -1219,6 +1219,6 @@ if __name__ == "__main__":
         do_service_stop(args.service_stop)
     elif args.service_get:
         do_service_get(args.service_get)
-    else:
-       print("Error: Invalid/Unknown arguments provided for the script.")
+    #else:
+    #   print("Error: Invalid/Unknown arguments provided for the script.")
 

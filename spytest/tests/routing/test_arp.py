@@ -197,6 +197,9 @@ def test_ft_arp_dynamic_renew_traffic_test(fixture_ft_arp_dynamic_renew_traffic_
                     mac_src=data.t2d1_mac_addr,transmit_mode="continuous",mac_dst=d1_mac_addr,
                     l2_encap='ethernet_ii_vlan',l3_protocol="ipv4",ip_dst_addr=data.t1d1_ip_addr,
                     ip_src_addr=data.t2d1_ip_addr,vlan_id=data.vlan_1,vlan="enable")
+    # XXX: For test
+    tg.tg_traffic_config(mode="modify", stream_id=s1['stream_id'], mac_dst=d1_mac_addr, mac_src=data.t2d1_mac_addr)
+
     interface_obj.clear_interface_counters(dut1)
     tg.tg_traffic_control(action="run", stream_handle=s1['stream_id'])
 

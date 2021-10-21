@@ -18,8 +18,9 @@ def config_save(dut,shell='sonic', skip_error_check=True, **kwargs):
         command = 'config save -y'
         [retvals, exceps] = utils.exec_foreach(True, dut_li, st.config, command)
     if shell == "vtysh" or cli_type == 'click':
-        command = 'do copy running-config startup-config'
-        [retvals, exceps] = utils.exec_foreach(True, dut_li, st.config, command, type="vtysh", skip_error_check=skip_error_check)
+        #repleace by alibaba cli
+        command = 'copy running-config startup-config'
+        [retvals, exceps] = utils.exec_foreach(True, dut_li, st.config, command, type="alicli", skip_error_check=skip_error_check)
     if cli_type == 'klish':
         #Need to execute write mem in case of klish also. Once all klish conversion is complete, only one command will be executed.
         command = "do write memory"

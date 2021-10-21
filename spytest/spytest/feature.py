@@ -107,6 +107,11 @@ class Feature(object):
         self.set_supported(feature_names)
         self.set_unsupported("intf-range")
         self.set_unsupported("vlan-range")
+        self.set_unsupported("config-loopback-add-command")
+        self.set_unsupported("klish")
+        self.set_unsupported("bcmcmd")
+        self.set_unsupported("show-bgp-summary-click-command")
+        self.set_unsupported("show-kdump-status-command")
 
     def is_supported(self, name):
         if name not in self.supported:

@@ -246,7 +246,7 @@ def get_interface_counters_all(dut, port=None, cli_type=''):
     cli_type = st.get_ui_type(dut, cli_type=cli_type)
     if cli_type == 'click':
         # To avoid traffic rate inaccuracy, run and ignore first show command in click & use second one
-        st.show(dut, "show interfaces counters -a", type=cli_type)
+        st.show(dut, "show interfaces counters -a -p 5", type=cli_type)
         if port:
             command = "show interfaces counters -a -i {}".format(port)
             if not st.is_feature_supported("show-interfaces-counters-interface-command", dut):
@@ -254,7 +254,7 @@ def get_interface_counters_all(dut, port=None, cli_type=''):
                 command = "show interfaces counters -a | grep -w {}".format(port)
             return st.show(dut, command)
         else:
-            return st.show(dut, "show interfaces counters -a", type=cli_type)
+            return st.show(dut, "show interfaces counters -a -p 5", type=cli_type)
     elif cli_type == 'klish':
         if port:
             cmd = "show interface counters rate | grep \"{} \"".format(port)

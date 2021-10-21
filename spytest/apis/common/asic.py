@@ -70,20 +70,22 @@ def get_counters(dut, interface=None, skip_tmpl=False):
     return bcm_show(dut, command, skip_tmpl=skip_tmpl)
 
 def get_ipv4_route_count(dut, timeout=120):
-    command = 'bcmcmd "l3 defip show" | wc -l'
-    output = bcm_show(dut, command, skip_tmpl=True, max_time=timeout)
-    x = re.search(r"\d+", output)
+    #yoapei, repleace by curl
+    command = "curl http://127.0.0.1:12346/route -s | grep ipv4 "
+    output = st.show(dut, command, skip_tmpl=True, max_time=timeout, skip_error_check=True)
+    x = re.findall(r"\d+", output)
     if x:
-        return int(x.group()) - 5
+        return int(x[1])
     else:
         return -1
 
 def get_ipv6_route_count(dut, timeout=120):
-    command = 'sudo bcmcmd "l3 ip6route show" | wc -l'
-    output = st.show(dut, command, skip_tmpl=True, max_time=timeout)
-    x = re.search(r"\d+", output)
+    #yaopei, repleace by curl
+    command = "curl http://127.0.0.1:12346/route -s | grep ipv6 "
+    output = st.show(dut, command, skip_tmpl=True, max_time=timeout, skip_error_check=True)
+    x = re.findall(r"\d+", output)
     if x:
-        return int(x.group()) - 7
+        return int(x[1])
     else:
         return -1
 

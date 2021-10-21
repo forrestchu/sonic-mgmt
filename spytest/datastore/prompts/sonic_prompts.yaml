@@ -182,6 +182,13 @@ patterns:
 
     mgmt-policy-map-flow-view : '--sonic-mgmt--\(config-policy-map-flow\)#'
 
+   # =====================================================================
+    # ALI-cli Patterns
+    # =====================================================================
+    alicli-user: '(sonic|{})#'
+    alicli-config: '(sonic|{})\(config\)#'
+    alicli-intf-config: '(sonic|{})\(config-if\)#'
+    alicli-any-config: '(sonic|{})\(config[^)]*\)#'
 
 ##########################################################################
 # MODES:
@@ -346,6 +353,13 @@ modes:
 
     mgmt-policy-map-flow-view : ['mgmt-config', 'class {} priority {}', 'exit']
 
+    # =====================================================================
+    # ALI-cli modes
+    # =====================================================================
+    alicli-user: ['normal-user', 'sudo cli', 'exit']
+    alicli-config: ['alicli-user', 'configure terminal', 'exit']
+    alicli-intf-config: ['alicli-config', 'interface {}', 'exit']
+    alicli-any-config: ['alicli-user', '', 'end']
 
 ##########################################################################
 # REQUIRED_ARGS:
@@ -457,6 +471,11 @@ required_args:
     mgmt-router-bgp-peer-group-config : ['peer_group']
     # =============================================================
 
+    # =============================================================
+    # added by ALI-cli
+    # =============================================================
+    alicli-intf-config: ['interface']
+
 ##########################################################################
 # SUDO_INCLUDE_PROMPTS:
 #    Prompts where config commands should be executed with SUDO.
@@ -467,4 +486,4 @@ sudo_include_prompts: ['normal-user']
 # do_exclude_prompts:
 #    Prompts where show commands should be not be executed with DO.
 ##########################################################################
-do_exclude_prompts: ['normal-user', 'vtysh-user', 'mgmt-user', 'root-user']
+do_exclude_prompts: ['normal-user', 'vtysh-user', 'mgmt-user', 'root-user', 'alicli-user']

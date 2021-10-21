@@ -54,7 +54,7 @@ def l3_performance_enhancements_module_hooks(request):
     # Module Configuration
     st.log("L3 Performance Enhancements Module Configuration.")
     # Configuring v4/v6 routing interfaces on the DUT.
-    ipfeature.config_ipv6(dut, action='enable')
+    #ipfeature.config_ipv6(dut, action='enable')
     ipfeature.config_ip_addr_interface(dut, dut_to_tg_port_1, data.my_ip_addr, data.ip_prefixlen, family="ipv4")
     ipfeature.config_ip_addr_interface(dut, dut_to_tg_port_1, data.my_ipv6_addr, data.ipv6_prefixlen, family="ipv6")
     ipfeature.config_ip_addr_interface(dut, dut_to_tg_port_2, data.intf_ip_addr, data.ip_prefixlen, family="ipv4")
@@ -586,6 +586,9 @@ def test_ft_l3_performance_enhancements_v4_bgp_link_flap_convergence_time(fixtur
     if not interface_obj.poll_for_interface_status(dut, dut_to_tg_port_1, 'oper', 'down', iteration=10, delay=1):
         st.report_fail('interface_admin_shut_down_fail', dut_to_tg_port_1)
 
+    #aone 37363239
+    st.wait(5)
+
     st.banner("# Measuring Convergence time ( control plane + data plane ) taken for BGP Link Flap scenario on HWSKU {}".format(hwsku_under_test))
 
     # Startup the routing interface link.
@@ -704,7 +707,7 @@ def test_cli_validation_ip_address():
     start_time = datetime.datetime.now()
     st.log("IP address config on 20 vlan routing interface using click")
     for each in range(101,121):
-        cmd = ["config interface ip add Vlan{} 192.168.{}.1/31".format(each, each)]
+        cmd = ["sudo cfgmgr intf add 192.168.{}.1/31 dev Vlan{}".format(each, each)]
         st.config(dut, cmd, type="click")
     end_time = datetime.datetime.now()
     time_diff = end_time - start_time
@@ -712,7 +715,7 @@ def test_cli_validation_ip_address():
 
     st.log("IP address unconfig on 20 vlan routing interface using click")
     for each in range(101, 121):
-        cmd = ["config interface ip remove Vlan{} 192.168.{}.1/31".format(each, each)]
+        cmd = ["sudo cfgmgr intf del 192.168.{}.1/31 dev Vlan{}".format(each, each)]
         st.config(dut, cmd, type="click")
     st.report_tc_pass("FtOpSoRtPerfFn054","test_case_passed")
 

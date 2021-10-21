@@ -4804,6 +4804,30 @@ class Net(object):
                             return ("", op, "vtysh-user")
                         if opts.conf:
                             return ("", op, "vtysh-any-config")
+        elif current_mode.startswith("alicli"):
+            if opts.ctype == "alicli":
+                if is_show:
+                    if current_mode == "alicli-user":
+                        return ("", op, current_mode)
+                    if cmd.startswith("do "):
+                        return ("", op, "alicli-any-config")
+                    return ("do ", op, "alicli-any-config")
+                else:
+                    if current_mode == "alicli-user":
+                        if cmd in ["exit"]:
+                            return ("", op, "normal-user")
+                        if not opts.conf:
+                            return ("", op, "alicli-user")
+                    elif current_mode == "alicli-config":
+                        if cmd in ["end", "exit"]:
+                            return ("", op, "alicli-user")
+                        if opts.conf:
+                            return ("", op, "alicli-any-config")
+                    else:
+                        if cmd in ["end"]:
+                            return ("", op, "alicli-user")
+                        if opts.conf:
+                            return ("", op, "alicli-any-config")
 
         # change the mode
         if opts.ctype == "click":
@@ -4824,6 +4848,12 @@ class Net(object):
         elif opts.ctype == "lldp":
             op = self._change_prompt(devname, "lldp-user", startmode=current_mode)
             return ("", op, "lldp-user")
+        elif opts.ctype == "alicli" and (is_show or not opts.conf):
+            op = self._change_prompt(devname, "alicli-user", startmode=current_mode)
+            return ("", op, "alicli-user")
+        elif opts.ctype == "alicli":
+            op = self._change_prompt(devname, "alicli-config", startmode=current_mode)
+            return ("", op, "alicli-any-config")
 
         return (prefix, op, "unknown-mode")
 

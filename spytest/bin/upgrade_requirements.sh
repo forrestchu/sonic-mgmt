@@ -12,6 +12,7 @@ export LIBS=
 export LDSHARED="gcc -pthread -shared"
 export PYMSSQL_BUILD_WITH_BUNDLED_FREETDS=1
 
+$SPYTEST_PYTHON -m pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
 $SPYTEST_PYTHON -m pip install -r $dir/requirements0.txt
 #$SPYTEST_PYTHON -m pip install -r $dir/requirements1.txt
 

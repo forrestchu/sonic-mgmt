@@ -3,4 +3,7 @@ FROM ubuntu:16.04
 COPY ./build_env.sh /var/build_env.sh
 RUN /var/build_env.sh
 
+COPY ./spytest/bin/* /tmp/
+RUN /tmp/upgrade_requirements.sh
+
 USER $user

@@ -28,7 +28,8 @@ apt-get install -y libxss1
 apt-get install -y libxss-dev 
 apt-get install -y expect
 
-BASE_URL="http://30.57.186.117/spytest"
+#BASE_URL="http://30.57.186.117/spytest"
+BASE_URL="http://10.97.244.220/spytest"
 
 cd /tmp
 # Download packages
@@ -72,5 +73,3 @@ cd /tmp/
 mv Ixia.tcl-fix.tcl /projects/scid/tgen/ixia/all/ixia/hlapi/9.10.2007.43/Ixia.tcl
 
 rm *.gz *.tar *.tgz
-
-/var/$USER/spytest/bin/upgrade_requirements.sh

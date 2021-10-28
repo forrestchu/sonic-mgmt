@@ -269,9 +269,10 @@ def add_vlan_member(dut, vlan, port_list, tagging_mode=False, skip_error=False, 
     for each_port in port_li:
         if cli_type == "click":
             if tagging_mode:
-                command = "config vlan member add {} {}".format(vlan, each_port)
+                #yaopei
+                command = "cfgmgr vlan add vlan {} dev {}".format(vlan, each_port)
             else:
-                command = "config vlan member add {} {} -u ".format(vlan, each_port)
+                command = "cfgmgr vlan add vlan {} dev {} untagged".format(vlan, each_port)
 
             # Here handling the error while adding interface to vlan
             out = st.config(dut, command, skip_error_check=True)
@@ -362,7 +363,7 @@ def delete_vlan_member(dut, vlan, port_list, tagging_mode=False, cli_type = '', 
     rest_fail_status = False
     for each_port in port_li:
         if cli_type == "click":
-            command = "config vlan member del {} {}".format(vlan, each_port)
+            command = "cfgmgr vlan del vlan {} dev {}".format(vlan, each_port)
             out = st.config(dut, command, skip_error_check=skip_error_check)
             if "is not a member of Vlan{}".format(vlan) in out:
                 st.error("{} is not a member of Vlan{}".format(each_port, vlan))
@@ -488,8 +489,10 @@ def verify_vlan_config(dut, vlan_list, tagged=None, untagged=None, name=None, cl
 
     vlan_li = map(str, vlan_list) if isinstance(vlan_list, list) else [vlan_list]
     output = show_vlan_config(dut, cli_type=cli_type)
+    output_brief = show_vlan_brief(dut, cli_type=cli_type)
     for each_vlan in vlan_li:
         entries = filter_and_select(output, None, {"vid": each_vlan})
+        entries_brief = filter_and_select(output_brief, None, {"vid": each_vlan})
         if not entries:
             st.log("Provided VLAN {} entry is not exist in table".format(each_vlan))
             return False
@@ -497,7 +500,7 @@ def verify_vlan_config(dut, vlan_list, tagged=None, untagged=None, name=None, cl
             interface_list = list(tagged) if isinstance(tagged, list) else [tagged]
             for each_intr in interface_list:
                 if cli_type in ["click", "rest-put", "rest-patch"]:
-                    if not filter_and_select(entries, None, {"member": each_intr, "mode": "tagged"}):
+                    if not filter_and_select(entries_brief, None, {"ports": each_intr, "mode": "tagged"}):
                         st.log("Provided interface {} is not a tagged member of Vlan {}".format(each_intr, each_vlan))
                         return False
                 elif cli_type == "klish":
@@ -511,7 +514,7 @@ def verify_vlan_config(dut, vlan_list, tagged=None, untagged=None, name=None, cl
             interface_list = list(untagged) if isinstance(untagged, list) else [untagged]
             for each_intr in interface_list:
                 if cli_type in ["click", "rest-put", "rest-patch"]:
-                    if not filter_and_select(entries, None, {"member": each_intr, "mode": "untagged"}):
+                    if not filter_and_select(entries_brief, None, {"ports": each_intr, "mode": "untagged"}):
                         st.log("Provided interface {} is not a untagged member of Vlan {}".format(each_intr, each_vlan))
                         return False
                 elif cli_type == "klish":
@@ -576,18 +579,19 @@ def _clear_vlan_configuration_helper(dut_list, cli_type = ''):
         st.log("############## {} : VLAN Cleanup ################".format(dut))
         if cli_type == 'click':
             output = show_vlan_config(dut, cli_type=cli_type)
+            output_brief = show_vlan_brief(dut, cli_type=cli_type)
 
             if not _has_vlan_range(dut):
                 (vlans, commands) = ({}, [])
-                for eac in output:
-                    (vid, member) = (eac['vid'], eac['member'])
+                for eac in output_brief:
+                    (vid, member) = (eac['vid'], eac['ports'])
                     if vid:
                         vlans[vid] = 1
                         if member:
-                            command = "config vlan member del {} {}".format(vid, member)
+                            command = "cfgmgr vlan del vlan {} dev {}".format(vid, member)
                             commands.append(command)
                 for vid in vlans.keys():
-                    command = "config vlan del {}".format(vid)
+                    command = "cfgmgr vlan del vlan {}".format(vid)
                     commands.append(command)
                 st.config(dut, commands)
                 continue

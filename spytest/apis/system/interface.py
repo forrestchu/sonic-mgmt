@@ -654,8 +654,12 @@ def show_queue_counters(dut, interface_name, queue=None, cli_type=''):
     """
     cli_type = st.get_ui_type(dut, cli_type=cli_type)
     if cli_type == 'click':
-        command = "show queue counters {}".format(interface_name)
-        output = st.show(dut, command, type=cli_type)
+        if interface_name == "CPU":
+            command = "show copp stat"
+            output = st.show(dut, command, type='alicli', skip_tmpl=False)
+        else:
+            command = "show queue counters {}".format(interface_name)
+            output = st.show(dut, command, type=cli_type)
     elif cli_type == 'klish':
         if interface_name == "CPU":
             command = "show queue counters interface CPU"
@@ -686,8 +690,9 @@ def clear_queue_counters(dut, interfaces_list=[], cli_type=''):
     if cli_type == 'click':
         interface_li = make_list(interfaces_list)
         if not interface_li:
-            command = "show queue counters -c"
-            st.show(dut, command)
+            #yao, chg to queuestat -c
+            command = "queuestat -c"
+            st.show(dut, command, skip_tmpl=True)
         else:
             for each_port in interface_li:
                 command = "show queue counters {} -c".format(each_port)

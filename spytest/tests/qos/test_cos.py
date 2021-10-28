@@ -337,7 +337,7 @@ def test_ft_cos_tc_queue_map():
     st.wait(10)
     data.tg.tg_traffic_control(action='stop', stream_handle=data.streams['vlan_tagged'])
     st.log("Verifying FDB table")
-    if not mac_obj.verify_mac_address_table(vars.D1, data.cos_dest_mac, type='Dynamic'):
+    if not mac_obj.verify_mac_address_table(vars.D1, data.cos_dest_mac, type='DYNAMIC'):
         st.report_fail("mac_address_verification_fail")
     st.log("Configuring cos queue and binding it on interfaces")
     configuring_tc_to_queue_map()

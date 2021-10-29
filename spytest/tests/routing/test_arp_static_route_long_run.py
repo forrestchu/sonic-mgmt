@@ -154,6 +154,9 @@ def test_ft_arp_static_route_config_mgmt_verifying_config_with_save_fast_reboot(
     Verify static ARP route config after save fast-reboot
     '''
     st.log("Performing fast-reboot on DUT")
+    #TODO using warm reboot feature
+    if not data.platform.lower() in data.constants['WARM_REBOOT_SUPPORTED_PLATFORMS']:
+        st.report_unsupported('test_case_unsupported')
     st.reboot(vars.D1, "fast")
     st.log("Verifying static route entries after save and fast-reboot")
     st.wait(5)

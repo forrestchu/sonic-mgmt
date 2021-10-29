@@ -22,7 +22,7 @@ def ensure_certificate(dut):
     if st.is_feature_supported("certgen-command", dut):
         st.config(dut, "/usr/bin/certgen admin")
 
-def get_system_status(dut, service=None, skip_error_check=False):
+def get_system_status(dut, service=None, skip_error_check=True):
     output = "???"
     try:
         output = st.show(dut, "show system status", skip_tmpl=True,

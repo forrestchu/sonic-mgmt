@@ -112,6 +112,7 @@ class Feature(object):
         self.set_unsupported("bcmcmd")
         self.set_unsupported("show-bgp-summary-click-command")
         self.set_unsupported("show-kdump-status-command")
+        self.set_unsupported("config-acl-table-delete-command")
 
     def is_supported(self, name):
         if name not in self.supported:

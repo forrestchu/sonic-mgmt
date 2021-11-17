@@ -158,6 +158,11 @@ def get_args_l3(identifier, value, attribs, pps, tg_type):
        if value == "4/4":
           tmp['l4_protocol'] = "tcp"
           tmp['tcp_rst_flag'] = 1
+    if identifier == "TTL":
+        tmp['ip_ttl'] = attribs['TTL']
+    if identifier == "DSCP":
+        tmp['ip_dscp'] = attribs['DSCP']
+
     return tmp
 
 def report_result(status):

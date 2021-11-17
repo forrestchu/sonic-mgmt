@@ -11,18 +11,6 @@ acl_json_config_d1 = {
       "stage": "EGRESS",
       "ports": [],
       "policy_desc": "L3_IPV4_EGRESS"
-    },
-    "L2_MAC_INGRESS": {
-      "type": "L2",
-      "stage": "INGRESS",
-      "ports": [],
-      "policy_desc": "L2_MAC_INGRESS"
-    },
-    "L2_MAC_EGRESS": {
-      "type": "L2",
-      "stage": "EGRESS",
-      "ports": [],
-      "policy_desc": "L2_MAC_EGRESS"
     }
   },
   "ACL_RULE": {
@@ -38,45 +26,36 @@ acl_json_config_d1 = {
     },
     "L3_IPV4_INGRESS|rule2": {
       "PACKET_ACTION": "FORWARD",
-      "SRC_IP": "5.5.5.5/32",
-      "DST_IP": "9.9.9.9/32",
+      "SRC_IP": "1.1.1.4/32",
+      "DST_IP": "2.2.2.4/32",
       "L4_SRC_PORT": 100,
       "IP_PROTOCOL": 17,
       "PRIORITY": 2000
     },
     "L3_IPV4_INGRESS|rule4": {
       "PACKET_ACTION": "DROP",
-      "SRC_IP": "9.9.9.9/32",
-      "DST_IP": "12.12.12.12/32",
+      "SRC_IP": "1.1.1.5/32",
+      "DST_IP": "2.2.2.5/32",
       "L4_DST_PORT": 300,
       "IP_PROTOCOL": 6,
       "PRIORITY": 4000
     },
     "L3_IPV4_INGRESS|rule5": {
       "PACKET_ACTION": "DROP",
-      "SRC_IP": "185.185.1.1/32",
-      "DST_IP": "18.18.1.1/32",
+      "SRC_IP": "1.1.1.6/32",
+      "DST_IP": "2.2.2.6/32",
       "TCP_FLAGS": "4/4",
       "PRIORITY": 5000
     },
-    "L3_IPV4_INGRESS|rule6": {
-      "PACKET_ACTION": "REDIRECT",
-      "SRC_IP": "176.185.1.1/32",
-      "DST_IP": "10.18.1.1/32",
-      "L4_SRC_PORT": 43,
-      "L4_DST_PORT": 567,
-      "IP_PROTOCOL": 6,
-      "PRIORITY": 5000
-    },
-    "L3_IPV4_INGRESS|PermiAny7": {
+    "L3_IPV4_INGRESS|PermitAny7": {
       "PACKET_ACTION": "FORWARD",
       "IP_TYPE": "IPV4ANY",
       "PRIORITY": 100
     },
     "L3_IPV4_EGRESS|rule1": {
       "PACKET_ACTION": "FORWARD",
-      "SRC_IP": "192.138.10.1/32",
-      "DST_IP": "55.46.45.2/32",
+      "SRC_IP": "2.2.2.2/32",
+      "DST_IP": "1.1.1.1/32",
       "L4_SRC_PORT": 43,
       "L4_DST_PORT": 567,
       "DSCP": 61,
@@ -85,16 +64,16 @@ acl_json_config_d1 = {
     },
     "L3_IPV4_EGRESS|rule2": {
       "PACKET_ACTION": "DROP",
-      "SRC_IP": "88.67.45.9/32",
-      "DST_IP": "12.12.12.12/32",
+      "SRC_IP": "2.2.2.4/32",
+      "DST_IP": "1.1.1.4/32",
       "IP_PROTOCOL": 17,
       "DSCP": 61,
       "PRIORITY": 4000
     },
     "L3_IPV4_EGRESS|rule3": {
       "PACKET_ACTION": "DROP",
-      "SRC_IP": "185.185.1.1/32",
-      "DST_IP": "181.182.1.1/32",
+      "SRC_IP": "2.2.2.5/32",
+      "DST_IP": "1.1.1.5/32",
       "L4_DST_PORT": 567,
       "IP_PROTOCOL": 6,
       "TCP_FLAGS": "4/4",
@@ -110,45 +89,77 @@ acl_json_config_d1 = {
       "IP_TYPE": "IPV4ANY",
       "IP_PROTOCOL": 17,
       "PRIORITY": 100
-    },
-    "L2_MAC_INGRESS|macrule1": {
-      "PACKET_ACTION": "FORWARD",
-      "SRC_MAC": "00:0a:01:00:00:03/ff:ff:ff:ff:ff:ff",
-      "DST_MAC": "00:0a:01:00:11:04/ff:ff:ff:ff:ff:ff",
-      "VLAN": "",
-      # "PCP":4,
-      # "DEI":1,
-      "PRIORITY": 1000
-    },
-    "L2_MAC_INGRESS|macrule2": {
-      "PACKET_ACTION": "DROP",
-      "SRC_MAC": "00:0a:01:00:00:05/ff:ff:ff:ff:ff:ff",
-      "DST_MAC": "00:0a:01:00:11:06/ff:ff:ff:ff:ff:ff",
-      "VLAN": "",
-      "PRIORITY": 900
-    },
-    "L2_MAC_EGRESS|macrule3": {
-      "PACKET_ACTION": "FORWARD",
-      "SRC_MAC": "00:0a:01:00:11:04/ff:ff:ff:ff:ff:ff",
-      "DST_MAC": "00:0a:01:00:00:03/ff:ff:ff:ff:ff:ff",
-      "VLAN": "",
-      "PRIORITY": 2000
-   },
-    "L2_MAC_EGRESS|macrule4": {
-      "PACKET_ACTION": "DROP",
-      "SRC_MAC": "00:0a:01:00:11:06/ff:ff:ff:ff:ff:ff",
-      "DST_MAC": "00:0a:01:00:00:05/ff:ff:ff:ff:ff:ff",
-      "VLAN": "",
-      "PRIORITY": 9000
-    },
-    "L2_MAC_EGRESS|macrule5": {
-      "PACKET_ACTION": "DROP",
-      "VLAN": "",
-      "ETHER_TYPE":0x0810,
-      "PRIORITY": 90
     }
   }
 }
+
+acl_json_config_qos = {
+  "ACL_TABLE": {
+    "QOS": {
+      "type": "RDMA",
+      "policy_desc": "QOS",
+      "ports": [],
+      "stage": "ingress"
+    }
+  },
+  "ACL_RULE": {
+    "QOS|RULE_1": {
+      "IP_PROTOCOL": 17,
+      "PACKET_ACTION": "QUEUE:3",
+      "PRIORITY": 2000
+    },
+    "QOS|RULE_2": {
+      "IP_PROTOCOL": 6,
+      "PACKET_ACTION": "QUEUE:3",
+      "PRIORITY": 2001
+    },
+    "QOS|RULE_3": {
+      "DSCP": 60,
+      "PACKET_ACTION": "REMARK-DSCP:40",
+      "PRIORITY": 5000
+    },
+    "QOS|PermiAny4": {
+      "IP_TYPE": "IPV4ANY",
+      "PACKET_ACTION": "FORWARD",
+      "PRIORITY": 1000
+    },
+    "QOS|PermiAny5": {
+      "IP_TYPE": "IPV6ANY",
+      "PACKET_ACTION": "FORWARD",
+      "PRIORITY": 1001
+    }
+  }
+}
+
+acl_json_config_egress_qos_dscp = {
+  "ACL_TABLE": {
+    "L3_IPV6_DSCP_EGRESS": {
+      "type": "L3V6",
+      "stage": "EGRESS",
+      "ports": [],
+      "policy_desc": "L3_IPV6_EGRESS"
+    },
+    "L3_IPV4_DSCP_EGRESS": {
+      "type": "L3",
+      "stage": "EGRESS",
+      "ports": [],
+      "policy_desc": "L3_IPV4_EGRESS"
+    }
+  },
+  "ACL_RULE": {
+    "L3_IPV6_DSCP_EGRESS|RULE_1": {
+      "DSCP": 40,
+      "PACKET_ACTION": "FORWARD",
+      "PRIORITY": 2000
+    },
+    "L3_IPV4_DSCP_EGRESS|RULE_1": {
+      "DSCP": 40,
+      "PACKET_ACTION": "FORWARD",
+      "PRIORITY": 2000
+    }
+  }
+}
+
 acl_json_config_v4_switch = {
   "ACL_TABLE": {
     "L3_IPV4_INGRESS": {
@@ -443,24 +454,24 @@ acl_json_config_d2 = {
   "ACL_RULE": {
     "L3_IPV6_INGRESS|rule1": {
       "PACKET_ACTION": "FORWARD",
-      "SRC_IPV6": "2001::10/128",
-      "DST_IPV6": "3001::10/128",
+      "SRC_IPV6": "2001::2/128",
+      "DST_IPV6": "1001::2/128",
       "L4_SRC_PORT": 100,
       "IP_PROTOCOL": 6,
       "PRIORITY": 1000
     },
     "L3_IPV6_INGRESS|rule3": {
       "PACKET_ACTION": "DROP",
-      "SRC_IPV6": "6001::10/128",
-      "DST_IPV6": "7001::10/128",
+      "SRC_IPV6": "2001::4/128",
+      "DST_IPV6": "1001::4/128",
       "L4_DST_PORT": 300,
       "IP_PROTOCOL": 6,
       "PRIORITY": 4000
     },
     "L3_IPV6_INGRESS|rule4": {
       "PACKET_ACTION": "DROP",
-      "SRC_IPV6": "8001::10/128",
-      "DST_IPV6": "9001::10/128",
+      "SRC_IPV6": "2001::5/128",
+      "DST_IPV6": "1001::5/128",
       "L4_DST_PORT": 100,
       "IP_PROTOCOL": 17,
       "PRIORITY": 5000
@@ -478,16 +489,16 @@ acl_json_config_d2 = {
     },
       "L3_IPV6_EGRESS|rule1": {
       "PACKET_ACTION": "FORWARD",
-      "SRC_IPV6": "2001::10/128",
-      "DST_IPV6": "3001::10/128",
+      "SRC_IPV6": "1001::2/128",
+      "DST_IPV6": "2001::2/128",
       "IP_PROTOCOL": 6,
       "L4_DST_PORT": 560,
       "PRIORITY": 1000
     },
     "L3_IPV6_EGRESS|rule4": {
       "PACKET_ACTION": "DROP",
-      "SRC_IPV6": "8001::10/128",
-      "DST_IPV6": "9001::10/128",
+      "SRC_IPV6": "1001::4/128",
+      "DST_IPV6": "2001::4/128",
       "IP_PROTOCOL": 17,
       "L4_SRC_PORT": 560,
       "PRIORITY": 5000

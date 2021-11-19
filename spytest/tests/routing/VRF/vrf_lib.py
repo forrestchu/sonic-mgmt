@@ -64,19 +64,19 @@ def vrf_base_unconfig():
     data.tg1.tg_traffic_control(action = 'reset', port_handle = data.tg_dut1_p1)
     data.tg2.tg_traffic_control(action = 'reset', port_handle = data.tg_dut2_p1)
 
-    data.tg1.tg_interface_config(port_handle = data.tg_dut1_p1, handle=data.d1_p1_intf_v4.get('1')['handle'], mode='destroy')
-    data.tg1.tg_interface_config(port_handle = data.tg_dut1_p1, handle=data.d1_p1_intf_v4.get('2')['handle'], mode='destroy')
-    data.tg1.tg_interface_config(port_handle = data.tg_dut1_p1, handle=data.d1_p1_intf_v4.get('3')['handle'], mode='destroy')
-    data.tg1.tg_interface_config(port_handle = data.tg_dut1_p1, handle=data.d1_p1_intf_v6.get('1')['handle'], mode='destroy')
-    data.tg1.tg_interface_config(port_handle = data.tg_dut1_p1, handle=data.d1_p1_intf_v6.get('2')['handle'], mode='destroy')
-    data.tg1.tg_interface_config(port_handle = data.tg_dut1_p1, handle=data.d1_p1_intf_v6.get('3')['handle'], mode='destroy')
+    data.tg1.tg_interface_config(port_handle = data.tg_dut1_p1, handle=data.d1_p1_intf_v4.get('11')['handle'], mode='destroy')
+    data.tg1.tg_interface_config(port_handle = data.tg_dut1_p1, handle=data.d1_p1_intf_v4.get('12')['handle'], mode='destroy')
+    data.tg1.tg_interface_config(port_handle = data.tg_dut1_p1, handle=data.d1_p1_intf_v4.get('13')['handle'], mode='destroy')
+    data.tg1.tg_interface_config(port_handle = data.tg_dut1_p1, handle=data.d1_p1_intf_v6.get('11')['handle'], mode='destroy')
+    data.tg1.tg_interface_config(port_handle = data.tg_dut1_p1, handle=data.d1_p1_intf_v6.get('12')['handle'], mode='destroy')
+    data.tg1.tg_interface_config(port_handle = data.tg_dut1_p1, handle=data.d1_p1_intf_v6.get('13')['handle'], mode='destroy')
 
-    data.tg1.tg_interface_config(port_handle = data.tg_dut2_p1, handle=data.d2_p1_intf_v4.get('6')['handle'], mode='destroy')
-    data.tg1.tg_interface_config(port_handle = data.tg_dut2_p1, handle=data.d2_p1_intf_v4.get('7')['handle'], mode='destroy')
-    data.tg1.tg_interface_config(port_handle = data.tg_dut2_p1, handle=data.d2_p1_intf_v4.get('8')['handle'], mode='destroy')
-    data.tg1.tg_interface_config(port_handle = data.tg_dut2_p1, handle=data.d2_p1_intf_v6.get('6')['handle'], mode='destroy')
-    data.tg1.tg_interface_config(port_handle = data.tg_dut2_p1, handle=data.d2_p1_intf_v6.get('7')['handle'], mode='destroy')
-    data.tg1.tg_interface_config(port_handle = data.tg_dut2_p1, handle=data.d2_p1_intf_v6.get('8')['handle'], mode='destroy')
+    data.tg1.tg_interface_config(port_handle = data.tg_dut2_p1, handle=data.d2_p1_intf_v4.get('16')['handle'], mode='destroy')
+    data.tg1.tg_interface_config(port_handle = data.tg_dut2_p1, handle=data.d2_p1_intf_v4.get('17')['handle'], mode='destroy')
+    data.tg1.tg_interface_config(port_handle = data.tg_dut2_p1, handle=data.d2_p1_intf_v4.get('18')['handle'], mode='destroy')
+    data.tg1.tg_interface_config(port_handle = data.tg_dut2_p1, handle=data.d2_p1_intf_v6.get('16')['handle'], mode='destroy')
+    data.tg1.tg_interface_config(port_handle = data.tg_dut2_p1, handle=data.d2_p1_intf_v6.get('17')['handle'], mode='destroy')
+    data.tg1.tg_interface_config(port_handle = data.tg_dut2_p1, handle=data.d2_p1_intf_v6.get('18')['handle'], mode='destroy')
 
 def debug_bgp_vrf():
     st.log("Dubug commands starts!")
@@ -575,13 +575,13 @@ def mutliple_hosts(**kwargs):
 
     if dut == data.dut1:
         if ip == 'ipv4':
-            if vlan == '1':
+            if vlan == '11':
                 intf_ip = tg1_dut1_vrf_ip[0]
                 gatway = dut1_tg1_vrf_ip[0]
-            if vlan == '2':
+            if vlan == '12':
                 intf_ip = tg1_dut1_vrf_ip[1]
                 gatway = dut1_tg1_vrf_ip[1]
-            if vlan == '3':
+            if vlan == '13':
                 intf_ip = tg1_dut1_vrf_ip[2]
                 gatway = dut1_tg1_vrf_ip[2]
             st.log('######------On DUT1 create ipv4 hosts on vlan '+vlan+' -----######')
@@ -589,13 +589,13 @@ def mutliple_hosts(**kwargs):
             intf_hand_v4 = data.tg1.tg_interface_config(port_handle = data.tg_dut1_p1, mode='config', intf_ip_addr = intf_ip, gateway = gatway, netmask = '255.255.255.0', vlan = '1', vlan_id = vlan, intf_ip_addr_step = '0.0.0.1', arp_send_req = '1')
             data.d1_p1_intf_v4.update({vlan:intf_hand_v4})
         else:
-            if vlan == '1':
+            if vlan == '11':
                 intf_ip = tg1_dut1_vrf_ipv6[0]
                 gatway = dut1_tg1_vrf_ipv6[0]
-            if vlan == '2':
+            if vlan == '12':
                 intf_ip = tg1_dut1_vrf_ipv6[1]
                 gatway = dut1_tg1_vrf_ipv6[1]
-            if vlan == '3':
+            if vlan == '13':
                 intf_ip = tg1_dut1_vrf_ipv6[2]
                 gatway = dut1_tg1_vrf_ipv6[2]
             st.log('######------On DUT1 create ipv6 hosts on vlan '+vlan+' -----######')
@@ -604,13 +604,13 @@ def mutliple_hosts(**kwargs):
             data.d1_p1_intf_v6.update({vlan:intf_hand_v6})
     else:
         if ip == 'ipv4':
-            if vlan == '6':
+            if vlan == '16':
                 intf_ip = tg1_dut2_vrf_ip[0]
                 gatway = dut2_tg1_vrf_ip[0]
-            if vlan == '7':
+            if vlan == '17':
                 intf_ip = tg1_dut2_vrf_ip[1]
                 gatway = dut2_tg1_vrf_ip[1]
-            if vlan == '8':
+            if vlan == '18':
                 intf_ip = tg1_dut2_vrf_ip[2]
                 gatway = dut2_tg1_vrf_ip[2]
             st.log('######------On DUT2 create ipv4 hosts on vlan '+vlan+' -----######')
@@ -618,13 +618,13 @@ def mutliple_hosts(**kwargs):
             intf_hand_v4 = data.tg2.tg_interface_config(port_handle = data.tg_dut2_p1, mode='config', intf_ip_addr = intf_ip, gateway = gatway, netmask = '255.255.255.0', vlan = '1', vlan_id = vlan, arp_send_req = '1')
             data.d2_p1_intf_v4.update({vlan:intf_hand_v4})
         else:
-            if vlan == '6':
+            if vlan == '16':
                 intf_ip = tg1_dut2_vrf_ipv6[0]
                 gatway = dut2_tg1_vrf_ipv6[0]
-            if vlan == '7':
+            if vlan == '17':
                 intf_ip = tg1_dut2_vrf_ipv6[1]
                 gatway = dut2_tg1_vrf_ipv6[1]
-            if vlan == '8':
+            if vlan == '18':
                 intf_ip = tg1_dut2_vrf_ipv6[2]
                 gatway = dut2_tg1_vrf_ipv6[2]
             st.log('######------On DUT2 create ipv6 hosts on vlan '+vlan+' -----######')
@@ -633,21 +633,21 @@ def mutliple_hosts(**kwargs):
             data.d2_p1_intf_v6.update({vlan:intf_hand_v6})
 
 def start_arp_nd():
-    data.tg1.tg_arp_control(handle=data.d1_p1_intf_v4.get('1')['handle'], arp_target='all')
-    data.tg1.tg_arp_control(handle=data.d1_p1_intf_v4.get('2')['handle'], arp_target='all')
-    data.tg1.tg_arp_control(handle=data.d1_p1_intf_v4.get('3')['handle'], arp_target='all')
+    data.tg1.tg_arp_control(handle=data.d1_p1_intf_v4.get('11')['handle'], arp_target='all')
+    data.tg1.tg_arp_control(handle=data.d1_p1_intf_v4.get('12')['handle'], arp_target='all')
+    data.tg1.tg_arp_control(handle=data.d1_p1_intf_v4.get('13')['handle'], arp_target='all')
 
-    data.tg1.tg_arp_control(handle=data.d1_p1_intf_v6.get('1')['handle'], arp_target='all')
-    data.tg1.tg_arp_control(handle=data.d1_p1_intf_v6.get('2')['handle'], arp_target='all')
-    data.tg1.tg_arp_control(handle=data.d1_p1_intf_v6.get('3')['handle'], arp_target='all')
+    data.tg1.tg_arp_control(handle=data.d1_p1_intf_v6.get('11')['handle'], arp_target='all')
+    data.tg1.tg_arp_control(handle=data.d1_p1_intf_v6.get('12')['handle'], arp_target='all')
+    data.tg1.tg_arp_control(handle=data.d1_p1_intf_v6.get('13')['handle'], arp_target='all')
 
-    data.tg1.tg_arp_control(handle=data.d2_p1_intf_v4.get('6')['handle'], arp_target='all')
-    data.tg1.tg_arp_control(handle=data.d2_p1_intf_v4.get('7')['handle'], arp_target='all')
-    data.tg1.tg_arp_control(handle=data.d2_p1_intf_v4.get('8')['handle'], arp_target='all')
+    data.tg1.tg_arp_control(handle=data.d2_p1_intf_v4.get('16')['handle'], arp_target='all')
+    data.tg1.tg_arp_control(handle=data.d2_p1_intf_v4.get('17')['handle'], arp_target='all')
+    data.tg1.tg_arp_control(handle=data.d2_p1_intf_v4.get('18')['handle'], arp_target='all')
 
-    data.tg1.tg_arp_control(handle=data.d2_p1_intf_v6.get('6')['handle'], arp_target='all')
-    data.tg1.tg_arp_control(handle=data.d2_p1_intf_v6.get('7')['handle'], arp_target='all')
-    data.tg1.tg_arp_control(handle=data.d2_p1_intf_v6.get('8')['handle'], arp_target='all')
+    data.tg1.tg_arp_control(handle=data.d2_p1_intf_v6.get('16')['handle'], arp_target='all')
+    data.tg1.tg_arp_control(handle=data.d2_p1_intf_v6.get('17')['handle'], arp_target='all')
+    data.tg1.tg_arp_control(handle=data.d2_p1_intf_v6.get('18')['handle'], arp_target='all')
 
 def pump_bgp_routes(**kwargs):
     if 'dut' in kwargs:
@@ -658,13 +658,13 @@ def pump_bgp_routes(**kwargs):
         vlan = kwargs['vlan']
     if dut == data.dut1:
         if ip == 'ipv4':
-            if vlan == '1':
+            if vlan == '11':
                 remote_as = dut1_as[0]
                 gatway = dut1_tg1_vrf_ip[0]
-            if vlan == '2':
+            if vlan == '12':
                 remote_as = dut1_as[1]
                 gatway = dut1_tg1_vrf_ip[1]
-            if vlan == '3':
+            if vlan == '13':
                 remote_as = dut1_as[2]
                 gatway = dut1_tg1_vrf_ip[2]
             st.log('######------On DUT1 send IPv4 BGP routes from Tgen -----######')
@@ -680,13 +680,13 @@ def pump_bgp_routes(**kwargs):
 
             data.d1_p1_bgp_v4.update({vlan:bgp_router})
         else:
-            if vlan == '1':
+            if vlan == '11':
                 remote_as = dut1_as[0]
                 gatway = dut1_tg1_vrf_ipv6[0]
-            if vlan == '2':
+            if vlan == '12':
                 remote_as = dut1_as[1]
                 gatway = dut1_tg1_vrf_ipv6[1]
-            if vlan == '3':
+            if vlan == '13':
                 remote_as = dut1_as[2]
                 gatway = dut1_tg1_vrf_ipv6[2]
             st.log('######------On DUT1 send IPv6 BGP routes from Tgen -----######')
@@ -703,14 +703,14 @@ def create_streams_all_vrf(**kwargs):
         todut = kwargs['todut']
 
     if todut == data.dut1:
-        intf_handle1 = data.d2_p1_intf_v4.get('6')
-        bgp_handle1 = data.d1_p1_bgp_v4.get('1')
+        intf_handle1 = data.d2_p1_intf_v4.get('16')
+        bgp_handle1 = data.d1_p1_bgp_v4.get('11')
 
-        intf_handle2 = data.d2_p1_intf_v4.get('7')
-        bgp_handle2 = data.d1_p1_bgp_v4.get('2')
+        intf_handle2 = data.d2_p1_intf_v4.get('17')
+        bgp_handle2 = data.d1_p1_bgp_v4.get('12')
 
-        intf_handle3 = data.d2_p1_intf_v4.get('8')
-        bgp_handle3 = data.d1_p1_bgp_v4.get('3')
+        intf_handle3 = data.d2_p1_intf_v4.get('18')
+        bgp_handle3 = data.d1_p1_bgp_v4.get('13')
 
         # tc1 = data.tg2.tg_traffic_config(port_handle = data.tg_dut2_p1, emulation_src_handle = intf_handle1['handle'][0], emulation_dst_handle = bgp_handle1['route'][0]['handle'], circuit_endpoint_type = 'ipv4', mode = 'create', transmit_mode = 'continuous', length_mode = 'fixed', rate_pps = tg_dut1_rate_pps, port_handle2 = data.tg_dut1_p1)
         # data.stream_list.update({'phy_v4_stream':tc1['stream_id']})
@@ -730,14 +730,14 @@ def create_streams_all_vrf(**kwargs):
         tc3 = data.tg2.tg_traffic_config(port_handle = data.tg_dut2_p1, duration = '2', emulation_src_handle = intf_handle3['handle'], emulation_dst_handle = bgp_handle3['route'][0]['handle'], circuit_endpoint_type = 'ipv4', mode = 'create', transmit_mode = 'continuous', length_mode = 'fixed', rate_pps = tg_dut1_rate_pps, port_handle2 = data.tg_dut1_p1)
         data.stream_list.update({'pc_v4_stream':tc3['stream_id']})
 
-        intf_handle4 = data.d2_p1_intf_v6.get('6')
-        bgp_handle4 = data.d1_p1_bgp_v6.get('1')
+        intf_handle4 = data.d2_p1_intf_v6.get('16')
+        bgp_handle4 = data.d1_p1_bgp_v6.get('11')
 
-        intf_handle5 = data.d2_p1_intf_v6.get('7')
-        bgp_handle5 = data.d1_p1_bgp_v6.get('2')
+        intf_handle5 = data.d2_p1_intf_v6.get('17')
+        bgp_handle5 = data.d1_p1_bgp_v6.get('12')
 
-        intf_handle6 = data.d2_p1_intf_v6.get('8')
-        bgp_handle6 = data.d1_p1_bgp_v6.get('3')
+        intf_handle6 = data.d2_p1_intf_v6.get('18')
+        bgp_handle6 = data.d1_p1_bgp_v6.get('13')
 
         # tc4 = data.tg2.tg_traffic_config(port_handle = data.tg_dut2_p1, emulation_src_handle = intf_handle4['handle'][0], emulation_dst_handle = bgp_handle4['route'][0]['handle'], circuit_endpoint_type = 'ipv6', mode = 'create', transmit_mode = 'continuous', length_mode = 'fixed', rate_pps = tg_dut1_rate_pps, port_handle2 = data.tg_dut1_p1)
         # data.stream_list.update({'phy_v6_stream':tc4['stream_id']})

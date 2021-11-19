@@ -65,7 +65,7 @@ def prologue_epilogue():
     # import pdb; pdb.set_trace()
     # import code; code.interact(local=globals())
     yield
-    #loc_lib.vrf_base_unconfig()
+    loc_lib.vrf_base_unconfig()
 
 @pytest.mark.sanity
 def test_VrfFun001_06():
@@ -85,7 +85,7 @@ def test_VrfFun001_06():
         st.log('VRF name configured on DUT1 is as not expected',vrf_name[0])
         result += 1
     for value in output['interfaces']:
-        if data.d1_dut_ports[0] or dut1_loopback[0] or data.dut1_loopback[1] or value == 'Vlan1':
+        if data.d1_dut_ports[0] or dut1_loopback[0] or data.dut1_loopback[1] or value == 'Vlan11':
             st.log('Bind to VRF is as expected',value)
         else:
             st.log('Bind to VRF is not as expected',value)
@@ -97,7 +97,7 @@ def test_VrfFun001_06():
         st.log('VRF name configured on DUT1 is as not expected',vrf_name[0])
         result += 1
     for value in output['interfaces']:
-        if data.d2_dut_ports[0] or dut2_loopback[0] or value == 'Vlan6':
+        if data.d2_dut_ports[0] or dut2_loopback[0] or value == 'Vlan16':
             st.log('Bind to VRF is as expected',value)
         else:
             st.log('Bind to VRF is not as expected',value)
@@ -935,47 +935,47 @@ def test_VrfFun_20_24_25_32_33_44_45(vrf_fixture_tc_20_24_25_32_33_44_45):
         #debug_bgp_vrf()
         st.report_fail('test_case_failed')
 
-#@pytest.mark.depends('test_VrfFun001_06')
-def test_VrfFun_05_50():
-
-    st.log('######################################################################################################################')
-    st.log('######------FtRtVrfFun005 Configure overlapping IP addresses belonging to different VRFs -----######')
-    st.log('######------FtRtVrfFun050	Verify non-default vrf after cold reboot -----######')
-    st.log('#######################################################################################################################')
-
-    result = 0
-    if not loc_lib.retry_api(loc_lib.verify_bgp, ve = '1',ip = 'ipv4'):
-        st.log('IPv4 BGP session on VRF-102 did not come up')
-        result += 1
-    if not loc_lib.retry_api(loc_lib.verify_bgp, ve = '1',ip = 'ipv6'):
-        st.log('IPv6 BGP session on VRF-102 did not come up')
-        result += 1
-    if not loc_lib.retry_api(loc_lib.verify_bgp, pc = '1',ip = 'ipv4'):
-        st.log('IPv4 BGP session on VRF-103 did not come up')
-        result += 1
-    if not loc_lib.retry_api(loc_lib.verify_bgp, pc = '1',ip = 'ipv6'):
-        st.log('IPv6 BGP session on VRF-103 did not come up')
-        result += 1
-    reboot_api.config_save(data.dut1)
-    reboot_api.config_save(data.dut1,shell='vtysh')
-    st.reboot(data.dut1, 'fast')
-    st.log('Waiting for the sessions to come up')
-    st.wait(40)
-    if not loc_lib.retry_api(loc_lib.verify_bgp, ve = '1',ip = 'ipv4'):
-        st.log('IPv4 BGP session on VRF-102 did not come up')
-        result += 1
-    if not loc_lib.retry_api(loc_lib.verify_bgp, ve = '1',ip = 'ipv6'):
-        st.log('IPv6 BGP session on VRF-102 did not come up')
-        result += 1
-    if not loc_lib.retry_api(loc_lib.verify_bgp, pc = '1',ip = 'ipv4'):
-        st.log('IPv4 BGP session on VRF-103 did not come up')
-        result += 1
-    if not loc_lib.retry_api(loc_lib.verify_bgp, pc = '1',ip = 'ipv6'):
-        st.log('IPv6 BGP session on VRF-103 did not come up')
-        result += 1
-    if result == 0:
-        st.report_pass('test_case_passed')
-    else:
-        st.log('Save and reload with VRF configuration failed')
-        loc_lib.debug_bgp_vrf()
-        st.report_fail('test_case_failed')
+##@pytest.mark.depends('test_VrfFun001_06')
+#def test_VrfFun_05_50():
+#
+#    st.log('######################################################################################################################')
+#    st.log('######------FtRtVrfFun005 Configure overlapping IP addresses belonging to different VRFs -----######')
+#    st.log('######------FtRtVrfFun050	Verify non-default vrf after cold reboot -----######')
+#    st.log('#######################################################################################################################')
+#
+#    result = 0
+#    if not loc_lib.retry_api(loc_lib.verify_bgp, ve = '1',ip = 'ipv4'):
+#        st.log('IPv4 BGP session on VRF-102 did not come up')
+#        result += 1
+#    if not loc_lib.retry_api(loc_lib.verify_bgp, ve = '1',ip = 'ipv6'):
+#        st.log('IPv6 BGP session on VRF-102 did not come up')
+#        result += 1
+#    if not loc_lib.retry_api(loc_lib.verify_bgp, pc = '1',ip = 'ipv4'):
+#        st.log('IPv4 BGP session on VRF-103 did not come up')
+#        result += 1
+#    if not loc_lib.retry_api(loc_lib.verify_bgp, pc = '1',ip = 'ipv6'):
+#        st.log('IPv6 BGP session on VRF-103 did not come up')
+#        result += 1
+#    reboot_api.config_save(data.dut1)
+#    reboot_api.config_save(data.dut1,shell='vtysh')
+#    st.reboot(data.dut1, 'fast')
+#    st.log('Waiting for the sessions to come up')
+#    st.wait(40)
+#    if not loc_lib.retry_api(loc_lib.verify_bgp, ve = '1',ip = 'ipv4'):
+#        st.log('IPv4 BGP session on VRF-102 did not come up')
+#        result += 1
+#    if not loc_lib.retry_api(loc_lib.verify_bgp, ve = '1',ip = 'ipv6'):
+#        st.log('IPv6 BGP session on VRF-102 did not come up')
+#        result += 1
+#    if not loc_lib.retry_api(loc_lib.verify_bgp, pc = '1',ip = 'ipv4'):
+#        st.log('IPv4 BGP session on VRF-103 did not come up')
+#        result += 1
+#    if not loc_lib.retry_api(loc_lib.verify_bgp, pc = '1',ip = 'ipv6'):
+#        st.log('IPv6 BGP session on VRF-103 did not come up')
+#        result += 1
+#    if result == 0:
+#        st.report_pass('test_case_passed')
+#    else:
+#        st.log('Save and reload with VRF configuration failed')
+#        loc_lib.debug_bgp_vrf()
+#        st.report_fail('test_case_failed')

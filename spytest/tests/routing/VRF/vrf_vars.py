@@ -12,8 +12,8 @@ dut2_dut1_vlan = ['%s'%x for x in range (101,105)]
 
 dut1_dut2_vlan_scale = ['%s'%x for x in range (1,1000)]
 
-dut1_tg1_vlan = ['%s'%x for x in range (1,4)]
-dut2_tg1_vlan = ['%s'%x for x in range (6,9)]
+dut1_tg1_vlan = ['%s'%x for x in range (11,14)]
+dut2_tg1_vlan = ['%s'%x for x in range (16,19)]
 
 #Loopback
 dut1_loopback = ['Loopback101', 'Loopback102', 'Loopback103']

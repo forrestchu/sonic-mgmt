@@ -113,6 +113,10 @@ class Feature(object):
         self.set_unsupported("show-bgp-summary-click-command")
         self.set_unsupported("show-kdump-status-command")
         self.set_unsupported("config-acl-table-delete-command")
+        self.set_unsupported("show-interfaces-counters-interface-command")
+        self.set_unsupported("show-vrf-verbose-command")
+        self.set_unsupported("vrf-needed-for-unbind")
+        self.set_unsupported("strom-control")
 
     def is_supported(self, name):
         if name not in self.supported:

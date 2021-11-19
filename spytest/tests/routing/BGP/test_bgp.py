@@ -336,7 +336,7 @@ class TestBGPCommon:
         st.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
 
         st.log("Verify logs on spine to check if aggregator and atomic ")
-        log_msg = slog_obj.get_logging_count(spine_name, filter_list=['{}'.format(string), 'atomic-aggregate',
+        log_msg = slog_obj.get_logging_count(spine_name, filter_list=['atomic-aggregate',
                                                                       'aggregated by {}'.format(info['D2_as']),
                                                                       'path {}'.format(info['D2_as'])])
 
@@ -534,48 +534,48 @@ def bgp_rif_class_hook(request):
 @pytest.mark.usefixtures('bgp_rif_class_hook')
 class TestBGPRif(TestBGPCommon):
 
-    @pytest.mark.bgp_ft
-    @pytest.mark.community
-    @pytest.mark.community_pass
-    def test_ft_bgp_v6_link_local_bgp(self):
-        """
-
-        Verify that BGP peer session is established with v6 link local address
-        """
-
-        # Getting topo info between an spine and leaf
-        info = bgplib.get_tg_topology_leafspine_bgp(dut_type='spine-leaf', max_tg_links='0', nodes='2')
-        # NOTE: D1 is spine and D2 is leaf by default
-
-        leaf_name = info['D2']
-        spine_name = info['D1']
-
-        result = bgpapi.create_bgp_neighbor_interface(leaf_name, info['D2_as'], info['D2D1P1'], info['D1_as'], 'ipv6', cli_type=bgp_cli_type)
-        if not result:
-            st.error("Failed to enable BGP on interface {}".format(info['D2D1P1']))
-            st.report_fail('test_case_failed')
-
-        result = bgpapi.create_bgp_neighbor_interface(spine_name, info['D1_as'], info['D1D2P1'], info['D2_as'], 'ipv6', cli_type=bgp_cli_type)
-        if not result:
-            # Clear the previous config
-            bgpapi.create_bgp_neighbor_interface(leaf_name, info['D2_as'], info['D2D1P1'], info['D1_as'], 'ipv6', 'no', cli_type=bgp_cli_type)
-            st.error("Failed to enable BGP on interface {}".format(info['D1D2P1']))
-            st.report_fail('test_case_failed')
-
-        # Verify bgp session on interface
-        if not utils.poll_wait(bgpapi.verify_bgp_summary, 130, leaf_name, family='ipv6', neighbor=info['D2D1P1'],
-                               state='Established', shell=bgp_cli_type):
-            # show neighbors for debug in case of failure and Clear all config
-            utils.exec_all(True, [[bgpapi.show_bgp_ipv6_neighbor_vtysh, leaf_name], [bgpapi.show_bgp_ipv6_neighbor_vtysh, spine_name]])
-            bgpapi.create_bgp_neighbor_interface(leaf_name, info['D2_as'], info['D2D1P1'], info['D1_as'], 'ipv6', 'no', cli_type=bgp_cli_type)
-            bgpapi.create_bgp_neighbor_interface(spine_name, info['D1_as'], info['D1D2P1'], info['D2_as'], 'ipv6', 'no', cli_type=bgp_cli_type)
-            st.error("BGP Neighbor failed to Establish between DUT and Partner")
-            st.report_fail('operation_failed')
-        utils.exec_all(True, [[bgpapi.show_bgp_ipv6_neighbor_vtysh, leaf_name],
-                              [bgpapi.show_bgp_ipv6_neighbor_vtysh, spine_name]])
-        bgpapi.create_bgp_neighbor_interface(leaf_name, info['D2_as'], info['D2D1P1'], info['D1_as'], 'ipv6', 'no', cli_type=bgp_cli_type)
-        bgpapi.create_bgp_neighbor_interface(spine_name, info['D1_as'], info['D1D2P1'], info['D2_as'], 'ipv6', 'no', cli_type=bgp_cli_type)
-        st.report_pass("test_case_passed")
+#    @pytest.mark.bgp_ft
+#    @pytest.mark.community
+#    @pytest.mark.community_pass
+#    def test_ft_bgp_v6_link_local_bgp(self):
+#        """
+#
+#        Verify that BGP peer session is established with v6 link local address
+#        """
+#
+#        # Getting topo info between an spine and leaf
+#        info = bgplib.get_tg_topology_leafspine_bgp(dut_type='spine-leaf', max_tg_links='0', nodes='2')
+#        # NOTE: D1 is spine and D2 is leaf by default
+#
+#        leaf_name = info['D2']
+#        spine_name = info['D1']
+#
+#        result = bgpapi.create_bgp_neighbor_interface(leaf_name, info['D2_as'], info['D2D1P1'], info['D1_as'], 'ipv6', cli_type=bgp_cli_type)
+#        if not result:
+#            st.error("Failed to enable BGP on interface {}".format(info['D2D1P1']))
+#            st.report_fail('test_case_failed')
+#
+#        result = bgpapi.create_bgp_neighbor_interface(spine_name, info['D1_as'], info['D1D2P1'], info['D2_as'], 'ipv6', cli_type=bgp_cli_type)
+#        if not result:
+#            # Clear the previous config
+#            bgpapi.create_bgp_neighbor_interface(leaf_name, info['D2_as'], info['D2D1P1'], info['D1_as'], 'ipv6', 'no', cli_type=bgp_cli_type)
+#            st.error("Failed to enable BGP on interface {}".format(info['D1D2P1']))
+#            st.report_fail('test_case_failed')
+#
+#        # Verify bgp session on interface
+#        if not utils.poll_wait(bgpapi.verify_bgp_summary, 130, leaf_name, family='ipv6', neighbor=info['D2D1P1'],
+#                               state='Established', shell=bgp_cli_type):
+#            # show neighbors for debug in case of failure and Clear all config
+#            utils.exec_all(True, [[bgpapi.show_bgp_ipv6_neighbor_vtysh, leaf_name], [bgpapi.show_bgp_ipv6_neighbor_vtysh, spine_name]])
+#            bgpapi.create_bgp_neighbor_interface(leaf_name, info['D2_as'], info['D2D1P1'], info['D1_as'], 'ipv6', 'no', cli_type=bgp_cli_type)
+#            bgpapi.create_bgp_neighbor_interface(spine_name, info['D1_as'], info['D1D2P1'], info['D2_as'], 'ipv6', 'no', cli_type=bgp_cli_type)
+#            st.error("BGP Neighbor failed to Establish between DUT and Partner")
+#            st.report_fail('operation_failed')
+#        utils.exec_all(True, [[bgpapi.show_bgp_ipv6_neighbor_vtysh, leaf_name],
+#                              [bgpapi.show_bgp_ipv6_neighbor_vtysh, spine_name]])
+#        bgpapi.create_bgp_neighbor_interface(leaf_name, info['D2_as'], info['D2D1P1'], info['D1_as'], 'ipv6', 'no', cli_type=bgp_cli_type)
+#        bgpapi.create_bgp_neighbor_interface(spine_name, info['D1_as'], info['D1D2P1'], info['D2_as'], 'ipv6', 'no', cli_type=bgp_cli_type)
+#        st.report_pass("test_case_passed")
 
     @pytest.mark.bgp_clear
     @pytest.mark.bgp_ft
@@ -619,182 +619,182 @@ class TestBGPRif(TestBGPCommon):
     def test_ft_bgp_ipv6_route_aggregation_with_as_set(self):
         TestBGPCommon.ft_bgp_ipv6_route_aggregation_with_as_set(self)
 
-    @pytest.mark.bgp_ft
-    def test_ft_bgp_v4_dyn_nbr(self):
-        """
-        Verify that BGP peering is formed with dynamic neighbors having 4btye ASN
-        """
-
-        # Getting topo info between an spine and leaf
-        info = bgplib.get_tg_topology_leafspine_bgp(dut_type='spine-leaf', max_tg_links='0', nodes='2')
-        # NOTE: D1 is spine D2 is leaf by default
-
-        leaf_name = info['D2']
-        spine_name = info['D1']
-
-        # Configure an ip address on Spine
-        spine_ipv4 = '45.45.45.45'
-        ipapi.config_ip_addr_interface(spine_name, info['D1D2P1'], spine_ipv4, 24, is_secondary_ip="yes")
-
-        # Configure an ip address on Leaf
-        leaf_ipv4 = '45.45.45.46'
-        ipapi.config_ip_addr_interface(leaf_name, info['D2D1P1'], leaf_ipv4, 24, is_secondary_ip="yes")
-        # if bgp_cli_type == "klish":
-        #     bgpapi.config_bgp_peer_group(leaf_name, info['D2_as'], 'leaf_spine', config="yes", cli_type=vtysh_cli_type)
-        # Add a listen range on Leaf
-        listen_range = '45.45.45.0'
-        bgpapi.config_bgp_listen(leaf_name, info['D2_as'], listen_range, 24, 'leaf_spine', 0, cli_type=bgp_cli_type)
-
-        # Add neighbor on Spine
-        bgpapi.create_bgp_neighbor_use_peergroup(spine_name, info['D1_as'], 'spine_leaf', leaf_ipv4, cli_type=bgp_cli_type)
-
-        # Verify bgp neighbors
-        result = st.poll_wait(bgpapi.verify_bgp_summary, 30, leaf_name, neighbor='*'+spine_ipv4, state='Established', shell=bgp_cli_type)
-        if not result:
-            bgplib.show_bgp_neighbors([leaf_name, spine_name], af='ipv4')
-            utils.exec_all(True, [[st.generate_tech_support, leaf_name, 'ft_bgp_v4_dyn_nbr'], [st.generate_tech_support, spine_name, 'ft_bgp_v4_dyn_nbr']])
-        # Clear applied configs
-
-        # Delete listen range
-        bgpapi.config_bgp_listen(leaf_name, info['D2_as'], listen_range, 24, 'leaf_spine', 0, 'no', cli_type=bgp_cli_type)
-
-        # Delete the neighbor from Spine
-        bgpapi.delete_bgp_neighbor(spine_name, info['D1_as'], leaf_ipv4, info['D2_as'], cli_type=bgp_cli_type)
-
-        # Delete ip address from Leaf
-        ipapi.delete_ip_interface(leaf_name, info['D2D1P1'], leaf_ipv4, 24, is_secondary_ip="yes")
-
-        # Delete ip address from Spine
-        ipapi.delete_ip_interface(spine_name, info['D1D2P1'], spine_ipv4, 24, is_secondary_ip="yes")
-        # if bgp_cli_type == "klish":
-        #     bgpapi.config_bgp_peer_group(leaf_name, info['D2_as'], 'leaf_spine', config="no", cli_type=bgp_cli_type)
-        if result:
-            st.debug("BGP adjacency verified")
-            st.report_pass("test_case_passed")
-        else:
-            st.error("Failed to form BGP peering using dynamic ipv4 neighbors")
-            st.report_fail("test_case_failed")
-
-    @pytest.mark.bgp_ft
-    def test_ft_bgp_v6_dyn_nbr(self):
-        """
-        Verify that ipv6 BGP peering is formed with dynamic neighbors
-        """
-
-        # Getting topo info between an spine and leaf
-        info = bgplib.get_tg_topology_leafspine_bgp(dut_type='spine-leaf', max_tg_links='0', nodes='2')
-        # NOTE: D1 is spine D2 is leaf by default
-
-        leaf_name = info['D2']
-        spine_name = info['D1']
-
-        # Configure an ip address on Spine
-        spine_ipv6 = '2001::1'
-        ipapi.config_ip_addr_interface(spine_name, info['D1D2P1'], spine_ipv6, 64, family='ipv6')
-
-        # Configure an ip address on Leaf
-        leaf_ipv6 = '2001::2'
-        ipapi.config_ip_addr_interface(leaf_name, info['D2D1P1'], leaf_ipv6, 64, family='ipv6')
-
-        # Add a listen range on Leaf
-        listen_range = '2001::0'
-        bgpapi.config_bgp_listen(leaf_name, info['D2_as'], listen_range, 64, 'leaf_spine6', 0, cli_type=bgp_cli_type)
-
-        # Add neighbor on Spine
-        bgpapi.create_bgp_neighbor_use_peergroup(spine_name, info['D1_as'], 'spine_leaf6', leaf_ipv6, family='ipv6', cli_type=bgp_cli_type)
-
-        # Verify dynamic bgp neighbors
-        result = st.poll_wait(bgpapi.verify_bgp_summary, 30, leaf_name, family='ipv6', neighbor='*'+spine_ipv6, state='Established', shell=bgp_cli_type)
-        if not result:
-            bgplib.show_bgp_neighbors([leaf_name, spine_name], af='ipv6')
-            utils.exec_all(True, [[st.generate_tech_support, leaf_name, 'ft_bgp_v6_dyn_nbr'], [st.generate_tech_support, spine_name, 'ft_bgp_v6_dyn_nbr']])
-        # Clear applied configs
-
-        # Delete listen range
-        bgpapi.config_bgp_listen(leaf_name, info['D2_as'], listen_range, 64, 'leaf_spine6', 0, 'no', cli_type=bgp_cli_type)
-
-        # Delete the neighbor from Spine
-        bgpapi.delete_bgp_neighbor(spine_name, info['D1_as'], leaf_ipv6, info['D2_as'], cli_type=bgp_cli_type)
-
-        # Delete ip address from Leaf
-        ipapi.delete_ip_interface(leaf_name, info['D2D1P1'], leaf_ipv6, 64, family='ipv6')
-
-        # Delete ip address from Spine
-        ipapi.delete_ip_interface(spine_name, info['D1D2P1'], spine_ipv6, 64, family='ipv6')
-
-        if result:
-            st.log("BGP adjacency verified")
-            st.report_pass("test_case_passed")
-        else:
-            st.log("Failed to form BGP peering using dynamic ipv6 neighbors")
-            st.report_fail("test_case_failed")
-
-    @pytest.mark.bgp_ft
-    def test_ft_bgp_v4_max_dyn_nbr(self):
-        """
-
-        Verify that BGP peering is established with maximum supported dynamic neighbors with maximum listen
-        ranges at once
-        """
-        # Getting topo info between an spine and leaf
-        info = bgplib.get_tg_topology_leafspine_bgp(dut_type='spine-leaf', max_tg_links='0', nodes='2')
-        # NOTE: D1 is spine D2 is leaf by default
-
-        leaf_name = info['D2']
-        spine_name = info['D1']
-
-        result = True
-
-        # Set listen limit
-        # NOTE: Setting a limit to max dynamic neighbors. It can be set to any value, but the test case execution
-        # time increases
-
-        limit = 5
-        bgpapi.config_bgp_listen(leaf_name,info['D2_as'], 0, 0, 'leaf_spine', limit,cli_type=bgp_cli_type)
-
-        # Apply Configs:
-        # Add IP addresses on leaf and spine
-        # Add neighbor on spine
-        # Add listen range on leaf
-        for i in range(1, limit+1):
-            leaf_ipaddr  = '{}.0.5.1'.format(20+i)
-            spine_ipaddr = '{}.0.5.2'.format(20+i)
-            listen_range = '{}.0.5.0'.format(20+i)
-            ipapi.config_ip_addr_interface(spine_name, info['D1D2P1'], spine_ipaddr, 24, is_secondary_ip="yes")
-            ipapi.config_ip_addr_interface(leaf_name, info['D2D1P1'], leaf_ipaddr, 24, is_secondary_ip="yes")
-            bgpapi.config_bgp_listen(leaf_name, info['D2_as'], listen_range, 24, 'leaf_spine', 0,cli_type=bgp_cli_type)
-            bgpapi.create_bgp_neighbor_use_peergroup(spine_name, info['D1_as'], 'spine_leaf', leaf_ipaddr)
-            # Verify dynamic bgp neighbors
-            poll_result = st.poll_wait(bgpapi.verify_bgp_summary, 30, leaf_name, family='ipv4', neighbor='*'+spine_ipaddr,
-                                                         state='Established', shell=bgp_cli_type)
-            result = result & poll_result
-            if not result:
-                bgplib.show_bgp_neighbors([leaf_name, spine_name], af='ipv4')
-                utils.exec_all(True, [[st.generate_tech_support, leaf_name, 'ft_bgp_v4_max_dyn_nbr'], [st.generate_tech_support, spine_name, 'ft_bgp_v4_max_dyn_nbr']])
-
-        # Clear applied configs
-
-        # Delete listen limit
-        bgpapi.config_bgp_listen(leaf_name, info['D2_as'], 0, 0, 'leaf_spine', limit, 'no',cli_type=bgp_cli_type)
-        for i in range(1, limit+1):
-            leaf_ipaddr = '{}.0.5.1'.format(20+i)
-            spine_ipaddr = '{}.0.5.2'.format(20+i)
-            listen_range = '{}.0.5.0'.format(20+i)
-            # Delete listen range
-            bgpapi.config_bgp_listen(leaf_name, info['D2_as'], listen_range, 24, 'leaf_spine', 0, 'no',cli_type=bgp_cli_type)
-            # Delete the neighbor from Spine
-            bgpapi.delete_bgp_neighbor(spine_name, info['D1_as'], leaf_ipaddr, info['D2_as'])
-            # Delete ip address from Leaf
-            ipapi.delete_ip_interface(leaf_name, info['D2D1P1'], leaf_ipaddr, 24, skip_error=True, is_secondary_ip="yes")
-            # Delete ip address from Spine
-            ipapi.delete_ip_interface(spine_name, info['D1D2P1'], spine_ipaddr, 24, skip_error=True, is_secondary_ip="yes")
-
-        if result:
-            st.debug("BGP adjacency verified")
-            st.report_pass("test_case_passed")
-        else:
-            st.error("Failed to form BGP peering using max dynamic ipv4 neighbors")
-            st.report_fail("test_case_failed")
+#    @pytest.mark.bgp_ft
+#    def test_ft_bgp_v4_dyn_nbr(self):
+#        """
+#        Verify that BGP peering is formed with dynamic neighbors having 4btye ASN
+#        """
+#
+#        # Getting topo info between an spine and leaf
+#        info = bgplib.get_tg_topology_leafspine_bgp(dut_type='spine-leaf', max_tg_links='0', nodes='2')
+#        # NOTE: D1 is spine D2 is leaf by default
+#
+#        leaf_name = info['D2']
+#        spine_name = info['D1']
+#
+#        # Configure an ip address on Spine
+#        spine_ipv4 = '45.45.45.45'
+#        ipapi.config_ip_addr_interface(spine_name, info['D1D2P1'], spine_ipv4, 24, is_secondary_ip="yes")
+#
+#        # Configure an ip address on Leaf
+#        leaf_ipv4 = '45.45.45.46'
+#        ipapi.config_ip_addr_interface(leaf_name, info['D2D1P1'], leaf_ipv4, 24, is_secondary_ip="yes")
+#        # if bgp_cli_type == "klish":
+#        #     bgpapi.config_bgp_peer_group(leaf_name, info['D2_as'], 'leaf_spine', config="yes", cli_type=vtysh_cli_type)
+#        # Add a listen range on Leaf
+#        listen_range = '45.45.45.0'
+#        bgpapi.config_bgp_listen(leaf_name, info['D2_as'], listen_range, 24, 'leaf_spine', 0, cli_type=bgp_cli_type)
+#
+#        # Add neighbor on Spine
+#        bgpapi.create_bgp_neighbor_use_peergroup(spine_name, info['D1_as'], 'spine_leaf', leaf_ipv4, cli_type=bgp_cli_type)
+#
+#        # Verify bgp neighbors
+#        result = st.poll_wait(bgpapi.verify_bgp_summary, 30, leaf_name, neighbor='*'+spine_ipv4, state='Established', shell=bgp_cli_type)
+#        if not result:
+#            bgplib.show_bgp_neighbors([leaf_name, spine_name], af='ipv4')
+#            utils.exec_all(True, [[st.generate_tech_support, leaf_name, 'ft_bgp_v4_dyn_nbr'], [st.generate_tech_support, spine_name, 'ft_bgp_v4_dyn_nbr']])
+#        # Clear applied configs
+#
+#        # Delete listen range
+#        bgpapi.config_bgp_listen(leaf_name, info['D2_as'], listen_range, 24, 'leaf_spine', 0, 'no', cli_type=bgp_cli_type)
+#
+#        # Delete the neighbor from Spine
+#        bgpapi.delete_bgp_neighbor(spine_name, info['D1_as'], leaf_ipv4, info['D2_as'], cli_type=bgp_cli_type)
+#
+#        # Delete ip address from Leaf
+#        ipapi.delete_ip_interface(leaf_name, info['D2D1P1'], leaf_ipv4, 24, is_secondary_ip="yes")
+#
+#        # Delete ip address from Spine
+#        ipapi.delete_ip_interface(spine_name, info['D1D2P1'], spine_ipv4, 24, is_secondary_ip="yes")
+#        # if bgp_cli_type == "klish":
+#        #     bgpapi.config_bgp_peer_group(leaf_name, info['D2_as'], 'leaf_spine', config="no", cli_type=bgp_cli_type)
+#        if result:
+#            st.debug("BGP adjacency verified")
+#            st.report_pass("test_case_passed")
+#        else:
+#            st.error("Failed to form BGP peering using dynamic ipv4 neighbors")
+#            st.report_fail("test_case_failed")
+#
+#    @pytest.mark.bgp_ft
+#    def test_ft_bgp_v6_dyn_nbr(self):
+#        """
+#        Verify that ipv6 BGP peering is formed with dynamic neighbors
+#        """
+#
+#        # Getting topo info between an spine and leaf
+#        info = bgplib.get_tg_topology_leafspine_bgp(dut_type='spine-leaf', max_tg_links='0', nodes='2')
+#        # NOTE: D1 is spine D2 is leaf by default
+#
+#        leaf_name = info['D2']
+#        spine_name = info['D1']
+#
+#        # Configure an ip address on Spine
+#        spine_ipv6 = '2001::1'
+#        ipapi.config_ip_addr_interface(spine_name, info['D1D2P1'], spine_ipv6, 64, family='ipv6')
+#
+#        # Configure an ip address on Leaf
+#        leaf_ipv6 = '2001::2'
+#        ipapi.config_ip_addr_interface(leaf_name, info['D2D1P1'], leaf_ipv6, 64, family='ipv6')
+#
+#        # Add a listen range on Leaf
+#        listen_range = '2001::0'
+#        bgpapi.config_bgp_listen(leaf_name, info['D2_as'], listen_range, 64, 'leaf_spine6', 0, cli_type=bgp_cli_type)
+#
+#        # Add neighbor on Spine
+#        bgpapi.create_bgp_neighbor_use_peergroup(spine_name, info['D1_as'], 'spine_leaf6', leaf_ipv6, family='ipv6', cli_type=bgp_cli_type)
+#
+#        # Verify dynamic bgp neighbors
+#        result = st.poll_wait(bgpapi.verify_bgp_summary, 30, leaf_name, family='ipv6', neighbor='*'+spine_ipv6, state='Established', shell=bgp_cli_type)
+#        if not result:
+#            bgplib.show_bgp_neighbors([leaf_name, spine_name], af='ipv6')
+#            utils.exec_all(True, [[st.generate_tech_support, leaf_name, 'ft_bgp_v6_dyn_nbr'], [st.generate_tech_support, spine_name, 'ft_bgp_v6_dyn_nbr']])
+#        # Clear applied configs
+#
+#        # Delete listen range
+#        bgpapi.config_bgp_listen(leaf_name, info['D2_as'], listen_range, 64, 'leaf_spine6', 0, 'no', cli_type=bgp_cli_type)
+#
+#        # Delete the neighbor from Spine
+#        bgpapi.delete_bgp_neighbor(spine_name, info['D1_as'], leaf_ipv6, info['D2_as'], cli_type=bgp_cli_type)
+#
+#        # Delete ip address from Leaf
+#        ipapi.delete_ip_interface(leaf_name, info['D2D1P1'], leaf_ipv6, 64, family='ipv6')
+#
+#        # Delete ip address from Spine
+#        ipapi.delete_ip_interface(spine_name, info['D1D2P1'], spine_ipv6, 64, family='ipv6')
+#
+#        if result:
+#            st.log("BGP adjacency verified")
+#            st.report_pass("test_case_passed")
+#        else:
+#            st.log("Failed to form BGP peering using dynamic ipv6 neighbors")
+#            st.report_fail("test_case_failed")
+#
+#    @pytest.mark.bgp_ft
+#    def test_ft_bgp_v4_max_dyn_nbr(self):
+#        """
+#
+#        Verify that BGP peering is established with maximum supported dynamic neighbors with maximum listen
+#        ranges at once
+#        """
+#        # Getting topo info between an spine and leaf
+#        info = bgplib.get_tg_topology_leafspine_bgp(dut_type='spine-leaf', max_tg_links='0', nodes='2')
+#        # NOTE: D1 is spine D2 is leaf by default
+#
+#        leaf_name = info['D2']
+#        spine_name = info['D1']
+#
+#        result = True
+#
+#        # Set listen limit
+#        # NOTE: Setting a limit to max dynamic neighbors. It can be set to any value, but the test case execution
+#        # time increases
+#
+#        limit = 5
+#        bgpapi.config_bgp_listen(leaf_name,info['D2_as'], 0, 0, 'leaf_spine', limit,cli_type=bgp_cli_type)
+#
+#        # Apply Configs:
+#        # Add IP addresses on leaf and spine
+#        # Add neighbor on spine
+#        # Add listen range on leaf
+#        for i in range(1, limit+1):
+#            leaf_ipaddr  = '{}.0.5.1'.format(20+i)
+#            spine_ipaddr = '{}.0.5.2'.format(20+i)
+#            listen_range = '{}.0.5.0'.format(20+i)
+#            ipapi.config_ip_addr_interface(spine_name, info['D1D2P1'], spine_ipaddr, 24, is_secondary_ip="yes")
+#            ipapi.config_ip_addr_interface(leaf_name, info['D2D1P1'], leaf_ipaddr, 24, is_secondary_ip="yes")
+#            bgpapi.config_bgp_listen(leaf_name, info['D2_as'], listen_range, 24, 'leaf_spine', 0,cli_type=bgp_cli_type)
+#            bgpapi.create_bgp_neighbor_use_peergroup(spine_name, info['D1_as'], 'spine_leaf', leaf_ipaddr)
+#            # Verify dynamic bgp neighbors
+#            poll_result = st.poll_wait(bgpapi.verify_bgp_summary, 30, leaf_name, family='ipv4', neighbor='*'+spine_ipaddr,
+#                                                         state='Established', shell=bgp_cli_type)
+#            result = result & poll_result
+#            if not result:
+#                bgplib.show_bgp_neighbors([leaf_name, spine_name], af='ipv4')
+#                utils.exec_all(True, [[st.generate_tech_support, leaf_name, 'ft_bgp_v4_max_dyn_nbr'], [st.generate_tech_support, spine_name, 'ft_bgp_v4_max_dyn_nbr']])
+#
+#        # Clear applied configs
+#
+#        # Delete listen limit
+#        bgpapi.config_bgp_listen(leaf_name, info['D2_as'], 0, 0, 'leaf_spine', limit, 'no',cli_type=bgp_cli_type)
+#        for i in range(1, limit+1):
+#            leaf_ipaddr = '{}.0.5.1'.format(20+i)
+#            spine_ipaddr = '{}.0.5.2'.format(20+i)
+#            listen_range = '{}.0.5.0'.format(20+i)
+#            # Delete listen range
+#            bgpapi.config_bgp_listen(leaf_name, info['D2_as'], listen_range, 24, 'leaf_spine', 0, 'no',cli_type=bgp_cli_type)
+#            # Delete the neighbor from Spine
+#            bgpapi.delete_bgp_neighbor(spine_name, info['D1_as'], leaf_ipaddr, info['D2_as'])
+#            # Delete ip address from Leaf
+#            ipapi.delete_ip_interface(leaf_name, info['D2D1P1'], leaf_ipaddr, 24, skip_error=True, is_secondary_ip="yes")
+#            # Delete ip address from Spine
+#            ipapi.delete_ip_interface(spine_name, info['D1D2P1'], spine_ipaddr, 24, skip_error=True, is_secondary_ip="yes")
+#
+#        if result:
+#            st.debug("BGP adjacency verified")
+#            st.report_pass("test_case_passed")
+#        else:
+#            st.error("Failed to form BGP peering using max dynamic ipv4 neighbors")
+#            st.report_fail("test_case_failed")
 
 
     @pytest.mark.bgp_ft
@@ -1011,6 +1011,13 @@ class TestBGPRif(TestBGPCommon):
         bgpapi.config_bgp(topo.dut_list[0], local_as=spine_as, config='no', neighbor=info['D2D1P1_ipv4'],
                           config_type_list=["routeMap"], routeMap='confed-rmap', diRection='out',cli_type=vtysh_cli_type)
         bgpapi.create_bgp_next_hop_self(topo.dut_list[0], spine_as, 'ipv4', info['D2D1P1_ipv4'], 'no', 'no')
+
+        bgpapi.config_bgp(leaf_name, config='no', config_type_list='', local_as=leaf_as,
+                          conf_identf=confed_identifier,cli_type=vtysh_cli_type)
+        bgpapi.config_bgp(leaf_name, config='no', config_type_list='', local_as=leaf_as, conf_peers=spine_as,cli_type=vtysh_cli_type)
+        bgpapi.config_bgp(spine_name, config='no', config_type_list='', local_as=spine_as,
+                          conf_identf=confed_identifier,cli_type=vtysh_cli_type)
+        bgpapi.config_bgp(spine_name, config='no', config_type_list='', local_as=spine_as, conf_peers=leaf_as,cli_type=vtysh_cli_type)
 
         if tc_fail_flag:
             st.report_fail('test_case_failed')
@@ -1864,55 +1871,55 @@ class TestBGPIPvxRouteAdvertisementFilter:
             st.report_fail("operation_failed")
 
     # testcase: FtOtSoRtBgp4Fn015, Verify eBGP authentication.
-    @pytest.mark.bgp_nbr_auth
-    def test_bgp_ebgp4_nbr_authentication(self, bgp_ipvx_route_adv_filter_fixture):
-        result = True
-        # configure password for both the duts
-        bgpapi.config_bgp(dut=self.local_topo['dut1'], local_as=self.local_topo['dut1_as'],
-                          neighbor=self.local_topo['dut2_addr_ipv4'], config='yes', password='broadcom',
-                          config_type_list=["pswd"],cli_type=bgp_cli_type)
-        bgpapi.config_bgp(dut=self.local_topo['dut2'], local_as=self.local_topo['dut2_as'],
-                          neighbor=self.local_topo['dut1_addr_ipv4'], config='yes', password='broadcom',
-                          config_type_list=["pswd"],cli_type=bgp_cli_type)
-
-        # clear bgp neighbors before checking for neighbor state again.
-        bgpapi.clear_ip_bgp_vtysh(dut=self.local_topo['dut1'], value="*")
-        bgpapi.clear_ip_bgp_vtysh(dut=self.local_topo['dut2'], value="*")
-
-        if not utils.poll_wait(bgpapi.verify_bgp_summary, 30, self.local_topo['dut1'], family='ipv4',
-                               neighbor=self.local_topo['dut2_addr_ipv4'], state='Established' , shell=bgp_cli_type):
-            bgplib.show_bgp_neighbors([self.local_topo['dut1'], self.local_topo['dut2']], af='ipv4')
-            st.error("BGP Neighbor failed to Establish between DUT1 and DUT2")
-            st.log("{} - Neighbor {} is failed to Establish".format(self.local_topo['dut1'],
-                                                                    self.local_topo['dut2_addr_ipv4']))
-            utils.exec_all(True, [[st.generate_tech_support, self.local_topo['dut1'], 'ft_bgp_ebgp4_nbr_authentication'], [st.generate_tech_support, self.local_topo['dut2'], 'ft_bgp_ebgp4_nbr_authentication']])
-            result = False
-        # Verify neighbors formation after rebooting Dut1
-        st.log("Verification of neighbor formation after reboot.")
-        # below API will change routing mode to split and save the sonic config.
-        bgpapi.enable_docker_routing_config_mode(dut=self.local_topo['dut1'])
-        reboot.config_save(self.local_topo['dut1'], shell='vtysh')
-        st.reboot(self.local_topo['dut1'], 'fast')
-        st.wait(3)
-        if not utils.poll_wait(bgpapi.verify_bgp_summary, 30, self.local_topo['dut1'], family='ipv4',
-                               neighbor=self.local_topo['dut2_addr_ipv4'], state='Established', shell=bgp_cli_type):
-            bgplib.show_bgp_neighbors([self.local_topo['dut1'], self.local_topo['dut2']], af='ipv4')
-            st.error("BGP Neighbor failed to Establish between DUT1 and DUT2")
-            st.log("{} - Neighbor {} is failed to Establish".format(self.local_topo['dut1'],
-                                                                    self.local_topo['dut2_addr_ipv4']))
-            utils.exec_all(True, [[st.generate_tech_support, self.local_topo['dut1'], 'ft_bgp_ebgp4_nbr_authentication'], [st.generate_tech_support, self.local_topo['dut2'], 'ft_bgp_ebgp4_nbr_authentication']])
-            result = False
-        # cleanup the testcase
-        bgpapi.config_bgp(dut=self.local_topo['dut1'], local_as=self.local_topo['dut1_as'],
-                          neighbor=self.local_topo['dut2_addr_ipv4'], config='no', password='broadcom',
-                          config_type_list=["pswd"],cli_type=bgp_cli_type)
-        bgpapi.config_bgp(dut=self.local_topo['dut2'], local_as=self.local_topo['dut2_as'],
-                          neighbor=self.local_topo['dut1_addr_ipv4'], config='no', password='broadcom',
-                          config_type_list=["pswd"],cli_type=bgp_cli_type)
-        if result:
-            st.report_pass("operation_successful")
-        else:
-            st.report_fail("operation_failed")
+#    @pytest.mark.bgp_nbr_auth
+#    def test_bgp_ebgp4_nbr_authentication(self, bgp_ipvx_route_adv_filter_fixture):
+#        result = True
+#        # configure password for both the duts
+#        bgpapi.config_bgp(dut=self.local_topo['dut1'], local_as=self.local_topo['dut1_as'],
+#                          neighbor=self.local_topo['dut2_addr_ipv4'], config='yes', password='broadcom',
+#                          config_type_list=["pswd"],cli_type=bgp_cli_type)
+#        bgpapi.config_bgp(dut=self.local_topo['dut2'], local_as=self.local_topo['dut2_as'],
+#                          neighbor=self.local_topo['dut1_addr_ipv4'], config='yes', password='broadcom',
+#                          config_type_list=["pswd"],cli_type=bgp_cli_type)
+#
+#        # clear bgp neighbors before checking for neighbor state again.
+#        bgpapi.clear_ip_bgp_vtysh(dut=self.local_topo['dut1'], value="*")
+#        bgpapi.clear_ip_bgp_vtysh(dut=self.local_topo['dut2'], value="*")
+#
+#        if not utils.poll_wait(bgpapi.verify_bgp_summary, 30, self.local_topo['dut1'], family='ipv4',
+#                               neighbor=self.local_topo['dut2_addr_ipv4'], state='Established' , shell=bgp_cli_type):
+#            bgplib.show_bgp_neighbors([self.local_topo['dut1'], self.local_topo['dut2']], af='ipv4')
+#            st.error("BGP Neighbor failed to Establish between DUT1 and DUT2")
+#            st.log("{} - Neighbor {} is failed to Establish".format(self.local_topo['dut1'],
+#                                                                    self.local_topo['dut2_addr_ipv4']))
+#            utils.exec_all(True, [[st.generate_tech_support, self.local_topo['dut1'], 'ft_bgp_ebgp4_nbr_authentication'], [st.generate_tech_support, self.local_topo['dut2'], 'ft_bgp_ebgp4_nbr_authentication']])
+#            result = False
+#        # Verify neighbors formation after rebooting Dut1
+#        st.log("Verification of neighbor formation after reboot.")
+#        # below API will change routing mode to split and save the sonic config.
+#        bgpapi.enable_docker_routing_config_mode(dut=self.local_topo['dut1'])
+#        reboot.config_save(self.local_topo['dut1'], shell='vtysh')
+#        st.reboot(self.local_topo['dut1'], 'fast')
+#        st.wait(3)
+#        if not utils.poll_wait(bgpapi.verify_bgp_summary, 30, self.local_topo['dut1'], family='ipv4',
+#                               neighbor=self.local_topo['dut2_addr_ipv4'], state='Established', shell=bgp_cli_type):
+#            bgplib.show_bgp_neighbors([self.local_topo['dut1'], self.local_topo['dut2']], af='ipv4')
+#            st.error("BGP Neighbor failed to Establish between DUT1 and DUT2")
+#            st.log("{} - Neighbor {} is failed to Establish".format(self.local_topo['dut1'],
+#                                                                    self.local_topo['dut2_addr_ipv4']))
+#            utils.exec_all(True, [[st.generate_tech_support, self.local_topo['dut1'], 'ft_bgp_ebgp4_nbr_authentication'], [st.generate_tech_support, self.local_topo['dut2'], 'ft_bgp_ebgp4_nbr_authentication']])
+#            result = False
+#        # cleanup the testcase
+#        bgpapi.config_bgp(dut=self.local_topo['dut1'], local_as=self.local_topo['dut1_as'],
+#                          neighbor=self.local_topo['dut2_addr_ipv4'], config='no', password='broadcom',
+#                          config_type_list=["pswd"],cli_type=bgp_cli_type)
+#        bgpapi.config_bgp(dut=self.local_topo['dut2'], local_as=self.local_topo['dut2_as'],
+#                          neighbor=self.local_topo['dut1_addr_ipv4'], config='no', password='broadcom',
+#                          config_type_list=["pswd"],cli_type=bgp_cli_type)
+#        if result:
+#            st.report_pass("operation_successful")
+#        else:
+#            st.report_fail("operation_failed")
 
     # testcase: FtOtSoRtBgp4Fn015, Verify eBGP traffic for ipv6.
     @pytest.mark.bgp_ebgp6_traffic
@@ -2035,29 +2042,29 @@ class TestBGPIPvxRouteAdvertisementFilter:
         if tc_fail_flag:
             st.report_fail("traffic_verification_failed")
         st.report_pass('test_case_passed')
-        # below API will change routing mode to split and save the sonic config.
-        bgpapi.enable_docker_routing_config_mode(dut=topo.dut_list[0])
-        reboot.config_save(topo.dut_list[0])
-        st.reboot(topo.dut_list[0], 'fast')
-        st.wait(3)
-        if not utils.poll_wait(bgpapi.verify_ipv6_bgp_summary, 120, topo.dut_list[0],
-                               neighbor=self.local_topo['dut2_addr_ipv6'], state='500'):
-            utils.exec_all(True, [[bgpapi.show_bgp_ipv6_neighbor_vtysh, topo.dut_list[0]],
-                                  [bgpapi.show_bgp_ipv6_neighbor_vtysh, topo.dut_list[1]]])
-            st.error("BGP Neighbor failed to Establish between DUT1 and DUT2")
-            st.log("{} - Neighbor {} is failed to Establish".format(topo.dut_list[0],
-                                                                    self.local_topo['dut2_addr_ipv6']))
-            #result = False
-        bgp_summary_spine_after_update_timer = bgpapi.show_bgp_ipv6_summary(topo.dut_list[0])
-        rib_entries_after_update_timer = bgp_summary_spine_after_update_timer[0]['ribentries']
-        st.log('RIB Entries after reboot : {}'.format(rib_entries_after_update_timer))
-        # without BGP helper, after reboot, no routes sent by DUT2 will be seen in dut1.
-        if int(rib_entries_after_update_timer) < 500:
-            st.error('Routes are not advertised to peer DUT, even after the update delay timer expiry')
-            tc_fail_flag = 1
-        if tc_fail_flag:
-            st.report_fail("traffic_verification_failed")
-        st.report_pass('test_case_passed')
+#        # below API will change routing mode to split and save the sonic config.
+#        bgpapi.enable_docker_routing_config_mode(dut=topo.dut_list[0])
+#        reboot.config_save(topo.dut_list[0])
+#        st.reboot(topo.dut_list[0], 'fast')
+#        st.wait(3)
+#        if not utils.poll_wait(bgpapi.verify_ipv6_bgp_summary, 120, topo.dut_list[0],
+#                               neighbor=self.local_topo['dut2_addr_ipv6'], state='500'):
+#            utils.exec_all(True, [[bgpapi.show_bgp_ipv6_neighbor_vtysh, topo.dut_list[0]],
+#                                  [bgpapi.show_bgp_ipv6_neighbor_vtysh, topo.dut_list[1]]])
+#            st.error("BGP Neighbor failed to Establish between DUT1 and DUT2")
+#            st.log("{} - Neighbor {} is failed to Establish".format(topo.dut_list[0],
+#                                                                    self.local_topo['dut2_addr_ipv6']))
+#            #result = False
+#        bgp_summary_spine_after_update_timer = bgpapi.show_bgp_ipv6_summary(topo.dut_list[0])
+#        rib_entries_after_update_timer = bgp_summary_spine_after_update_timer[0]['ribentries']
+#        st.log('RIB Entries after reboot : {}'.format(rib_entries_after_update_timer))
+#        # without BGP helper, after reboot, no routes sent by DUT2 will be seen in dut1.
+#        if int(rib_entries_after_update_timer) < 500:
+#            st.error('Routes are not advertised to peer DUT, even after the update delay timer expiry')
+#            tc_fail_flag = 1
+#        if tc_fail_flag:
+#            st.report_fail("traffic_verification_failed")
+#        st.report_pass('test_case_passed')
 
     # testcase: FtOtSoRtBgpPlFn002, Verify ipv6 route aggregation.
     def test_route_aggregate_ipv6(self, bgp_ipvx_route_adv_filter_fixture):

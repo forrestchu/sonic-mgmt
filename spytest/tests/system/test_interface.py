@@ -74,6 +74,8 @@ def interface_func_hooks(request):
     yield
     if st.get_func_name(request) == 'test_ft_ovr_counters':
         intfapi.interface_properties_set(vars.D1, vars.D1T1P1, 'mtu', intf_data.mtu_default)
+    elif st.get_func_name(request) == 'test_ft_port_frame_fwd_diff_mtu':
+        intfapi.interface_properties_set(vars.D1, [vars.D1T1P1, vars.D1T1P2], 'mtu', intf_data.mtu_default)
 
 
 def initialize_variables():
@@ -166,22 +168,23 @@ def test_ft_port_frame_fwd_diff_mtu():
     st.report_pass("test_case_passed")
 
 
-@pytest.mark.regression
-@pytest.mark.interface_ft
-def test_ft_port_fec_nofec():
-    """
-    Author : Nagarjuna Suravarapu <nagarjuna.suravarapu@broadcom.com>
-    Testbed :  D1====== D2(two links)
-    Verify the port status by enabling / disabling fec when we connected it with other device.
-    """
-    speed = intfapi.get_interface_property(vars.D1, vars.D1D2P1, "speed")
-    if not speed:
-        st.report_fail("Dut_failed_to_get_speed")
-    if speed[0] in ['10G', '10000', '1G', '1000']:
-        port_fec_no_fec(vars, speed[0], fec=["none", "fc"])
-    else:
-        port_fec_no_fec(vars, speed[0], fec=["none", "rs"])
-    st.report_pass("test_case_passed")
+# unsupport fec config on 200G port
+#@pytest.mark.regression
+#@pytest.mark.interface_ft
+#def test_ft_port_fec_nofec():
+#    """
+#    Author : Nagarjuna Suravarapu <nagarjuna.suravarapu@broadcom.com>
+#    Testbed :  D1====== D2(two links)
+#    Verify the port status by enabling / disabling fec when we connected it with other device.
+#    """
+#    speed = intfapi.get_interface_property(vars.D1, vars.D1D2P1, "speed")
+#    if not speed:
+#        st.report_fail("Dut_failed_to_get_speed")
+#    if speed[0] in ['10G', '10000', '1G', '1000']:
+#        port_fec_no_fec(vars, speed[0], fec=["none", "fc"])
+#    else:
+#        port_fec_no_fec(vars, speed[0], fec=["none", "rs"])
+#    st.report_pass("test_case_passed")
 
 
 @pytest.mark.regression
@@ -201,7 +204,10 @@ def test_ft_port_fn_verify_shut_noshut():
         st.report_fail("ping_fail", intf_data.ip_address1, intf_data.ip_address)
     for _ in range(3):
         intfapi.interface_shutdown(vars.D1, [vars.D1D2P1], skip_verify=True)
+        st.wait(3)
         intfapi.interface_noshutdown(vars.D1, [vars.D1D2P1], skip_verify=True)
+    if not st.poll_wait(intfapi.verify_interface_status, 15, vars.D1, vars.D1D2P1, "oper", "up"):
+        st.report_fail("interface_is_down_on_dut", [vars.D1D2P1])
     if not ipapi.ping(vars.D1, intf_data.ip_address1, family='ipv4', count=5):
         st.report_fail("ping_fail", intf_data.ip_address, intf_data.ip_address1)
     if not ipapi.ping(vars.D2, intf_data.ip_address, family='ipv4', count=1):
@@ -216,6 +222,7 @@ def test_ft_port_fn_verify_shut_noshut():
     for _ in range(3):
         intfapi.interface_shutdown(vars.D1, [vars.D1D2P1], skip_verify=True)
         intfapi.interface_noshutdown(vars.D1, [vars.D1D2P1], skip_verify=True)
+    st.wait(30)
     if not st.poll_wait(intfapi.verify_interface_status, 15, vars.D1, vars.D1D2P1, "oper", "up"):
         st.report_fail("interface_is_down_on_dut", [vars.D1D2P1])
     if not st.poll_wait(intfapi.verify_interface_status, 15, vars.D2, vars.D2D1P1, "oper", "up"):
@@ -232,7 +239,7 @@ def test_ft_ovr_counters():
     Verify rx_err counters should increment, when framesize is more than MTU.
     """
     flag = 1
-    properties = ['rx_ovr','tx_ovr']
+    properties = ['rx_err','tx_err']
     intf_data.port_list = [vars.D1T1P1, vars.D1T1P2]
     intfapi.clear_interface_counters(vars.D1)
     intf_data.tg.tg_traffic_control(action='clear_stats', port_handle=[intf_data.tg_ph_1, intf_data.tg_ph_2])

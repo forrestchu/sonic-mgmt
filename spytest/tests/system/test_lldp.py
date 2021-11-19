@@ -381,8 +381,8 @@ def test_ft_lldp_docker_restart():
     service_name = "lldp"
     basic_obj.service_operations_by_systemctl(vars.D1, service_name, 'stop')
     basic_obj.service_operations_by_systemctl(vars.D1,service_name,'restart')
-    if not basic_obj.poll_for_system_status(vars.D1,service_name,30,1):
-        st.report_fail("service_not_running", service_name)
+    #if not basic_obj.poll_for_system_status(vars.D1,service_name,30,1):
+    #    st.report_fail("service_not_running", service_name)
     if not basic_obj.verify_service_status(vars.D1, service_name):
         st.report_fail("lldp_service_not_up")
     if not intf_obj.poll_for_interfaces(vars.D1,iteration_count=30,delay=1):

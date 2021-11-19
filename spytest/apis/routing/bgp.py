@@ -854,7 +854,7 @@ def config_bgp_network_advertise(dut, local_asn, network, route_map='', addr_fam
     if cli_type == "vtysh":
         command  = "router bgp {}".format(local_asn)
         command += "\n address-family {} {}".format(addr_family, "unicast")
-        command += "\n {} network {}".format(cfgmode, network)
+        command += "\n {} network {} nonconnected".format(cfgmode, network)
         if route_map != '' :
             command += "route-map {}".format(route_map)
         st.config(dut, command, type=cli_type)

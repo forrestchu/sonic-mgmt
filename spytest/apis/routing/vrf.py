@@ -1,3 +1,4 @@
+import json
 from spytest import st, utils
 from spytest.utils import filter_and_select
 from utilities.utils import get_interface_number_from_name
@@ -149,6 +150,20 @@ def get_vrf_verbose(dut, **kwargs):
         vrf_info['interfaces'] = interfaces
         return vrf_info
 
+def vrf_v4_v6_enable_mode(dut, vrf):
+    """
+
+    :param dut:
+    :return:
+    """
+    final_data, temp_data = dict(), dict()
+    data = {"v4": "true","v6": "true"}
+    temp_data[vrf] = data
+    final_data['VRF'] = temp_data
+    data_json = json.dumps(final_data)
+    json.loads(data_json)
+    st.apply_json(dut, data_json)
+
 def config_vrf(dut, **kwargs):
     """
     #Sonic cmd: Config vrf <add | delete> <VRF-name>
@@ -183,12 +198,16 @@ def config_vrf(dut, **kwargs):
         if skip_error:
             try:
                 st.config(dut, my_cmd)
+                if config.lower() == 'yes'
+                    vrf_v4_v6_enable_mode(dut, vrf)
                 return True
             except Exception:
                 st.log("Error handled..by API")
                 return False
         else:
             st.config(dut, my_cmd)
+            if config.lower() == 'yes'
+                vrf_v4_v6_enable_mode(dut, vrf)
             return True
     elif cli_type == 'klish':
         command = ''

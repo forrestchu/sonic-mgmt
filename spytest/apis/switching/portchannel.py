@@ -448,8 +448,9 @@ def add_del_portchannel_member(dut, portchannel, members, flag="add", skip_verif
                 st.error("Port Channel Members {}: PortChannel {} not found".format(action, portchannel))
                 return False
         for member in utils.make_list(members):
-            command = "config portchannel member {} {} {}".format(flag, portchannel, member)
-            st.config(dut, command, skip_error_check=skip_err_check)
+            member_flag = "add-mem" if flag == "add" else "del-mem"
+            command = "teamd {} {} member-ports {}".format(member_flag, portchannel, member)
+            st.config(dut, command, skip_error_check=skip_err_check, type='alicli')
             if not skip_verify:
                 if flag == 'add':
                     if not verify_portchannel_member(dut, portchannel, member, flag):

@@ -2,7 +2,7 @@
 # @author : Chaitanya Vella (chaitanya-vella.kumar@broadcom.com)
 # @author2 :Jagadish Chatrasi (jagadish.chatrasi@broadcom.com)
 
-import re
+import re, json
 from collections import OrderedDict
 
 from spytest import st
@@ -175,6 +175,7 @@ def interface_properties_set(dut, interfaces_list, property, value, skip_error=F
     :return:
     """
     interfaces_li = list(interfaces_list) if isinstance(interfaces_list, list) else [interfaces_list]
+    final_data, temp_data = dict(), dict()
     if cli_type == "click":
         for each_interface in interfaces_li:
             if property.lower() == "speed":
@@ -195,10 +196,16 @@ def interface_properties_set(dut, interfaces_list, property, value, skip_error=F
                 command = "config interface fec {} {}".format(each_interface, value)
                 st.config(dut, command)
             elif property.lower() == "mtu":
-                command = "config interface mtu {} {}".format(each_interface, value)
-                out = st.config(dut, command, skip_error_check=skip_error)
-                if re.search(r'Error: Interface MTU is invalid.*', out):
-                    return False
+                #command = "config interface mtu {} {}".format(each_interface, value)
+                #out = st.config(dut, command, skip_error_check=skip_error)
+                #if re.search(r'Error: Interface MTU is invalid.*', out):
+                #    return False
+                data = {"mtu": value}
+                temp_data[each_interface] = data
+                final_data['PORT'] = temp_data
+                data_json = json.dumps(final_data)
+                json.loads(data_json)
+                st.apply_json(dut, data_json)
             else:
                 st.log("Invalid property '{}' used.".format(property))
                 return False

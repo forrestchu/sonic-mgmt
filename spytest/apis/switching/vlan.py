@@ -31,7 +31,7 @@ def create_vlan(dut, vlan_list, cli_type = ''):
     commands = list()
     for each_vlan in vlan_li:
         if cli_type == "click":
-            commands.append("config vlan add {}".format(each_vlan))
+            commands.append("cfgmgr vlan add vlan {}".format(each_vlan))
         elif cli_type == "klish":
             commands.append("interface Vlan {}".format(each_vlan))
             commands.append('exit')
@@ -245,7 +245,7 @@ def get_vlan_list(dut, cli_type = ''):
     :return:
     """
     st.log("show vlan to get vlan list")
-    output = show_vlan_config(dut, cli_type=cli_type)
+    output = show_vlan_brief(dut, cli_type=cli_type)
     vlan_list = list(set([eac['vid'] for eac in output]))
     return vlan_list
 
@@ -488,11 +488,9 @@ def verify_vlan_config(dut, vlan_list, tagged=None, untagged=None, name=None, cl
     """
 
     vlan_li = map(str, vlan_list) if isinstance(vlan_list, list) else [vlan_list]
-    output = show_vlan_config(dut, cli_type=cli_type)
-    output_brief = show_vlan_brief(dut, cli_type=cli_type)
+    output = show_vlan_brief(dut, cli_type=cli_type)
     for each_vlan in vlan_li:
         entries = filter_and_select(output, None, {"vid": each_vlan})
-        entries_brief = filter_and_select(output_brief, None, {"vid": each_vlan})
         if not entries:
             st.log("Provided VLAN {} entry is not exist in table".format(each_vlan))
             return False
@@ -500,7 +498,7 @@ def verify_vlan_config(dut, vlan_list, tagged=None, untagged=None, name=None, cl
             interface_list = list(tagged) if isinstance(tagged, list) else [tagged]
             for each_intr in interface_list:
                 if cli_type in ["click", "rest-put", "rest-patch"]:
-                    if not filter_and_select(entries_brief, None, {"ports": each_intr, "mode": "tagged"}):
+                    if not filter_and_select(entries, None, {"ports": each_intr, "porttagging": "tagged"}):
                         st.log("Provided interface {} is not a tagged member of Vlan {}".format(each_intr, each_vlan))
                         return False
                 elif cli_type == "klish":
@@ -514,7 +512,7 @@ def verify_vlan_config(dut, vlan_list, tagged=None, untagged=None, name=None, cl
             interface_list = list(untagged) if isinstance(untagged, list) else [untagged]
             for each_intr in interface_list:
                 if cli_type in ["click", "rest-put", "rest-patch"]:
-                    if not filter_and_select(entries_brief, None, {"ports": each_intr, "mode": "untagged"}):
+                    if not filter_and_select(entries, None, {"ports": each_intr, "porttagging": "untagged"}):
                         st.log("Provided interface {} is not a untagged member of Vlan {}".format(each_intr, each_vlan))
                         return False
                 elif cli_type == "klish":
@@ -578,12 +576,11 @@ def _clear_vlan_configuration_helper(dut_list, cli_type = ''):
         cli_type = st.get_ui_type(dut, cli_type=cli_type)
         st.log("############## {} : VLAN Cleanup ################".format(dut))
         if cli_type == 'click':
-            output = show_vlan_config(dut, cli_type=cli_type)
-            output_brief = show_vlan_brief(dut, cli_type=cli_type)
+            output = show_vlan_brief(dut, cli_type=cli_type)
 
             if not _has_vlan_range(dut):
                 (vlans, commands) = ({}, [])
-                for eac in output_brief:
+                for eac in output:
                     (vid, member) = (eac['vid'], eac['ports'])
                     if vid:
                         vlans[vid] = 1
@@ -599,7 +596,7 @@ def _clear_vlan_configuration_helper(dut_list, cli_type = ''):
             # Get Vlan list
             vlan_list = list(set([eac['vid'] for eac in output]))
             # Get interface list
-            member_list = list(set([eac['member'] for eac in output if eac['member'] != '']))
+            member_list = list(set([eac['ports'] for eac in output if eac['ports'] != '']))
             if member_list:
                 if not config_vlan_range_members(dut, '1 4093', member_list, config='del', skip_verify=True):
                     st.log("VLAN all member delete failed")
@@ -717,7 +714,7 @@ def config_vlan_range(dut, vlan_range, config="add", skip_verify=False, cli_type
             for vrange in vlan_range_list:
                 [range_min, range_max] = [int(vid) for vid in vrange.split()]
                 for vid in range(range_min, range_max+1):
-                    commands.append("config vlan {} {}".format(config, vid))
+                    commands.append("cfgmgr vlan {} vlan {}".format(config, vid))
             output = st.config(dut, commands)
             return _check_config_vlan_output(output)
 
@@ -806,7 +803,7 @@ def config_vlan_range_members(dut, vlan_range, port, config="add", skip_verify=F
                 for vrange in vlan_range_list:
                     [range_min, range_max] = [int(vid) for vid in vrange.split()]
                     for vid in range(range_min, range_max+1):
-                        commands.append("config vlan member {} {} {}".format(config, vid, each_port))
+                        commands.append("cfgmgr vlan {} vlan {} dev {}".format(config, vid, each_port))
             output = st.config(dut, commands, skip_error_check=skip_error)
             return _check_config_vlan_member_output(output)
 

@@ -27,6 +27,7 @@ apt-get install -y iputils-ping
 apt-get install -y libxss1 
 apt-get install -y libxss-dev 
 apt-get install -y expect
+apt-get install -y vim
 
 #BASE_URL="http://30.57.186.117/spytest"
 BASE_URL="http://10.97.244.220/spytest"
@@ -72,4 +73,12 @@ ln -s 9.10.16.6/ 9.10
 cd /tmp/
 mv Ixia.tcl-fix.tcl /projects/scid/tgen/ixia/all/ixia/hlapi/9.10.2007.43/Ixia.tcl
 
+ln -s /usr/lib/x86_64-linux-gnu/libffi.so.6 /usr/lib/x86_64-linux-gnu/libffi.so.5
+
+# https://github.com/HypothesisWorks/hypothesis/pull/2015/files
+wget $BASE_URL/compat.patch
+cd /projects/scid/tools/ActivPython/current/lib/python2.7/site-packages/hypothesis/internal/
+patch -p1 < /tmp/compat.patch
+
+cd /tmp/
 rm *.gz *.tar *.tgz

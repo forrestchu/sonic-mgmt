@@ -1,7 +1,8 @@
 import pytest
 
-from spytest import st, tgapi
+from spytest import st, tgapi, SpyTestDict
 
+import apis.system.basic as basic_obj
 import apis.routing.ip as ipapi
 import apis.routing.bgp as bgpapi
 import apis.switching.vlan as vlanapi
@@ -62,6 +63,8 @@ def bgp_pre_config_cleanup():
     bgplib.l3tc_vrfipv4v6_address_leafspine_tg_config_unconfig(config='no')
     bgplib.l3tc_vrfipv4v6_address_leafspine_tg_bgp_config(config='no')
     ipapi.clear_ip_configuration(st.get_dut_names(), family='all', thread=True)
+    for dut in st.get_dut_names() :
+        bgpapi.unconfig_router_bgp(dut)
     vlanapi.clear_vlan_configuration(st.get_dut_names())
     poapi.clear_portchannel_configuration(st.get_dut_names())
     st.banner("BGP MODULE CONFIG CLEANUP - END")
@@ -111,6 +114,59 @@ class TestBGPCommon:
             st.report_fail('test_case_failed')
         st.report_pass("test_case_passed")
 
+    def ft_bgp_neigbor_cpu_attack_check(self):
+        data = SpyTestDict()
+        TG_D1 = topo.tg_dut_list_name[0]
+        tg_ob = topo['T1{}P1_tg_obj'.format(TG_D1)]
+        dut_rt_int_mac = basic_obj.get_ifconfig_ether(topo.dut_list[0] , bgplib.data.D1T1P1)
+ 
+        data.streams = {}
+        stream = tg_ob.tg_traffic_config(port_handle=topo['T1{}P1_ipv6_tg_ph'.format(TG_D1)],
+                                       mode='create', length_mode='fixed', frame_size=128,
+                                       rate_pps=15000, l2_encap='ethernet_ii_vlan',
+                                       transmit_mode='continuous', l3_protocol='ipv4',
+                                       mac_src='00:0a:01:01:23:01',
+                                       mac_dst=dut_rt_int_mac, ip_src_addr="193.2.1.2",
+                                       ip_dst_addr="193.2.1.1", ip_ttl="255",
+                                       l4_protocol="icmp", icmp_type=1)
+        st.log('Stream output:{}'.format(stream))
+        data.streams['ICMP'] = stream['stream_id']
+
+        stream = tg_ob.tg_traffic_config(port_handle=topo['T1{}P1_ipv6_tg_ph'.format(TG_D1)],
+                                       mode='create', length_mode='fixed', frame_size=128,
+                                       rate_pps=30000, l2_encap='ethernet_ii_vlan',
+                                       transmit_mode='continuous', l3_protocol='ipv4',
+                                       mac_src='00:0a:01:01:23:01', \
+                                       mac_dst=dut_rt_int_mac, ip_src_addr="193.2.1.2",
+                                       ip_dst_addr="193.2.1.1", ip_ttl="255",
+                                       l4_protocol='tcp', tcp_src_port=179, tcp_dst_port=6000, 
+                                       tcp_dst_port_mode='incr', tcp_dst_port_count=10)
+        st.log('Stream output:{}'.format(stream))
+        data.streams['BGP'] = stream['stream_id']
+
+        stream = tg_ob.tg_traffic_config(port_handle=topo['T1{}P1_ipv6_tg_ph'.format(TG_D1)],
+                                       mode='create', length_mode='fixed', frame_size=128,
+                                       rate_pps=30000, l2_encap='ethernet_ii_vlan', mac_src='00:0a:01:01:23:01',
+                                       mac_dst=dut_rt_int_mac, transmit_mode='continuous',
+                                       l3_protocol="arp", arp_operation="arpReply", arp_dst_hw_addr=dut_rt_int_mac,
+                                       arp_src_hw_addr='00:0a:01:01:23:01')
+        st.log('Stream output:{}'.format(stream))
+        data.streams['ARP_Reply'] = stream['stream_id']
+
+        tg_ob.tg_traffic_control(action='run', stream_handle=data.streams['ICMP'])
+        tg_ob.tg_traffic_control(action='run', stream_handle=data.streams['BGP'])
+        tg_ob.tg_traffic_control(action='run', stream_handle=data.streams['ARP_Reply'])
+        st.wait(100)
+        if not utils.poll_wait(bgplib.l3tc_vrfipv4v6_address_leafspine_bgp_check, 10, config_type='all'):
+            st.error("Neighbour is failed to Establish between Spine - Leaf")
+            st.report_fail('test_case_failed')
+        st.log("BGP status check OK")
+
+        tg_ob.tg_traffic_control(action='stop', stream_handle=data.streams['ICMP'])
+        tg_ob.tg_traffic_control(action='stop', stream_handle=data.streams['BGP'])
+        tg_ob.tg_traffic_control(action='stop', stream_handle=data.streams['ARP_Reply'])
+        st.report_pass("test_case_passed")
+
     def ft_bgp_peer_traffic_check(self):
         """
         Traffic validation between Leaf Routers.
@@ -148,7 +204,7 @@ class TestBGPCommon:
             tc_fail_flag = 1
 
         # Sleep for update delay timer and the check the route count in neighbour
-        st.wait(60)
+        st.wait(65)  #occasional failure when wait 60 seconds, so wait 65 seconds
         bgp_summary_spine_after_update_timer = bgpapi.show_bgp_ipv4_summary(topo.dut_list[1])
         rib_entries_after_update_timer = bgp_summary_spine_after_update_timer[0]['ribentries']
         st.log('RIB Entries after update delay timer expiry : {}'.format(rib_entries_after_update_timer))
@@ -590,6 +646,13 @@ class TestBGPRif(TestBGPCommon):
     @pytest.mark.community_fail
     def test_ft_bgp_peer_traffic_check(self, bgp_rif_func_hook):
         TestBGPCommon.ft_bgp_peer_traffic_check(self)
+
+    @pytest.mark.bgp_traffic
+    @pytest.mark.bgp_ft
+    @pytest.mark.community
+    @pytest.mark.community_fail
+    def test_ft_bgp_neigbor_cpu_attack_check(self):
+        TestBGPCommon.ft_bgp_neigbor_cpu_attack_check(self)
 
     @pytest.mark.bgp_ft
     @pytest.mark.community

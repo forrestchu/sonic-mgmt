@@ -198,7 +198,7 @@ def config_vrf(dut, **kwargs):
         if skip_error:
             try:
                 st.config(dut, my_cmd)
-                if config.lower() == 'yes'
+                if config.lower() == 'yes':
                     vrf_v4_v6_enable_mode(dut, vrf)
                 return True
             except Exception:
@@ -206,7 +206,7 @@ def config_vrf(dut, **kwargs):
                 return False
         else:
             st.config(dut, my_cmd)
-            if config.lower() == 'yes'
+            if config.lower() == 'yes':
                 vrf_v4_v6_enable_mode(dut, vrf)
             return True
     elif cli_type == 'klish':

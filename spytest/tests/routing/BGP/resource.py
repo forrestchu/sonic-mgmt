@@ -67,4 +67,7 @@ def resource_data(vars):
     data['spine_tg_as'] = 64001
     data['leaf_tg_as'] = 63001
 
+    data.D1T1P1 = vars.D1T1P1
+    data.D2T1P1 = vars.D2T1P1
+
     return data

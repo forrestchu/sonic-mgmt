@@ -100,16 +100,16 @@ def check_intf_traffic_counters(dut, loopCnt, case):
             if entry["iface"] == dut_to_tg_port_1:
                 DUT_tx_value = entry["tx_bps"]
         p1_rcvd = DUT_rx_value
-        p1_rcvd = p1_rcvd.replace(" MB/s","")
-        p1_rcvd = p1_rcvd.replace(" B/s","")
-        p1_rcvd = p1_rcvd.replace(" KB/s","")
-        p1_rcvd = p1_rcvd.replace(" GB/s","")
+        p1_rcvd = p1_rcvd.replace(" Mb/s","")
+        p1_rcvd = p1_rcvd.replace(" b/s","")
+        p1_rcvd = p1_rcvd.replace(" Kb/s","")
+        p1_rcvd = p1_rcvd.replace(" Gb/s","")
         p1_rcvd = 0.0 if p1_rcvd == "" else p1_rcvd
         p2_txmt = DUT_tx_value
-        p2_txmt = p2_txmt.replace(" MB/s","")
-        p2_txmt = p2_txmt.replace(" B/s","")
-        p2_txmt = p2_txmt.replace(" KB/s","")
-        p2_txmt = p2_txmt.replace(" GB/s","")
+        p2_txmt = p2_txmt.replace(" Mb/s","")
+        p2_txmt = p2_txmt.replace(" b/s","")
+        p2_txmt = p2_txmt.replace(" Kb/s","")
+        p2_txmt = p2_txmt.replace(" Gb/s","")
         p2_txmt = 0.0 if p2_txmt == "" else p2_txmt
 
         st.log("rx_ok counter value on DUT Ingress port: {} and tx_ok xounter value on DUT Egress port : {}".format(p1_rcvd, p2_txmt))

@@ -132,6 +132,7 @@ def test_l3_fwding():
     data.my_dut_list = st.get_dut_names()
 
     dut1 = vars.D1
+    dut2 = vars.D2
     ipfeature.get_interface_ip_address(dut1, family="ipv4")
     ipfeature.get_interface_ip_address(dut1, family="ipv6")
     ipfeature.show_ip_route(dut1)
@@ -207,6 +208,7 @@ def test_l3_fwding():
     if not result: st.report_fail("msg", "IPv4 Ping Failed")
 
     # verify the ipv6 ping
+    ipfeature.ping(dut2,data.d1t1_ip_addr_v6,'ipv6') #aone ndp:37246835
     result = ipfeature.ping(dut1, data.d2t1_ip_addr_v6,'ipv6')
     if not result: st.report_fail("msg", "IPv6 Ping Failed")
 

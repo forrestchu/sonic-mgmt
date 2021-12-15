@@ -222,7 +222,7 @@ def test_ft_port_fn_verify_shut_noshut():
     for _ in range(3):
         intfapi.interface_shutdown(vars.D1, [vars.D1D2P1], skip_verify=True)
         intfapi.interface_noshutdown(vars.D1, [vars.D1D2P1], skip_verify=True)
-    st.wait(30)
+    st.wait(90)
     if not st.poll_wait(intfapi.verify_interface_status, 15, vars.D1, vars.D1D2P1, "oper", "up"):
         st.report_fail("interface_is_down_on_dut", [vars.D1D2P1])
     if not st.poll_wait(intfapi.verify_interface_status, 15, vars.D2, vars.D2D1P1, "oper", "up"):

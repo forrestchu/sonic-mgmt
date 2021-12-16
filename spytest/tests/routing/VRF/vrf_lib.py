@@ -55,6 +55,7 @@ def vrf_base_unconfig():
     dut_vrf_bgp(phy = '1', config = 'no')
     dut_vrf_bgp(ve = '1', config = 'no')
     dut_vrf_bgp(pc = '1', config = 'no')
+    dut_bgp_ext_del()
     dut_vrf_bind(phy = '1', config = 'no')
     dut_vrf_bind(ve = '1', config = 'no')
     dut_vrf_bind(pc = '1', config = 'no')
@@ -482,6 +483,12 @@ def dut_vrf_bgp(**kwargs):
         dict1 = {'vrf_name':vrf_name[2],'local_as':dut1_as[2],'config':'no','removeBGP':'yes','config_type_list':['removeBGP']}
         dict2 = {'vrf_name':vrf_name[2],'local_as':dut2_as[2],'config':'no','removeBGP':'yes','config_type_list':['removeBGP']}
         parallel.exec_parallel(True, [data.dut1, data.dut2], bgp_api.config_bgp, [dict1, dict2])
+
+def dut_bgp_ext_del():
+    # new bgp intance was generated in test_VrfFun_20_24_25_32_33_44_45, need delete
+    dict1 = {'local_as':dut1_as[1],'config':'no','removeBGP':'yes','config_type_list':['removeBGP']}
+    dict2 = {'local_as':dut2_as[1],'config':'no','removeBGP':'yes','config_type_list':['removeBGP']}
+    parallel.exec_parallel(True, [data.dut1, data.dut2], bgp_api.config_bgp, [dict1, dict2])
 
 def verify_bgp(**kwargs):
     if 'phy' in kwargs:

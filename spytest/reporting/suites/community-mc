@@ -5,23 +5,27 @@
 +file:routing/BGP/test_bgp.py
 +file:routing/VRF/test_vrf.py
 +file:qos/acl/test_acls_l3_forwarding.py
-#+file:system/test_interface.py
++file:system/test_interface.py
 +file:system/test_lldp.py
++file:switching/test_portchannel.py
 
 # test cases requiring link state propagation
 -test:test_ft_cos_tc_queue_map
-#-test:test_l2_to_l3_port
--test:test_ft_arp_entry_link_failure
--test:test_ft_arp_clear_cache_static_and_dynamic_entries
 -test:TestBGPRif.test_ft_bgp_rmap_out
 -test:TestBGPIPvxRouteAdvertisementFilter.test_redistribute_static_ipv4
 -test:TestBGPIPvxRouteAdvertisementFilter.test_bgp_route_map_with_community
 -test:test_ft_lldp_docker_restart
+-test:test_ft_portchannel_behavior_with_tagged_traffic
+-test:test_ft_untagged_traffic_on_portchannel
+-test:test_ft_member_state_after_interchanged_the_members_across_portchannels
+-test:test_ft_portchannel_with_vlan_variations
+-test:test_ft_lacp_graceful_restart_with_cold_boot
+-test:test_ft_lacp_graceful_restart_with_save_reload
 
 #+args:--skip-init-config true
 +args:--skip-load-config base
 +args:--load-config-method force-reboot
 +args:--get-tech-support none
 +args:--fetch-core-files none
-#+args:--build-url http://10.97.244.220/dailybuild/SONiC-dev-master-mc/latest/sonic-cisco.bin
-#+args:--load-image installer
++args:--build-url http://10.97.244.220/dailybuild/SONiC-dev-master-mc/latest/sonic-cisco.bin
++args:--load-image installer

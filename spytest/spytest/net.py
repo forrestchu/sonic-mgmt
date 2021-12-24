@@ -753,6 +753,7 @@ class Net(object):
     def set_pagination(self, devname):
         if not no_more_suffix:
             self.config(devname, "terminal length 0", type="klish", conf=False)
+        #self.config(devname, "no page", type="alicli", conf=False)
 
     def set_login_timeout(self, devname):
         self.fix_hostname(devname)
@@ -2932,6 +2933,11 @@ class Net(object):
     def finish_upgrade_image(self, devname, url, retval, skip_reboot, max_ready_wait):
         devname = self._check_devname(devname)
         if retval == "success":
+            if not  skip_reboot:
+                # we need to download the helper files again
+                self.skip_trans_helper[devname] = dict()
+                msg = "set self.skip_trans_helper = NULL"
+                self.dut_log(devname,msg)
             if skip_reboot:
                 msg = "Image upgraded successfully."
                 self.dut_log(devname, msg)

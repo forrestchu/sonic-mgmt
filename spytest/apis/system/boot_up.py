@@ -70,6 +70,8 @@ def sonic_installer_install2(dut, url, max_time=1800, skip_error_check=False, mi
         if re.search("Not installing SONiC version", output) and \
            re.search("as current running SONiC has the same version", output):
             return "skipped"
+        if re.search("is current running. Do nothing...", output):
+            return "skipped"
         return "error"
     elif cli_type == 'klish':
         cmd = "image install {}".format(url)

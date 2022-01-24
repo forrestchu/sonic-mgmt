@@ -285,6 +285,14 @@ def create_v6_route(route_count):
                                ipv6_dst_addr=data.ip6_addr[9])
     st.log("TRAFCONF: " + str(tr1))
 
+    # Ping from tgen to DUT2, for nd info learn
+    res = tgapi.verify_ping(src_obj=tg, port_handle=tg_handler["tg_ph_2"], dev_handle=h2['handle'], dst_ip=data.ip6_addr[8], \
+                      ping_count='1', exp_count='1')
+    if res:
+        st.log("Ping succeeded.")
+    else:
+        st.warn("Ping failed.")
+
     res = tg.tg_traffic_control(action='run', stream_handle=tr1['stream_id'])
     st.log("TR_CTRL: " + str(res))
     tg.tg_traffic_control(action='stop', stream_handle=tr1['stream_id'])
@@ -389,6 +397,14 @@ def test_ft_ip6_static_route_traffic_forward_blackhole():
 
     # Ping from tgen to DUT.
     res = tgapi.verify_ping(src_obj=tg, port_handle=tg_handler["tg_ph_1"], dev_handle=h1['handle'], dst_ip=data.ip6_addr[1], \
+                      ping_count='1', exp_count='1')
+    if res:
+        st.log("Ping succeeded.")
+    else:
+        st.warn("Ping failed.")
+
+    # Ping from tgen to DUT2, for nd info learn
+    res = tgapi.verify_ping(src_obj=tg, port_handle=tg_handler["tg_ph_2"], dev_handle=h2['handle'], dst_ip=data.ip6_addr[8], \
                       ping_count='1', exp_count='1')
     if res:
         st.log("Ping succeeded.")
@@ -640,65 +656,65 @@ def test_ft_verify_interfaces_order():
     st.report_pass("test_case_passed")
 
 
-@pytest.fixture(scope="function")
-def ceta_31902_fixture(request,ip_module_hooks):
-    ipfeature.config_ip_addr_interface(vars.D1, vars.D1T1P2, data.ip6_addr[1],
-                                                           96, family=data.af_ipv6,config="remove")
-    vlan_obj.create_vlan(vars.D1, [data.host1_vlan,data.host2_vlan])
-    vlan_obj.add_vlan_member(vars.D1, data.host1_vlan, [vars.D1T1P1,vars.D1T1P2], tagging_mode=True)
-    vlan_obj.add_vlan_member(vars.D1, data.host2_vlan, [vars.D1T1P1, vars.D1T1P2], tagging_mode=True)
-    ipfeature.config_ip_addr_interface(vars.D1, "Vlan"+data.host1_vlan, data.vlan1_ip, 24, family=data.af_ipv4)
-    ipfeature.config_ip_addr_interface(vars.D1, "Vlan" + data.host2_vlan, data.vlan2_ip, 24, family=data.af_ipv4)
-    yield
-    ipfeature.delete_ip_interface(vars.D1, "Vlan"+data.host1_vlan, data.vlan1_ip, "24", family="ipv4")
-    ipfeature.delete_ip_interface(vars.D1, "Vlan"+data.host2_vlan, data.vlan2_ip, "24", family="ipv4")
-    vlan_obj.delete_vlan_member(vars.D1, data.host1_vlan, [vars.D1T1P1, vars.D1T1P2], True)
-    vlan_obj.delete_vlan_member(vars.D1, data.host2_vlan, [vars.D1T1P1, vars.D1T1P2], True)
-    vlan_obj.delete_vlan(vars.D1, [data.host1_vlan,data.host2_vlan])
-    ipfeature.config_ip_addr_interface(vars.D1, vars.D1T1P2, data.ip6_addr[1], 96, family=data.af_ipv6)
-
-
-def test_Ceta_31902(ceta_31902_fixture):
-    success=True
-    mac_obj.config_mac(dut=vars.D1,mac=data.host1_mac, vlan=data.host1_vlan, intf=vars.D1T1P1)
-    arp_obj.add_static_arp(dut=vars.D1, ipaddress=data_tg_ip, macaddress=data.host1_mac,
-                       interface="Vlan"+data.host1_vlan)
-
-    arp_obj.add_static_arp(dut=vars.D1, ipaddress=data_tg_ip, macaddress=data.host2_mac,
-                       interface="Vlan"+data.host2_vlan)
-    arp_obj.delete_static_arp(dut=vars.D1, ipaddress=data_tg_ip, interface="Vlan"+data.host2_vlan, mac=data.host2_mac)
-
-    arp_obj.add_static_arp(dut=vars.D1, ipaddress=data_tg_ip, macaddress=data.host2_mac,
-                       interface="Vlan"+data.host1_vlan)
-    arp_obj.delete_static_arp(dut=vars.D1, ipaddress=data_tg_ip, interface="Vlan"+data.host1_vlan, mac=data.host2_mac)
-
-    mac_obj.config_mac(dut=vars.D1,mac=data.host2_mac, vlan=data.host1_vlan, intf=vars.D1T1P2)
-    arp_obj.add_static_arp(dut=vars.D1, ipaddress=data_tg_ip, macaddress=data.host2_mac,
-                       interface="Vlan"+data.host1_vlan)
-
-    mac_obj.delete_mac(dut=vars.D1, mac=data.host1_mac, vlan=data.host1_vlan)
-    mac_obj.config_mac(dut=vars.D1,mac=data.host1_mac, vlan=data.host1_vlan, intf=vars.D1T1P1)
-    l2_out = asicapi.get_l2_out(vars.D1, data.host2_mac)
-    l3_out = asicapi.get_l3_out(vars.D1, data.host2_mac)
-    if l2_out and l3_out:
-        l2_gport=l2_out[0]["gport"][9]
-        l3_port=l3_out[0]["port"]
-        if l2_gport == l3_port:
-            st.log("MAC {} points port {} correctly in both ARP and MAC table".format(data.host2_mac,l2_gport))
-        else:
-            success=False
-            st.error("MAC and ARP table are NOT in SYNC; "
-                     "MAC {} points to gport {} in \"l2 show\""
-                     "but in \"l3 egress show\" it is port {}".format(data.host2_mac,l2_gport,l3_port))
-    else:
-        success=False
-        st.error("MAC NOT present in \"l2 show\" or \"l3 egress show\" output")
-
-    arp_obj.delete_static_arp(dut=vars.D1, ipaddress=data_tg_ip, interface="Vlan"+data.host1_vlan, mac=data.host2_mac)
-    mac_obj.delete_mac(dut=vars.D1, mac=data.host1_mac, vlan=data.host1_vlan)
-    mac_obj.delete_mac(dut=vars.D1, mac=data.host2_mac, vlan=data.host1_vlan)
-
-    if success:
-        st.report_pass("test_case_id_passed", "test_Ceta_31902")
-    else:
-        st.report_fail("test_case_id_failed", "test_Ceta_31902")
+#@pytest.fixture(scope="function")
+#def ceta_31902_fixture(request,ip_module_hooks):
+#    ipfeature.config_ip_addr_interface(vars.D1, vars.D1T1P2, data.ip6_addr[1],
+#                                                           96, family=data.af_ipv6,config="remove")
+#    vlan_obj.create_vlan(vars.D1, [data.host1_vlan,data.host2_vlan])
+#    vlan_obj.add_vlan_member(vars.D1, data.host1_vlan, [vars.D1T1P1,vars.D1T1P2], tagging_mode=True)
+#    vlan_obj.add_vlan_member(vars.D1, data.host2_vlan, [vars.D1T1P1, vars.D1T1P2], tagging_mode=True)
+#    ipfeature.config_ip_addr_interface(vars.D1, "Vlan"+data.host1_vlan, data.vlan1_ip, 24, family=data.af_ipv4)
+#    ipfeature.config_ip_addr_interface(vars.D1, "Vlan" + data.host2_vlan, data.vlan2_ip, 24, family=data.af_ipv4)
+#    yield
+#    ipfeature.delete_ip_interface(vars.D1, "Vlan"+data.host1_vlan, data.vlan1_ip, "24", family="ipv4")
+#    ipfeature.delete_ip_interface(vars.D1, "Vlan"+data.host2_vlan, data.vlan2_ip, "24", family="ipv4")
+#    vlan_obj.delete_vlan_member(vars.D1, data.host1_vlan, [vars.D1T1P1, vars.D1T1P2], True)
+#    vlan_obj.delete_vlan_member(vars.D1, data.host2_vlan, [vars.D1T1P1, vars.D1T1P2], True)
+#    vlan_obj.delete_vlan(vars.D1, [data.host1_vlan,data.host2_vlan])
+#    ipfeature.config_ip_addr_interface(vars.D1, vars.D1T1P2, data.ip6_addr[1], 96, family=data.af_ipv6)
+#
+#
+#def test_Ceta_31902(ceta_31902_fixture):
+#    success=True
+#    mac_obj.config_mac(dut=vars.D1,mac=data.host1_mac, vlan=data.host1_vlan, intf=vars.D1T1P1)
+#    arp_obj.add_static_arp(dut=vars.D1, ipaddress=data_tg_ip, macaddress=data.host1_mac,
+#                       interface="Vlan"+data.host1_vlan)
+#
+#    arp_obj.add_static_arp(dut=vars.D1, ipaddress=data_tg_ip, macaddress=data.host2_mac,
+#                       interface="Vlan"+data.host2_vlan)
+#    arp_obj.delete_static_arp(dut=vars.D1, ipaddress=data_tg_ip, interface="Vlan"+data.host2_vlan, mac=data.host2_mac)
+#
+#    arp_obj.add_static_arp(dut=vars.D1, ipaddress=data_tg_ip, macaddress=data.host2_mac,
+#                       interface="Vlan"+data.host1_vlan)
+#    arp_obj.delete_static_arp(dut=vars.D1, ipaddress=data_tg_ip, interface="Vlan"+data.host1_vlan, mac=data.host2_mac)
+#
+#    mac_obj.config_mac(dut=vars.D1,mac=data.host2_mac, vlan=data.host1_vlan, intf=vars.D1T1P2)
+#    arp_obj.add_static_arp(dut=vars.D1, ipaddress=data_tg_ip, macaddress=data.host2_mac,
+#                       interface="Vlan"+data.host1_vlan)
+#
+#    mac_obj.delete_mac(dut=vars.D1, mac=data.host1_mac, vlan=data.host1_vlan)
+#    mac_obj.config_mac(dut=vars.D1,mac=data.host1_mac, vlan=data.host1_vlan, intf=vars.D1T1P1)
+#    l2_out = asicapi.get_l2_out(vars.D1, data.host2_mac)
+#    l3_out = asicapi.get_l3_out(vars.D1, data.host2_mac)
+#    if l2_out and l3_out:
+#        l2_gport=l2_out[0]["gport"][9]
+#        l3_port=l3_out[0]["port"]
+#        if l2_gport == l3_port:
+#            st.log("MAC {} points port {} correctly in both ARP and MAC table".format(data.host2_mac,l2_gport))
+#        else:
+#            success=False
+#            st.error("MAC and ARP table are NOT in SYNC; "
+#                     "MAC {} points to gport {} in \"l2 show\""
+#                     "but in \"l3 egress show\" it is port {}".format(data.host2_mac,l2_gport,l3_port))
+#    else:
+#        success=False
+#        st.error("MAC NOT present in \"l2 show\" or \"l3 egress show\" output")
+#
+#    arp_obj.delete_static_arp(dut=vars.D1, ipaddress=data_tg_ip, interface="Vlan"+data.host1_vlan, mac=data.host2_mac)
+#    mac_obj.delete_mac(dut=vars.D1, mac=data.host1_mac, vlan=data.host1_vlan)
+#    mac_obj.delete_mac(dut=vars.D1, mac=data.host2_mac, vlan=data.host1_vlan)
+#
+#    if success:
+#        st.report_pass("test_case_id_passed", "test_Ceta_31902")
+#    else:
+#        st.report_fail("test_case_id_failed", "test_Ceta_31902")

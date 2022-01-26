@@ -1,0 +1,10 @@
+Value AS (\d*)
+Value RID ([a-fA-F\d\.:]*)
+Value BGP_MHOP (\d*)
+Value RM_PRI_AS (remove-private-AS)
+
+Start
+  ^.*router bgp ${AS}
+  ^.*bgp router-id ${RID}
+  ^.*neighbor [a-fA-F\d\.:]* ebgp-multihop ${BGP_MHOP}
+  ^.*neighbor [a-fA-F\d\.:]* ${RM_PRI_AS}

@@ -108,8 +108,19 @@ def frr_config_checkpoint(obj, key, expect = True, checkpoint = ''):
     output_bgpd = obj.show_frr_bgp_running()
     st.log(output_bgpd)
     checkflag = True
-    if output_bgpd[0].get(key) is None or output_bgpd[0].get(key) == '':
-        checkflag = False
+    temp = output_bgpd
+    for sub_key in key.split('|'):
+        temp = temp.get(sub_key)
+        st.log("subkey {} , val {}".format(sub_key, temp))
+        if isinstance(temp,dict):
+            continue
+        elif temp == 'true':
+            checkflag = True
+            break
+        else:       
+            checkflag = False
+            break     
+
     if checkflag != expect:
         st.report_fail("{} frr config has no {} config".format(checkpoint, key))
 
@@ -135,7 +146,8 @@ def test_cli_bgp_remove_private_as_v4():
 
     ### check frr running-config ##
     st.log("check frr running-config")
-    frr_config_checkpoint(bgpcli_obj, 'rm_pri_as', True, 'check2')
+    frr_key = "router bgp {}|address-family ipv4 unicast|neighbor {} remove-private-AS".format(bgpcli_obj.get_local_as() ,peer_ip)
+    frr_config_checkpoint(bgpcli_obj, frr_key, True, 'check2')
 
     ### reboot and check config recovery ### 
     st.log("reboot and check config recovery")
@@ -143,14 +155,14 @@ def test_cli_bgp_remove_private_as_v4():
 
     configdb_checkpoint(dut, peerkey, 'remove_private_as', 'true', True, 'check3')
 
-    frr_config_checkpoint(bgpcli_obj, 'rm_pri_as', True, 'check4')
+    frr_config_checkpoint(bgpcli_obj, frr_key, True, 'check4')
 
     ### restore the environment
     st.log("restore the environment")
     bgpcli_obj.config_neighbor(peer = peer_ip, remove_private_as='false', address_family='true',
         af_pro='ipv4', af_modifier='unicast')
     configdb_checkpoint(dut, peerkey, 'remove_private_as', 'false', True, 'check5')
-    frr_config_checkpoint(bgpcli_obj, 'rm_pri_as', False, 'check6')
+    frr_config_checkpoint(bgpcli_obj, frr_key, False, 'check6')
 
     st.report_pass("test_case_passed")
 
@@ -172,20 +184,104 @@ def test_cli_bgp_ebgp_multihop_v4():
 
     ### check frr running-config ##
     st.log("check frr running-config")
-    frr_config_checkpoint(bgpcli_obj, 'bgp_mhop', True, 'check2')
+    frr_key = "router bgp {}|neighbor {} ebgp-multihop {}".format(bgpcli_obj.get_local_as() ,peer_ip, '255')
+    frr_config_checkpoint(bgpcli_obj, frr_key, True, 'check2')
 
     ### reboot and check config recovery ### 
     st.log("reboot and check config recovery")
     bgpcli_obj.save_config_and_reboot()
     configdb_checkpoint(dut, peerkey, 'ebgp_multihop', '255', True, 'check3')
-    frr_config_checkpoint(bgpcli_obj, 'bgp_mhop', True, 'check4')
+    frr_config_checkpoint(bgpcli_obj, frr_key, True, 'check4')
 
     ### restore the environment
     st.log("restore the environment")
     bgpcli_obj.config_neighbor(peer = peer_ip, ebgp_multihop='false')
     configdb_checkpoint(dut, peerkey, 'ebgp_multihop', 'null', True, 'check5')
-    frr_config_checkpoint(bgpcli_obj, 'bgp_mhop', False, 'check6')
+    frr_config_checkpoint(bgpcli_obj, frr_key, False, 'check6')
+
+    st.report_pass("test_case_passed")
+
+@pytest.mark.bgp_cli
+def test_cli_bgp_send_community_v4():
+    st.log("test_cli_bgp_send_community_v4 begin")
+    bgpcli_obj = data['bgpcli_obj']
+    dut = data['dut']
+    peer_ip = data.ip4_addr[0]
+
+    ### config cli ###
+    st.log("config cli")
+    
+    bgpcli_obj.config_neighbor(peer = peer_ip, address_family='true', activate='true', send_community='false',
+        af_pro='ipv4', af_modifier='unicast')
+
+    ### check config db ###
+    st.log("check config db")
+    
+    ## hgetall BGP_NEIGHBOR|192.168.1.1|ipv4
+    peerkey = "BGP_NEIGHBOR|{}|ipv4".format(peer_ip)
+    configdb_checkpoint(dut, peerkey, 'send_community', 'false', True, 'check1')
+
+    ### check frr running-config ##
+    st.log("check frr running-config")
+    frr_key = "router bgp {}|address-family ipv4 unicast|no neighbor {} send-community".format(bgpcli_obj.get_local_as() ,peer_ip)
+    frr_config_checkpoint(bgpcli_obj, frr_key, True, 'check2')
+
+    ### reboot and check config recovery ### 
+    st.log("reboot and check config recovery")
+    bgpcli_obj.save_config_and_reboot()
+
+    configdb_checkpoint(dut, peerkey, 'send_community', 'false', True, 'check3')
+
+    frr_config_checkpoint(bgpcli_obj, frr_key, True, 'check4')
+
+    ### restore the environment
+    st.log("restore the environment")
+    bgpcli_obj.config_neighbor(peer = peer_ip, send_community='true', address_family='true',
+        af_pro='ipv4', af_modifier='unicast')
+    configdb_checkpoint(dut, peerkey, 'send_community', 'true', True, 'check5')
+    frr_config_checkpoint(bgpcli_obj, frr_key, False, 'check6')
 
     st.report_pass("test_case_passed")
 
 
+@pytest.mark.bgp_cli
+def test_cli_bgp_next_hop_self_v4():
+    st.log("test_cli_bgp_next_hop_self_v4 begin")
+    bgpcli_obj = data['bgpcli_obj']
+    dut = data['dut']
+    peer_ip = data.ip4_addr[0]
+
+    ### config cli ###
+    st.log("config cli")
+    
+    bgpcli_obj.config_neighbor(peer = peer_ip, address_family='true', activate='true', next_hop_self='true',
+        af_pro='ipv4', af_modifier='unicast')
+
+    ### check config db ###
+    st.log("check config db")
+    
+    ## hgetall BGP_NEIGHBOR|192.168.1.1|ipv4
+    peerkey = "BGP_NEIGHBOR|{}|ipv4".format(peer_ip)
+    configdb_checkpoint(dut, peerkey, 'next_hop_self', 'true', True, 'check1')
+
+    ### check frr running-config ##
+    st.log("check frr running-config")
+    frr_key = "router bgp {}|address-family ipv4 unicast|neighbor {} next-hop-self".format(bgpcli_obj.get_local_as() ,peer_ip)
+    frr_config_checkpoint(bgpcli_obj, frr_key, True, 'check2')
+
+    ### reboot and check config recovery ### 
+    st.log("reboot and check config recovery")
+    bgpcli_obj.save_config_and_reboot()
+
+    configdb_checkpoint(dut, peerkey, 'next_hop_self', 'true', True, 'check3')
+
+    frr_config_checkpoint(bgpcli_obj, frr_key, True, 'check4')
+
+    ### restore the environment
+    st.log("restore the environment")
+    bgpcli_obj.config_neighbor(peer = peer_ip, next_hop_self='false', address_family='true',
+        af_pro='ipv4', af_modifier='unicast')
+    configdb_checkpoint(dut, peerkey, 'next_hop_self', 'false', True, 'check5')
+    frr_config_checkpoint(bgpcli_obj, frr_key, False, 'check6')
+
+    st.report_pass("test_case_passed")

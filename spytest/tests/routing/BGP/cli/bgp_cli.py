@@ -3,6 +3,7 @@
 import pytest
 from spytest import st, tgapi, SpyTestDict
 import time
+import json
 
 ALICLI_VIEW = "cli"
 CONFIG_VIEW = "configure terminal"
@@ -18,6 +19,9 @@ class BGP_CLI():
         self.dut = dut
         self.peers_v4 = []
         self.peers_v6 = []
+    
+    def get_local_as(self):
+        return self.local_as
 
     def create_bgp_route(self, as_num):
         router_bpg = ROUTE_BGP_VIEW.format(as_num)
@@ -79,16 +83,31 @@ class BGP_CLI():
                 cmd = "{} -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, self.router_view, act_cmd)
             st.config(self.dut, cmd)
         
+        ## bgp af-ip view
         remove_private_as = properties.get('remove_private_as', None)
         if remove_private_as is not None:
             t_cmd = "{} neighbor {} remove-private-AS".format('no' if remove_private_as=='false' else '', peer)
             cmd = ''
             if af is not None:
                 cmd = "{} -c '{}' -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, self.router_view, af_cmd, t_cmd)
-            else:
-                cmd = "{} -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, self.router_view, t_cmd)
-            st.config(self.dut, cmd)
-
+                st.config(self.dut, cmd)
+        ## bgp af-ip view
+        send_community = properties.get('send_community', None)
+        if send_community is not None:
+            t_cmd = "{} neighbor {} send-community".format('no' if send_community=='false' else '', peer)
+            cmd = ''
+            if af is not None:
+                cmd = "{} -c '{}' -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, self.router_view, af_cmd, t_cmd)
+                st.config(self.dut, cmd)
+        ## bgp af-ip view
+        next_hop_self = properties.get('next_hop_self', None)
+        if next_hop_self is not None:
+            t_cmd = "{} neighbor {} next-hop-self".format('no' if next_hop_self=='false' else '', peer)
+            cmd = ''
+            if af is not None:
+                cmd = "{} -c '{}' -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, self.router_view, af_cmd, t_cmd)
+                st.config(self.dut, cmd)
+  
     def flush_neighbors(self):
         st.log("Flush BGP neighbors")
         
@@ -101,8 +120,12 @@ class BGP_CLI():
 
     def show_frr_bgp_running(self):
         cmd = "vtysh -c 'show running-config bgpd json'"
-        output = st.show(self.dut, cmd)
-        return output
+        #output = st.show(self.dut, cmd)
+        output = st.show(self.dut, cmd, skip_tmpl=True)
+        json_str = json.dumps(output).encode('utf-8')
+        json_str = json_str.replace('end\\n','').replace('true','"true"').replace("\\n","").replace("\\","").replace('root@sonic:~#','').strip('"')
+        output_json = json.loads(json_str)
+        return output_json
 
     def save_config_and_reboot(self):
         cmd = "{} -c '{}' -c 'copy running-config startup-config'".format(ALICLI_VIEW, CONFIG_VIEW)

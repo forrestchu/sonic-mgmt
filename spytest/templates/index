@@ -577,6 +577,7 @@ show_queue_threshold_cpu.tmpl, .*, sonic, show threshold queue CPU
 #########################################################################################
 show_vtysh_running_config.tmpl, .*, sonic, show running-config ospfd
 show_vtysh_running_config_pim.tmpl, .*, sonic, show running-config pimd
+show_vtysh_running_config_bgpd.tmpl, .*, sonic, show running-config bgpd
 show_vtysh_running_config.tmpl, .*, sonic, show running-config
 show_vtysh_running_config.tmpl, .*, sonic, write terminal
 show_vtysh_running_config.tmpl, .*, sonic, show startup-config

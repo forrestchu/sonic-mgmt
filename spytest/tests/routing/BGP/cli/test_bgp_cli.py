@@ -51,6 +51,8 @@ def restore_env():
     bgpcli_obj = data['bgpcli_obj']
     bgpcli_obj.flush_neighbors()
     bgpcli_obj.clear_bgp_router_id(data.router_id)
+    bgpcli_obj.flush_bgp_community_list()
+    bgpcli_obj.flush_bgp_aspath_access_lists()
 
 @pytest.fixture(scope="module", autouse=True)
 def cli_module_hooks(request):
@@ -370,5 +372,358 @@ def test_cli_bgp_bfd_with_param_v4():
     configdb_checkpoint(dut, peerkey, 'rx_timer', 'null', True, 'check5-3')
     configdb_checkpoint(dut, peerkey, 'tx_timer', 'null', True, 'check5-4')
     frr_config_checkpoint(bgpcli_obj, frr_key, False, 'check6')
+
+    st.report_pass("test_case_passed")
+
+@pytest.mark.bgp_cli
+@pytest.mark.bgp_community_list
+def test_cli_bgp_community_list_normal():
+    st.log("test_cli_bgp_community_list_normal begin")
+    bgpcli_obj = data['bgpcli_obj']
+    dut = data['dut']
+
+    st.log("config cli:  normal cases")
+    ###add case data
+    item = [["50","deny","50:51"],["60","permit","60:61"],["150","deny","50:51 51:52"],["250","permit","50:51 51:52 52:53"],
+            ["50","permit","51:52"],["60","deny","61:62 63:64"],["150","permit","51:52"],["250","deny","50:51 51:52 52:53"]]
+
+    ##1: add-check-del
+    for i in range(len(item)):
+        ### config cli ###
+        bgpcli_obj.config_bgp_community_list(item[i][0], item[i][1], item[i][2])
+        
+        ### check config db ###
+        peerkey = "COMMUNITY_LIST|{}".format(item[i][0])
+        configdb_checkpoint(dut, peerkey, item[i][1], item[i][2], True, 'check1-1')
+
+        ### check frr running-config ##
+        output = st.show(dut, "show running-config bgpd", type='vtysh')
+        st.log(output)
+
+        result = False
+        for j in range(len(output)):
+            if output[j].get('community_name_num') == item[i][0] and output[j].get('param_type') == item[i][1] and output[j].get('param_val') == item[i][2]:
+                result = True
+                break
+        
+        if result == False:
+            st.report_fail("check1-2: frr check failed: {} {} {}".format(item[i][0], item[i][1], item[i][2]))
+        
+        bgpcli_obj.del_config_bgp_community_list(item[i][0], item[i][1], item[i][2])
+
+    ##2: add all - check all - del all
+    for i in range(len(item)):
+        ### config cli ###
+        bgpcli_obj.config_bgp_community_list(item[i][0], item[i][1], item[i][2])
+    for i in range(len(item)):
+        ### check config db ###
+        peerkey = "COMMUNITY_LIST|{}".format(item[i][0])
+        configdb_checkpoint(dut, peerkey, item[i][1], item[i][2], True, 'check2-1')
+
+        ### check frr running-config ##
+        output = st.show(dut, "show running-config bgpd", type='vtysh')
+        st.log(output)
+
+        result = False
+        for j in range(len(output)):
+            if output[j].get('community_name_num') == item[i][0] and output[j].get('param_type') == item[i][1] and output[j].get('param_val') == item[i][2]:
+                result = True
+                break
+        
+        if result == False:
+            st.report_fail("check2-2: frr check failed: {} {} {}".format(item[i][0], item[i][1], item[i][2]))
+        
+    bgpcli_obj.flush_bgp_community_list()
+
+    ##3: add all - del all - check all 
+    for i in range(len(item)):
+        ### config cli ###
+        bgpcli_obj.config_bgp_community_list(item[i][0], item[i][1], item[i][2])
+    
+    bgpcli_obj.flush_bgp_community_list()
+
+    for i in range(len(item)):
+        ### check config db ###
+        peerkey = "COMMUNITY_LIST|{}".format(item[i][0])
+        configdb_checkpoint(dut, peerkey, item[i][1], item[i][2], False, 'check3-1')
+
+        ### check frr running-config ##
+        output = st.show(dut, "show running-config bgpd", type='vtysh')
+        st.log(output)
+
+        result = False
+        for j in range(len(output)):
+            if output[j].get('community_name_num') == item[i][0] and output[j].get('param_type') == item[i][1] and output[j].get('param_val') == item[i][2]:
+                result = True
+                break
+        
+        if result == True:
+            st.report_fail("check3-2: frr check failed: {} {} {}".format(item[i][0], item[i][1], item[i][2]))
+
+    st.report_pass("test_case_passed")
+
+@pytest.mark.bgp_cli
+@pytest.mark.bgp_community_list
+def test_cli_bgp_community_list_standard():
+    st.log("test_cli_bgp_community_list_standard begin")
+    bgpcli_obj = data['bgpcli_obj']
+    dut = data['dut']
+
+    st.log("config cli:  standard cases")
+    ###add case data
+    item = [["standard list1","deny","50:51"],["standard list2","permit","60:61"],["standard name1","deny","50:51 51:52"],
+            ["standard name2","permit","50:51 51:52 52:53"],["standard list1","permit","51:52"],["standard list2","deny","61:62 63:64"],
+            ["standard name1","permit","51:52"],["standard name2","deny","50:51 51:52 52:53"],
+            ["standard 999","permit","51:52"],["standard 23453","deny","50:51 51:52 52:53"]]
+
+    ##1: add-check-del
+    for i in range(len(item)):
+        ### config cli ###
+        bgpcli_obj.config_bgp_community_list(item[i][0], item[i][1], item[i][2])
+        
+        ### check config db ###
+        peerkey = "COMMUNITY_LIST|{}|{}".format(item[i][0].split()[0], item[i][0].split()[1])
+        configdb_checkpoint(dut, peerkey, item[i][1], item[i][2], True, 'check1-1')
+
+        ### check frr running-config ##
+        output = st.show(dut, "show running-config bgpd", type='vtysh')
+        st.log(output)
+
+        result = False
+        for j in range(len(output)):
+            if (output[j].get('community_name_std') == item[i][0].split()[1] or output[j].get('community_name_num') == item[i][0].split()[1]) and output[j].get('param_type') == item[i][1] and output[j].get('param_val') == item[i][2]:
+                result = True
+                break
+        
+        if result == False:
+            st.report_fail("check1-2: frr check failed: {} {} {}".format(item[i][0], item[i][1], item[i][2]))
+        
+        bgpcli_obj.del_config_bgp_community_list(item[i][0], item[i][1], item[i][2])
+
+    ##2: add all - check all - del all
+    for i in range(len(item)):
+        ### config cli ###
+        bgpcli_obj.config_bgp_community_list(item[i][0], item[i][1], item[i][2])
+    for i in range(len(item)):
+        ### check config db ###
+        peerkey = "COMMUNITY_LIST|{}|{}".format(item[i][0].split()[0], item[i][0].split()[1])
+        configdb_checkpoint(dut, peerkey, item[i][1], item[i][2], True, 'check2-1')
+
+        ### check frr running-config ##
+        output = st.show(dut, "show running-config bgpd", type='vtysh')
+        st.log(output)
+
+        result = False
+        for j in range(len(output)):
+            if (output[j].get('community_name_std') == item[i][0].split()[1] or output[j].get('community_name_num') == item[i][0].split()[1]) and output[j].get('param_type') == item[i][1] and output[j].get('param_val') == item[i][2]:
+                result = True
+                break
+        
+        if result == False:
+            st.report_fail("check2-2: frr check failed: {} {} {}".format(item[i][0], item[i][1], item[i][2]))
+        
+    bgpcli_obj.flush_bgp_community_list()
+
+    ##3: add all - del all - check all 
+    for i in range(len(item)):
+        ### config cli ###
+        bgpcli_obj.config_bgp_community_list(item[i][0], item[i][1], item[i][2])
+    
+    bgpcli_obj.flush_bgp_community_list()
+
+    for i in range(len(item)):
+        ### check config db ###
+        peerkey = "COMMUNITY_LIST|{}|{}".format(item[i][0].split()[0], item[i][0].split()[1])
+        configdb_checkpoint(dut, peerkey, item[i][1], item[i][2], False, 'check3-1')
+
+        ### check frr running-config ##
+        output = st.show(dut, "show running-config bgpd", type='vtysh')
+        st.log(output)
+
+        result = False
+        for j in range(len(output)):
+            if (output[j].get('community_name_std') == item[i][0] or output[j].get('community_name_num') == item[i][0].split()[1]) and output[j].get('param_type') == item[i][1] and output[j].get('param_val') == item[i][2]:
+                result = True
+                break
+        
+        if result == True:
+            st.report_fail("check3-2: frr check failed: {} {} {}".format(item[i][0], item[i][1], item[i][2]))
+
+    st.report_pass("test_case_passed")
+
+@pytest.mark.bgp_cli
+@pytest.mark.bgp_community_list
+def test_cli_bgp_community_list_expanded():
+    st.log("test_cli_bgp_community_list_expanded begin")
+    bgpcli_obj = data['bgpcli_obj']
+    dut = data['dut']
+
+    st.log("config cli:  expanded cases")
+    ###add case data
+    item = [["expanded list1","deny","50:51"],["expanded list2","permit","60:61"],["expanded name1","deny","50:51 51:52"],
+            ["expanded name2","permit","50:51 51:52 52:53"],["expanded list1","permit","51:52"],["expanded list2","deny","61:62 63:64"],
+            ["expanded name1","permit","51:52"],["expanded name2","deny","50:51 51:52 52:53"],
+            ["expanded 999","permit","51:52"],["expanded 23453","deny","50:51 51:52 52:53"]]
+
+    ##1: add-check-del
+    for i in range(len(item)):
+        ### config cli ###
+        bgpcli_obj.config_bgp_community_list(item[i][0], item[i][1], item[i][2])
+        
+        ### check config db ###
+        peerkey = "COMMUNITY_LIST|{}|{}".format(item[i][0].split()[0], item[i][0].split()[1])
+        configdb_checkpoint(dut, peerkey, item[i][1], item[i][2], True, 'check1-1')
+
+        ### check frr running-config ##
+        output = st.show(dut, "show running-config bgpd", type='vtysh')
+        st.log(output)
+
+        result = False
+        for j in range(len(output)):
+            if (output[j].get('community_name_exp') == item[i][0].split()[1] or output[j].get('community_name_num') == item[i][0].split()[1]) and output[j].get('param_type') == item[i][1] and output[j].get('param_val') == item[i][2]:
+                result = True
+                break
+        
+        if result == False:
+            st.report_fail("check1-2: frr check failed: {} {} {}".format(item[i][0], item[i][1], item[i][2]))
+        
+        bgpcli_obj.del_config_bgp_community_list(item[i][0], item[i][1], item[i][2])
+
+    ##2: add all - check all - del all
+    for i in range(len(item)):
+        ### config cli ###
+        bgpcli_obj.config_bgp_community_list(item[i][0], item[i][1], item[i][2])
+    for i in range(len(item)):
+        ### check config db ###
+        peerkey = "COMMUNITY_LIST|{}|{}".format(item[i][0].split()[0], item[i][0].split()[1])
+        configdb_checkpoint(dut, peerkey, item[i][1], item[i][2], True, 'check2-1')
+
+        ### check frr running-config ##
+        output = st.show(dut, "show running-config bgpd", type='vtysh')
+        st.log(output)
+
+        result = False
+        for j in range(len(output)):
+            if (output[j].get('community_name_exp') == item[i][0].split()[1] or output[j].get('community_name_num') == item[i][0].split()[1]) and output[j].get('param_type') == item[i][1] and output[j].get('param_val') == item[i][2]:
+                result = True
+                break
+        
+        if result == False:
+            st.report_fail("check2-2: frr check failed: {} {} {}".format(item[i][0], item[i][1], item[i][2]))
+        
+    bgpcli_obj.flush_bgp_community_list()
+
+    ##3: add all - del all - check all 
+    for i in range(len(item)):
+        ### config cli ###
+        bgpcli_obj.config_bgp_community_list(item[i][0], item[i][1], item[i][2])
+    
+    bgpcli_obj.flush_bgp_community_list()
+
+    for i in range(len(item)):
+        ### check config db ###
+        peerkey = "COMMUNITY_LIST|{}|{}".format(item[i][0].split()[0], item[i][0].split()[1])
+        configdb_checkpoint(dut, peerkey, item[i][1], item[i][2], False, 'check3-1')
+
+        ### check frr running-config ##
+        output = st.show(dut, "show running-config bgpd", type='vtysh')
+        st.log(output)
+
+        result = False
+        for j in range(len(output)):
+            if (output[j].get('community_name_exp') == item[i][0] or output[j].get('community_name_num') == item[i][0].split()[1]) and output[j].get('param_type') == item[i][1] and output[j].get('param_val') == item[i][2]:
+                result = True
+                break
+        
+        if result == True:
+            st.report_fail("check3-2: frr check failed: {} {} {}".format(item[i][0], item[i][1], item[i][2]))
+
+    st.report_pass("test_case_passed")
+
+@pytest.mark.bgp_cli
+@pytest.mark.bgp_aspath_access_list
+def test_cli_bgp_aspath_access_list():
+    st.log("test_cli_bgp_aspath_access_list begin")
+    bgpcli_obj = data['bgpcli_obj']
+    dut = data['dut']
+
+    st.log("config cli:  bgp as-path access-list cases")
+    ###add case data
+    item = [["500","deny","10010"],["name1","permit","100 300"],["list1","deny","233 205"],["xyz","permit","100 120"],
+           ["500","permit","200220"],["name1","deny","100 500"],["list1","permit","100 20"],["xyz","deny","300 200"]]
+
+
+    ##1: add-check-del
+    for i in range(len(item)):
+        ### config cli ###
+        bgpcli_obj.config_bgp_aspath_access_list(item[i][0], item[i][1], item[i][2])
+        
+        ### check config db ###
+        peerkey = "ASPATH_ACCESS_LIST|{}".format(item[i][0])
+        configdb_checkpoint(dut, peerkey, item[i][1], item[i][2], True, 'check1-1')
+
+        ### check frr running-config ##
+        output = st.show(dut, "show running-config bgpd", type='vtysh')
+        st.log(output)
+
+        result = False
+        for j in range(len(output)):
+            if output[j].get('access_list_name') == item[i][0] and output[j].get('param_type') == item[i][1] and output[j].get('param_val') == item[i][2]:
+                result = True
+                break
+        
+        if result == False:
+            st.report_fail("check1-2: frr check failed: {} {} {}".format(item[i][0], item[i][1], item[i][2]))
+        
+        bgpcli_obj.del_config_bgp_aspath_access_list(item[i][0], item[i][1], item[i][2])
+
+    ##2: add all - check all - del all
+    for i in range(len(item)):
+        ### config cli ###
+        bgpcli_obj.config_bgp_aspath_access_list(item[i][0], item[i][1], item[i][2])
+    for i in range(len(item)):
+        ### check config db ###
+        peerkey = "ASPATH_ACCESS_LIST|{}".format(item[i][0])
+        configdb_checkpoint(dut, peerkey, item[i][1], item[i][2], True, 'check2-1')
+
+        ### check frr running-config ##
+        output = st.show(dut, "show running-config bgpd", type='vtysh')
+        st.log(output)
+
+        result = False
+        for j in range(len(output)):
+            if output[j].get('access_list_name') == item[i][0] and output[j].get('param_type') == item[i][1] and output[j].get('param_val') == item[i][2]:
+                result = True
+                break
+        
+        if result == False:
+            st.report_fail("check2-2: frr check failed: {} {} {}".format(item[i][0], item[i][1], item[i][2]))
+        
+    bgpcli_obj.flush_bgp_aspath_access_lists()
+
+    ##3: add all - del all - check all 
+    for i in range(len(item)):
+        ### config cli ###
+        bgpcli_obj.config_bgp_aspath_access_list(item[i][0], item[i][1], item[i][2])
+    
+    bgpcli_obj.flush_bgp_aspath_access_lists()
+
+    for i in range(len(item)):
+        ### check config db ###
+        peerkey = "ASPATH_ACCESS_LIST|{}".format(item[i][0])
+        configdb_checkpoint(dut, peerkey, item[i][1], item[i][2], False, 'check3-1')
+
+        ### check frr running-config ##
+        output = st.show(dut, "show running-config bgpd", type='vtysh')
+        st.log(output)
+
+        result = False
+        for j in range(len(output)):
+            if output[j].get('access_list_name') == item[i][0] and output[j].get('param_type') == item[i][1] and output[j].get('param_val') == item[i][2]:
+                result = True
+                break
+        
+        if result == True:
+            st.report_fail("check3-2: frr check failed: {} {} {}".format(item[i][0], item[i][1], item[i][2]))
 
     st.report_pass("test_case_passed")

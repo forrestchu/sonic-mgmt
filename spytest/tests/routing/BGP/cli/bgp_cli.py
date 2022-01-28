@@ -11,6 +11,8 @@ CONFIG_VIEW = "configure terminal"
 ROUTE_BGP_VIEW = "router bgp {}"
 BGP_RID_CONFIG = "bgp router-id {}"
 
+BGP_COMMUNITY_LIST_CONFIG = "bgp community-list {} {} {}"
+BGP_ASPATH_ACCESS_LIST_CONFIG = "bgp as-path access-list {} {} {}"
 
 class BGP_CLI():
 
@@ -20,9 +22,46 @@ class BGP_CLI():
         self.dut = dut
         self.peers_v4 = []
         self.peers_v6 = []
-    
-    def get_local_as(self):
-        return self.local_as
+        self.community_list = []
+        self.aspath_access_list = []
+
+    def config_bgp_community_list(self, name, type, num):
+        comm_lst = BGP_COMMUNITY_LIST_CONFIG.format(name, type, num)
+        command = "{} -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, comm_lst)
+        st.config(self.dut, command)
+        self.community_list.append(comm_lst)
+
+    def del_config_bgp_community_list(self, name, type, num):
+        comm_lst = BGP_COMMUNITY_LIST_CONFIG.format(name, type, num)
+        command = "{} -c '{}' -c 'no {}'".format(ALICLI_VIEW, CONFIG_VIEW, comm_lst)
+        st.config(self.dut, command)
+        self.community_list.remove(comm_lst)
+
+    def flush_bgp_community_list(self):
+        st.log("Flush bgp community-list")
+
+        for it in self.community_list:
+            cmd = "{} -c '{}' -c 'no {}'".format(ALICLI_VIEW, CONFIG_VIEW, it)
+            st.config(self.dut, cmd)
+
+    def config_bgp_aspath_access_list(self, name, type, num):
+        access_lst = BGP_ASPATH_ACCESS_LIST_CONFIG.format(name, type, num)
+        command = "{} -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, access_lst)
+        st.config(self.dut, command)
+        self.aspath_access_list.append(access_lst)
+
+    def del_config_bgp_aspath_access_list(self, name, type, num):
+        access_lst = BGP_ASPATH_ACCESS_LIST_CONFIG.format(name, type, num)
+        command = "{} -c '{}' -c 'no {}'".format(ALICLI_VIEW, CONFIG_VIEW, access_lst)
+        st.config(self.dut, command)
+        self.aspath_access_list.remove(access_lst)
+
+    def flush_bgp_aspath_access_lists(self):
+        st.log("Flush bgp as-path access-list")
+        
+        for it in self.aspath_access_list:
+            cmd = "{} -c '{}' -c 'no {}'".format(ALICLI_VIEW, CONFIG_VIEW, it)
+            st.config(self.dut, cmd)
 
     def create_bgp_route(self, as_num):
         router_bpg = ROUTE_BGP_VIEW.format(as_num)

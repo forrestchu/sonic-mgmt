@@ -4,6 +4,7 @@ import pytest
 from spytest import st, tgapi, SpyTestDict
 import time
 import json
+import re
 
 ALICLI_VIEW = "cli"
 CONFIG_VIEW = "configure terminal"
@@ -107,7 +108,19 @@ class BGP_CLI():
             if af is not None:
                 cmd = "{} -c '{}' -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, self.router_view, af_cmd, t_cmd)
                 st.config(self.dut, cmd)
-  
+        
+        bfd = properties.get('bfd', None)
+        detect_multiplier = properties.get('detect_multiplier', None)
+        tx_timer = properties.get('tx_timer', None)
+        rx_timer = properties.get('rx_timer', None)
+        if bfd is not None:
+            if detect_multiplier is not None and tx_timer is not None and rx_timer is not None :
+                t_cmd = "{} neighbor {} bfd {} {} {}".format('no' if bfd=='false' else '', peer, detect_multiplier, tx_timer, rx_timer)
+            else:
+                t_cmd = "{} neighbor {} bfd".format('no' if bfd=='false' else '', peer)
+            cmd = "{} -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, self.router_view, t_cmd)
+            st.config(self.dut, cmd)
+
     def flush_neighbors(self):
         st.log("Flush BGP neighbors")
         
@@ -123,7 +136,8 @@ class BGP_CLI():
         #output = st.show(self.dut, cmd)
         output = st.show(self.dut, cmd, skip_tmpl=True)
         json_str = json.dumps(output).encode('utf-8')
-        json_str = json_str.replace('end\\n','').replace('true','"true"').replace("\\n","").replace("\\","").replace('root@sonic:~#','').strip('"')
+        json_str = json_str.replace('end\\n','').replace('true','"true"').replace("\\n","").replace("\\","").strip('"')
+        json_str = re.sub(r"[A-Za-z]*@\S*#", '', json_str)
         output_json = json.loads(json_str)
         return output_json
 
@@ -134,4 +148,4 @@ class BGP_CLI():
         st.log("start reboot")
         st.reboot(self.dut)
         st.wait(5)
-        st.log("finisg reboot")
+        st.log("finish reboot")

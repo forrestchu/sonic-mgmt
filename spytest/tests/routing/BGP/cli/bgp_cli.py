@@ -25,6 +25,9 @@ class BGP_CLI():
         self.community_list = []
         self.aspath_access_list = []
 
+    def get_local_as(self):
+        return self.local_as
+
     def config_bgp_community_list(self, name, type, num):
         comm_lst = BGP_COMMUNITY_LIST_CONFIG.format(name, type, num)
         command = "{} -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, comm_lst)

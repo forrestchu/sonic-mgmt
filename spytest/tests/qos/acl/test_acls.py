@@ -33,24 +33,24 @@ data.TBD = 10
 data.portChannelName = "PortChannel1"
 data.tg_type = 'ixia'
 data.cli_type = ""
-data.ipv4_address_D1 = "1.1.1.1"
-data.ipv4_address_D2 = "2.2.2.1"
+data.ipv4_address_D1 = "1.0.0.1"
+data.ipv4_address_D2 = "2.0.0.1"
 data.ipv4_address_D3 = "100.0.0.1"
 data.ipv4_address_D4 = "200.0.0.1"
 data.ipv4_portchannel_D1 = "192.168.1.1"
 data.ipv4_portchannel_D2 = "192.168.1.2"
-data.ipv4_network_D1 = "1.1.1.0/24"
-data.ipv4_network_D2 = "2.2.2.0/24"
+data.ipv4_network_D1 = "1.0.0.0/24"
+data.ipv4_network_D2 = "2.0.0.0/24"
 data.ipv4_network_D3 = "100.0.0.0/24"
 data.ipv4_network_D4 = "200.0.0.0/24"
-data.ipv6_address_D1 = "1001::1"
-data.ipv6_address_D2 = "2001::1"
+data.ipv6_address_D1 = "1000::1"
+data.ipv6_address_D2 = "2000::1"
 data.ipv6_address_D3 = "100::1"
 data.ipv6_address_D4 = "200::1"
 data.ipv6_portchannel_D1 = "3001::1"
 data.ipv6_portchannel_D2 = "3001::2"
-data.ipv6_network_D1 = "1001::0/64"
-data.ipv6_network_D2 = "2001::0/64"
+data.ipv6_network_D1 = "1000::0/64"
+data.ipv6_network_D2 = "2000::0/64"
 data.ipv6_network_D3 = "100::0/64"
 data.ipv6_network_D4 = "200::0/64"
 
@@ -64,97 +64,53 @@ def get_handles():
     '''
     ######################## Topology ############################
 
-               +---------+                  +-------+
-               |         +------------------+       |
-      TG1 -----|  DUT1   |  portchannel     |  DUT2 +----- TG2
-               |         +------------------+       |
-               +---------+                  +-------+
+               +---------+
+               |         +
+      TG1 -----|  DUT1   |----- TG2
+               |         +
+               +---------+
 
     ##############################################################
     '''
     global vars, tg_port_list
-    vars = st.ensure_min_topology("D1D2:2", "D1T1:2", "D2T1:2")
+    vars = st.ensure_min_topology("D1T1:2", "D1T1:2")
     tg1, tg_ph_1 = tgapi.get_handle_byname("T1D1P1")
-    tg2, tg_ph_2 = tgapi.get_handle_byname("T1D2P1")
-    tg3, tg_ph_3 = tgapi.get_handle_byname("T1D1P2")
-    tg4, tg_ph_4 = tgapi.get_handle_byname("T1D2P2")
+    tg2, tg_ph_2 = tgapi.get_handle_byname("T1D1P2")
     if tg1.tg_type == 'stc': data.tg_type = 'stc'
-    tg_port_list = [tg_ph_1, tg_ph_2, tg_ph_3]
+    tg_port_list = [tg_ph_1, tg_ph_2]
     tg1.tg_traffic_control(action="reset", port_handle=tg_ph_1)
     tg2.tg_traffic_control(action="reset", port_handle=tg_ph_2)
-    tg3.tg_traffic_control(action="reset", port_handle=tg_ph_3)
-    tg4.tg_traffic_control(action="reset", port_handle=tg_ph_4)
-    return (tg1, tg2, tg3, tg4, tg_ph_1, tg_ph_2, tg_ph_3, tg_ph_4)
+    return (tg1, tg2, tg_ph_1, tg_ph_2)
 
 
 
 def apply_module_configuration():
     print_log("Applying module configuration")
 
-    data.dut1_lag_members = [vars.D1D2P1, vars.D1D2P2]
-    data.dut2_lag_members = [vars.D2D1P1, vars.D2D1P2]
-
-    # create portchannel
-    utils.exec_all(True, [
-        utils.ExecAllFunc(pc_obj.create_portchannel, vars.D1, data.portChannelName),
-        utils.ExecAllFunc(pc_obj.create_portchannel, vars.D2, data.portChannelName),
-    ])
-
-    # add portchannel members
-    utils.exec_all(True, [
-        utils.ExecAllFunc(pc_obj.add_portchannel_member, vars.D1, data.portChannelName, data.dut1_lag_members),
-        utils.ExecAllFunc(pc_obj.add_portchannel_member, vars.D2, data.portChannelName, data.dut2_lag_members),
-    ])
-
 
 
 def clear_module_configuration():
     print_log("Clearing module configuration")
-    # delete Ipv4 address
-    print_log("Delete ip address configuration:")
-    ip_obj.clear_ip_configuration([vars.D1, vars.D2], family='ipv4')
-    # delete Ipv6 address
-    ip_obj.clear_ip_configuration([vars.D1, vars.D2], family='ipv6')
-    # delete ipv4 static routes
-    ip_obj.delete_static_route(vars.D1, data.ipv4_portchannel_D2, data.ipv4_network_D2, shell="vtysh",
-                               family="ipv4")
-    ip_obj.delete_static_route(vars.D1, data.ipv4_portchannel_D2, "200.0.0.0/24", shell="vtysh",
-                               family="ipv4")
-    ip_obj.delete_static_route(vars.D2, data.ipv4_portchannel_D1, data.ipv4_network_D1, shell="vtysh",
-                               family="ipv4")
-    # delete ipv6 static routes
-    ip_obj.delete_static_route(vars.D1, data.ipv6_portchannel_D2, data.ipv6_network_D2, shell="vtysh",
-                               family="ipv6")
-    ip_obj.delete_static_route(vars.D2, data.ipv6_portchannel_D1, data.ipv6_network_D1, shell="vtysh",
-                               family="ipv6")
-
-    # delete portchannel members
-    utils.exec_all(True, [
-        utils.ExecAllFunc(pc_obj.delete_portchannel_member, vars.D1, data.portChannelName, data.dut1_lag_members),
-        utils.ExecAllFunc(pc_obj.delete_portchannel_member, vars.D2, data.portChannelName, data.dut2_lag_members),
-    ])
-    # delete portchannel
-    utils.exec_all(True, [
-        utils.ExecAllFunc(pc_obj.delete_portchannel, vars.D1, data.portChannelName),
-        utils.ExecAllFunc(pc_obj.delete_portchannel, vars.D2, data.portChannelName),
-    ])
-
-    [_, exceptions] = utils.exec_all(True, [[acl_obj.acl_delete, vars.D1], [acl_obj.acl_delete, vars.D2]])
+    [_, exceptions] = utils.exec_all(True, [[acl_obj.acl_delete, vars.D1]])
 
     #Clear static arp entries
     print_log("Clearing ARP entries")
     arp_obj.clear_arp_table(vars.D1)
-    arp_obj.clear_arp_table(vars.D2)
     #Clear static ndp entries
     print_log("Clearing NDP entries")
     arp_obj.clear_ndp_table(vars.D1)
-    arp_obj.clear_ndp_table(vars.D2)
 
 
 def add_port_to_acl_table(config, table_name, port):
     config['ACL_TABLE'][table_name]['ports'] = []
     config['ACL_TABLE'][table_name]['ports'].append(port)
 
+def add_port_to_acl_table_rules(config, port):
+    rules = config["ACL_RULE"]
+    for rule, attributes in rules.items():
+        if ("in_ports" not in attributes):
+            continue
+        config["ACL_RULE"][rule]["in_ports"].append(port)
 
 def change_acl_rules(config, rule_name, attribute, value):
     config["ACL_RULE"][rule_name][attribute] = value
@@ -166,7 +122,7 @@ def apply_acl_config(dut, config):
     st.apply_json2(dut, json_config)
 
 
-def create_streams(tx_tg, rx_tg, rules, match, mac_src, mac_dst,dscp=None):
+def create_streams(tx_tg, rx_tg, rules, match, mac_src, mac_dst,dscp=None,tc=None):
     # use the ACL rule definitions to create match/non-match traffic streams
     # instead of hardcoding the traffic streams
     my_args = {
@@ -179,16 +135,22 @@ def create_streams(tx_tg, rx_tg, rules, match, mac_src, mac_dst,dscp=None):
     }
     if dscp:
         my_args.update({"ip_dscp": dscp})
+    if tc:
+        my_args.update({"ipv6_traffic_class": tc})
 
     for rule, attributes in rules.items():
         if ("IP_TYPE" in attributes) or ("ETHER_TYPE" in attributes):
             continue
+        if ("PermiAny" in rule):
+            continue
+
         if match in rule:
             params = {}
             tmp = dict(my_args)
             for key, value in attributes.items():
                 params.update(acl_utils.get_args_l3(key, value, attributes, data.rate_pps, data.tg_type))
             tmp.update(params)
+            print(params)
             stream = data.tgmap[tx_tg]['tg'].tg_traffic_config(**tmp)
             stream_id = stream['stream_id']
             s = {}
@@ -310,7 +272,7 @@ def verify_packet_count(tx, tx_port, rx, rx_port, table):
 
 def initialize_topology():
     print_log("Initializing Topology")
-    (tg1, tg2, tg3, tg4, tg_ph_1, tg_ph_2, tg_ph_3, tg_ph_4) = get_handles()
+    (tg1, tg2, tg_ph_1, tg_ph_2) = get_handles()
     data.tgmap = {
         "tg1": {
             "tg": tg1,
@@ -320,16 +282,6 @@ def initialize_topology():
         "tg2": {
             "tg": tg2,
             "handle": tg_ph_2,
-            "streams": {}
-        },
-        "tg3": {
-            "tg": tg3,
-            "handle": tg_ph_3,
-            "streams": {}
-        },
-        "tg4": {
-            "tg": tg4,
-            "handle": tg_ph_4,
             "streams": {}
         }
     }
@@ -344,116 +296,53 @@ def acl_v4_module_hooks(request):
     apply_module_configuration()
 
     acl_config1 = acl_data.acl_json_config_d1
-    add_port_to_acl_table(acl_config1, 'L3_IPV4_INGRESS', vars.D1T1P1)
-    add_port_to_acl_table(acl_config1, 'L3_IPV4_EGRESS', vars.D1T1P1)
+    add_port_to_acl_table(acl_config1, 'IN4', vars.D1T1P2)
+    add_port_to_acl_table(acl_config1, 'EGR4', vars.D1T1P1)
     acl_config2 = acl_data.acl_json_config_d2
-    add_port_to_acl_table(acl_config2, 'L3_IPV6_INGRESS', vars.D2T1P1)
-    add_port_to_acl_table(acl_config2, 'L3_IPV6_EGRESS', vars.D2T1P1)
-    acl_config3 = acl_data.acl_json_config_qos
-    add_port_to_acl_table(acl_config3, 'QOS', vars.D1T1P2)
-    acl_config4 = acl_data.acl_json_config_egress_qos_dscp
-    add_port_to_acl_table(acl_config4, 'L3_IPV6_DSCP_EGRESS', vars.D2T1P2)
-    add_port_to_acl_table(acl_config4, 'L3_IPV4_DSCP_EGRESS', vars.D2T1P2)
+    add_port_to_acl_table(acl_config2, 'IN6', vars.D1T1P2)
+    add_port_to_acl_table(acl_config2, 'EGR6', vars.D1T1P1)
+
+    add_port_to_acl_table_rules(acl_config1, vars.D1T1P2)
+    add_port_to_acl_table_rules(acl_config2, vars.D1T1P2)
 
     print_log('Creating ACL tables and rules')
     utils.exec_all(True, [
-        utils.ExecAllFunc(acl_obj.apply_acl_config, vars.D1, acl_config1),
-        utils.ExecAllFunc(acl_obj.apply_acl_config, vars.D2, acl_config2),
+        utils.ExecAllFunc(acl_obj.apply_acl_config, vars.D1, acl_config1)
     ])
 
     utils.exec_all(True, [
-        utils.ExecAllFunc(acl_obj.apply_acl_config, vars.D1, acl_config3),
-        utils.ExecAllFunc(acl_obj.apply_acl_config, vars.D2, acl_config4),
+        utils.ExecAllFunc(acl_obj.apply_acl_config, vars.D1, acl_config2)
     ])
     # create streams
     data.mac1 = basic_obj.get_ifconfig_ether(vars.D1, vars.D1T1P1)
-    data.mac2 = basic_obj.get_ifconfig_ether(vars.D2, vars.D2T1P1)
 
     print_log('Creating streams')
-    create_streams("tg1", "tg2", acl_config1['ACL_RULE'], "L3_IPV4_INGRESS", \
+    create_streams("tg2", "tg1", acl_config1['ACL_RULE'], "IN4", \
                    mac_src="00:0a:01:00:00:01", mac_dst=data.mac1, dscp=62)
-    create_streams("tg1", "tg2", acl_config2['ACL_RULE'], "L3_IPV6_EGRESS", \
-                   mac_src="00:0a:01:00:00:01", mac_dst=data.mac1)
-    create_streams("tg2", "tg1", acl_config2['ACL_RULE'], "L3_IPV6_INGRESS", \
-                   mac_src="00:0a:01:00:11:02", mac_dst=data.mac2)
-    create_streams("tg2", "tg1", acl_config1['ACL_RULE'], "L3_IPV4_EGRESS", \
-                   mac_src="00:0a:01:00:11:02", mac_dst=data.mac2, dscp=61)
-
-    create_streams_for_qos("tg3", "tg4", acl_config3['ACL_RULE'], "QOS", \
-                   mac_src="00:0a:01:00:00:01", mac_dst=data.mac1)
+    create_streams("tg2", "tg1", acl_config2['ACL_RULE'], "IN6", \
+                   mac_src="00:0a:01:00:00:01", mac_dst=data.mac1, tc=248)
 
     print_log('Completed module configuration')
 
     st.log("Configuring ipv4 address on ixia connected interfaces and portchannels present on both the DUTs")
     ip_obj.config_ip_addr_interface(vars.D1, vars.D1T1P1, data.ipv4_address_D1, 24, family="ipv4", config='add')
-    ip_obj.config_ip_addr_interface(vars.D2, vars.D2T1P1, data.ipv4_address_D2, 24, family="ipv4", config='add')
-    ip_obj.config_ip_addr_interface(vars.D1, vars.D1T1P2, data.ipv4_address_D3, 24, family="ipv4", config='add')
-    ip_obj.config_ip_addr_interface(vars.D2, vars.D2T1P2, data.ipv4_address_D4, 24, family="ipv4", config='add')
-
-    ip_obj.config_ip_addr_interface(vars.D1, data.portChannelName, data.ipv4_portchannel_D1, 24, family="ipv4",
-                                    config='add')
-    ip_obj.config_ip_addr_interface(vars.D2, data.portChannelName, data.ipv4_portchannel_D2, 24, family="ipv4",
-                                    config='add')
+    ip_obj.config_ip_addr_interface(vars.D1, vars.D1T1P2, data.ipv4_address_D2, 24, family="ipv4", config='add')
 
     st.log("Configuring ipv6 address on ixia connected interfaces and portchannels present on both the DUTs")
     ip_obj.config_ip_addr_interface(vars.D1, vars.D1T1P1, data.ipv6_address_D1, 64, family="ipv6", config='add')
-    ip_obj.config_ip_addr_interface(vars.D2, vars.D2T1P1, data.ipv6_address_D2, 64, family="ipv6", config='add')
-    ip_obj.config_ip_addr_interface(vars.D1, vars.D1T1P2, data.ipv6_address_D3, 64, family="ipv6", config='add')
-    ip_obj.config_ip_addr_interface(vars.D2, vars.D2T1P2, data.ipv6_address_D4, 64, family="ipv6", config='add')
-
-    ip_obj.config_ip_addr_interface(vars.D1, data.portChannelName, data.ipv6_portchannel_D1, 64, family="ipv6",
-                                    config='add')
-    ip_obj.config_ip_addr_interface(vars.D2, data.portChannelName, data.ipv6_portchannel_D2, 64, family="ipv6",
-                                    config='add')
-
-    st.log("configuring ipv4 static routes on both the DUTs")
-    ip_obj.create_static_route(vars.D1, data.ipv4_portchannel_D2, data.ipv4_network_D2, shell="vtysh",
-                               family="ipv4")
-    ip_obj.create_static_route(vars.D1, data.ipv4_portchannel_D2, data.ipv4_network_D4, shell="vtysh",
-                               family="ipv4")
-    ip_obj.create_static_route(vars.D2, data.ipv4_portchannel_D1, data.ipv4_network_D1, shell="vtysh",
-                               family="ipv4")
-    ip_obj.create_static_route(vars.D2, data.ipv4_portchannel_D1, data.ipv4_network_D3, shell="vtysh",
-                               family="ipv4")
-
-    st.log("configuring ipv6 static routes on both the DUTs")
-    ip_obj.create_static_route(vars.D1, data.ipv6_portchannel_D2, data.ipv6_network_D2, shell="vtysh",
-                               family="ipv6")
-    ip_obj.create_static_route(vars.D1, data.ipv6_portchannel_D2, data.ipv6_network_D4, shell="vtysh",
-                               family="ipv6")
-    ip_obj.create_static_route(vars.D2, data.ipv6_portchannel_D1, data.ipv6_network_D1, shell="vtysh",
-                               family="ipv6")
-    ip_obj.create_static_route(vars.D2, data.ipv6_portchannel_D1, data.ipv6_network_D3, shell="vtysh",
-                               family="ipv6")
+    ip_obj.config_ip_addr_interface(vars.D1, vars.D1T1P2, data.ipv6_address_D2, 64, family="ipv6", config='add')
 
     st.log("configuring static arp entries")
-    arp_obj.add_static_arp(vars.D1, "1.1.1.2", "00:0a:01:00:00:01", vars.D1T1P1)
-    arp_obj.add_static_arp(vars.D2, "2.2.2.2", "00:0a:01:00:11:02", vars.D2T1P1)
-    arp_obj.add_static_arp(vars.D2, "2.2.2.4", "00:0a:01:00:11:02", vars.D2T1P1)
-    arp_obj.add_static_arp(vars.D1, "1.1.1.4", "00:0a:01:00:00:01", vars.D1T1P1)
-    arp_obj.add_static_arp(vars.D2, "2.2.2.5", "00:0a:01:00:11:02", vars.D2T1P1)
-    arp_obj.add_static_arp(vars.D1, "1.1.1.5", "00:0a:01:00:00:01", vars.D1T1P1)
-    arp_obj.add_static_arp(vars.D2, "2.2.2.6", "00:0a:01:00:11:02", vars.D2T1P1)
-    arp_obj.add_static_arp(vars.D1, "1.1.1.6", "00:0a:01:00:00:01", vars.D1T1P1)
+    arp_obj.add_static_arp(vars.D1, "2.0.0.2", "00:0a:01:00:11:02", vars.D1T1P2)
+    arp_obj.add_static_arp(vars.D1, "1.0.0.2", "00:0a:01:00:00:01", vars.D1T1P1)
 
-    arp_obj.add_static_arp(vars.D2, "200.0.0.2", "00:0a:01:00:11:03", vars.D2T1P2)
     arp_obj.show_arp(vars.D1)
-    arp_obj.show_arp(vars.D2)
 
     st.log("configuring static ndp entries")
-    arp_obj.config_static_ndp(vars.D1, "1001::2", "00:0a:01:00:00:01", vars.D1T1P1, operation="add")
-    arp_obj.config_static_ndp(vars.D2, "2001::2", "00:0a:01:00:11:02", vars.D2T1P1, operation="add")
-    arp_obj.config_static_ndp(vars.D1, "1001::4", "00:0a:01:00:00:01", vars.D1T1P1, operation="add")
-    arp_obj.config_static_ndp(vars.D2, "2001::4", "00:0a:01:00:11:02", vars.D2T1P1, operation="add")
-    arp_obj.config_static_ndp(vars.D1, "1001::5", "00:0a:01:00:00:01", vars.D1T1P1, operation="add")
-    arp_obj.config_static_ndp(vars.D2, "2001::5", "00:0a:01:00:11:02", vars.D2T1P1, operation="add")
-    arp_obj.config_static_ndp(vars.D1, "1001::6", "00:0a:01:00:00:01", vars.D1T1P1, operation="add")
-    arp_obj.config_static_ndp(vars.D2, "2001::6", "00:0a:01:00:11:02", vars.D2T1P1, operation="add")
-
-    arp_obj.config_static_ndp(vars.D2, "200::2", "00:0a:01:00:11:03", vars.D2T1P2, operation="add")
+    arp_obj.config_static_ndp(vars.D1, "1000::2", "00:0a:01:00:00:01", vars.D1T1P1, operation="add")
+    arp_obj.config_static_ndp(vars.D1, "2000::2", "00:0a:01:00:11:02", vars.D1T1P2, operation="add")
 
     arp_obj.show_ndp(vars.D1)
-    arp_obj.show_ndp(vars.D2)
 
     yield
     clear_module_configuration()
@@ -461,18 +350,10 @@ def acl_v4_module_hooks(request):
 @pytest.fixture(scope="function", autouse=True)
 def acl_function_hooks(request):
     yield
-    if st.get_func_name(request) == "test_ft_acl_ingress_ipv4":
-        acl_obj.delete_acl_table(vars.D1, acl_type="ip", acl_table_name=['L3_IPV4_INGRESS'])
-    elif st.get_func_name(request) == "test_ft_acl_egress_ipv6":
-        acl_obj.delete_acl_table(vars.D2, acl_type="ipv6", acl_table_name=['L3_IPV6_EGRESS'])
-    elif st.get_func_name(request) == "test_ft_acl_qos":
-        acl_obj.delete_acl_table(vars.D1, acl_type="ip", acl_table_name=['QOS'])
-        acl_obj.delete_acl_table(vars.D2, acl_type="ip", acl_table_name=['L3_IPV4_DSCP_EGRESS'])
-        acl_obj.delete_acl_table(vars.D2, acl_type="ipv6", acl_table_name=['L3_IPV6_DSCP_EGRESS'])
 
 
 def verify_rule_priority(dut, table_name, acl_type="ip"):
-    acl_rule_counters = acl_obj.show_acl_counters(dut, acl_table=table_name, acl_rule='PermitAny7', acl_type=acl_type)
+    acl_rule_counters = acl_obj.show_acl_counters(dut, acl_table=table_name, acl_rule='PermitAny', acl_type=acl_type)
     if len(acl_rule_counters) == 1:
         if (int(acl_rule_counters[0]['packetscnt']) != 0):
             print_log("ACL Rule priority test failed")
@@ -489,36 +370,59 @@ def verify_queue_counters_pps_match(dut, port, q, expect):
     return False
 
 @pytest.mark.acl_test345654
-def test_ft_acl_ingress_ipv4():
+def test_ft_acl_ipv4():
     '''
     IPv4 Ingress ACL is applied on DUT1 port connected to TG Port#1
     Traffic is sent on TG Port #1
     Traffic is recieved at TG Port #2
     '''
-    [_, exceptions] = utils.exec_all(True, [[acl_obj.clear_acl_counter, vars.D1], [acl_obj.clear_acl_counter, vars.D2]])
+    [_, exceptions] = utils.exec_all(True, [[acl_obj.clear_acl_counter, vars.D1]])
     ensure_no_exception(exceptions)
     transmit('tg1')
-    result1 = verify_packet_count('tg1', vars.T1D1P1, 'tg2', vars.T1D2P1, "L3_IPV4_INGRESS")
+    result1 = verify_packet_count('tg1', vars.T1D1P1, 'tg2', vars.T1D1P2, "IN4")
+    result2 = verify_packet_count('tg1', vars.T1D1P1, 'tg2', vars.T1D1P2, "EGR4")
 
     print_log('Verifing IPv4 Ingress ACL hit counters')
-    result2 = verify_acl_hit_counters(vars.D1, "L3_IPV4_INGRESS")
-    result3 = verify_rule_priority(vars.D1, "L3_IPV4_INGRESS")
+    result3 = verify_acl_hit_counters(vars.D1, "IN4")
+    result4 = verify_acl_hit_counters(vars.D1, "EGR4")
+    result5 = verify_rule_priority(vars.D1, "IN4")
+    result6 = verify_rule_priority(vars.D1, "EGR4")
 
-    acl_utils.report_result(result1 and result2 and result3 )
+    acl_utils.report_result(result1 and result2 and result3 and result4 and result5 and result6)
 
-@pytest.mark.acl_test345654
-def test_ft_acl_qos():
-    transmit('tg3')
-    result1 = verify_packet_count('tg3', vars.T1D1P2, 'tg4', vars.T1D2P2, "QOS")
-    result2 = verify_acl_hit_counters(vars.D1, "QOS")
-    result3 = verify_acl_hit_counters(vars.D2, "L3_IPV6_DSCP_EGRESS", acl_type="ipv6")
-    result4 = verify_acl_hit_counters(vars.D2, "L3_IPV4_DSCP_EGRESS")
-    counter1 = show_queue_counters(vars.D1, vars.D1D2P1, queue='UC5')
-    counter2 = show_queue_counters(vars.D1, vars.D1D2P2, queue='UC5')
-    if counter1 + counter2 < 200:
-        st.report_fail("Check queue counter failed!");
+@pytest.mark.acl_test678
+def test_ft_acl_egress_ipv6():
+    '''
+    IPv6 Egress ACL is applied on DUT2 port connected to TG Port #2
+    Traffic is sent on TG Port #1
+    Traffic is recieved at TG Port #2
+    '''
+    [_, exceptions] = utils.exec_all(True, [[acl_obj.clear_acl_counter, vars.D1]])
+    transmit('tg1')
+    result1 = verify_packet_count('tg1', vars.T1D1P1, 'tg2', vars.T1D1P2, "IN6")
+    result2 = verify_packet_count('tg1', vars.T1D1P1, 'tg2', vars.T1D1P2, "EGR6")
 
-    acl_utils.report_result(result1 and result2 and result3 and result4)
+    print_log('Verifing IPv6 Egress ACL hit counters')
+    result3 = verify_acl_hit_counters(vars.D1, "IN6", acl_type="ipv6")
+    result4 = verify_acl_hit_counters(vars.D1, "EGR6", acl_type="ipv6")
+    result5 = verify_rule_priority(vars.D1, "IN6")
+    result6 = verify_rule_priority(vars.D1, "EGR6")
+
+    acl_utils.report_result(result1 and result2 and result3 and result4 and result5 and result6)
+
+#@pytest.mark.acl_test345654
+#def test_ft_acl_qos():
+#    transmit('tg3')
+#    result1 = verify_packet_count('tg3', vars.T1D1P2, 'tg4', vars.T1D2P2, "QOS")
+#    result2 = verify_acl_hit_counters(vars.D1, "QOS")
+#    result3 = verify_acl_hit_counters(vars.D2, "L3_IPV6_DSCP_EGRESS", acl_type="ipv6")
+#    result4 = verify_acl_hit_counters(vars.D2, "L3_IPV4_DSCP_EGRESS")
+#    counter1 = show_queue_counters(vars.D1, vars.D1D2P1, queue='UC5')
+#    counter2 = show_queue_counters(vars.D1, vars.D1D2P2, queue='UC5')
+#    if counter1 + counter2 < 200:
+#        st.report_fail("Check queue counter failed!");
+#
+#    acl_utils.report_result(result1 and result2 and result3 and result4)
 
 #@pytest.mark.acl_test
 #def test_ft_acl_egress_ipv4():
@@ -528,33 +432,13 @@ def test_ft_acl_qos():
 #    Traffic is recieved at TG Port #1
 #    '''
 #    transmit('tg2')
-#    result1 = verify_packet_count('tg2', vars.T1D2P1, 'tg1', vars.T1D1P1, "L3_IPV4_EGRESS")
+#    result1 = verify_packet_count('tg2', vars.T1D2P1, 'tg1', vars.T1D1P1, "EGR4")
 #    print_log('Verifing IPv4 Egress ACL hit counters')
-#    result2 = verify_acl_hit_counters(vars.D1, "L3_IPV4_EGRESS")
+#    result2 = verify_acl_hit_counters(vars.D1, "EGR4")
 #    acl_utils.report_result(result1 and result2)
 #
 #
-#@pytest.mark.acl_test678
-#def test_ft_acl_egress_ipv6():
-#    '''
-#    IPv6 Egress ACL is applied on DUT2 port connected to TG Port #2
-#    Traffic is sent on TG Port #1
-#    Traffic is recieved at TG Port #2
-#    '''
-#    [_, exceptions] = utils.exec_all(True, [[clear_interface_counters, vars.D1], [clear_interface_counters, vars.D2]])
-#    ensure_no_exception(exceptions)
-#    [_, exceptions] = utils.exec_all(True, [[get_interface_counters, vars.D1, vars.D1T1P1],
-#                                           [get_interface_counters, vars.D2, vars.D2T1P1]])
-#    ensure_no_exception(exceptions)
-#    [_, exceptions] = utils.exec_all(True, [[acl_obj.clear_acl_counter, vars.D1], [acl_obj.clear_acl_counter, vars.D2]])
-#    transmit('tg1')
-#    [_, exceptions] = utils.exec_all(True, [[get_interface_counters, vars.D1, vars.D1T1P1],
-#                                           [get_interface_counters, vars.D2, vars.D2T1P1]])
-#    ensure_no_exception(exceptions)
-#    result1 = verify_packet_count('tg1', vars.T1D1P1, 'tg2', vars.T1D2P1, "L3_IPV6_EGRESS")
-#    print_log('Verifing IPv6 Egress ACL hit counters')
-#    result2 = verify_acl_hit_counters(vars.D2, "L3_IPV6_EGRESS", acl_type="ipv6")
-#    acl_utils.report_result(result1 and result2)
+
 #
 #
 #@pytest.mark.community
@@ -574,11 +458,11 @@ def test_ft_acl_qos():
 #    [_, exceptions] = utils.exec_all(True, [[get_interface_counters, vars.D1, vars.D1T1P1],
 #                                           [get_interface_counters, vars.D2, vars.D2T1P1]])
 #    ensure_no_exception(exceptions)
-#    result1 = verify_packet_count('tg2', vars.T1D2P1, 'tg1', vars.T1D1P1, "L3_IPV6_INGRESS")
+#    result1 = verify_packet_count('tg2', vars.T1D2P1, 'tg1', vars.T1D1P1, "IN6")
 #    print_log('Verifing IPv6 Ingress ACL hit counters')
 #
-#    result2 = verify_acl_hit_counters(vars.D2, "L3_IPV6_INGRESS", acl_type="ipv6")
-#    result3 = verify_rule_priority(vars.D2, "L3_IPV6_INGRESS", acl_type="ipv6")
+#    result2 = verify_acl_hit_counters(vars.D2, "IN6", acl_type="ipv6")
+#    result3 = verify_rule_priority(vars.D2, "IN6", acl_type="ipv6")
 #    acl_utils.report_result(result1 and result2 and result3)
 #
 #

@@ -159,9 +159,15 @@ def get_args_l3(identifier, value, attribs, pps, tg_type):
           tmp['l4_protocol'] = "tcp"
           tmp['tcp_rst_flag'] = 1
     if identifier == "TTL":
-        tmp['ip_ttl'] = attribs['TTL']
+        if "SRC_IPV6" in attribs or "DST_IPV6" in attribs:
+            tmp['ipv6_ttl'] = attribs['TTL']
+        else:
+            tmp['ipv6_ttl'] = attribs['TTL']
     if identifier == "DSCP":
-        tmp['ip_dscp'] = attribs['DSCP']
+        if "SRC_IPV6" in attribs or "DST_IPV6" in attribs:
+            tmp['ipv6_traffic_class'] = int(attribs['DSCP']) * 4
+        else:
+            tmp['ip_dscp'] = attribs['DSCP']
 
     return tmp
 

@@ -1,98 +1,306 @@
 acl_json_config_d1 = {
-  "ACL_TABLE": {
-    "L3_IPV4_INGRESS": {
-      "type": "L3",
-      "stage": "INGRESS",
-      "ports": [],
-      "policy_desc": "L3_IPV4_INGRESS"
+    "ACL_TABLE": {
+        "IN4": {
+            "type": "L3",
+            "stage": "INGRESS",
+            "ports": [],
+            "policy_desc": "L3_IPV4_INGRESS"
+        },
+        "EGR4": {
+            "type": "L3",
+            "stage": "EGRESS",
+            "ports": [],
+            "policy_desc": "L3_IPV4_EGRESS"
+        }
     },
-    "L3_IPV4_EGRESS": {
-      "type": "L3",
-      "stage": "EGRESS",
-      "ports": [],
-      "policy_desc": "L3_IPV4_EGRESS"
+    "ACL_RULE": {
+        "IN4|RULE_1": {
+            "DSCP": 0,
+            "DST_IP": "1.0.0.2/32",
+            "IP_PROTOCOL": 17,
+            "L4_DST_PORT": 22222,
+            "L4_SRC_PORT": 11111,
+            "PACKET_ACTION": "FORWARD",
+            "PRIORITY": "9999",
+            "SRC_IP": "2.0.0.2/24",
+            "in_ports": []
+        },
+        "IN4|RULE_2": {
+            "DSCP": 0,
+            "DST_IP": "1.0.0.2/32",
+            "IP_PROTOCOL": 6,
+            "L4_DST_PORT": 22222,
+            "L4_SRC_PORT": 11111,
+            "PACKET_ACTION": "FORWARD",
+            "PRIORITY": "9998",
+            "SRC_IP": "2.0.0.2/24",
+            "in_ports": []
+        },
+        "IN4|RULE_3": {
+            "DSCP": 0,
+            "DST_IP": "1.0.0.2/32",
+            "IP_PROTOCOL": 17,
+            "L4_DST_PORT": 222,
+            "L4_SRC_PORT": 111,
+            "PACKET_ACTION": "FORWARD",
+            "PRIORITY": "9997",
+            "SRC_IP": "2.0.0.2/24",
+            "in_ports": []
+        },
+        "IN4|RULE_4": {
+            "DSCP": 0,
+            "DST_IP": "1.0.0.2/32",
+            "IP_PROTOCOL": 17,
+            "PACKET_ACTION": "FORWARD",
+            "PRIORITY": "9996",
+            "SRC_IP": "2.0.0.2/24",
+            "in_ports": []
+        },
+        "IN4|RULE_5": {
+            "DSCP": 10,
+            "DST_IP": "1.0.0.2/32",
+            "IP_PROTOCOL": 17,
+            "PACKET_ACTION": "FORWARD",
+            "PRIORITY": "9995",
+            "SRC_IP": "2.0.0.2/24",
+            "in_ports": []
+        },
+        "IN4|RULE_6": {
+            "DST_IP": "1.0.0.2/32",
+            "IP_PROTOCOL": 17,
+            "PACKET_ACTION": "FORWARD",
+            "PRIORITY": "9994",
+            "SRC_IP": "2.0.0.2/24",
+            "in_ports": []
+        },
+        "IN4|RULE_7": {
+            "DST_IP": "1.0.0.2/32",
+            "PACKET_ACTION": "FORWARD",
+            "PRIORITY": "9993",
+            "SRC_IP": "4.0.0.2/32",
+            "in_ports": []
+        },
+        "IN4|PermiAny": {
+            "PACKET_ACTION": "FORWARD",
+            "PRIORITY": "9990"
+        },
+        "EGR4|RULE_1": {
+            "DSCP": 0,
+            "DST_IP": "1.0.0.2/32",
+            "IP_PROTOCOL": 17,
+            "L4_DST_PORT": 22222,
+            "L4_SRC_PORT": 11111,
+            "PACKET_ACTION": "FORWARD",
+            "PRIORITY": "9999",
+            "SRC_IP": "2.0.0.2/24"
+        },
+        "EGR4|RULE_2": {
+            "DSCP": 0,
+            "DST_IP": "1.0.0.2/32",
+            "IP_PROTOCOL": 6,
+            "L4_DST_PORT": 22222,
+            "L4_SRC_PORT": 11111,
+            "PACKET_ACTION": "FORWARD",
+            "PRIORITY": "9998",
+            "SRC_IP": "2.0.0.2/24"
+        },
+        "EGR4|RULE_3": {
+            "DSCP": 0,
+            "DST_IP": "1.0.0.2/32",
+            "IP_PROTOCOL": 17,
+            "L4_DST_PORT": 222,
+            "L4_SRC_PORT": 111,
+            "PACKET_ACTION": "FORWARD",
+            "PRIORITY": "9997",
+            "SRC_IP": "2.0.0.2/24"
+        },
+        "EGR4|RULE_4": {
+            "DSCP": 0,
+            "DST_IP": "1.0.0.2/32",
+            "IP_PROTOCOL": 17,
+            "PACKET_ACTION": "FORWARD",
+            "PRIORITY": "9996",
+            "SRC_IP": "2.0.0.2/24"
+        },
+        "EGR4|RULE_5": {
+            "DSCP": 10,
+            "DST_IP": "1.0.0.2/32",
+            "IP_PROTOCOL": 17,
+            "PACKET_ACTION": "FORWARD",
+            "PRIORITY": "9995",
+            "SRC_IP": "2.0.0.2/24"
+        },
+        "EGR4|RULE_6": {
+            "DST_IP": "1.0.0.2/32",
+            "IP_PROTOCOL": 17,
+            "PACKET_ACTION": "FORWARD",
+            "PRIORITY": "9994",
+            "SRC_IP": "2.0.0.2/24"
+        },
+        "EGR4|RULE_7": {
+            "DST_IP": "1.0.0.2/32",
+            "PACKET_ACTION": "FORWARD",
+            "PRIORITY": "9993",
+            "SRC_IP": "4.0.0.2/32"
+        },
+        "EGR4|PermiAny": {
+            "PACKET_ACTION": "FORWARD",
+            "PRIORITY": "9990"
+        }
     }
-  },
-  "ACL_RULE": {
-    "L3_IPV4_INGRESS|rule1": {
-      "PACKET_ACTION": "FORWARD",
-      "SRC_IP": "1.1.1.1/32",
-      "DST_IP": "2.2.2.2/32",
-      "L4_SRC_PORT": 43,
-      "L4_DST_PORT": 10,
-      "DSCP":62,
-      "IP_PROTOCOL": 6,
-      "PRIORITY": 1000
-    },
-    "L3_IPV4_INGRESS|rule2": {
-      "PACKET_ACTION": "FORWARD",
-      "SRC_IP": "1.1.1.4/32",
-      "DST_IP": "2.2.2.4/32",
-      "L4_SRC_PORT": 100,
-      "IP_PROTOCOL": 17,
-      "PRIORITY": 2000
-    },
-    "L3_IPV4_INGRESS|rule4": {
-      "PACKET_ACTION": "DROP",
-      "SRC_IP": "1.1.1.5/32",
-      "DST_IP": "2.2.2.5/32",
-      "L4_DST_PORT": 300,
-      "IP_PROTOCOL": 6,
-      "PRIORITY": 4000
-    },
-    "L3_IPV4_INGRESS|rule5": {
-      "PACKET_ACTION": "DROP",
-      "SRC_IP": "1.1.1.6/32",
-      "DST_IP": "2.2.2.6/32",
-      "TCP_FLAGS": "4/4",
-      "PRIORITY": 5000
-    },
-    "L3_IPV4_INGRESS|PermitAny7": {
-      "PACKET_ACTION": "FORWARD",
-      "IP_TYPE": "IPV4ANY",
-      "PRIORITY": 100
-    },
-    "L3_IPV4_EGRESS|rule1": {
-      "PACKET_ACTION": "FORWARD",
-      "SRC_IP": "2.2.2.2/32",
-      "DST_IP": "1.1.1.1/32",
-      "L4_SRC_PORT": 43,
-      "L4_DST_PORT": 567,
-      "DSCP": 61,
-      "IP_PROTOCOL": 6,
-      "PRIORITY": 1000
-    },
-    "L3_IPV4_EGRESS|rule2": {
-      "PACKET_ACTION": "DROP",
-      "SRC_IP": "2.2.2.4/32",
-      "DST_IP": "1.1.1.4/32",
-      "IP_PROTOCOL": 17,
-      "DSCP": 61,
-      "PRIORITY": 4000
-    },
-    "L3_IPV4_EGRESS|rule3": {
-      "PACKET_ACTION": "DROP",
-      "SRC_IP": "2.2.2.5/32",
-      "DST_IP": "1.1.1.5/32",
-      "L4_DST_PORT": 567,
-      "IP_PROTOCOL": 6,
-      "TCP_FLAGS": "4/4",
-      "PRIORITY": 5000
-    },
-    "L3_IPV4_EGRESS|PermiAny4": {
-      "PACKET_ACTION": "FORWARD",
-      "IP_TYPE": "IPV4ANY",
-      "PRIORITY": 100
-    },
-    "L3_IPV4_EGRESS|PermiAny5": {
-      "PACKET_ACTION": "FORWARD",
-      "IP_TYPE": "IPV4ANY",
-      "IP_PROTOCOL": 17,
-      "PRIORITY": 100
-    }
-  }
 }
 
+acl_json_config_d2 = {
+    "ACL_TABLE": {
+        "IN6": {
+            "type": "L3V6",
+            "stage": "INGRESS",
+            "ports": [],
+            "policy_desc": "L3_IPV6_INGRESS"
+        },
+        "EGR6": {
+            "type": "L3V6",
+            "stage": "EGRESS",
+            "ports": [],
+            "policy_desc": "L3_IPV6_EGRESS"
+        }
+    },
+    "ACL_RULE": {
+        "IN6|RULE_1": {
+            "DSCP": "0",
+            "DST_IPV6": "1000::2/128",
+            "IP_PROTOCOL": 17,
+            "L4_DST_PORT": 22222,
+            "L4_SRC_PORT": 11111,
+            "PACKET_ACTION": "FORWARD",
+            "PRIORITY": "9999",
+            "SRC_IPV6": "2000::2/64",
+            "in_ports": []
+        },
+        "IN6|RULE_2": {
+            "DSCP": "0",
+            "DST_IPV6": "1000::2/128",
+            "IP_PROTOCOL": 6,
+            "L4_DST_PORT": 22222,
+            "L4_SRC_PORT": 11111,
+            "PACKET_ACTION": "FORWARD",
+            "PRIORITY": "9998",
+            "SRC_IPV6": "2000::2/64",
+            "in_ports": []
+        },
+        "IN6|RULE_3": {
+            "DSCP": "0",
+            "DST_IPV6": "1000::2/128",
+            "IP_PROTOCOL": 17,
+            "L4_DST_PORT": 222,
+            "L4_SRC_PORT": 111,
+            "PACKET_ACTION": "FORWARD",
+            "PRIORITY": "9997",
+            "SRC_IPV6": "2000::2/64",
+            "in_ports": []
+        },
+        "IN6|RULE_4": {
+            "DSCP": "0",
+            "DST_IPV6": "1000::2/128",
+            "IP_PROTOCOL": 17,
+            "PACKET_ACTION": "FORWARD",
+            "PRIORITY": "9996",
+            "SRC_IPV6": "2000::2/64",
+            "in_ports": []
+        },
+        "IN6|RULE_5": {
+            "DSCP": "10",
+            "DST_IPV6": "1000::2/128",
+            "IP_PROTOCOL": 17,
+            "PACKET_ACTION": "FORWARD",
+            "PRIORITY": "9995",
+            "SRC_IPV6": "2000::2/64",
+            "in_ports": []
+        },
+        "IN6|RULE_6": {
+            "DST_IPV6": "1000::2/128",
+            "IP_PROTOCOL": 17,
+            "PACKET_ACTION": "FORWARD",
+            "PRIORITY": "9994",
+            "SRC_IPV6": "2000::2/64",
+            "in_ports": []
+        },
+        "IN6|RULE_7": {
+            "DST_IPV6": "1000::2/128",
+            "PACKET_ACTION": "FORWARD",
+            "PRIORITY": "9993",
+            "SRC_IPV6": "4000::2/128",
+            "in_ports": []
+        },
+        "IN6|PermiAny": {
+            "PACKET_ACTION": "FORWARD",
+            "PRIORITY": "9990"
+        },
+        "EGR6|RULE_1": {
+            "DSCP": "0",
+            "DST_IPV6": "1000::2/128",
+            "IP_PROTOCOL": 17,
+            "L4_DST_PORT": 22222,
+            "L4_SRC_PORT": 11111,
+            "PACKET_ACTION": "FORWARD",
+            "PRIORITY": "9999",
+            "SRC_IPV6": "2000::2/64"
+        },
+        "EGR6|RULE_2": {
+            "DSCP": "0",
+            "DST_IPV6": "1000::2/128",
+            "IP_PROTOCOL": 6,
+            "L4_DST_PORT": 22222,
+            "L4_SRC_PORT": 11111,
+            "PACKET_ACTION": "FORWARD",
+            "PRIORITY": "9998",
+            "SRC_IPV6": "2000::2/64"
+        },
+        "EGR6|RULE_3": {
+            "DSCP": "0",
+            "DST_IPV6": "1000::2/128",
+            "IP_PROTOCOL": 17,
+            "L4_DST_PORT": 222,
+            "L4_SRC_PORT": 111,
+            "PACKET_ACTION": "FORWARD",
+            "PRIORITY": "9997",
+            "SRC_IPV6": "2000::2/64"
+        },
+        "EGR6|RULE_4": {
+            "DSCP": "0",
+            "DST_IPV6": "1000::2/128",
+            "IP_PROTOCOL": 17,
+            "PACKET_ACTION": "FORWARD",
+            "PRIORITY": "9996",
+            "SRC_IPV6": "2000::2/64"
+        },
+        "EGR6|RULE_5": {
+            "DSCP": "10",
+            "DST_IPV6": "1000::2/128",
+            "IP_PROTOCOL": 17,
+            "PACKET_ACTION": "FORWARD",
+            "PRIORITY": "9995",
+            "SRC_IPV6": "2000::2/64"
+        },
+        "EGR6|RULE_6": {
+            "DST_IPV6": "1000::2/128",
+            "IP_PROTOCOL": 17,
+            "PACKET_ACTION": "FORWARD",
+            "PRIORITY": "9994",
+            "SRC_IPV6": "2000::2/64"
+        },
+        "EGR6|RULE_7": {
+            "DST_IPV6": "1000::2/128",
+            "PACKET_ACTION": "FORWARD",
+            "PRIORITY": "9993",
+            "SRC_IPV6": "4000::2/128"
+        },
+        "EGR6|PermiAny": {
+            "PACKET_ACTION": "FORWARD",
+            "PRIORITY": "9990"
+        }
+    }
+}
 acl_json_config_qos = {
   "ACL_TABLE": {
     "QOS": {
@@ -433,85 +641,6 @@ acl_json_config_vlan_d3 = {
       "SRC_MAC": "00:0a:01:00:11:06/ff:ff:ff:ff:ff:ff",
       "DST_MAC": "00:0a:01:00:00:05/ff:ff:ff:ff:ff:ff",
       "PRIORITY": 90
-    }
-  }
-}
-acl_json_config_d2 = {
-  "ACL_TABLE": {
-    "L3_IPV6_INGRESS": {
-      "type": "L3V6",
-      "stage": "INGRESS",
-      "ports": [],
-      "policy_desc": "L3_IPV6_INGRESS"
-    },
-    "L3_IPV6_EGRESS": {
-      "type": "L3V6",
-      "stage": "EGRESS",
-      "ports": [],
-      "policy_desc": "L3_IPV6_EGRESS"
-    }
-  },
-  "ACL_RULE": {
-    "L3_IPV6_INGRESS|rule1": {
-      "PACKET_ACTION": "FORWARD",
-      "SRC_IPV6": "2001::2/128",
-      "DST_IPV6": "1001::2/128",
-      "L4_SRC_PORT": 100,
-      "IP_PROTOCOL": 6,
-      "PRIORITY": 1000
-    },
-    "L3_IPV6_INGRESS|rule3": {
-      "PACKET_ACTION": "DROP",
-      "SRC_IPV6": "2001::4/128",
-      "DST_IPV6": "1001::4/128",
-      "L4_DST_PORT": 300,
-      "IP_PROTOCOL": 6,
-      "PRIORITY": 4000
-    },
-    "L3_IPV6_INGRESS|rule4": {
-      "PACKET_ACTION": "DROP",
-      "SRC_IPV6": "2001::5/128",
-      "DST_IPV6": "1001::5/128",
-      "L4_DST_PORT": 100,
-      "IP_PROTOCOL": 17,
-      "PRIORITY": 5000
-    },
-    "L3_IPV6_INGRESS|rule5": {
-      "PACKET_ACTION": "FORWARD",
-      "IP_TYPE": "IPV6ANY",
-      "SRC_IPV6": "2001::2/128",
-      "PRIORITY": 1000
-    },
-    "L3_IPV6_INGRESS|PermitAny6": {
-          "PACKET_ACTION": "FORWARD",
-          "IP_TYPE": "IPV6ANY",
-          "PRIORITY": 100
-    },
-      "L3_IPV6_EGRESS|rule1": {
-      "PACKET_ACTION": "FORWARD",
-      "SRC_IPV6": "1001::2/128",
-      "DST_IPV6": "2001::2/128",
-      "IP_PROTOCOL": 6,
-      "L4_DST_PORT": 560,
-      "PRIORITY": 1000
-    },
-    "L3_IPV6_EGRESS|rule4": {
-      "PACKET_ACTION": "DROP",
-      "SRC_IPV6": "1001::4/128",
-      "DST_IPV6": "2001::4/128",
-      "IP_PROTOCOL": 17,
-      "L4_SRC_PORT": 560,
-      "PRIORITY": 5000
-    },
-    # "L3_IPV6_EGRESS|DenyAny5": {
-    #   "PACKET_ACTION": "DROP",
-    #   "ETHER_TYPE":'0x086dd',
-    #   "PRIORITY": 50
-    # },
-    "L3_IPV6_EGRESS|PermitAny6": {
-      "PACKET_ACTION": "FORWARD",
-      "IP_TYPE": "IPV6ANY",
-      "PRIORITY": 100
     }
   }
 }

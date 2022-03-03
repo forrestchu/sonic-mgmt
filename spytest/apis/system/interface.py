@@ -662,7 +662,7 @@ def show_queue_counters(dut, interface_name, queue=None, cli_type=''):
     cli_type = st.get_ui_type(dut, cli_type=cli_type)
     if cli_type == 'click':
         if interface_name == "CPU":
-            command = "show copp stat"
+            command = "no page\nshow copp stat"
             output = st.show(dut, command, type='alicli', skip_tmpl=False)
         else:
             command = "show queue counters {}".format(interface_name)

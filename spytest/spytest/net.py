@@ -5000,7 +5000,7 @@ class Net(object):
                 return self.run_script(devname, max_run_time, "/tmp/config.sh")
 
             if env.get("SPYTEST_SPLIT_COMMAND_LIST", "0") == "0":
-                if opts.ctype != "klish": cmd_list = [opts.sep.join(cmd_list)]
+                if opts.ctype not in ["klish", "alicli"] : cmd_list = [opts.sep.join(cmd_list)]
 
         # add confirmation prompts if specified
         confirm_prompts = []

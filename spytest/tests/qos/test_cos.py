@@ -630,11 +630,11 @@ def test_ft_cos_cpu_counters():
         status = False
     data.tg.tg_traffic_control(action='stop', stream_handle=data.streams['SNMP'])
 
-    st.log("Sending ipv4 DHCP")
-    data.tg.tg_traffic_control(action='run', stream_handle=data.streams['DHCP'])
-    if not cos_counters_checking(value="DHCP"):
-        status = False
-    data.tg.tg_traffic_control(action='stop', stream_handle=data.streams['DHCP'])
+    #st.log("Sending ipv4 DHCP")
+    #data.tg.tg_traffic_control(action='run', stream_handle=data.streams['DHCP'])
+    #if not cos_counters_checking(value="DHCP"):
+    #    status = False
+    #data.tg.tg_traffic_control(action='stop', stream_handle=data.streams['DHCP'])
 
     st.log("Sending ipv4 SSH")
     data.tg.tg_traffic_control(action='run', stream_handle=data.streams['SSH'])

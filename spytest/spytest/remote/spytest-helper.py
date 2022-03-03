@@ -844,6 +844,27 @@ def read_messages(file_path, all_file, var_file, our_file):
         offset = 0
     return retval
 
+def do_process_status_check(lvl):
+    docker_list =['database', 'snmp', 'lldp', 'telemetry', 'sflow', 'macsec', 'syncd', 'teamd', 'smartflow', 'swss', 'bgp', 'warden', 'amon']
+    exclude_process = {}
+
+    #exclude some normal exit process
+    for docker in docker_list:
+	    exclude_process[docker] = ['start.sh']
+    exclude_process['swss'].extend(['restore_neighbors', 'enable_counters', 'gearsyncd', 'swssconfig'])
+    exclude_process['database'].extend(['flushdb'])
+    exclude_process['bgp'].extend(['bgp_eoiu_marker'])
+    exclude_process['amon'].extend(['gearbox_check', 'hardware_diag'])
+
+    #reverse all dockers to check exited process
+    print("=" * 17 + " EXITED PROCESS " + "=" * 17)
+    for docker in docker_list:
+        cmd = "docker exec -i {} supervisorctl status |grep EXITED ".format(docker)
+        for i in exclude_process[docker]:
+            cmd += "|grep -v {} ".format(i)
+        retval = execute_check_cmd(cmd, trace_cmd=False, trace_out=False, skip_error=True)
+        print(retval)
+
 def syslog_read_msgs(lvl, phase):
     if phase: execute_check_cmd("sudo echo {}".format(phase))
     file_path = "{}/syslog.offset".format(spytest_dir)
@@ -866,7 +887,7 @@ def syslog_read_msgs(lvl, phase):
 
     index = syslog_levels.index(lvl)
     needed = "|".join(syslog_levels[:index+1])
-    cmd = r"""grep -E "^\S+\s+[0-9]+\s+[0-9]+:[0-9]+:[0-9]+(\.[0-9]+){{0,1}}(\s+[0-9]+){{0,1}}\s+\S+\s+({})" {}"""
+    cmd = r"""grep -E "^\S*\s+\S+\s+\S+\s+\S+[0-9]+:[0-9]+:[0-9]+(\.[0-9]+){{0,1}}\s+\S+\s+({})" {}"""
     retval = execute_check_cmd(cmd.format(needed.upper(), our_file), trace_cmd=False, trace_out=False, skip_error=True)
     lines = retval.split("\n")
     syslog_lines = len(lines)
@@ -881,6 +902,9 @@ def syslog_read_msgs(lvl, phase):
         print("=" * 17 + " MATCHED SYSLOG " + "=" * 17)
         print(retval)
         print("=" * 50)
+
+    #add process check after syslog read
+    do_process_status_check(lvl)
 
 def do_sairedis(op):
     if op == "clean":

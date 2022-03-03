@@ -1368,7 +1368,8 @@ class WorkArea(object):
         any_get_tech_support = bool(self.cfg.get_tech_support != "none")
         self.net._init_clean(dut, any_fetch_core_files, any_get_tech_support, True)
 
-        if self.cfg.skip_init_config and not self.cfg.config_profile: return
+        #always generate init config
+        #if self.cfg.skip_init_config and not self.cfg.config_profile: return
         if self.cfg.pde: return
 
         profile_name = self._context._tb.get_config_profile()
@@ -1741,7 +1742,8 @@ class WorkArea(object):
                 os._exit(6)
 
         # save the TA default configuration as base configuration
-        if not self.cfg.skip_init_config:
+        #if not self.cfg.skip_init_config:
+        if True:
             [retvals, exceptions] = self._foreach_dev(self.net._apply_remote, "save-base-config")
             if self._trace_exceptions(None, "exception saving base configuration", exceptions):
                 os._exit(6)

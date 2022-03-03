@@ -117,6 +117,7 @@ class Feature(object):
         self.set_unsupported("show-vrf-verbose-command")
         self.set_unsupported("vrf-needed-for-unbind")
         self.set_unsupported("strom-control")
+        self.set_unsupported("system-status")
 
     def is_supported(self, name):
         if name not in self.supported:

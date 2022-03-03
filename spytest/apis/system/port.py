@@ -251,7 +251,7 @@ def get_interface_counters_all(dut, port=None, cli_type=''):
             command = "show interfaces counters -a -i {}".format(port)
             if not st.is_feature_supported("show-interfaces-counters-interface-command", dut):
                 st.community_unsupported(command, dut)
-                command = "show interfaces counters -a | grep -w {}".format(port)
+                command = "show interfaces counters -a -p1 | grep -w {}".format(port)
             return st.show(dut, command)
         else:
             return st.show(dut, "show interfaces counters -a -p 1", type=cli_type)

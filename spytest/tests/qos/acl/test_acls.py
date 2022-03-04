@@ -90,6 +90,12 @@ def apply_module_configuration():
 
 
 def clear_module_configuration():
+    # delete Ipv4 address
+    print_log("Delete ip address configuration:")
+    ip_obj.clear_ip_configuration([vars.D1], family='ipv4')
+    # delete Ipv6 address
+    ip_obj.clear_ip_configuration([vars.D1], family='ipv6')
+
     print_log("Clearing module configuration")
     [_, exceptions] = utils.exec_all(True, [[acl_obj.acl_delete, vars.D1]])
 

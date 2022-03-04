@@ -1233,7 +1233,6 @@ acl_json_config_v4_l3_traffic = {
     },
     "L3_IPV4_INGRESS|PermitAny6": {
       "PACKET_ACTION": "FORWARD",
-      "IP_TYPE": "IPV4ANY",
       "PRIORITY": 100
     }
   }
@@ -1260,7 +1259,7 @@ acl_json_config_v6_l3_traffic = {
       "PACKET_ACTION": "DROP",
       "SRC_IPV6": "3001::2/128",
       "DST_IPV6": "4001::2/128",
-      "L4_SRC_PORT": "100",
+      "L4_SRC_PORT": 100,
       "L4_DST_PORT": 300,
       "IP_PROTOCOL": 6,
       "PRIORITY": 4000
@@ -1275,7 +1274,6 @@ acl_json_config_v6_l3_traffic = {
     },
     "L3_IPV6_INGRESS|PermitAny5": {
       "PACKET_ACTION": "FORWARD",
-      "IP_TYPE": "IPV6ANY",
       "PRIORITY": 100
     }
   }

@@ -150,6 +150,9 @@ def create_streams(tx_tg, rx_tg, rules, match, mac_src, mac_dst):
     for rule, attributes in rules.items():
         if ("IP_TYPE" in attributes) or ("ETHER_TYPE" in attributes):
             continue
+        if ("PermiAny" in rule):
+            continue
+
         if match in rule:
             params = {}
             tmp = dict(my_args)
@@ -174,7 +177,7 @@ def verify_acl_hit_counters(dut, table_name, acl_type="ip"):
     result = True
     acl_rule_counters = acl_obj.show_acl_counters(dut, acl_type=acl_type, acl_table=table_name)
     for rule in acl_rule_counters:
-        if rule['packetscnt'] == 0:
+        if 'PermiAny' not in rule['rulename'] and rule['packetscnt'] == 0:
             return False
     return result
 
@@ -189,7 +192,7 @@ def verify_packet_count(tx, tx_port, rx, rx_port, table):
     action_list = []
     index = 0
     for s_id, attr in tg_tx['streams'].items():
-        if table in attr['TABLE']:
+        if table in attr['TABLE'] and 'PermitAny' not in attr['TABLE']:
             index = index + 1
             if attr["PACKET_ACTION"] == "FORWARD":
                 exp_ratio = 1

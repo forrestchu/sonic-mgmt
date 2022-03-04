@@ -187,7 +187,7 @@ show_c.tmpl, .*, sonic, bcmcmd "show c.*"
 show_platform_syseeprom.tmpl, .*, sonic, show platform syseeprom
 show_bgp_neighbor_detail.tmpl, .*,  sonic, show bgp neighbors .*
 show_bgp_neighbor.tmpl, .*,  sonic, show bgp vrf.*
-show_queue_counters_interface_CPU.tmpl, .*,  sonic, show copp stat
+show_queue_counters_interface_CPU.tmpl, .*,  sonic, cli .* 'show copp stat'
 show_queue_counters_interface.tmpl, .*, sonic, show queue counters interface .*
 show_queue_counters.tmpl, .*, sonic, show queue counters
 show_queue_threshold_multicast.tmpl, .*,  sonic, show queue threshold multicast

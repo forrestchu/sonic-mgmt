@@ -23,7 +23,7 @@ def cos_module_hooks(request):
     global vars
 
     st.log("Ensuring minimum topology")
-    vars = st.ensure_min_topology("D1T1:2")
+    vars = st.ensure_min_topology("D1T1:2","D2T1:1")
 
     cos_variables()
     cos_module_config(config='yes')
@@ -390,9 +390,16 @@ def binding_queue_map_to_interfaces():
 def cos_counters_checking(value=None,loopCnt=3):
     flag = 0
     iter = 1
+    find = False
     if not st.is_feature_supported("bcmcmd", vars.D1):
         while iter <= loopCnt:
             queue_dict_list = show_queue_counters(vars.D1, "CPU")
+            for i in range(len(queue_dict_list)):
+                if value in queue_dict_list[i]['copp']:
+                    find = True
+            if not find:
+                st.warn("{} queue not find".format(value))
+                return True
             cpu_accept_counter1 = int(filter_and_select(queue_dict_list, ['accept'], {'copp': value})[0]['accept'].replace(',', ''))
             cpu_drop_counter1 = int(filter_and_select(queue_dict_list, ['drop'], {'copp': value})[0]['drop'].replace(',', ''))
             expect_cir = int(filter_and_select(queue_dict_list, ['cir'], {'copp': value})[0]['cir'].replace(',', ''))

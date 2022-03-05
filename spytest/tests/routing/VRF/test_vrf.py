@@ -196,6 +196,7 @@ def lib_test_VrfFun003():
     ###############################################################################################################################
     result = 0
     loc_lib.clear_tg()
+    st.wait(10)
     data.tg2.tg_traffic_control(action = 'run', stream_handle = data.stream_list.get('ve_v4_stream'), duration = '2')
     st.log('Verify ping and traceroute on virtual interface non-default vrf for both IPv4 and IPv6')
     if not ip_api.ping(data.dut1, dut2_dut1_vrf_ip[0], interface= vrf_name[1], count = 2):

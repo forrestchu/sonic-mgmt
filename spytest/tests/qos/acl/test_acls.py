@@ -53,6 +53,13 @@ data.ipv6_network_D1 = "1000::0/64"
 data.ipv6_network_D2 = "2000::0/64"
 data.ipv6_network_D3 = "100::0/64"
 data.ipv6_network_D4 = "200::0/64"
+# For Acl capacity 
+data.ipv4_src_ip_base = "1.0.0.2"
+data.ipv4_dst_ip_base = "2.0.0.2"
+data.ipv6_src_ip_base = "100::0:2"
+data.ipv6_dst_ip_base = "200::0:2"
+data.ipv4_default_network = "2.0.0.0/8"
+data.ipv6_default_network = "200::/48"
 
 def print_log(msg):
     log_start = "\n================================================================================\n"
@@ -147,7 +154,7 @@ def create_streams(tx_tg, rx_tg, rules, match, mac_src, mac_dst,dscp=None,tc=Non
     for rule, attributes in rules.items():
         if ("IP_TYPE" in attributes) or ("ETHER_TYPE" in attributes):
             continue
-        if ("PermiAny" in rule):
+        if ("PermitAny" in rule):
             continue
 
         if match in rule:
@@ -221,7 +228,9 @@ def verify_acl_hit_counters(dut, table_name, acl_type="ip"):
     result = True
     acl_rule_counters = acl_obj.show_acl_counters(dut, acl_table=table_name, acl_type=acl_type)
     for rule in acl_rule_counters:
-        if not rule['packetscnt'] or rule['packetscnt'] == 0:
+        if 'PermitAny' in rule['rulename']:
+            continue
+        if not rule['packetscnt'] or int(rule['packetscnt']) == 0 or rule['packetscnt'] == 'N/A':
             return False
     return result
 
@@ -356,11 +365,17 @@ def acl_v4_module_hooks(request):
 @pytest.fixture(scope="function", autouse=True)
 def acl_function_hooks(request):
     yield
+    if st.get_func_name(request) == "test_ft_acl_ipv6":
+        print_log("Clearing module configuration")
+        [_, exceptions] = utils.exec_all(True, [[acl_obj.clear_acl_counter, vars.D1]])
+        [_, exceptions] = utils.exec_all(True, [[acl_obj.acl_delete, vars.D1]])
 
 
 def verify_rule_priority(dut, table_name, acl_type="ip"):
     acl_rule_counters = acl_obj.show_acl_counters(dut, acl_table=table_name, acl_rule='PermitAny', acl_type=acl_type)
+    print (acl_rule_counters)
     if len(acl_rule_counters) == 1:
+        print (int(acl_rule_counters[0]['packetscnt']))
         if (int(acl_rule_counters[0]['packetscnt']) != 0):
             print_log("ACL Rule priority test failed")
             return False
@@ -393,11 +408,12 @@ def test_ft_acl_ipv4():
     result4 = verify_acl_hit_counters(vars.D1, "EGR4")
     result5 = verify_rule_priority(vars.D1, "IN4")
     result6 = verify_rule_priority(vars.D1, "EGR4")
+    print(result1, result2, result3, result4, result5, result6)
 
     acl_utils.report_result(result1 and result2 and result3 and result4 and result5 and result6)
 
 @pytest.mark.acl_test678
-def test_ft_acl_egress_ipv6():
+def test_ft_acl_ipv6():
     '''
     IPv6 Egress ACL is applied on DUT2 port connected to TG Port #2
     Traffic is sent on TG Port #1
@@ -413,62 +429,40 @@ def test_ft_acl_egress_ipv6():
     result4 = verify_acl_hit_counters(vars.D1, "EGR6", acl_type="ipv6")
     result5 = verify_rule_priority(vars.D1, "IN6")
     result6 = verify_rule_priority(vars.D1, "EGR6")
+    print(result1, result2, result3, result4, result5, result6)
 
     acl_utils.report_result(result1 and result2 and result3 and result4 and result5 and result6)
 
 #@pytest.mark.acl_test345654
-#def test_ft_acl_qos():
-#    transmit('tg3')
-#    result1 = verify_packet_count('tg3', vars.T1D1P2, 'tg4', vars.T1D2P2, "QOS")
-#    result2 = verify_acl_hit_counters(vars.D1, "QOS")
-#    result3 = verify_acl_hit_counters(vars.D2, "L3_IPV6_DSCP_EGRESS", acl_type="ipv6")
-#    result4 = verify_acl_hit_counters(vars.D2, "L3_IPV4_DSCP_EGRESS")
-#    counter1 = show_queue_counters(vars.D1, vars.D1D2P1, queue='UC5')
-#    counter2 = show_queue_counters(vars.D1, vars.D1D2P2, queue='UC5')
-#    if counter1 + counter2 < 200:
-#        st.report_fail("Check queue counter failed!");
-#
-#    acl_utils.report_result(result1 and result2 and result3 and result4)
+def test_ft_acl_capacity():
+    acl_config1 = acl_data.acl_json_capacity
+    add_port_to_acl_table(acl_config1, 'IN4', vars.D1T1P2)
+    add_port_to_acl_table(acl_config1, 'IN6', vars.D1T1P2)
 
-#@pytest.mark.acl_test
-#def test_ft_acl_egress_ipv4():
-#    '''
-#    IPv4 Egress ACL is applied on DUT1 port connected to TG Port#1
-#    Traffic is sent on TG Port #2
-#    Traffic is recieved at TG Port #1
-#    '''
-#    transmit('tg2')
-#    result1 = verify_packet_count('tg2', vars.T1D2P1, 'tg1', vars.T1D1P1, "EGR4")
-#    print_log('Verifing IPv4 Egress ACL hit counters')
-#    result2 = verify_acl_hit_counters(vars.D1, "EGR4")
-#    acl_utils.report_result(result1 and result2)
-#
-#
+    print_log('Creating ACL Capacity tables and rules')
+    utils.exec_all(True, [
+        utils.ExecAllFunc(acl_obj.apply_acl_config, vars.D1, acl_config1)
+    ])
+    st.wait(180)
 
-#
-#
-#@pytest.mark.community
-#@pytest.mark.community_fail
-#def test_ft_acl_ingress_ipv6():
-#    '''
-#    IPv6 Ingress ACL is applied on DUT2 port connected to TG Port #2
-#    Traffic is sent on TG Port #2
-#    Traffic is recieved at TG Port #1
-#    '''
-#    [_, exceptions] = utils.exec_all(True, [[clear_interface_counters, vars.D1], [clear_interface_counters, vars.D2]])
-#    ensure_no_exception(exceptions)
-#    [_, exceptions] = utils.exec_all(True, [[get_interface_counters, vars.D1, vars.D1T1P1],
-#                                           [get_interface_counters, vars.D2, vars.D2T1P1]])
-#    ensure_no_exception(exceptions)
-#    transmit('tg2')
-#    [_, exceptions] = utils.exec_all(True, [[get_interface_counters, vars.D1, vars.D1T1P1],
-#                                           [get_interface_counters, vars.D2, vars.D2T1P1]])
-#    ensure_no_exception(exceptions)
-#    result1 = verify_packet_count('tg2', vars.T1D2P1, 'tg1', vars.T1D1P1, "IN6")
-#    print_log('Verifing IPv6 Ingress ACL hit counters')
-#
-#    result2 = verify_acl_hit_counters(vars.D2, "IN6", acl_type="ipv6")
-#    result3 = verify_rule_priority(vars.D2, "IN6", acl_type="ipv6")
-#    acl_utils.report_result(result1 and result2 and result3)
-#
-#
+    #create static route
+    ip_obj.create_static_route(vars.D1, '2.0.0.2', data.ipv4_default_network, family = 'ipv4')
+    ip_obj.create_static_route(vars.D1, '2000::2', data.ipv6_default_network, family = 'ipv6')
+
+    s1 = data.tgmap['tg2']['tg'].tg_traffic_config(port_handle = data.tgmap['tg2']['handle'], mode = 'create', duration = '1', transmit_mode = 'continuous', length_mode = 'fixed', port_handle2 = data.tgmap['tg1']['handle'], rate_pps = 102400, mac_src = "00:0a:01:00:00:01", mac_dst = data.mac1, ip_src_addr = data.ipv4_src_ip_base, ip_dst_addr=data.ipv4_dst_ip_base, l3_protocol='ipv4',ip_src_mode = 'increment', ip_src_count = 1024, ip_src_step ='0.0.1.0',ip_dst_mode = 'increment', ip_dst_count = 1024, ip_dst_step ='0.0.1.0')
+    s2 = data.tgmap['tg2']['tg'].tg_traffic_config(port_handle = data.tgmap['tg2']['handle'], mode = 'create', duration = '1', transmit_mode = 'continuous', length_mode = 'fixed', port_handle2 = data.tgmap['tg1']['handle'], rate_pps = 102400, mac_src = "00:0a:01:00:00:01", mac_dst = data.mac1, ipv6_src_addr = data.ipv6_src_ip_base, ipv6_dst_addr=data.ipv6_dst_ip_base, l3_protocol='ipv6',ipv6_src_mode = 'increment', ipv6_src_count = 1024, ipv6_src_step ='::1:0',ipv6_dst_mode = 'increment', ipv6_dst_count = 1024, ipv6_dst_step ='::1:0')
+
+    [_, exceptions] = utils.exec_all(True, [[acl_obj.clear_acl_counter, vars.D1]])
+    data.tgmap['tg2']['tg'].tg_traffic_control(action="run", stream_handle=s1['stream_id'])
+    data.tgmap['tg2']['tg'].tg_traffic_control(action="run", stream_handle=s2['stream_id'])
+    st.wait(10)
+    data.tgmap['tg2']['tg'].tg_traffic_control(action="stop", stream_handle=s1['stream_id'])
+    data.tgmap['tg2']['tg'].tg_traffic_control(action="stop", stream_handle=s2['stream_id'])
+    st.wait(5)
+
+    result1 = verify_acl_hit_counters(vars.D1, "IN4")
+    result2 = verify_acl_hit_counters(vars.D1, "IN6", acl_type="ipv6")
+    print(result1, result2)
+
+    acl_utils.report_result(result1 and result2 and result3 and result4)
+

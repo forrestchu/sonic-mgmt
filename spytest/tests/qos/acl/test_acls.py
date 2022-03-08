@@ -464,5 +464,5 @@ def test_ft_acl_capacity():
     result2 = verify_acl_hit_counters(vars.D1, "IN6", acl_type="ipv6")
     print(result1, result2)
 
-    acl_utils.report_result(result1 and result2 and result3 and result4)
+    acl_utils.report_result(result1 and result2)
 

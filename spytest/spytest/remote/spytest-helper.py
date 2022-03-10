@@ -857,7 +857,7 @@ def do_process_status_check(lvl):
     exclude_process['amon'].extend(['gearbox_check', 'hardware_diag'])
 
     #reverse all dockers to check exited process
-    print("=" * 17 + " EXITED PROCESS " + "=" * 17)
+    print("=" * 17 + " PROCESS CHECK " + "=" * 17)
     for docker in docker_list:
         cmd = "docker exec -i {} supervisorctl status |grep EXITED ".format(docker)
         for i in exclude_process[docker]:

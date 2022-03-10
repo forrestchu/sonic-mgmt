@@ -1368,8 +1368,7 @@ class WorkArea(object):
         any_get_tech_support = bool(self.cfg.get_tech_support != "none")
         self.net._init_clean(dut, any_fetch_core_files, any_get_tech_support, True)
 
-        #always generate init config
-        #if self.cfg.skip_init_config and not self.cfg.config_profile: return
+        if self.cfg.skip_init_config and not self.cfg.config_profile: return
         if self.cfg.pde: return
 
         profile_name = self._context._tb.get_config_profile()
@@ -1736,14 +1735,13 @@ class WorkArea(object):
         self._foreach_dev(self.hooks.extend_base_config)
 
         # save the current running configuration as TA default configuration
-        if not self.cfg.skip_init_config:
+        if not self.cfg.skip_init_config and not self.cfg.force_keep_minimize_config:
             [retvals, exceptions] = self._foreach_dev(self.net._apply_remote, "rewrite-ta-config")
             if self._trace_exceptions(None, "exception rewriting running configuration to default ta configuration", exceptions):
                 os._exit(6)
 
         # save the TA default configuration as base configuration
-        #if not self.cfg.skip_init_config:
-        if True:
+        if not self.cfg.skip_init_config:
             [retvals, exceptions] = self._foreach_dev(self.net._apply_remote, "save-base-config")
             if self._trace_exceptions(None, "exception saving base configuration", exceptions):
                 os._exit(6)
@@ -3468,6 +3466,8 @@ def add_options(parser):
                help="Skip loading initial configuration before and after execution")
     add_option(group, "--skip-load-config", action="store", choices=['base', 'module', 'none'],
                help="Skip loading configuration before and after test case execution")
+    add_option(group, "--force-keep-minimize-config", action="store_true",
+               help="force loading initial configuration before and after each module test")
     add_option(group, "--load-image", action="store",
                choices=['installer', 'onie1', 'onie', "none", "installer-without-migration", "testbed"],
                help="Loading image before and after execution using specified method")
@@ -3657,6 +3657,7 @@ def _create_work_area2(config):
     cfg.topology_check = config.getoption("--topology-check", ["module"])
     cfg.skip_init_config = config.getoption("--skip-init-config")
     cfg.skip_load_config = config.getoption("--skip-load-config")
+    cfg.force_keep_minimize_config = config.getoption("--force-keep-minimize-config")
     cfg.load_image = config.getoption("--load-image", "onie")
     cfg.ignore_dep_check = bool(config.getoption("--ignore-dep-check"))
     cfg.memory_check = config.getoption("--memory-check")

@@ -23,8 +23,9 @@
 -test:test_ft_lacp_graceful_restart_with_cold_boot
 -test:test_ft_lacp_graceful_restart_with_save_reload
 
-+args:--skip-init-config
+#+args:--skip-init-config
 #+args:--skip-load-config base
++args:--force-keep-minimize-config
 +args:--load-config-method force-reboot
 +args:--get-tech-support none
 +args:--fetch-core-files none

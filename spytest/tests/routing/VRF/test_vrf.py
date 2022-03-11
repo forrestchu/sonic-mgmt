@@ -835,6 +835,7 @@ def test_VrfFun_29_30_41_42_54_55(vrf_fixture_tc_29_30_41_42_54_55):
     if not ip_api.ping(data.dut1, dut2_loopback_ip[1], interface= vrf_name[1], count = 2):
         st.log('IPv6 Ping from Vrf-102-DUT1 to Vrf-102-DUT2 failed after static route configuration to loopback interface')
         result += 1
+    st.wait(3)
     if not ip_bgp.verify_bgp_neighbor(data.dut1, neighborip = dut2_loopback_ip[1], state='Established', vrf = vrf_name[1]):
         st.log('IPv4 routes on VRF-102 over the loopback, not learnt on DUT2')
         result += 1
@@ -854,6 +855,7 @@ def test_VrfFun_29_30_41_42_54_55(vrf_fixture_tc_29_30_41_42_54_55):
     if not ip_api.ping(data.dut1, dut2_loopback_ipv6[2], interface= vrf_name[2], family='ipv6', count = 2):
         st.log('IPv6 Ping from Vrf-102-DUT1 to Vrf-102-DUT2 failed after static route configuration to loopback interface')
         result += 1
+    st.wait(3)
     if not ip_bgp.verify_bgp_neighbor(data.dut1, neighborip = dut2_loopback_ipv6[2], state='Established', vrf = vrf_name[2]):
         st.log('IPv4 routes on VRF-102 over the loopback, not learnt on DUT2')
         result += 1

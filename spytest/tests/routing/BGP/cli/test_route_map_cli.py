@@ -48,6 +48,7 @@ def restore_env():
 def cli_module_hooks(request):
     ########### module prologue #################
     st.log("pre mod config cli")
+    st.ensure_min_topology("D1")
     get_single_dut()
     config_depend_cli()
     yield

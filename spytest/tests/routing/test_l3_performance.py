@@ -1,5 +1,6 @@
 import pytest
 import datetime
+import time
 
 from spytest import st, tgapi, SpyTestDict
 from spytest.utils import filter_and_select
@@ -27,6 +28,7 @@ data.intf_ipv6_addr = "3000::1"
 data.neigh_ipv6_addr2 = "3000::2"
 data.ipv6_prefixlen = "64"
 data.test_bgp_route_count = 20000
+data.ip6_full_mask_num = 30000
 data.traffic_rate_pps = data.test_bgp_route_count
 data.includeTraffic = False
 
@@ -83,6 +85,15 @@ def l3_performance_enhancements_module_hooks(request):
 @pytest.fixture(scope="function", autouse=True)
 def l3_performance_enhancements_func_hooks(request):
     # Function configuration
+    if st.get_func_name(request) == "test_ft_l3_performance_enhancements_v4_route_intstall_withdraw":
+        st.log("Setting v4 route install num_routes 400k..")
+        data.test_bgp_route_count = 400000
+    elif st.get_func_name(request) == "test_ft_l3_performance_enhancements_v6_route_intstall_withdraw":
+        st.log("Setting v6 route install num_routes 300k..")
+        data.test_bgp_route_count = 300000
+    else:
+        st.log("Setting route install num_routes 20k..")
+        data.test_bgp_route_count = 20000
     yield
     # Function cleanup
 
@@ -153,6 +164,7 @@ def check_bcmcmd_route_count(dut, loopCnt, ipType, defcount, expcount):
             flag = 1
             break
         iter = iter+1
+        time.sleep(1)
 
     if flag:
         return True
@@ -210,7 +222,7 @@ def fixture_v4(request):
     st.log("BGP_HANDLE: "+str(bgp_rtr1))
 
     # Verifying the BGP neighborship
-    st.wait(10)
+    st.wait(120)
     st.log("Verifying the BGP neighborship.")
     if not bgpfeature.verify_bgp_summary(dut, neighbor=data.neigh_ip_addr, state='Established'):
         st.report_fail("bgp_ip_peer_establish_fail", data.neigh_ip_addr)
@@ -241,7 +253,7 @@ def fixture_v6(request):
 
     # Configuring BGP on TG interface
     conf_var = {'mode':'enable', 'ip_version':'6', 'active_connect_enable':'1', 'local_as':data.remote_as_num, 'remote_as':data.as_num, 'remote_ipv6_addr':data.my_ipv6_addr}
-    route_var = {'mode':'add', 'ip_version':'6', 'num_routes':data.test_bgp_route_count, 'prefix':'3300:1::', 'as_path':'as_seq:1'}
+    route_var = [{'mode':'add', 'ip_version':'6', 'num_routes':data.test_bgp_route_count, 'prefix':'3300:1::', 'as_path':'as_seq:1', 'ipv6_prefix_length': 64}, {'mode':'add', 'ip_version':'6', 'num_routes':data.ip6_full_mask_num, 'prefix':'3400:1::', 'as_path':'as_seq:1', 'ipv6_prefix_length': 128}]
     ctrl_start = {'mode':'start'}
 
     # Starting the BGP router on TG.
@@ -249,7 +261,7 @@ def fixture_v6(request):
     st.log("BGP_HANDLE: "+str(bgp_rtr2))
 
     # Verifying the BGP neighborship
-    st.wait(10)
+    st.wait(120)
     st.log("Verifying the BGP neighborship.")
     if not bgpfeature.verify_bgp_summary(dut, family='ipv6', neighbor=data.neigh_ipv6_addr, state='Established'):
         st.report_fail("bgp_ip6_peer_establish_fail", data.neigh_ip_addr)
@@ -309,7 +321,7 @@ def test_ft_l3_performance_enhancements_v4_route_intstall_withdraw(fixture_v4):
     st.log("TR_CTRL: "+str(ctrl1))
 
     # Verify the total route count using bcmcmd
-    if not check_bcmcmd_route_count(dut, 50, "ipv4", def_v4_route_count, 0):
+    if not check_bcmcmd_route_count(dut, 100, "ipv4", def_v4_route_count, 0):
         st.report_fail("route_table_not_cleared_by_withdraw_from_tg")
 
     # Verify the total route count
@@ -340,7 +352,7 @@ def test_ft_l3_performance_enhancements_v4_route_intstall_withdraw(fixture_v4):
 
     # Verify the total route count using bcmcmd
     result = True
-    if not check_bcmcmd_route_count(dut, 50, "ipv4", def_v4_route_count, data.test_bgp_route_count):
+    if not check_bcmcmd_route_count(dut, 100, "ipv4", def_v4_route_count, data.test_bgp_route_count):
         st.error("route_table_not_updated_by_advertise_from_tg")
         result = False
 
@@ -368,8 +380,8 @@ def test_ft_l3_performance_enhancements_v4_route_intstall_withdraw(fixture_v4):
     st.banner("time_diff_in_secs for route display using vtysh: {} ".format(time_diff_in_secs))
 
     #verifying klish cli show ip route validation
-    if st.is_feature_supported("klish"):
-        show_ip_route_validation_cli('klish')
+    #if st.is_feature_supported("klish"):
+    #    show_ip_route_validation_cli('klish')
 
     # Verify the total route count using SONiC CLI
     count = verify_bgp_route_count(dut, family='ipv4', neighbor=data.neigh_ip_addr, state='Established')
@@ -393,7 +405,7 @@ def test_ft_l3_performance_enhancements_v4_route_intstall_withdraw(fixture_v4):
     st.log("TR_CTRL: "+str(ctrl1))
 
     # Verify the total route count using bcmcmd
-    if not check_bcmcmd_route_count(dut, 50, "ipv4", def_v4_route_count, 0):
+    if not check_bcmcmd_route_count(dut, 100, "ipv4", def_v4_route_count, 0):
         st.report_fail("route_table_not_cleared_by_withdraw_from_tg")
 
     if data.includeTraffic:
@@ -441,9 +453,11 @@ def test_ft_l3_performance_enhancements_v6_route_intstall_withdraw(fixture_v6):
     # Withdraw the routes.
     ctrl1=tg.tg_bgp_routes_control(handle=bgp_rtr2['conf']['handle'], route_handle=bgp_rtr2['route'][0]['handle'], mode='withdraw')
     st.log("TR_CTRL: "+str(ctrl1))
+    ctrl1=tg.tg_bgp_routes_control(handle=bgp_rtr2['conf']['handle'], route_handle=bgp_rtr2['route'][1]['handle'], mode='withdraw')
+    st.log("TR_CTRL: "+str(ctrl1))
 
     # Verify the total route count using bcmcmd
-    if not check_bcmcmd_route_count(dut, 50, "ipv6", def_v6_route_count, 0):
+    if not check_bcmcmd_route_count(dut, 100, "ipv6", def_v6_route_count, 0):
         st.report_fail("route_table_not_cleared_by_withdraw_from_tg")
 
     # Verify the total route count
@@ -471,9 +485,11 @@ def test_ft_l3_performance_enhancements_v6_route_intstall_withdraw(fixture_v6):
     # Readvertise the routes.
     ctrl1=tg.tg_bgp_routes_control(handle=bgp_rtr2['conf']['handle'], route_handle=bgp_rtr2['route'][0]['handle'], mode='readvertise')
     st.log("TR_CTRL: "+str(ctrl1))
+    ctrl1=tg.tg_bgp_routes_control(handle=bgp_rtr2['conf']['handle'], route_handle=bgp_rtr2['route'][1]['handle'], mode='readvertise')
+    st.log("TR_CTRL: "+str(ctrl1))
 
     # Verify the total route count using bcmcmd
-    if not check_bcmcmd_route_count(dut, 50, "ipv6", def_v6_route_count, data.test_bgp_route_count):
+    if not check_bcmcmd_route_count(dut, 100, "ipv6", def_v6_route_count, data.test_bgp_route_count + data.ip6_full_mask_num):
         st.report_fail("route_table_not_updated_by_advertise_from_tg")
 
     if data.includeTraffic:
@@ -488,7 +504,7 @@ def test_ft_l3_performance_enhancements_v6_route_intstall_withdraw(fixture_v6):
     # Verify the total route count
     count = verify_bgp_route_count(dut, family='ipv6', neighbor=data.neigh_ipv6_addr, state='Established')
     st.log("Route count: "+str(count))
-    if int(count) != int(data.test_bgp_route_count):
+    if int(count) != int(data.test_bgp_route_count + data.ip6_full_mask_num):
         st.report_fail("route_table_not_updated_by_advertise_from_tg")
 
     # Time taken for route installation
@@ -505,9 +521,11 @@ def test_ft_l3_performance_enhancements_v6_route_intstall_withdraw(fixture_v6):
     # Withdraw the routes.
     ctrl1=tg.tg_bgp_routes_control(handle=bgp_rtr2['conf']['handle'], route_handle=bgp_rtr2['route'][0]['handle'], mode='withdraw')
     st.log("TR_CTRL: "+str(ctrl1))
+    ctrl1=tg.tg_bgp_routes_control(handle=bgp_rtr2['conf']['handle'], route_handle=bgp_rtr2['route'][1]['handle'], mode='withdraw')
+    st.log("TR_CTRL: "+str(ctrl1))
 
     # Verify the total route count using bcmcmd
-    if not check_bcmcmd_route_count(dut, 50, "ipv6", def_v6_route_count, 0):
+    if not check_bcmcmd_route_count(dut, 100, "ipv6", def_v6_route_count, 0):
         st.report_fail("route_table_not_cleared_by_withdraw_from_tg")
 
     if data.includeTraffic:

@@ -8,7 +8,7 @@ import json
 ALICLI_VIEW = "cli"
 CONFIG_VIEW = "configure terminal"
 ROUTE_MAP_VIEW = "route-map {} {} {}"
-
+CMD_INTERVAL = 2
 
 class ROUTE_MAP_CLI():
 
@@ -21,113 +21,132 @@ class ROUTE_MAP_CLI():
         route_map = ROUTE_MAP_VIEW.format(name, permittion, sequence)
         cmd = "{} -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, route_map)
         st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
         return route_map
 
     def delete_route_map(self, route_map):
         cmd = "{} -c '{}' -c no '{}'".format(ALICLI_VIEW, CONFIG_VIEW, route_map)
         st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
 
     def set_metric(self, route_map, metric_val):
         st.log("Route-map set metric")
         sub_cmd = "set metric {}".format(metric_val)
         cmd = "{} -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, route_map, sub_cmd)
         st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
 
     def no_set_metric(self, route_map):
         st.log("Route-map no set metric")
         sub_cmd = "no set metric"
         cmd = "{} -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, route_map, sub_cmd)
         st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
 
     def no_set_metric_val(self, route_map, metric_val):
         st.log("Route-map no set metric val")
         sub_cmd = "no set metric {}".format(metric_val)
         cmd = "{} -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, route_map, sub_cmd)
         st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
 
     def set_weight(self, route_map, weight_val):
         st.log("Route-map set weight")
         sub_cmd = "set weight {}".format(weight_val)
         cmd = "{} -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, route_map, sub_cmd)
         st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
 
     def no_set_weight(self, route_map):
         st.log("Route-map no set weight")
         sub_cmd = "no set weight"
         cmd = "{} -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, route_map, sub_cmd)
         st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
 
     def no_set_weight_val(self, route_map, weight_val):
         st.log("Route-map no set weight val")
         sub_cmd = "no set weight {}".format(weight_val)
         cmd = "{} -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, route_map, sub_cmd)
         st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
 
     def set_origin(self, route_map, origin_val):
         st.log("Route-map set origin")
         sub_cmd = "set origin {}".format(origin_val)
         cmd = "{} -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, route_map, sub_cmd)
         st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
 
     def no_set_origin(self, route_map):
         st.log("Route-map no set origin")
         sub_cmd = "no set origin"
         cmd = "{} -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, route_map, sub_cmd)
         st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
 
     def no_set_origin_val(self, route_map, origin_val):
         st.log("Route-map no set origin val")
         sub_cmd = "no set origin {}".format(origin_val)
         cmd = "{} -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, route_map, sub_cmd)
         st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
 
     def set_ip_nexthop(self, route_map, ip_nexthop_val):
         st.log("Route-map set ip_nexthop")
         sub_cmd = "set ip next-hop {}".format(ip_nexthop_val)
         cmd = "{} -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, route_map, sub_cmd)
         st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
 
     def no_set_ip_nexthop(self, route_map):
         st.log("Route-map no set ip_nexthop")
         sub_cmd = "no set ip next-hop"
         cmd = "{} -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, route_map, sub_cmd)
         st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
 
     def no_set_ip_nexthop_val(self, route_map, ip_nexthop_val):
         st.log("Route-map no set ip_nexthop val")
         sub_cmd = "no set ip next-hop {}".format(ip_nexthop_val)
         cmd = "{} -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, route_map, sub_cmd)
         st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
 
     def match_tag(self, route_map, tag_val):
         st.log("Route-map match tag")
         sub_cmd = "match tag {}".format(tag_val)
         cmd = "{} -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, route_map, sub_cmd)
         st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
 
     def no_match_tag(self, route_map):
         st.log("Route-map match tag")
         sub_cmd = "no match tag"
         cmd = "{} -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, route_map, sub_cmd)
         st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
 
     def no_match_tag_val(self, route_map, tag_val):
         st.log("Route-map match tag")
         sub_cmd = "no match tag {}".format(tag_val)
         cmd = "{} -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, route_map, sub_cmd)
         st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
 
     def match_source_protocol(self, route_map, source_protocol_val):
         st.log("Route-map match source_protocol")
         sub_cmd = "match source-protocol {}".format(source_protocol_val)
         cmd = "{} -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, route_map, sub_cmd)
         st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
 
     def no_match_source_protocol_val(self, route_map, source_protocol_val):
         st.log("Route-map match source_protocol")
         sub_cmd = "no match source-protocol {}".format(source_protocol_val)
         cmd = "{} -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, route_map, sub_cmd)
         st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
 
     def save_config_and_reboot(self):
         cmd = "{} -c '{}' -c 'copy running-config startup-config'".format(ALICLI_VIEW, CONFIG_VIEW)
@@ -143,12 +162,10 @@ class ROUTE_MAP_CLI():
         output = st.show(self.dut, cmd, skip_tmpl=True)
 
         st.log("===================")
-        st.log("===================")
         json_str = json.dumps(output).encode('utf-8')
         json_str = json_str[:json_str.rfind('end')].replace('true','"true"').replace("\\n","").replace("\\","").strip('"')
         output_json = json.loads(json_str)
 
         st.log(output_json)
-        st.log("===================")
         st.log("===================")
         return output_json

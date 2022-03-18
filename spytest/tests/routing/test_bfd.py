@@ -413,7 +413,7 @@ def test_bfd_ipv4_attr_set():
             ip_version                     = "4",
             aggregate_bfd_session          = "1")
     tg1.tg_emulation_bfd_control(handle = data.bfd_v4_rtr1['handle'], mode = "restart")
-    st.wait(10)
+    st.wait(20)
 
     if not bfdapi.verify_bfd_peer(dut1, peer=neigh_ip_addr, local_addr=dut1_ip_addr, rx_interval=[['50','50']], 
                             status='up', cli_type='alicli', vrf_name=data.vrf):
@@ -601,7 +601,7 @@ def test_bfd_ipv6_attr_set():
             session_count                  = "0",
             ip_version                     = "6",
             aggregate_bfd_session          = "1")
-    tg1.tg_emulation_bfd_control(handle = data.bfd_v6_rtr1['handle'], mode = "restart")
+    tg1.tg_emulation_bfd_control(handle = data.bfd_v6_rtr1['bfd_v6_interface_handle'], mode = "restart")
     st.wait(10)
 
     if not bfdapi.verify_bfd_peer(dut1, peer=neigh_ipv6_addr, local_addr=dut1_ipv6_addr, rx_interval=[['50','50']], 

@@ -65,6 +65,7 @@ show_bgp_neighbor.tmpl, .*,  sonic, show ip bgp vrf .* neighbors.*
 show_bgp_neighbor.tmpl, .*,  sonic, show bgp .* unicast neighbors.*
 show_bgp_neighbor.tmpl, .*,  sonic, show bgp ipv(4|6) unicast vrf .* neighbors.*
 show_bgp_neighbor.tmpl, .*,  sonic, show bgp ipv4 neighbor.*
+show_ip_interfaces_brief.tmpl, .*, sonic, show ip interface breif
 show_ip_interfaces.tmpl, .*, sonic, show ip interface
 show_ip_interfaces.tmpl, .*, sonic, show ipv6 interface
 show_ip_loadshare.tmpl, .*, sonic, show ip load-share

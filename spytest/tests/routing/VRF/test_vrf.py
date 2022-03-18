@@ -80,34 +80,34 @@ def test_VrfFun001_06():
     result = 0
     output = vrf_api.get_vrf_verbose(dut = data.dut1,vrfname = vrf_name[0])
     if vrf_name[0] in output['vrfname']:
-        st.log('VRF configured on DUT1 is as expected',vrf_name[0])
+        st.log('VRF configured on DUT1 is as expected')
     else:
-        st.log('VRF name configured on DUT1 is as not expected',vrf_name[0])
+        st.log('VRF name configured on DUT1 is as not expected')
         result += 1
     for value in output['interfaces']:
         if data.d1_dut_ports[0] or dut1_loopback[0] or data.dut1_loopback[1] or value == 'Vlan11':
-            st.log('Bind to VRF is as expected',value)
+            st.log('Bind to VRF is as expected')
         else:
-            st.log('Bind to VRF is not as expected',value)
+            st.log('Bind to VRF is not as expected')
             result += 1
     output = vrf_api.get_vrf_verbose(dut = data.dut2,vrfname = vrf_name[0])
     if vrf_name[0] in output['vrfname']:
-        st.log('VRF configured on DUT1 is as expected',vrf_name[0])
+        st.log('VRF configured on DUT1 is as expected')
     else:
-        st.log('VRF name configured on DUT1 is as not expected',vrf_name[0])
+        st.log('VRF name configured on DUT1 is as not expected')
         result += 1
     for value in output['interfaces']:
         if data.d2_dut_ports[0] or dut2_loopback[0] or value == 'Vlan16':
-            st.log('Bind to VRF is as expected',value)
+            st.log('Bind to VRF is as expected')
         else:
-            st.log('Bind to VRF is not as expected',value)
+            st.log('Bind to VRF is not as expected')
             result += 1
-    if not ip_api.verify_interface_ip_address(data.dut1, 'PortChannel10' ,dut1_dut2_vrf_ip[0]+'/24', vrfname = vrf_name[2]):
-        st.log('IPv4 address configuration on portchannel interface failed')
-        result += 1
-    if not ip_api.verify_interface_ip_address(data.dut2, 'PortChannel10' ,dut2_dut1_vrf_ipv6[0]+'/64', vrfname = vrf_name[2],family='ipv6'):
-        st.log('IPv6 address configuration on portchannel interface failed')
-        result += 1
+#    if not ip_api.verify_interface_ip_address(data.dut1, 'PortChannel10' ,dut1_dut2_vrf_ip[0]+'/24', vrfname = vrf_name[2]):
+#        st.log('IPv4 address configuration on portchannel interface failed')
+#        result += 1
+#    if not ip_api.verify_interface_ip_address(data.dut2, 'PortChannel10' ,dut2_dut1_vrf_ipv6[0]+'/64', vrfname = vrf_name[2],family='ipv6'):
+#        st.log('IPv6 address configuration on portchannel interface failed')
+#        result += 1
     if arp_api.get_arp_count(data.dut1, vrf = vrf_name[1]) < 2:
         st.log('ARP entry for VRF-102 not as expected on DUT1')
         result += 1
@@ -149,15 +149,15 @@ def lib_test_VrfFun002():
     if not ip_api.ping(data.dut1, dut2_dut1_vrf_ip[0], interface= vrf_name[0], count = 2):
         st.log('IPv4 Ping from Vrf-101-DUT1 to Vrf-101-DUT2 failed')
         result += 1
-    if not ip_api.traceroute(data.dut1, dut2_dut1_vrf_ip[0], vrf_name= vrf_name[0], timeout = 3):
-        st.log('IPv4 Traceroute from Vrf-101-DUT1 to Vrf-101-DUT2 failed')
-        result += 1
+#    if not ip_api.traceroute(data.dut1, dut2_dut1_vrf_ip[0], vrf_name= vrf_name[0], timeout = 3):
+#        st.log('IPv4 Traceroute from Vrf-101-DUT1 to Vrf-101-DUT2 failed')
+#        result += 1
     if not ip_api.ping(data.dut1, dut2_dut1_vrf_ipv6[0], family='ipv6', interface= vrf_name[0], count = 2):
         st.log('IPv6 Ping from Vrf-101-DUT1 to Vrf-101-DUT2 failed')
         result += 1
-    if not ip_api.traceroute(data.dut1, dut2_dut1_vrf_ipv6[0], family='ipv6', vrf_name= vrf_name[0], timeout = 3):
-        st.log('IPv6 Traceroute from Vrf-101-DUT1 to Vrf-101-DUT2 failed')
-        result += 1
+#    if not ip_api.traceroute(data.dut1, dut2_dut1_vrf_ipv6[0], family='ipv6', vrf_name= vrf_name[0], timeout = 3):
+#        st.log('IPv6 Traceroute from Vrf-101-DUT1 to Vrf-101-DUT2 failed')
+#        result += 1
     if not ip_api.verify_ip_route(data.dut1, vrf_name = vrf_name[0], type='B', nexthop = tg1_dut1_vrf_ip[0], interface = 'Vlan'+dut1_tg1_vlan[0]):
         st.log('IPv4 routes on VRF-101, not learnt on DUT1')
         result += 1
@@ -202,15 +202,15 @@ def lib_test_VrfFun003():
     if not ip_api.ping(data.dut1, dut2_dut1_vrf_ip[0], interface= vrf_name[1], count = 2):
         st.log('IPv4 Ping from Vrf-102-DUT1 to vrf DUT2-102 failed')
         result += 1
-    if not ip_api.traceroute(data.dut1, dut2_dut1_vrf_ip[0], vrf_name= vrf_name[1], timeout = 3):
-        st.log('IPv4 Traceroute Vrf-102-DUT1 to vrf DUT2-102 failed')
-        result += 1
+#    if not ip_api.traceroute(data.dut1, dut2_dut1_vrf_ip[0], vrf_name= vrf_name[1], timeout = 3):
+#        st.log('IPv4 Traceroute Vrf-102-DUT1 to vrf DUT2-102 failed')
+#        result += 1
     if not ip_api.ping(data.dut1, dut2_dut1_vrf_ipv6[0], family='ipv6', interface= vrf_name[1], count = 2):
         st.log('IPv6 Ping Vrf-102-DUT1 to vrf DUT2-102 failed')
         result += 1
-    if not ip_api.traceroute(data.dut1, dut2_dut1_vrf_ipv6[0], family='ipv6', vrf_name= vrf_name[1], timeout = 3):
-        st.log('IPv6 Traceroute Vrf-102-DUT1 to vrf DUT2-102 failed')
-        result += 1
+#    if not ip_api.traceroute(data.dut1, dut2_dut1_vrf_ipv6[0], family='ipv6', vrf_name= vrf_name[1], timeout = 3):
+#        st.log('IPv6 Traceroute Vrf-102-DUT1 to vrf DUT2-102 failed')
+#        result += 1
     if not ip_api.verify_ip_route(data.dut1, vrf_name = vrf_name[1], type='B', nexthop = tg1_dut1_vrf_ip[1], interface = 'Vlan'+dut1_tg1_vlan[1]):
         st.log('IPv4 routes on VRF-102, not learnt on DUT1')
         result += 1
@@ -268,15 +268,15 @@ def lib_test_VrfFun004():
     if not ip_api.ping(data.dut1, dut2_dut1_vrf_ip[0], interface= vrf_name[2], count = 2):
         st.log('IPv4 Ping from Vrf-103-DUT1 to Vrf-103-DUT2 failed')
         result += 1
-    if not ip_api.traceroute(data.dut1, dut2_dut1_vrf_ip[0], vrf_name= vrf_name[2], timeout = 3):
-        st.log('IPv4 Traceroute from Vrf-103-DUT1 to Vrf-103-DUT2 failed')
-        result += 1
+#    if not ip_api.traceroute(data.dut1, dut2_dut1_vrf_ip[0], vrf_name= vrf_name[2], timeout = 3):
+#        st.log('IPv4 Traceroute from Vrf-103-DUT1 to Vrf-103-DUT2 failed')
+#        result += 1
     if not ip_api.ping(data.dut1, dut2_dut1_vrf_ipv6[0], family='ipv6', interface= vrf_name[2], count = 2):
         st.log('IPv6 Ping from Vrf-103-DUT1 to Vrf-103-DUT2 failed')
         result += 1
-    if not ip_api.traceroute(data.dut1, dut2_dut1_vrf_ipv6[0], family='ipv6', vrf_name= vrf_name[2], timeout = 3):
-        st.log('IPv6 Traceroute from Vrf-103-DUT1 to Vrf-103-DUT2 failed')
-        result += 1
+#    if not ip_api.traceroute(data.dut1, dut2_dut1_vrf_ipv6[0], family='ipv6', vrf_name= vrf_name[2], timeout = 3):
+#        st.log('IPv6 Traceroute from Vrf-103-DUT1 to Vrf-103-DUT2 failed')
+#        result += 1
     if not loc_lib.retry_api(ip_api.verify_ip_route, dut = data.dut1, vrf_name = vrf_name[2], type='B', nexthop = tg1_dut1_vrf_ip[2], interface = 'Vlan'+dut1_tg1_vlan[2], retry_count= 2, delay= 5):
         st.log('IPv4 routes on VRF-103, not learnt on DUT1')
         result += 1
@@ -324,15 +324,15 @@ def test_VrfFun004():
     if not ip_api.ping(data.dut1, dut2_dut1_vrf_ip[0], count = 2):
         st.log('IPv4 Ping from Portchannel10-DUT1 to Portchannel10-DUT2 failed')
         result += 1
-    if not ip_api.traceroute(data.dut1, dut2_dut1_vrf_ip[0],timeout = 3):
-        st.log('IPv4 Traceroute from Portchannel10-DUT1 to Portchannel10-DUT2 failed')
-        result += 1
+#    if not ip_api.traceroute(data.dut1, dut2_dut1_vrf_ip[0],timeout = 3):
+#        st.log('IPv4 Traceroute from Portchannel10-DUT1 to Portchannel10-DUT2 failed')
+#        result += 1
     if not ip_api.ping(data.dut1, dut2_dut1_vrf_ipv6[0], family='ipv6', count = 2):
         st.log('IPv6 Ping from Portchannel10-DUT1 to Portchannel10-DUT2 failed')
         result += 1
-    if not ip_api.traceroute(data.dut1, dut2_dut1_vrf_ipv6[0], family='ipv6', timeout = 3):
-        st.log('IPv6 Traceroute from Portchannel10-DUT1 to Portchannel10-DUT2 failed')
-        result += 1
+#    if not ip_api.traceroute(data.dut1, dut2_dut1_vrf_ipv6[0], family='ipv6', timeout = 3):
+#        st.log('IPv6 Traceroute from Portchannel10-DUT1 to Portchannel10-DUT2 failed')
+#        result += 1
     st.log('######------Delete the member port and port-channel------######')
     utils.exec_all(True,[[ip_api.delete_ip_interface,data.dut1,'PortChannel10',dut1_dut2_vrf_ip[0],dut1_dut2_vrf_ip_subnet,'ipv4'], [ip_api.delete_ip_interface,data.dut2, 'PortChannel10', dut2_dut1_vrf_ip[0], dut2_dut1_vrf_ip_subnet, 'ipv4']])
     utils.exec_all(True,[[ip_api.delete_ip_interface,data.dut1,'PortChannel10',dut1_dut2_vrf_ipv6[0],dut1_dut2_vrf_ipv6_subnet,'ipv6'], [ip_api.delete_ip_interface,data.dut2, 'PortChannel10', dut2_dut1_vrf_ipv6[0], dut2_dut1_vrf_ipv6_subnet, 'ipv6']])

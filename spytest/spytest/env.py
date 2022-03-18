@@ -77,6 +77,7 @@ defaults = {
     "SPYTEST_RECOVERY_CTRL_Q": "1",
     "SPYTEST_SOFT_TGEN_WAIT_MULTIPLIER": "2",
     "SPYTEST_APPLY_BASE_CONFIG_AFTER_MODULE": "1",
+    "SPYTEST_USE_ALICLI": "1",
 }
 
 dev_defaults = {

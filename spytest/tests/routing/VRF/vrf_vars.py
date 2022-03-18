@@ -4,8 +4,8 @@ data = SpyTestDict()
 data.test_var = 'testing'
 data.mac_aging = 10
 
-vrf_name = ['Vrf-'+'%s'%x for x in range (101,105)]
-vrf_name_scale = ['Vrf-'+'%s'%x for x in range (1,1000)]
+vrf_name = ['MC-Aliyun-vrf-long-name-test-abcdefg-'+'%s'%x for x in range (101,105)]
+vrf_name_scale = ['MC-Aliyun-vrf-long-name-test-abcdefg-'+'%s'%x for x in range (1,1000)]
 #Vlan
 dut1_dut2_vlan = ['%s'%x for x in range (101,105)]
 dut2_dut1_vlan = ['%s'%x for x in range (101,105)]

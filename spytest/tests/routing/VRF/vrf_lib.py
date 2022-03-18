@@ -81,7 +81,14 @@ def vrf_base_unconfig():
 
 def debug_bgp_vrf():
     st.log("Dubug commands starts!")
-    cmd_list = ['show ip route vrf Vrf-101','show ip route vrf Vrf-102','show ip route vrf Vrf-103','show ipv6 route vrf Vrf-101','show ipv6 route vrf Vrf-102','show ipv6 route vrf Vrf-103','show arp','show ndp']
+    cmd_list = ['show ip route vrf MC-Aliyun-vrf-long-name-test-abcdefg-101',
+                'show ip route vrf MC-Aliyun-vrf-long-name-test-abcdefg-102',
+                'show ip route vrf MC-Aliyun-vrf-long-name-test-abcdefg-103',
+                'show ipv6 route vrf MC-Aliyun-vrf-long-name-test-abcdefg-101',
+                'show ipv6 route vrf MC-Aliyun-vrf-long-name-test-abcdefg-102',
+                'show ipv6 route vrf MC-Aliyun-vrf-long-name-test-abcdefg-103',
+                'show arp',
+                'show ndp']
     utils.exec_all(True, [[st.apply_script, data.dut1, cmd_list], [st.apply_script, data.dut2, cmd_list]])
     st.log(" End of Dubug commands")
 

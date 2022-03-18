@@ -7,6 +7,7 @@ import subprocess
 
 from spytest import st
 from spytest.utils import filter_and_select
+import spytest.env as env
 
 from apis.system.rest import config_rest, delete_rest ,get_rest
 from apis.routing.ip_rest import get_subinterface_index
@@ -68,6 +69,8 @@ def ping(dut, addresses, family='ipv4', **kwargs):
     # add defaults
     kwargs['tgen'] = kwargs.get('tgen', False)
     kwargs['count'] = kwargs.get('count', 3)
+    if env.get("SPYTEST_USE_ALICLI", "0") != "0":
+        cli_type = 'alicli'
 
     if family.lower() == "ipv4":
         if external:
@@ -81,6 +84,8 @@ def ping(dut, addresses, family='ipv4', **kwargs):
                     kwargs.pop('interface')
                 else:
                     command = "ping {} -c {} ".format(addresses, kwargs['count'])
+            elif cli_type == 'alicli':
+                command = "do ping {} -c {} ".format(addresses, kwargs['count'])
             else:
                 st.log("UNSUPPORTED CLI TYPE")
                 return False
@@ -97,6 +102,8 @@ def ping(dut, addresses, family='ipv4', **kwargs):
                     kwargs.pop('interface')
                 else:
                     command = "ping6 {} -c {} ".format(addresses, kwargs['count'])
+            elif cli_type == 'alicli':
+                command = "do ping {} -c {} ".format(addresses, kwargs['count'])
             else:
                 st.log("UNSUPPORTED CLI TYPE")
                 return False
@@ -133,6 +140,11 @@ def ping(dut, addresses, family='ipv4', **kwargs):
     else:
         rv = st.config(dut, command, type=cli_type)
     out = re.findall(ping_pattern, rv)
+
+    #TODO:
+    if cli_type == 'alicli':
+        command = "show arp"
+        st.show(dut, command, type='click')
 
     if not out:
         st.error("Failed to get the ping output.")
@@ -382,15 +394,21 @@ def verify_interface_ip_address(dut, interface_name, ip_address, family="ipv4", 
     :param flags:
     :return:
     """
-    cli_type=st.get_ui_type(dut, cli_type=cli_type)
+    cli_type = kwargs.pop('cli_type', st.get_ui_type(dut,**kwargs))
     if cli_type in ['rest-patch', 'rest-put']:
         cli_type = 'klish'                      #OC-YANG URLs are not available for show ip/ipv6 interface. Reported JIRA: SONIC-23677 for this.
     command = "show ip interface"
     if family == "ipv6":
         command = "show ipv6 interface"
+    if cli_type == 'alicli':
+        command = "show ip interface brief"
     output = st.show(dut, command,type=cli_type)
-    result = output if family == "ipv4" else prepare_show_ipv6_interface_output(output)
-    match = {"interface": interface_name, "vrf": vrfname, "ipaddr": ip_address, "flags": flags}
+    if cli_type != 'alicli':
+        result = output if family == "ipv4" else prepare_show_ipv6_interface_output(output)
+        match = {"interface": interface_name, "vrf": vrfname, "ipaddr": ip_address, "flags": flags}
+    else:
+        result = output
+        match = {"interface": interface_name, "vrf": vrfname, "ipaddr": ip_address}
     entries = utils.filter_and_select(result, ["interface"], match)
     return True if entries else False
 

@@ -41,7 +41,11 @@ def verify_bfd_counters(dut,**kwargs):
     bfd.verify_bfd_counters(dut1,cntrlpktout="100",cntrlpktin="100",peeraddress="5000::2")
     bfd.verify_bfd_counters(dut1,cntrlpktout="200",cntrlpktin="200",peeraddress="50.1.1.2")
     """
-    cli_type = st.get_ui_type(dut, **kwargs)
+    if 'cli_type' in kwargs:
+        cli_type = kwargs['cli_type']
+        del kwargs['cli_type']
+    else:
+        cli_type = st.get_ui_type(dut, **kwargs)
 
     result = False
     st.log("verify show bfd peers counters")
@@ -56,7 +60,7 @@ def verify_bfd_counters(dut,**kwargs):
 
     cmd = "show bfd"
     if vrf != 'default-vrf':
-        if cli_type == 'click':
+        if cli_type == 'click' or cli_type == 'alicli':
             cmd = cmd + ' vrf ' + vrf + ' peers counters'
         elif cli_type == 'klish':
             cmd = cmd + ' peers' + ' vrf ' + vrf +' counters'
@@ -64,7 +68,7 @@ def verify_bfd_counters(dut,**kwargs):
         cmd = cmd + ' peers counters'
 
     output = []
-    if cli_type in ['click', 'klish']:
+    if cli_type in ['click', 'klish', 'alicli']:
         cli_type = "vtysh" if cli_type == "click" else cli_type
         output = st.show(dut, cmd, type=cli_type)
     elif cli_type in ['rest-patch', 'rest-put']:
@@ -169,7 +173,10 @@ def configure_bfd(dut, **kwargs):
     else:
         vrf = 'default-vrf'
 
-    cli_type = st.get_ui_type(dut, **kwargs)
+    if 'cli_type' in kwargs:
+        cli_type = kwargs['cli_type']
+    else:
+        cli_type = st.get_ui_type(dut, **kwargs)
 
     if 'neighbor_ip' not in kwargs:
         st.error("Mandatory parameter - neighbor_ip not found")
@@ -240,6 +247,24 @@ def configure_bfd(dut, **kwargs):
                 data = {"openconfig-network-instance:{}".format(nbr_cmd): neigh_list}
                 if not config_rest(dut, http_method=cli_type, rest_url=url, json_data=data):
                     return False
+        if cli_type in ['alicli']:
+            if vrf == 'default-vrf':
+                cmd = "router bgp {}\n".format(kwargs['local_asn'])
+            else:
+                cmd = "router bgp {} vrf {}\n".format(kwargs['local_asn'], vrf)
+            for nbr in kwargs['neighbor_ip']:
+                cmd1 = cmd + "{} neighbor {} bfd ".format(config, nbr)
+                multi = 3
+                rx = 300
+                tx = 300
+                if 'multiplier' in kwargs and config != 'no':
+                    multi = int(kwargs['multiplier'][0])
+                if 'rx_intv' in kwargs and config != 'no':
+                    rx = int(kwargs['rx_intv'][0])
+                if 'tx_intv' in kwargs and config != 'no':
+                    tx = int(kwargs['tx_intv'][0])
+                cmd1 += "{} {} {}\n".format(multi, rx, tx)
+                st.config(dut, cmd1, type=cli_type)
         else:
             st.error("Invalid UI-Type: {} provided".format(cli_type))
             return False
@@ -458,9 +483,13 @@ def verify_bfd_peer(dut,**kwargs):
             vrf = 'default'
         del kwargs['vrf_name']
     else:
-        vrf = 'default'
+        vrf = 'Default'
 
-    cli_type = st.get_ui_type(dut, **kwargs)
+    if 'cli_type' in kwargs:
+        cli_type = kwargs['cli_type']
+        del kwargs['cli_type']
+    else:
+        cli_type = st.get_ui_type(dut, **kwargs)
 
     if 'multihop' in kwargs:
         is_mhop = True
@@ -497,21 +526,21 @@ def verify_bfd_peer(dut,**kwargs):
                         cmd = "show bfd peer " + peer_ip + " local-address "+ local_addr
             else:
                 if 'local_addr' in kwargs and 'interface' in kwargs :
-                    if cli_type == 'click':
+                    if cli_type == 'click' or cli_type == 'alicli':
                         for peer_ip,local_addr,intf in zip(kwargs['peer'],kwargs['local_addr'],kwargs['interface']):
                             cmd = "show bfd" + " vrf " + vrf + " peer " + peer_ip + " local-address "+ local_addr + " interface " + intf
                     else:
                         for peer_ip,local_addr,intf in zip(kwargs['peer'],kwargs['local_addr'],kwargs['interface']):
                             cmd = "show bfd" + " peer " + peer_ip + " vrf " + vrf + " local-address "+ local_addr + " interface " + intf
                 elif 'interface' in kwargs and 'local_addr' not in kwargs:
-                    if cli_type == 'click':
+                    if cli_type == 'click' or cli_type == 'alicli':
                         for peer_ip,intf in zip(kwargs['peer'],kwargs['interface']):
                             cmd = "show bfd" + " vrf " + vrf + " peer " + peer_ip + " interface " + intf
                     else:
                         for peer_ip, intf in zip(kwargs['peer'], kwargs['interface']):
                             cmd = "show bfd" + " peer " + peer_ip + " vrf " + vrf + " interface " + intf
                 else:
-                    if cli_type == 'click':
+                    if cli_type == 'click' or cli_type == 'alicli':
                         for peer_ip,local_addr in zip(kwargs['peer'],kwargs['local_addr']):
                             cmd = "show bfd" + " vrf " + vrf + " peer " + peer_ip + " local-address "+ local_addr
                     else:
@@ -540,13 +569,13 @@ def verify_bfd_peer(dut,**kwargs):
         if vrf == 'default':
             cmd = "show bfd peers"
         else:
-            if cli_type == 'click':
+            if cli_type == 'click' or cli_type == 'alicli':
                 cmd = "show bfd" + " vrf " + vrf + " peers"
             else:
                 cmd = "show bfd" + " peers" + " vrf " + vrf
     #Execute appropriate BFD CLI
     parsed_output = []
-    if cli_type in ['click', 'klish']:
+    if cli_type in ['click', 'klish', 'alicli']:
         cli_type = "vtysh" if cli_type == "click" else cli_type
         try:
             parsed_output = st.show(dut, cmd, type=cli_type)
@@ -643,7 +672,7 @@ def get_bfd_peer_counters(dut,**kwargs):
     if kwargs['peer'] == 'all' and vrf == 'default':
         cmd = "show bfd peers counters"
     elif kwargs['peer'] == 'all' and vrf != 'default':
-        if cli_type == 'click':
+        if cli_type in ['click', 'alicli']:
             cmd = "show bfd vrf {} peers counters".format(vrf)
         else:
             cmd = "show bfd peers vrf {} counters".format(vrf)
@@ -651,51 +680,51 @@ def get_bfd_peer_counters(dut,**kwargs):
         if is_mhop is False:
             if vrf == 'default':
                 if 'local_addr' in kwargs and 'interface' in kwargs :
-                    if cli_type == 'click':
+                    if cli_type in ['click', 'alicli']:
                         cmd = "show bfd peer " + kwargs['peer'] + " local-address "+ kwargs['local_addr'] + " interface " + kwargs['interface'] + " counters"
                     else:
                         cmd = "show bfd peer counters " + kwargs['peer'] + " local-address " + kwargs['local_addr'] + " interface " + kwargs['interface']
                 elif 'interface' in kwargs and 'local_addr' not in kwargs:
-                    if cli_type == 'click':
+                    if cli_type in ['click', 'alicli']:
                         cmd = "show bfd peer " + kwargs['peer'] + " interface " + kwargs['interface'] + " counters"
                     else:
                         cmd = "show bfd peer counters " + kwargs['peer'] + " interface " + kwargs['interface']
                 else:
-                    if cli_type == 'click':
+                    if cli_type in ['click', 'alicli']:
                         cmd = "show bfd peer " + kwargs['peer'] + " local-address "+ kwargs['local_addr'] + " counters"
                     else:
                         cmd = "show bfd peer counters " + kwargs['peer'] + " local-address " + kwargs['local_addr']
             else:
                 if 'local_addr' in kwargs and 'interface' in kwargs :
-                    if cli_type == 'click':
+                    if cli_type in ['click', 'alicli']:
                         cmd = "show bfd vrf {} peer ".format(vrf) + kwargs['peer'] + " local-address "+ kwargs['local_addr'] + " interface " + kwargs['interface'] + " counters"
                     else:
                         cmd = "show bfd peer counters " + kwargs['peer'] + " vrf " + vrf + " local-address " + kwargs['local_addr'] + " interface " + kwargs['interface']
                 elif 'interface' in kwargs and 'local_addr' not in kwargs:
-                    if cli_type == 'click':
+                    if cli_type in ['click', 'alicli']:
                         cmd = "show bfd vrf {} peer ".format(vrf) + kwargs['peer'] + " interface " + kwargs['interface'] + " counters"
                     else:
                         cmd = "show bfd peer counters " + kwargs['peer'] + " vrf " + vrf + " interface " + kwargs['interface']
                 else:
-                    if cli_type == 'click':
+                    if cli_type in ['click', 'alicli']:
                         cmd = "show bfd vrf {} peer ".format(vrf) + kwargs['peer'] + " local-address "+ kwargs['local_addr'] + " counters"
                     else:
                         cmd = "show bfd peer counters " + kwargs['peer'] + " vrf " + vrf + " local-address " + kwargs['local_addr']
 
         else:
             if vrf == 'default':
-                if cli_type == 'click':
+                if cli_type in ['click', 'alicli']:
                     cmd = "show bfd peer " + kwargs['peer'] + " multihop local-address " + kwargs['local_addr'] + " counters"
                 else:
                     cmd = "show bfd peer counters " + kwargs['peer'] + " multihop local-address " + kwargs['local_addr']
             else:
-                if cli_type == 'click':
+                if cli_type in ['click', 'alicli']:
                     cmd = "show bfd vrf {} peer ".format(vrf) + kwargs['peer'] + " multihop local-address " + kwargs['local_addr'] + " counters"
                 else:
                     cmd = "show bfd peer counters " + kwargs['peer'] + " vrf " + vrf + " multihop local-address " + kwargs['local_addr']
 
     parsed_output =[]
-    if cli_type in ['click', 'klish']:
+    if cli_type in ['click', 'klish', 'alicli']:
         cli_type = "vtysh" if cli_type == "click" else cli_type
         try:
             parsed_output = st.show(dut, cmd, type=cli_type)

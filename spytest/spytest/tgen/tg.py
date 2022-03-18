@@ -1458,6 +1458,9 @@ class TGIxia(TGBase):
                 else:
                     kwargs['neighbor_type'] = 'internal'
                 kwargs.pop('remote_as')
+        if fname == 'tg_emulation_bfd_control':
+            logger.info('Applying changes for IXIA before starting BFD')
+            self.tg_topology_test_control(action='apply_on_the_fly_changes', tg_wait=10)
 
         if fname == 'tg_emulation_igmp_config':
             kwargs['handle'] = kwargs['handle'][0] if type(kwargs['handle']) is list else kwargs['handle']

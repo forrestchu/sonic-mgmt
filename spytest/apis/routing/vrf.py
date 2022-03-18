@@ -159,7 +159,10 @@ def vrf_v4_v6_enable_mode(dut, vrf):
     final_data, temp_data = dict(), dict()
     data = {"v4": "true","v6": "true"}
     temp_data[vrf] = data
-    final_data['VRF'] = temp_data
+    if not vrf.startswith("Vrf"):
+        final_data['VRF_ALIAS'] = temp_data
+    else:
+        final_data['VRF'] = temp_data
     data_json = json.dumps(final_data)
     json.loads(data_json)
     st.apply_json(dut, data_json)
@@ -198,16 +201,16 @@ def config_vrf(dut, **kwargs):
         if skip_error:
             try:
                 st.config(dut, my_cmd)
-                if config.lower() == 'yes':
-                    vrf_v4_v6_enable_mode(dut, vrf)
+                #if config.lower() == 'yes':
+                #    vrf_v4_v6_enable_mode(dut, vrf)
                 return True
             except Exception:
                 st.log("Error handled..by API")
                 return False
         else:
             st.config(dut, my_cmd)
-            if config.lower() == 'yes':
-                vrf_v4_v6_enable_mode(dut, vrf)
+            #if config.lower() == 'yes':
+            #    vrf_v4_v6_enable_mode(dut, vrf)
             return True
     elif cli_type == 'klish':
         command = ''

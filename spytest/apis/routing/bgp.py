@@ -26,6 +26,8 @@ def get_cfg_cli_type(dut, **kwargs):
         cli_type = "vtysh"
     elif cli_type in ["rest-patch","rest-put"]:
         cli_type = "rest-patch"
+    elif cli_type in ["alicli"]:
+        cli_type = "alicli"
     else:
         cli_type = "klish"
     return cli_type
@@ -118,7 +120,7 @@ def config_router_bgp_mode(dut, local_asn, config_mode='enable', vrf='default', 
     :return:
     """
     cli_type = get_cfg_cli_type(dut, cli_type=cli_type)
-    st.log("Config router BGP mode .. {}".format(config_mode))
+    st.log("Config router BGP mode .. {} type {}".format(config_mode,cli_type))
     mode = "no" if config_mode.lower() == 'disable' else ""
     if cli_type in ['vtysh', 'click']:
         cli_type = 'vtysh'
@@ -155,6 +157,11 @@ def config_router_bgp_mode(dut, local_asn, config_mode='enable', vrf='default', 
                 st.error("Error in Unconfiguring AS number")
                 return False
             return True
+    elif cli_type == 'alicli':
+        if vrf.lower() == 'default':
+            command = "{} router bgp {}".format(mode, local_asn)
+        else:
+            command = "{} router bgp {} vrf {}".format(mode, local_asn, vrf)
     else:
         st.error("UNSUPPORTED CLI TYPE -- {}".format(cli_type))
         return False
@@ -3594,9 +3601,10 @@ def config_bgp(dut, **kwargs):
     diRection = kwargs.get('diRection', 'in')
     weight = kwargs.get('weight', None)
     allowas_in = kwargs.get("allowas_in",None)
+    cli_type = kwargs.get("cli_type",cli_type)
     config_cmd = "" if config.lower() == 'yes' else "no"
     my_cmd =''
-    if cli_type == "vtysh":
+    if cli_type == "vtysh" or cli_type == "alicli":
         if 'local_as' in kwargs and removeBGP != 'yes':
             if vrf_name != 'default':
                 my_cmd = 'router bgp {} vrf {}\n'.format(local_as, vrf_name)

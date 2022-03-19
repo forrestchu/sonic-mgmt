@@ -196,7 +196,7 @@ def lib_test_VrfFun003():
     ###############################################################################################################################
     result = 0
     loc_lib.clear_tg()
-    st.wait(10)
+    st.wait(30)
     data.tg2.tg_traffic_control(action = 'run', stream_handle = data.stream_list.get('ve_v4_stream'), duration = '2')
     st.log('Verify ping and traceroute on virtual interface non-default vrf for both IPv4 and IPv6')
     if not ip_api.ping(data.dut1, dut2_dut1_vrf_ip[0], interface= vrf_name[1], count = 2):
@@ -277,10 +277,10 @@ def lib_test_VrfFun004():
 #    if not ip_api.traceroute(data.dut1, dut2_dut1_vrf_ipv6[0], family='ipv6', vrf_name= vrf_name[2], timeout = 3):
 #        st.log('IPv6 Traceroute from Vrf-103-DUT1 to Vrf-103-DUT2 failed')
 #        result += 1
-    if not loc_lib.retry_api(ip_api.verify_ip_route, dut = data.dut1, vrf_name = vrf_name[2], type='B', nexthop = tg1_dut1_vrf_ip[2], interface = 'Vlan'+dut1_tg1_vlan[2], retry_count= 2, delay= 5):
+    if not loc_lib.retry_api(ip_api.verify_ip_route, dut = data.dut1, vrf_name = vrf_name[2], type='B', nexthop = tg1_dut1_vrf_ip[2], interface = 'Vlan'+dut1_tg1_vlan[2], retry_count= 2, delay= 10):
         st.log('IPv4 routes on VRF-103, not learnt on DUT1')
         result += 1
-    if not loc_lib.retry_api(ip_api.verify_ip_route, dut = data.dut2, vrf_name = vrf_name[2], type='B', nexthop = dut1_dut2_vrf_ip[0], interface = 'PortChannel10', retry_count= 2, delay= 5):
+    if not loc_lib.retry_api(ip_api.verify_ip_route, dut = data.dut2, vrf_name = vrf_name[2], type='B', nexthop = dut1_dut2_vrf_ip[0], interface = 'PortChannel10', retry_count= 2, delay= 10):
         st.log('IPv4 routes on VRF-103, not learnt on DUT2')
         result += 1
     traffic_details = {'1': {'tx_ports' : [data.tg_dut2_hw_port],'tx_obj' : [data.tg2],'exp_ratio' : [1],'rx_ports' : [data.tg_dut1_hw_port],'rx_obj' : [data.tg1],'stream_list' : [[data.stream_list.get('pc_v4_stream')]]}}
@@ -291,10 +291,10 @@ def lib_test_VrfFun004():
         result += 1
     loc_lib.clear_tg()
     data.tg2.tg_traffic_control(action = 'run', stream_handle = data.stream_list.values(), duration = '2')
-    if not loc_lib.retry_api(ip_api.verify_ip_route, dut = data.dut1, family='ipv6', vrf_name = vrf_name[2], type='B', nexthop = tg1_dut1_vrf_ipv6[2], interface = 'Vlan'+dut1_tg1_vlan[2], retry_count= 2, delay= 5):
+    if not loc_lib.retry_api(ip_api.verify_ip_route, dut = data.dut1, family='ipv6', vrf_name = vrf_name[2], type='B', nexthop = tg1_dut1_vrf_ipv6[2], interface = 'Vlan'+dut1_tg1_vlan[2], retry_count= 2, delay= 10):
         st.log('IPv6 routes on VRF-103, not learnt on DUT1')
         result += 1
-    if not loc_lib.retry_api(ip_api.verify_ip_route, dut = data.dut2, family='ipv6', vrf_name = vrf_name[2], type='B', nexthop = dut1_dut2_vrf_ipv6[0], interface = 'PortChannel10',retry_count= 2, delay= 5):
+    if not loc_lib.retry_api(ip_api.verify_ip_route, dut = data.dut2, family='ipv6', vrf_name = vrf_name[2], type='B', nexthop = dut1_dut2_vrf_ipv6[0], interface = 'PortChannel10',retry_count= 2, delay= 10):
         st.log('IPv6 routes on VRF-103, not learnt on DUT2')
         result += 1
     traffic_details = {'1': {'tx_ports' : [data.tg_dut2_hw_port],'tx_obj' : [data.tg2],'exp_ratio' : [1],'rx_ports' : [data.tg_dut1_hw_port],'rx_obj' : [data.tg1],'stream_list' : [[data.stream_list.get('pc_v6_stream')]]}}
@@ -419,13 +419,13 @@ def test_VrfFun_34_46():
     bgp_api.clear_ip_bgp_vrf_vtysh(data.dut1, vrf_name[1], family = 'ipv6')
     bgp_api.clear_ip_bgp_vrf_vtysh(data.dut1, vrf_name[2], family = 'ipv4')
     bgp_api.clear_ip_bgp_vrf_vtysh(data.dut1, vrf_name[2], family = 'ipv6')
-    if not loc_lib.retry_api(ip_api.verify_ip_route, dut = data.dut2, vrf_name = vrf_name[1], type='B', nexthop = dut1_dut2_vrf_ip[0], interface = 'Vlan'+dut2_dut1_vlan[0], retry_count= 2, delay= 5):
+    if not loc_lib.retry_api(ip_api.verify_ip_route, dut = data.dut2, vrf_name = vrf_name[1], type='B', nexthop = dut1_dut2_vrf_ip[0], interface = 'Vlan'+dut2_dut1_vlan[0], retry_count= 2, delay= 10):
         st.log('IPv4 routes on VRF-102, not learnt on DUT2')
         result += 1
-    if not loc_lib.retry_api(ip_api.verify_ip_route, dut = data.dut2, vrf_name = vrf_name[1], type='B', nexthop = dut1_dut2_vrf_ipv6[0], interface = 'Vlan'+dut2_dut1_vlan[0],family='ipv6',retry_count= 2, delay= 5):
+    if not loc_lib.retry_api(ip_api.verify_ip_route, dut = data.dut2, vrf_name = vrf_name[1], type='B', nexthop = dut1_dut2_vrf_ipv6[0], interface = 'Vlan'+dut2_dut1_vlan[0],family='ipv6',retry_count= 2, delay= 10):
         st.log('IPv6 routes on VRF-102, not learnt on DUT2')
         result += 1
-    if not loc_lib.retry_api(ip_api.verify_ip_route, dut = data.dut2, family='ipv6', vrf_name = vrf_name[2], type='B', nexthop = dut1_dut2_vrf_ipv6[0], interface = 'PortChannel10',retry_count= 2, delay= 5):
+    if not loc_lib.retry_api(ip_api.verify_ip_route, dut = data.dut2, family='ipv6', vrf_name = vrf_name[2], type='B', nexthop = dut1_dut2_vrf_ipv6[0], interface = 'PortChannel10',retry_count= 2, delay= 10):
         st.log('IPv6 routes on VRF-103, not learnt on DUT2')
         result += 1
     if result == 0:
@@ -462,7 +462,7 @@ def test_VrfFun_38_39_48():
     bgp_api.config_bgp(dut = data.dut1, vrf_name = vrf_name[2], addr_family ='ipv6',  config = 'yes', local_as = dut1_as[2], neighbor = dut2_dut1_vrf_ipv6[0], remote_as = dut2_as[2], config_type_list =['neighbor'])
     bgp_api.config_bgp(dut = data.dut1, vrf_name = vrf_name[2], addr_family ='ipv6',  config = 'yes', local_as = dut1_as[2], neighbor = dut2_dut1_vrf_ipv6[0], remote_as = dut2_as[2], config_type_list =['activate','nexthop_self'])
     bgp_api.config_bgp(dut = data.dut1, vrf_name = vrf_name[2], local_as = dut1_as[2], config = 'yes', addr_family ='ipv6', config_type_list=["routeMap"], routeMap='UseGlobal', diRection='in', neighbor=dut2_dut1_vrf_ipv6[0])
-    if not loc_lib.retry_api(ip_api.verify_ip_route, dut = data.dut2, family='ipv6', vrf_name = vrf_name[2], type='B', nexthop = dut1_dut2_vrf_ipv6[0], interface = 'PortChannel10',retry_count= 2, delay= 10):
+    if not loc_lib.retry_api(ip_api.verify_ip_route, dut = data.dut2, family='ipv6', vrf_name = vrf_name[2], type='B', nexthop = dut1_dut2_vrf_ipv6[0], interface = 'PortChannel10',retry_count= 2, delay= 15):
         st.log('IPv6 routes on VRF-102, not learnt on DUT2')
         result += 1
         basic.get_techsupport(filename='test_VrfFun_38_39_48_ipv6_routes')
@@ -472,7 +472,7 @@ def test_VrfFun_38_39_48():
     bgp_api.config_bgp(dut = data.dut1, vrf_name = vrf_name[2], addr_family ='ipv6',  config = 'yes', local_as = dut1_as[2], neighbor = tg1_dut1_vrf_ipv6[2], remote_as = dut1_tg_as, config_type_list =['neighbor'])
     bgp_api.config_bgp(dut = data.dut1, vrf_name = vrf_name[2], addr_family ='ipv6',  config = 'yes', local_as = dut1_as[2], neighbor = tg1_dut1_vrf_ipv6[2], remote_as = dut1_tg_as, config_type_list =['activate'])
     bgp_api.config_bgp(dut = data.dut1, vrf_name = vrf_name[2], local_as = dut1_as[2], config = 'yes', addr_family ='ipv6', config_type_list=["routeMap"], routeMap='UseGlobal', diRection='in', neighbor=tg1_dut1_vrf_ipv6[2])
-    if not loc_lib.retry_api(ip_api.verify_ip_route, dut = data.dut2, family='ipv6', vrf_name = vrf_name[2], type='B', nexthop = dut1_dut2_vrf_ipv6[0], interface = 'PortChannel10',retry_count= 3, delay= 10):
+    if not loc_lib.retry_api(ip_api.verify_ip_route, dut = data.dut2, family='ipv6', vrf_name = vrf_name[2], type='B', nexthop = dut1_dut2_vrf_ipv6[0], interface = 'PortChannel10',retry_count= 3, delay= 15):
         st.log('IPv6 routes on VRF-102, not learnt on DUT2')
         result += 1
     if result == 0:

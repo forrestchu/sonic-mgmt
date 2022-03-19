@@ -276,8 +276,8 @@ def test_bfd_ipv4_base():
     # stop ixia to check bfd status
     tg1.tg_emulation_bfd_control(handle = data.bfd_v4_rtr1['handle'], mode = "stop")
     st.wait(10)
-    if bfdapi.verify_bfd_peer(dut1, peer=neigh_ip_addr, local_addr=formatted_dut1_ip_addr,  vrf_name=data.vrf, 
-                                rx_interval=[[data.dut_bfd_timer,data.tg_bfd_timer]], status='up', cli_type='alicli'):
+    if not bfdapi.verify_bfd_peer(dut1, peer=neigh_ip_addr, local_addr=formatted_dut1_ip_addr,  vrf_name=data.vrf, 
+                                rx_interval=[[data.dut_bfd_timer,data.tg_bfd_timer]], status='down', cli_type='alicli'):
         st.report_fail("bfd status error", ip_addr, dut1)
 
     #restart ixia bfd
@@ -357,6 +357,7 @@ def test_bfd_ipv4_flap():
 
     bfdapi.configure_bfd(dut1, local_asn=data.as_num, neighbor_ip=neigh_ip_addr, 
                         config="yes",vrf_name=data.vrf, cli_type='alicli', rx_intv=100, tx_intv=100)
+    st.wait(5)
 
     if not bfdapi.verify_bfd_peer(dut1, peer=neigh_ip_addr, local_addr=dut1_ip_addr, rx_interval=[['100',data.tg_bfd_timer]], 
                             status='up', cli_type='alicli', vrf_name=data.vrf):
@@ -364,6 +365,7 @@ def test_bfd_ipv4_flap():
 
     bfdapi.configure_bfd(dut1, local_asn=data.as_num, neighbor_ip=neigh_ip_addr, 
                         config="yes",vrf_name=data.vrf, cli_type='alicli', rx_intv=int(data.dut_bfd_timer), tx_intv=int(data.dut_bfd_timer))
+    st.wait(5)
 
     if not bfdapi.verify_bfd_peer(dut1, peer=neigh_ip_addr, local_addr=dut1_ip_addr, rx_interval=[[data.dut_bfd_timer,data.tg_bfd_timer]], 
                             status='up', cli_type='alicli', vrf_name=data.vrf):
@@ -389,6 +391,7 @@ def test_bfd_ipv4_attr_set():
     st.log("bfd status check ok, set dut bfd params: multiplier=5, rx_intv=50, tx_intv=50")
     bfdapi.configure_bfd(dut1, local_asn=data.as_num, neighbor_ip=neigh_ip_addr, 
                         config="yes",vrf_name=data.vrf, cli_type='alicli', multiplier=5, rx_intv=50, tx_intv=50)
+    st.wait(5)
 
     #skip multiplier check
     if not bfdapi.verify_bfd_peer(dut1, peer=neigh_ip_addr, local_addr=dut1_ip_addr, rx_interval=[['50',data.tg_bfd_timer]], 
@@ -421,6 +424,7 @@ def test_bfd_ipv4_attr_set():
 
     bfdapi.configure_bfd(dut1, local_asn=data.as_num, neighbor_ip=neigh_ip_addr, 
                         config="yes",vrf_name=data.vrf, cli_type='alicli', multiplier=3, rx_intv=int(data.dut_bfd_timer), tx_intv=int(data.dut_bfd_timer))
+    st.wait(5)
 
     if not bfdapi.verify_bfd_peer(dut1, peer=neigh_ip_addr, local_addr=dut1_ip_addr, rx_interval=[[data.dut_bfd_timer,'50']], 
                             status='up', cli_type='alicli', vrf_name=data.vrf):
@@ -453,8 +457,8 @@ def test_bfd_ipv6_base():
     # stop ixia to check bfd status
     tg1.tg_emulation_bfd_control(handle = data.bfd_v6_rtr1['bfd_v6_interface_handle'], mode = "stop")
     st.wait(5)
-    if bfdapi.verify_bfd_peer(dut1, peer=neigh_ipv6_addr, local_addr=formatted_dut1_ipv6_addr,  vrf_name=data.vrf, 
-                                rx_interval=[[data.dut_bfd_timer,data.tg_bfd_timer]], status='up', cli_type='alicli'):
+    if not bfdapi.verify_bfd_peer(dut1, peer=neigh_ipv6_addr, local_addr=formatted_dut1_ipv6_addr,  vrf_name=data.vrf, 
+                                rx_interval=[[data.dut_bfd_timer,data.tg_bfd_timer]], status='down', cli_type='alicli'):
         st.report_fail("bfd status error", formatted_dut1_ipv6_addr, dut1)
 
     #restart ixia bfd
@@ -535,6 +539,7 @@ def test_bfd_ipv6_flap():
 
     bfdapi.configure_bfd(dut1, local_asn=data.as_num, neighbor_ip=neigh_ipv6_addr, 
                         config="yes",vrf_name=data.vrf, cli_type='alicli', rx_intv=100, tx_intv=100)
+    st.wait(5)
 
     if not bfdapi.verify_bfd_peer(dut1, peer=neigh_ipv6_addr, local_addr=dut1_ipv6_addr, rx_interval=[['100',data.tg_bfd_timer]], 
                             status='up', cli_type='alicli', vrf_name=data.vrf):
@@ -542,6 +547,7 @@ def test_bfd_ipv6_flap():
 
     bfdapi.configure_bfd(dut1, local_asn=data.as_num, neighbor_ip=neigh_ipv6_addr, 
                         config="yes",vrf_name=data.vrf, cli_type='alicli', rx_intv=int(data.dut_bfd_timer), tx_intv=int(data.dut_bfd_timer))
+    st.wait(5)
 
     if not bfdapi.verify_bfd_peer(dut1, peer=neigh_ipv6_addr, local_addr=dut1_ipv6_addr, rx_interval=[[data.dut_bfd_timer,data.tg_bfd_timer]], 
                             status='up', cli_type='alicli', vrf_name=data.vrf):
@@ -568,7 +574,7 @@ def test_bfd_ipv6_attr_set():
     st.log("bfd status check ok, set dut bfd params: multiplier=5, rx_intv=50, tx_intv=50")
     bfdapi.configure_bfd(dut1, local_asn=data.as_num, neighbor_ip=neigh_ipv6_addr, 
                         config="yes",vrf_name=data.vrf, cli_type='alicli', multiplier=5, rx_intv=new_interval, tx_intv=new_interval)
-
+    st.wait(10)
     #skip multiplier check
     if not bfdapi.verify_bfd_peer(dut1, peer=neigh_ipv6_addr, local_addr=dut1_ipv6_addr, rx_interval=[['50',data.tg_bfd_timer]], 
                             status='up', cli_type='alicli', vrf_name=data.vrf):
@@ -610,7 +616,7 @@ def test_bfd_ipv6_attr_set():
 
     bfdapi.configure_bfd(dut1, local_asn=data.as_num, neighbor_ip=neigh_ipv6_addr, 
                         config="yes",vrf_name=data.vrf, cli_type='alicli', multiplier=3, rx_intv=int(data.dut_bfd_timer), tx_intv=int(data.dut_bfd_timer))
-
+    st.wait(10)
     if not bfdapi.verify_bfd_peer(dut1, peer=neigh_ipv6_addr, local_addr=dut1_ipv6_addr, rx_interval=[[data.dut_bfd_timer,'50']], 
                             status='up', cli_type='alicli', vrf_name=data.vrf):
         st.report_fail("bfd status error", dut1_ipv6_addr, dut1)

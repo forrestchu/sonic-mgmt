@@ -394,7 +394,7 @@ def verify_interface_ip_address(dut, interface_name, ip_address, family="ipv4", 
     :param flags:
     :return:
     """
-    cli_type = kwargs.pop('cli_type', st.get_ui_type(dut,**kwargs))
+    cli_type=st.get_ui_type(dut, cli_type=cli_type)
     if cli_type in ['rest-patch', 'rest-put']:
         cli_type = 'klish'                      #OC-YANG URLs are not available for show ip/ipv6 interface. Reported JIRA: SONIC-23677 for this.
     command = "show ip interface"

@@ -48,5 +48,7 @@ topology:
             Ethernet12: {EndDevice: MC-01, EndPort: Ethernet12, params: def_link}
             Ethernet13: {EndDevice: MC-01, EndPort: Ethernet13, params: def_link}
             Ethernet16: {EndDevice: MC-01, EndPort: Ethernet16, params: def_link}
+            Ethernet50: {EndDevice: ixia-01, EndPort: 1/19, params: def_tg_link}
+            Ethernet51: {EndDevice: ixia-01, EndPort: 1/20, params: def_tg_link}
 
 

@@ -10,6 +10,8 @@
 +file:system/test_interface.py
 +file:system/test_lldp.py
 +file:switching/test_portchannel.py
++file:routing/VRF/test_mgmt_vrf.py
++file:routing/MC_SCALE/test_mc_scale.py
 
 # test cases requiring link state propagation
 -test:test_ft_cos_tc_queue_map

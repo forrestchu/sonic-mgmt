@@ -1391,6 +1391,8 @@ class TGIxia(TGBase):
                 mul=kwargs.get('count','1')
                 if 'vlan_id_count' in kwargs:
                     mul=kwargs.get('vlan_id_count','1')
+                if 'device_group_multiplier' in kwargs:
+                    mul=kwargs.get('device_group_multiplier','1')
                 res=self.tg_topology_config(topology_handle=topo_han, device_group_multiplier=mul)
                 logger.info(res)
                 tgen_wait(10)
@@ -1398,7 +1400,7 @@ class TGIxia(TGBase):
                 kwargs.pop('port_handle')
             if kwargs.get('enable_flow_control') != None:
                 kwargs['enable_flow_control'] = 1 if kwargs['enable_flow_control'] == 'true' else 0
-            for param in ('count', 'block_mode', 'enable_ping_response'):
+            for param in ('count', 'block_mode', 'enable_ping_response','device_group_multiplier'):
                 if kwargs.get(param) != None:
                     kwargs.pop(param)
 
@@ -1419,6 +1421,10 @@ class TGIxia(TGBase):
             if 'ipv6_prefix_length' in kwargs:
                 kwargs['prefix_from'] = kwargs['ipv6_prefix_length']
                 kwargs.pop('ipv6_prefix_length')
+            if 'active' in kwargs:
+                #kwargs.pop('skip_stop_test_control')
+                logger.info('Skip disabling protocol before adding the route')
+                return kwargs
             logger.info('Disabling protocol before adding the route')
             self.tg_topology_test_control(handle=kwargs['handle'], stack='ethernet', action='stop_all_protocols',
                                           tg_wait=10)
@@ -1613,6 +1619,9 @@ class TGIxia(TGBase):
 
     def trgen_post_proc(self, fname, **kwargs):
         if fname == 'tg_emulation_bgp_route_config':
+            if 'active' in kwargs:
+                logger.info('skip enabling protocol after adding the route')
+                return
             logger.info('Enabling protocol after adding the route')
             self.tg_topology_test_control(handle=kwargs['handle'], stack='ipv(4|6)', action='start_all_protocols')
 

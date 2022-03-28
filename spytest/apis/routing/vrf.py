@@ -1,4 +1,5 @@
 import json
+import spytest.env as env
 from spytest import st, utils
 from spytest.utils import filter_and_select
 from utilities.utils import get_interface_number_from_name
@@ -190,6 +191,8 @@ def config_vrf(dut, **kwargs):
     else:
         skip_error = False
     cli_type = kwargs.pop('cli_type', st.get_ui_type(dut))
+    if env.get("SPYTEST_USE_ALICLI", "0") != "0":
+        cli_type = 'alicli'
     if cli_type == 'click':
         my_cmd = ''
         if config.lower() == 'yes':
@@ -244,6 +247,24 @@ def config_vrf(dut, **kwargs):
                     st.log(response)
                     return False
         return True
+    elif cli_type == 'alicli':
+        my_cmd = ''
+        if config.lower() == 'yes':
+            for vrf in vrf_name:
+                my_cmd += 'vrf {}\n'.format(vrf)
+        else:
+            for vrf in vrf_name:
+                my_cmd += 'no vrf {}\n'.format(vrf)
+        if skip_error:
+            try:
+                st.config(dut, my_cmd, type='alicli')
+                return True
+            except Exception:
+                st.log("Error handled..by API")
+                return False
+        else:
+            st.config(dut, my_cmd, type='alicli')
+            return True
     else:
         st.log("Unsupported cli")
 

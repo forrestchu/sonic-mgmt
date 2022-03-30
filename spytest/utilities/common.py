@@ -236,7 +236,7 @@ def random_password(slen=10):
 def random_vlan_list(count=1, exclude=[]):
     retval = []
     while count > 0:
-        val = random.randint(2, 4094)
+        val = random.randint(2, 4000)
         if exclude and val in exclude:
             pass
         elif val not in retval:

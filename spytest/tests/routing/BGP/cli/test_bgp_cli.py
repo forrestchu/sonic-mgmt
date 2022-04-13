@@ -385,8 +385,8 @@ def test_cli_bgp_community_list_normal():
 
     st.log("config cli:  normal cases")
     ###add case data
-    item = [["50","deny","50:51"],["60","permit","60:61"],["150","deny","50:51 51:52"],["250","permit","50:51 51:52 52:53"],
-            ["50","permit","51:52"],["60","deny","61:62 63:64"],["150","permit","51:52"],["250","deny","50:51 51:52 52:53"]]
+    item = [["50","deny","50:51","deny@"],["60","permit","60:61","permit@"],["150","deny","50:51 51:52","deny@"],["250","permit","50:51 51:52 52:53","permit@"],
+            ["50","permit","51:52","permit@"],["60","deny","61:62 63:64","deny@"],["150","permit","51:52","permit@"],["250","deny","50:51 51:52 52:53","deny@"]]
 
     ##1: add-check-del
     for i in range(len(item)):
@@ -395,7 +395,7 @@ def test_cli_bgp_community_list_normal():
         
         ### check config db ###
         peerkey = "COMMUNITY_LIST|{}".format(item[i][0])
-        configdb_checkpoint(dut, peerkey, item[i][1], item[i][2], True, 'check1-1')
+        configdb_checkpoint(dut, peerkey, item[i][3], item[i][2], True, 'check1-1')
 
         ### check frr running-config ##
         output = st.show(dut, "show running-config bgpd", type='vtysh')
@@ -419,7 +419,7 @@ def test_cli_bgp_community_list_normal():
     for i in range(len(item)):
         ### check config db ###
         peerkey = "COMMUNITY_LIST|{}".format(item[i][0])
-        configdb_checkpoint(dut, peerkey, item[i][1], item[i][2], True, 'check2-1')
+        configdb_checkpoint(dut, peerkey, item[i][3], item[i][2], True, 'check2-1')
 
         ### check frr running-config ##
         output = st.show(dut, "show running-config bgpd", type='vtysh')
@@ -446,7 +446,7 @@ def test_cli_bgp_community_list_normal():
     for i in range(len(item)):
         ### check config db ###
         peerkey = "COMMUNITY_LIST|{}".format(item[i][0])
-        configdb_checkpoint(dut, peerkey, item[i][1], item[i][2], False, 'check3-1')
+        configdb_checkpoint(dut, peerkey, item[i][3], item[i][2], False, 'check3-1')
 
         ### check frr running-config ##
         output = st.show(dut, "show running-config bgpd", type='vtysh')
@@ -472,10 +472,10 @@ def test_cli_bgp_community_list_standard():
 
     st.log("config cli:  standard cases")
     ###add case data
-    item = [["standard list1","deny","50:51"],["standard list2","permit","60:61"],["standard name1","deny","50:51 51:52"],
-            ["standard name2","permit","50:51 51:52 52:53"],["standard list1","permit","51:52"],["standard list2","deny","61:62 63:64"],
-            ["standard name1","permit","51:52"],["standard name2","deny","50:51 51:52 52:53"],
-            ["standard 999","permit","51:52"],["standard 23453","deny","50:51 51:52 52:53"]]
+    item = [["standard list1","deny","50:51","deny@"],["standard list2","permit","60:61","permit@"],["standard name1","deny","50:51 51:52","deny@"],
+            ["standard name2","permit","50:51 51:52 52:53","permit@"],["standard list1","permit","51:52","permit@"],["standard list2","deny","61:62 63:64","deny@"],
+            ["standard name1","permit","51:52","permit@"],["standard name2","deny","50:51 51:52 52:53","deny@"],
+            ["standard 999","permit","51:52","permit@"],["standard 23453","deny","50:51 51:52 52:53","deny@"]]
 
     ##1: add-check-del
     for i in range(len(item)):
@@ -484,7 +484,7 @@ def test_cli_bgp_community_list_standard():
         
         ### check config db ###
         peerkey = "COMMUNITY_LIST|{}|{}".format(item[i][0].split()[0], item[i][0].split()[1])
-        configdb_checkpoint(dut, peerkey, item[i][1], item[i][2], True, 'check1-1')
+        configdb_checkpoint(dut, peerkey, item[i][3], item[i][2], True, 'check1-1')
 
         ### check frr running-config ##
         output = st.show(dut, "show running-config bgpd", type='vtysh')
@@ -508,7 +508,7 @@ def test_cli_bgp_community_list_standard():
     for i in range(len(item)):
         ### check config db ###
         peerkey = "COMMUNITY_LIST|{}|{}".format(item[i][0].split()[0], item[i][0].split()[1])
-        configdb_checkpoint(dut, peerkey, item[i][1], item[i][2], True, 'check2-1')
+        configdb_checkpoint(dut, peerkey, item[i][3], item[i][2], True, 'check2-1')
 
         ### check frr running-config ##
         output = st.show(dut, "show running-config bgpd", type='vtysh')
@@ -535,7 +535,7 @@ def test_cli_bgp_community_list_standard():
     for i in range(len(item)):
         ### check config db ###
         peerkey = "COMMUNITY_LIST|{}|{}".format(item[i][0].split()[0], item[i][0].split()[1])
-        configdb_checkpoint(dut, peerkey, item[i][1], item[i][2], False, 'check3-1')
+        configdb_checkpoint(dut, peerkey, item[i][3], item[i][2], False, 'check3-1')
 
         ### check frr running-config ##
         output = st.show(dut, "show running-config bgpd", type='vtysh')
@@ -561,10 +561,10 @@ def test_cli_bgp_community_list_expanded():
 
     st.log("config cli:  expanded cases")
     ###add case data
-    item = [["expanded list1","deny","50:51"],["expanded list2","permit","60:61"],["expanded name1","deny","50:51 51:52"],
-            ["expanded name2","permit","50:51 51:52 52:53"],["expanded list1","permit","51:52"],["expanded list2","deny","61:62 63:64"],
-            ["expanded name1","permit","51:52"],["expanded name2","deny","50:51 51:52 52:53"],
-            ["expanded 999","permit","51:52"],["expanded 23453","deny","50:51 51:52 52:53"]]
+    item = [["expanded list1","deny","50:51","deny@"],["expanded list2","permit","60:61","permit@"],["expanded name1","deny","50:51 51:52","deny@"],
+            ["expanded name2","permit","50:51 51:52 52:53","permit@"],["expanded list1","permit","51:52","permit@"],["expanded list2","deny","61:62 63:64","deny@"],
+            ["expanded name1","permit","51:52","permit@"],["expanded name2","deny","50:51 51:52 52:53","deny@"],
+            ["expanded 999","permit","51:52","permit@"],["expanded 23453","deny","50:51 51:52 52:53","deny@"]]
 
     ##1: add-check-del
     for i in range(len(item)):
@@ -573,7 +573,7 @@ def test_cli_bgp_community_list_expanded():
         
         ### check config db ###
         peerkey = "COMMUNITY_LIST|{}|{}".format(item[i][0].split()[0], item[i][0].split()[1])
-        configdb_checkpoint(dut, peerkey, item[i][1], item[i][2], True, 'check1-1')
+        configdb_checkpoint(dut, peerkey, item[i][3], item[i][2], True, 'check1-1')
 
         ### check frr running-config ##
         output = st.show(dut, "show running-config bgpd", type='vtysh')
@@ -597,7 +597,7 @@ def test_cli_bgp_community_list_expanded():
     for i in range(len(item)):
         ### check config db ###
         peerkey = "COMMUNITY_LIST|{}|{}".format(item[i][0].split()[0], item[i][0].split()[1])
-        configdb_checkpoint(dut, peerkey, item[i][1], item[i][2], True, 'check2-1')
+        configdb_checkpoint(dut, peerkey, item[i][3], item[i][2], True, 'check2-1')
 
         ### check frr running-config ##
         output = st.show(dut, "show running-config bgpd", type='vtysh')
@@ -624,7 +624,7 @@ def test_cli_bgp_community_list_expanded():
     for i in range(len(item)):
         ### check config db ###
         peerkey = "COMMUNITY_LIST|{}|{}".format(item[i][0].split()[0], item[i][0].split()[1])
-        configdb_checkpoint(dut, peerkey, item[i][1], item[i][2], False, 'check3-1')
+        configdb_checkpoint(dut, peerkey, item[i][3], item[i][2], False, 'check3-1')
 
         ### check frr running-config ##
         output = st.show(dut, "show running-config bgpd", type='vtysh')
@@ -650,8 +650,8 @@ def test_cli_bgp_aspath_access_list():
 
     st.log("config cli:  bgp as-path access-list cases")
     ###add case data
-    item = [["500","deny","10010"],["name1","permit","100 300"],["list1","deny","233 205"],["xyz","permit","100 120"],
-           ["500","permit","200220"],["name1","deny","100 500"],["list1","permit","100 20"],["xyz","deny","300 200"]]
+    item = [["500","deny","10010","deny@"],["name1","permit","100 300","permit@"],["list1","deny","233 205","deny@"],["xyz","permit","100 120","permit@"],
+           ["500","permit","200220","permit@"],["name1","deny","100 500","deny@"],["list1","permit","100 20","permit@"],["xyz","deny","300 200","deny@"]]
 
 
     ##1: add-check-del
@@ -661,7 +661,7 @@ def test_cli_bgp_aspath_access_list():
         
         ### check config db ###
         peerkey = "ASPATH_ACCESS_LIST|{}".format(item[i][0])
-        configdb_checkpoint(dut, peerkey, item[i][1], item[i][2], True, 'check1-1')
+        configdb_checkpoint(dut, peerkey, item[i][3], item[i][2], True, 'check1-1')
 
         ### check frr running-config ##
         output = st.show(dut, "show running-config bgpd", type='vtysh')
@@ -685,7 +685,7 @@ def test_cli_bgp_aspath_access_list():
     for i in range(len(item)):
         ### check config db ###
         peerkey = "ASPATH_ACCESS_LIST|{}".format(item[i][0])
-        configdb_checkpoint(dut, peerkey, item[i][1], item[i][2], True, 'check2-1')
+        configdb_checkpoint(dut, peerkey, item[i][3], item[i][2], True, 'check2-1')
 
         ### check frr running-config ##
         output = st.show(dut, "show running-config bgpd", type='vtysh')
@@ -712,7 +712,7 @@ def test_cli_bgp_aspath_access_list():
     for i in range(len(item)):
         ### check config db ###
         peerkey = "ASPATH_ACCESS_LIST|{}".format(item[i][0])
-        configdb_checkpoint(dut, peerkey, item[i][1], item[i][2], False, 'check3-1')
+        configdb_checkpoint(dut, peerkey, item[i][3], item[i][2], False, 'check3-1')
 
         ### check frr running-config ##
         output = st.show(dut, "show running-config bgpd", type='vtysh')
@@ -738,10 +738,10 @@ def test_cli_bgp_community_list_with_command_typo():
 
     st.log("config cli:  typo cases")
     ###add case data with errors
-    item = [["50","denyy","50:51"],["60","ppermit","60:61"],["list1","deny","50:51 51:52"],
-            ["50","permitt","51:52"],["60","ddeny","61:62 63:64"],["list1","permit","51:52"],
-            ["250","permit","50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52"],
-            ["250","deny","50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52"]]
+    item = [["50","denyy","50:51","deny@"],["60","ppermit","60:61","permit@"],["list1","deny","50:51 51:52","deny@"],
+            ["50","permitt","51:52","permit@"],["60","ddeny","61:62 63:64","deny@"],["list1","permit","51:52","permit@"],
+            ["250","permit","50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52","permit@"],
+            ["250","deny","50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52","deny@"]]
 
     ##1: add-check-del
     for i in range(len(item)):
@@ -750,7 +750,7 @@ def test_cli_bgp_community_list_with_command_typo():
 
         ### check config db ###
         peerkey = "COMMUNITY_LIST|{}".format(item[i][0])
-        configdb_checkpoint(dut, peerkey, item[i][1], item[i][2], False, 'check1-1')
+        configdb_checkpoint(dut, peerkey, item[i][3], item[i][2], False, 'check1-1')
 
         ### check frr running-config ##
         output = st.show(dut, "show running-config bgpd", type='vtysh')
@@ -774,7 +774,7 @@ def test_cli_bgp_community_list_with_command_typo():
     for i in range(len(item)):
         ### check config db ###
         peerkey = "COMMUNITY_LIST|{}".format(item[i][0])
-        configdb_checkpoint(dut, peerkey, item[i][1], item[i][2], False, 'check2-1')
+        configdb_checkpoint(dut, peerkey, item[i][3], item[i][2], False, 'check2-1')
 
         ### check frr running-config ##
         output = st.show(dut, "show running-config bgpd", type='vtysh')
@@ -802,10 +802,10 @@ def test_cli_bgp_aspath_access_list_with_command_typo():
 
     st.log("config cli:  typo cases")
     ###add case data with errors
-    item = [["50","denyy","50:51"],["60","ppermit","60:61"],["list1","deeny","50:51 51:52"],
-            ["50","permitt","51:52"],["60","ddeny","61:62 63:64"],["list1","peermit","51:52"],
-            ["list2","permit","50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52"],
-            ["list2","deny","50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52"]]
+    item = [["50","denyy","50:51","deny@"],["60","ppermit","60:61","permit@"],["list1","deeny","50:51 51:52","deny@"],
+            ["50","permitt","51:52","permit@"],["60","ddeny","61:62 63:64","deny@"],["list1","peermit","51:52","permit@"],
+            ["list2","permit","50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52","permit@"],
+            ["list2","deny","50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52 52:53 50:51 51:52","deny@"]]
 
     ##1: add-check-del
     for i in range(len(item)):
@@ -814,7 +814,7 @@ def test_cli_bgp_aspath_access_list_with_command_typo():
 
         ### check config db ###
         peerkey = "ASPATH_ACCESS_LIST|{}".format(item[i][0])
-        configdb_checkpoint(dut, peerkey, item[i][1], item[i][2], False, 'check1-1')
+        configdb_checkpoint(dut, peerkey, item[i][3], item[i][2], False, 'check1-1')
 
         ### check frr running-config ##
         output = st.show(dut, "show running-config bgpd", type='vtysh')
@@ -838,7 +838,7 @@ def test_cli_bgp_aspath_access_list_with_command_typo():
     for i in range(len(item)):
         ### check config db ###
         peerkey = "ASPATH_ACCESS_LIST|{}".format(item[i][0])
-        configdb_checkpoint(dut, peerkey, item[i][1], item[i][2], False, 'check2-1')
+        configdb_checkpoint(dut, peerkey, item[i][3], item[i][2], False, 'check2-1')
 
         ### check frr running-config ##
         output = st.show(dut, "show running-config bgpd", type='vtysh')

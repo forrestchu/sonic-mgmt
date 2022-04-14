@@ -12,6 +12,8 @@
 +file:switching/test_portchannel.py
 +file:routing/VRF/test_mgmt_vrf.py
 +file:routing/MC_SCALE/test_mc_scale.py
++file:routing/BGP/cli/test_bgp_cli.py
++file:routing/BGP/cli/test_route_map_cli.py
 
 # test cases requiring link state propagation
 -test:test_ft_cos_tc_queue_map

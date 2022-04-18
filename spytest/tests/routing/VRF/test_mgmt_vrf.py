@@ -113,7 +113,7 @@ def base_config():
 
     #st.reboot(dut)
     reboot.config_save_reboot(dut)
-    st.wait(60)
+    st.wait(150)
     st.log("finish need config")
 
 @pytest.mark.community

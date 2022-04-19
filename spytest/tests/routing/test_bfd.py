@@ -4,6 +4,7 @@ from collections import OrderedDict
 
 from spytest import st, tgapi, SpyTestDict
 from spytest.utils import filter_and_select
+from utilities.utils import retry_api
 
 import apis.common.asic as asicapi
 import apis.switching.vlan as vapi
@@ -608,17 +609,17 @@ def test_bfd_ipv6_attr_set():
             ip_version                     = "6",
             aggregate_bfd_session          = "1")
     tg1.tg_emulation_bfd_control(handle = data.bfd_v6_rtr1['bfd_v6_interface_handle'], mode = "restart")
-    st.wait(10)
+    st.wait(5)
 
-    if not bfdapi.verify_bfd_peer(dut1, peer=neigh_ipv6_addr, local_addr=dut1_ipv6_addr, rx_interval=[['50','50']], 
-                            status='up', cli_type='alicli', vrf_name=data.vrf):
+    if not retry_api(bfdapi.verify_bfd_peer, dut=dut1, peer=neigh_ipv6_addr, local_addr=dut1_ipv6_addr, rx_interval=[['50','50']], 
+                            status='up', cli_type='alicli', vrf_name=data.vrf, retry_count= 3, delay= 3):
         st.report_fail("bfd status error", dut1_ipv6_addr, dut1)
 
     bfdapi.configure_bfd(dut1, local_asn=data.as_num, neighbor_ip=neigh_ipv6_addr, 
                         config="yes",vrf_name=data.vrf, cli_type='alicli', multiplier=3, rx_intv=int(data.dut_bfd_timer), tx_intv=int(data.dut_bfd_timer))
-    st.wait(10)
-    if not bfdapi.verify_bfd_peer(dut1, peer=neigh_ipv6_addr, local_addr=dut1_ipv6_addr, rx_interval=[[data.dut_bfd_timer,'50']], 
-                            status='up', cli_type='alicli', vrf_name=data.vrf):
+    st.wait(5)
+    if not retry_api(bfdapi.verify_bfd_peer, dut1, peer=neigh_ipv6_addr, local_addr=dut1_ipv6_addr, rx_interval=[[data.dut_bfd_timer,'50']], 
+                            status='up', cli_type='alicli', vrf_name=data.vrf, retry_count= 3, delay= 3):
         st.report_fail("bfd status error", dut1_ipv6_addr, dut1)
 
     st.report_pass("test_case_passed")

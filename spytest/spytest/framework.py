@@ -3730,6 +3730,7 @@ def _create_work_area2(config):
     if cfg.filemode:
         os.environ["SPYTEST_TOPOLOGY_STATUS_ONFAIL_ABORT"] = ""
 
+    os.environ["SPYTEST_ENSURE_TRAFFIC_CONTROL"] = "1"
     wa = get_work_area()
     if not wa:
         wa = WorkArea(cfg)

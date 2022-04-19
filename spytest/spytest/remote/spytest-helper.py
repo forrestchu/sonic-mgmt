@@ -390,10 +390,10 @@ def init_ta_config(flags, profile):
     execute_check_cmd("logrotate -f /etc/logrotate.conf", skip_error=True)
     clear = os.getenv("SPYTEST_ONINIT_CLEAR", "syslog,sairedis")
     if "syslog" in clear:
-        execute_check_cmd("rm -f {}/syslog.*".format(var_log_dir))
+        #execute_check_cmd("rm -f {}/syslog.*".format(var_log_dir))
         execute_check_cmd("rm -f {}/syslog.*".format(spytest_dir))
     if "redis" in clear:
-        execute_check_cmd("rm -f {}/swss/sairedis.rec.*".format(var_log_dir))
+        #execute_check_cmd("rm -f {}/swss/sairedis.rec.*".format(var_log_dir))
         execute_check_cmd("rm -f {}/sairedis.*".format(spytest_dir))
 
     print("DONE")

@@ -135,12 +135,6 @@
                 "Eth109.503",
                 "Eth109.504",
                 "Eth109.600",
-                "Eth110.503",
-                "Eth110.504",
-                "Eth110.600",
-                "Eth111.501",
-                "Eth111.502",
-                "Eth111.600",
                 "Eth112.501",
                 "Eth112.502",
                 "Eth112.600",
@@ -296,1839 +290,1233 @@
         }
     }, 
     "BGP_NEIGHBOR": {
-        "100.0.0.0|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.100|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.101|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.10|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.11|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.12|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.13|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.14|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.15|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.16|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.17|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.18|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.19|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.1|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.20|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.21|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.22|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.23|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.24|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.25|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.26|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.27|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.28|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.29|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.2|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.30|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.31|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.32|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.33|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.34|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.35|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.36|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.37|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.38|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.39|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.3|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.40|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.41|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.42|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.43|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.44|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.45|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.46|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.47|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.48|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.49|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.4|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.50|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.51|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.52|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.53|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.54|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.55|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.56|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.57|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.58|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.59|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.5|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.60|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.61|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.62|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.63|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.64|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.65|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.66|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.67|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.68|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.69|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.6|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.70|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.71|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.72|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.73|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.74|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.75|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.76|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.77|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.78|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.79|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.7|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.80|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.81|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.82|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.83|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.84|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.85|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.86|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.87|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.88|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.89|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.8|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.90|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.91|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.92|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.93|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.94|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.95|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.96|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.97|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.98|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.99|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.0.0.9|global|Vrf200": {
-            "in_group": "ixia_v4"
-        }, 
-        "100.1.1.1|global|Vrf-bfd1": {
+        "100.1.1.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.10.1|global|Vrf-bfd1": {
+        "100.1.10.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.100.1|global|Vrf-bfd1": {
+        "100.1.100.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.11.1|global|Vrf-bfd1": {
+        "100.1.11.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.12.1|global|Vrf-bfd1": {
+        "100.1.12.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.13.1|global|Vrf-bfd1": {
+        "100.1.13.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.14.1|global|Vrf-bfd1": {
+        "100.1.14.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.15.1|global|Vrf-bfd1": {
+        "100.1.15.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.16.1|global|Vrf-bfd1": {
+        "100.1.16.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.17.1|global|Vrf-bfd1": {
+        "100.1.17.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.18.1|global|Vrf-bfd1": {
+        "100.1.18.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.19.1|global|Vrf-bfd1": {
+        "100.1.19.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.2.1|global|Vrf-bfd1": {
+        "100.1.2.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.20.1|global|Vrf-bfd1": {
+        "100.1.20.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.21.1|global|Vrf-bfd1": {
+        "100.1.21.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.22.1|global|Vrf-bfd1": {
+        "100.1.22.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.23.1|global|Vrf-bfd1": {
+        "100.1.23.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.24.1|global|Vrf-bfd1": {
+        "100.1.24.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.25.1|global|Vrf-bfd1": {
+        "100.1.25.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.26.1|global|Vrf-bfd1": {
+        "100.1.26.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.27.1|global|Vrf-bfd1": {
+        "100.1.27.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.28.1|global|Vrf-bfd1": {
+        "100.1.28.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.29.1|global|Vrf-bfd1": {
+        "100.1.29.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.3.1|global|Vrf-bfd1": {
+        "100.1.3.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.30.1|global|Vrf-bfd1": {
+        "100.1.30.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.31.1|global|Vrf-bfd1": {
+        "100.1.31.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.32.1|global|Vrf-bfd1": {
+        "100.1.32.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.33.1|global|Vrf-bfd1": {
+        "100.1.33.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.34.1|global|Vrf-bfd1": {
+        "100.1.34.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.35.1|global|Vrf-bfd1": {
+        "100.1.35.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.36.1|global|Vrf-bfd1": {
+        "100.1.36.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.37.1|global|Vrf-bfd1": {
+        "100.1.37.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.38.1|global|Vrf-bfd1": {
+        "100.1.38.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.39.1|global|Vrf-bfd1": {
+        "100.1.39.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.4.1|global|Vrf-bfd1": {
+        "100.1.4.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.40.1|global|Vrf-bfd1": {
+        "100.1.40.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.41.1|global|Vrf-bfd1": {
+        "100.1.41.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.42.1|global|Vrf-bfd1": {
+        "100.1.42.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.43.1|global|Vrf-bfd1": {
+        "100.1.43.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.44.1|global|Vrf-bfd1": {
+        "100.1.44.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.45.1|global|Vrf-bfd1": {
+        "100.1.45.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.46.1|global|Vrf-bfd1": {
+        "100.1.46.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.47.1|global|Vrf-bfd1": {
+        "100.1.47.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.48.1|global|Vrf-bfd1": {
+        "100.1.48.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.49.1|global|Vrf-bfd1": {
+        "100.1.49.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.5.1|global|Vrf-bfd1": {
+        "100.1.5.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.50.1|global|Vrf-bfd1": {
+        "100.1.50.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.51.1|global|Vrf-bfd1": {
+        "100.1.51.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.52.1|global|Vrf-bfd1": {
+        "100.1.52.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.53.1|global|Vrf-bfd1": {
+        "100.1.53.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.54.1|global|Vrf-bfd1": {
+        "100.1.54.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.55.1|global|Vrf-bfd1": {
+        "100.1.55.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.56.1|global|Vrf-bfd1": {
+        "100.1.56.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.57.1|global|Vrf-bfd1": {
+        "100.1.57.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.58.1|global|Vrf-bfd1": {
+        "100.1.58.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.59.1|global|Vrf-bfd1": {
+        "100.1.59.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.6.1|global|Vrf-bfd1": {
+        "100.1.6.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.60.1|global|Vrf-bfd1": {
+        "100.1.60.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.61.1|global|Vrf-bfd1": {
+        "100.1.61.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.62.1|global|Vrf-bfd1": {
+        "100.1.62.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.63.1|global|Vrf-bfd1": {
+        "100.1.63.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.64.1|global|Vrf-bfd1": {
+        "100.1.64.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.65.1|global|Vrf-bfd1": {
+        "100.1.65.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.66.1|global|Vrf-bfd1": {
+        "100.1.66.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.67.1|global|Vrf-bfd1": {
+        "100.1.67.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.68.1|global|Vrf-bfd1": {
+        "100.1.68.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.69.1|global|Vrf-bfd1": {
+        "100.1.69.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.7.1|global|Vrf-bfd1": {
+        "100.1.7.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.70.1|global|Vrf-bfd1": {
+        "100.1.70.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.71.1|global|Vrf-bfd1": {
+        "100.1.71.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.72.1|global|Vrf-bfd1": {
+        "100.1.72.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.73.1|global|Vrf-bfd1": {
+        "100.1.73.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.74.1|global|Vrf-bfd1": {
+        "100.1.74.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.75.1|global|Vrf-bfd1": {
+        "100.1.75.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.76.1|global|Vrf-bfd1": {
+        "100.1.76.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.77.1|global|Vrf-bfd1": {
+        "100.1.77.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.78.1|global|Vrf-bfd1": {
+        "100.1.78.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.79.1|global|Vrf-bfd1": {
+        "100.1.79.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.8.1|global|Vrf-bfd1": {
+        "100.1.8.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.80.1|global|Vrf-bfd1": {
+        "100.1.80.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.81.1|global|Vrf-bfd1": {
+        "100.1.81.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.82.1|global|Vrf-bfd1": {
+        "100.1.82.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.83.1|global|Vrf-bfd1": {
+        "100.1.83.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.84.1|global|Vrf-bfd1": {
+        "100.1.84.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.85.1|global|Vrf-bfd1": {
+        "100.1.85.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.86.1|global|Vrf-bfd1": {
+        "100.1.86.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.87.1|global|Vrf-bfd1": {
+        "100.1.87.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.88.1|global|Vrf-bfd1": {
+        "100.1.88.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.89.1|global|Vrf-bfd1": {
+        "100.1.89.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.9.1|global|Vrf-bfd1": {
+        "100.1.9.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.90.1|global|Vrf-bfd1": {
+        "100.1.90.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.91.1|global|Vrf-bfd1": {
+        "100.1.91.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.92.1|global|Vrf-bfd1": {
+        "100.1.92.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.93.1|global|Vrf-bfd1": {
+        "100.1.93.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.94.1|global|Vrf-bfd1": {
+        "100.1.94.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.95.1|global|Vrf-bfd1": {
+        "100.1.95.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.96.1|global|Vrf-bfd1": {
+        "100.1.96.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.97.1|global|Vrf-bfd1": {
+        "100.1.97.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.98.1|global|Vrf-bfd1": {
+        "100.1.98.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100.1.99.1|global|Vrf-bfd1": {
+        "100.1.99.1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v4"
         }, 
-        "100:1:0:10::1|global|Vrf-bfd1": {
+        "100:1:0:10::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:11::1|global|Vrf-bfd1": {
+        "100:1:0:11::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:12::1|global|Vrf-bfd1": {
+        "100:1:0:12::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:13::1|global|Vrf-bfd1": {
+        "100:1:0:13::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:14::1|global|Vrf-bfd1": {
+        "100:1:0:14::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:15::1|global|Vrf-bfd1": {
+        "100:1:0:15::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:16::1|global|Vrf-bfd1": {
+        "100:1:0:16::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:17::1|global|Vrf-bfd1": {
+        "100:1:0:17::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:18::1|global|Vrf-bfd1": {
+        "100:1:0:18::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:19::1|global|Vrf-bfd1": {
+        "100:1:0:19::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:1::1|global|Vrf-bfd1": {
+        "100:1:0:1::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:1a::1|global|Vrf-bfd1": {
+        "100:1:0:1a::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:1b::1|global|Vrf-bfd1": {
+        "100:1:0:1b::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:1c::1|global|Vrf-bfd1": {
+        "100:1:0:1c::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:1d::1|global|Vrf-bfd1": {
+        "100:1:0:1d::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:1e::1|global|Vrf-bfd1": {
+        "100:1:0:1e::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:1f::1|global|Vrf-bfd1": {
+        "100:1:0:1f::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:20::1|global|Vrf-bfd1": {
+        "100:1:0:20::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:21::1|global|Vrf-bfd1": {
+        "100:1:0:21::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:22::1|global|Vrf-bfd1": {
+        "100:1:0:22::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:23::1|global|Vrf-bfd1": {
+        "100:1:0:23::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:24::1|global|Vrf-bfd1": {
+        "100:1:0:24::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:25::1|global|Vrf-bfd1": {
+        "100:1:0:25::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:26::1|global|Vrf-bfd1": {
+        "100:1:0:26::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:27::1|global|Vrf-bfd1": {
+        "100:1:0:27::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:28::1|global|Vrf-bfd1": {
+        "100:1:0:28::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:29::1|global|Vrf-bfd1": {
+        "100:1:0:29::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:2::1|global|Vrf-bfd1": {
+        "100:1:0:2::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:2a::1|global|Vrf-bfd1": {
+        "100:1:0:2a::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:2b::1|global|Vrf-bfd1": {
+        "100:1:0:2b::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:2c::1|global|Vrf-bfd1": {
+        "100:1:0:2c::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:2d::1|global|Vrf-bfd1": {
+        "100:1:0:2d::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:2e::1|global|Vrf-bfd1": {
+        "100:1:0:2e::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:2f::1|global|Vrf-bfd1": {
+        "100:1:0:2f::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:30::1|global|Vrf-bfd1": {
+        "100:1:0:30::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:31::1|global|Vrf-bfd1": {
+        "100:1:0:31::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:32::1|global|Vrf-bfd1": {
+        "100:1:0:32::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:33::1|global|Vrf-bfd1": {
+        "100:1:0:33::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:34::1|global|Vrf-bfd1": {
+        "100:1:0:34::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:35::1|global|Vrf-bfd1": {
+        "100:1:0:35::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:36::1|global|Vrf-bfd1": {
+        "100:1:0:36::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:37::1|global|Vrf-bfd1": {
+        "100:1:0:37::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:38::1|global|Vrf-bfd1": {
+        "100:1:0:38::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:39::1|global|Vrf-bfd1": {
+        "100:1:0:39::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:3::1|global|Vrf-bfd1": {
+        "100:1:0:3::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:3a::1|global|Vrf-bfd1": {
+        "100:1:0:3a::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:3b::1|global|Vrf-bfd1": {
+        "100:1:0:3b::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:3c::1|global|Vrf-bfd1": {
+        "100:1:0:3c::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:3d::1|global|Vrf-bfd1": {
+        "100:1:0:3d::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:3e::1|global|Vrf-bfd1": {
+        "100:1:0:3e::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:3f::1|global|Vrf-bfd1": {
+        "100:1:0:3f::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:40::1|global|Vrf-bfd1": {
+        "100:1:0:40::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:41::1|global|Vrf-bfd1": {
+        "100:1:0:41::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:42::1|global|Vrf-bfd1": {
+        "100:1:0:42::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:43::1|global|Vrf-bfd1": {
+        "100:1:0:43::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:44::1|global|Vrf-bfd1": {
+        "100:1:0:44::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:45::1|global|Vrf-bfd1": {
+        "100:1:0:45::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:46::1|global|Vrf-bfd1": {
+        "100:1:0:46::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:47::1|global|Vrf-bfd1": {
+        "100:1:0:47::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:48::1|global|Vrf-bfd1": {
+        "100:1:0:48::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:49::1|global|Vrf-bfd1": {
+        "100:1:0:49::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:4::1|global|Vrf-bfd1": {
+        "100:1:0:4::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:4a::1|global|Vrf-bfd1": {
+        "100:1:0:4a::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:4b::1|global|Vrf-bfd1": {
+        "100:1:0:4b::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:4c::1|global|Vrf-bfd1": {
+        "100:1:0:4c::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:4d::1|global|Vrf-bfd1": {
+        "100:1:0:4d::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:4e::1|global|Vrf-bfd1": {
+        "100:1:0:4e::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:4f::1|global|Vrf-bfd1": {
+        "100:1:0:4f::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:50::1|global|Vrf-bfd1": {
+        "100:1:0:50::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:51::1|global|Vrf-bfd1": {
+        "100:1:0:51::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:52::1|global|Vrf-bfd1": {
+        "100:1:0:52::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:53::1|global|Vrf-bfd1": {
+        "100:1:0:53::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:54::1|global|Vrf-bfd1": {
+        "100:1:0:54::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:55::1|global|Vrf-bfd1": {
+        "100:1:0:55::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:56::1|global|Vrf-bfd1": {
+        "100:1:0:56::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:57::1|global|Vrf-bfd1": {
+        "100:1:0:57::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:58::1|global|Vrf-bfd1": {
+        "100:1:0:58::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:59::1|global|Vrf-bfd1": {
+        "100:1:0:59::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:5::1|global|Vrf-bfd1": {
+        "100:1:0:5::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:5a::1|global|Vrf-bfd1": {
+        "100:1:0:5a::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:5b::1|global|Vrf-bfd1": {
+        "100:1:0:5b::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:5c::1|global|Vrf-bfd1": {
+        "100:1:0:5c::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:5d::1|global|Vrf-bfd1": {
+        "100:1:0:5d::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:5e::1|global|Vrf-bfd1": {
+        "100:1:0:5e::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:5f::1|global|Vrf-bfd1": {
+        "100:1:0:5f::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:60::1|global|Vrf-bfd1": {
+        "100:1:0:60::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:61::1|global|Vrf-bfd1": {
+        "100:1:0:61::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:62::1|global|Vrf-bfd1": {
+        "100:1:0:62::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:63::1|global|Vrf-bfd1": {
+        "100:1:0:63::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:6::1|global|Vrf-bfd1": {
+        "100:1:0:6::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:7::1|global|Vrf-bfd1": {
+        "100:1:0:7::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:8::1|global|Vrf-bfd1": {
+        "100:1:0:8::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:9::1|global|Vrf-bfd1": {
+        "100:1:0:9::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:a::1|global|Vrf-bfd1": {
+        "100:1:0:a::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:b::1|global|Vrf-bfd1": {
+        "100:1:0:b::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:c::1|global|Vrf-bfd1": {
+        "100:1:0:c::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:d::1|global|Vrf-bfd1": {
+        "100:1:0:d::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:e::1|global|Vrf-bfd1": {
+        "100:1:0:e::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1:0:f::1|global|Vrf-bfd1": {
+        "100:1:0:f::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
         }, 
-        "100:1::1|global|Vrf-bfd1": {
+        "100:1::1|global|long-vrf-dut-bfd1": {
             "in_group": "dut1_v6"
-        }, 
-        "100::10|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::11|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::12|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::13|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::14|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::15|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::16|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::17|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::18|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::19|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::1a|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::1b|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::1c|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::1d|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::1e|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::1f|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::20|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::21|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::22|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::23|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::24|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::25|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::26|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::27|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::28|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::29|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::2a|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::2b|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::2c|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::2d|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::2e|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::2f|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::2|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::30|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::31|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::32|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::33|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::34|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::35|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::36|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::37|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::38|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::39|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::3a|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::3b|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::3c|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::3d|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::3e|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::3f|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::3|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::40|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::41|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::42|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::43|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::44|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::45|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::46|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::47|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::48|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::49|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::4a|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::4b|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::4c|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::4d|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::4e|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::4f|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::4|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::50|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::51|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::52|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::53|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::54|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::55|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::56|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::57|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::58|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::59|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::5a|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::5b|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::5c|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::5d|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::5e|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::5f|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::5|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::60|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::61|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::62|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::63|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::64|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::65|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::6|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::7|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::8|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::9|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::a|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::b|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::c|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::d|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::e|global|Vrf200": {
-            "in_group": "ixia_v6"
-        }, 
-        "100::f|global|Vrf200": {
-            "in_group": "ixia_v6"
         }, 
-        "109.1.0.0|global|Vrf200": {
+        "109.1.0.0|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.100|global|Vrf200": {
+        "109.1.0.100|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.101|global|Vrf200": {
+        "109.1.0.101|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.10|global|Vrf200": {
+        "109.1.0.10|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.11|global|Vrf200": {
+        "109.1.0.11|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.12|global|Vrf200": {
+        "109.1.0.12|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.13|global|Vrf200": {
+        "109.1.0.13|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.14|global|Vrf200": {
+        "109.1.0.14|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.15|global|Vrf200": {
+        "109.1.0.15|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.16|global|Vrf200": {
+        "109.1.0.16|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.17|global|Vrf200": {
+        "109.1.0.17|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.18|global|Vrf200": {
+        "109.1.0.18|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.19|global|Vrf200": {
+        "109.1.0.19|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.1|global|Vrf200": {
+        "109.1.0.1|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.20|global|Vrf200": {
+        "109.1.0.20|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.21|global|Vrf200": {
+        "109.1.0.21|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.22|global|Vrf200": {
+        "109.1.0.22|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.23|global|Vrf200": {
+        "109.1.0.23|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.24|global|Vrf200": {
+        "109.1.0.24|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.25|global|Vrf200": {
+        "109.1.0.25|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.26|global|Vrf200": {
+        "109.1.0.26|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.27|global|Vrf200": {
+        "109.1.0.27|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.28|global|Vrf200": {
+        "109.1.0.28|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.29|global|Vrf200": {
+        "109.1.0.29|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.2|global|Vrf200": {
+        "109.1.0.2|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.30|global|Vrf200": {
+        "109.1.0.30|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.31|global|Vrf200": {
+        "109.1.0.31|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.32|global|Vrf200": {
+        "109.1.0.32|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.33|global|Vrf200": {
+        "109.1.0.33|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.34|global|Vrf200": {
+        "109.1.0.34|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.35|global|Vrf200": {
+        "109.1.0.35|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.36|global|Vrf200": {
+        "109.1.0.36|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.37|global|Vrf200": {
+        "109.1.0.37|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.38|global|Vrf200": {
+        "109.1.0.38|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.39|global|Vrf200": {
+        "109.1.0.39|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.3|global|Vrf200": {
+        "109.1.0.3|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.40|global|Vrf200": {
+        "109.1.0.40|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.41|global|Vrf200": {
+        "109.1.0.41|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.42|global|Vrf200": {
+        "109.1.0.42|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.43|global|Vrf200": {
+        "109.1.0.43|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.44|global|Vrf200": {
+        "109.1.0.44|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.45|global|Vrf200": {
+        "109.1.0.45|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.46|global|Vrf200": {
+        "109.1.0.46|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.47|global|Vrf200": {
+        "109.1.0.47|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.48|global|Vrf200": {
+        "109.1.0.48|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.49|global|Vrf200": {
+        "109.1.0.49|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.4|global|Vrf200": {
+        "109.1.0.4|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.50|global|Vrf200": {
+        "109.1.0.50|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.51|global|Vrf200": {
+        "109.1.0.51|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.52|global|Vrf200": {
+        "109.1.0.52|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.53|global|Vrf200": {
+        "109.1.0.53|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.54|global|Vrf200": {
+        "109.1.0.54|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.55|global|Vrf200": {
+        "109.1.0.55|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.56|global|Vrf200": {
+        "109.1.0.56|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.57|global|Vrf200": {
+        "109.1.0.57|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.58|global|Vrf200": {
+        "109.1.0.58|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.59|global|Vrf200": {
+        "109.1.0.59|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.5|global|Vrf200": {
+        "109.1.0.5|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.60|global|Vrf200": {
+        "109.1.0.60|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.61|global|Vrf200": {
+        "109.1.0.61|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.62|global|Vrf200": {
+        "109.1.0.62|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.63|global|Vrf200": {
+        "109.1.0.63|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.64|global|Vrf200": {
+        "109.1.0.64|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.65|global|Vrf200": {
+        "109.1.0.65|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.66|global|Vrf200": {
+        "109.1.0.66|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.67|global|Vrf200": {
+        "109.1.0.67|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.68|global|Vrf200": {
+        "109.1.0.68|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.69|global|Vrf200": {
+        "109.1.0.69|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.6|global|Vrf200": {
+        "109.1.0.6|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.70|global|Vrf200": {
+        "109.1.0.70|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.71|global|Vrf200": {
+        "109.1.0.71|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.72|global|Vrf200": {
+        "109.1.0.72|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.73|global|Vrf200": {
+        "109.1.0.73|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.74|global|Vrf200": {
+        "109.1.0.74|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.75|global|Vrf200": {
+        "109.1.0.75|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.76|global|Vrf200": {
+        "109.1.0.76|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.77|global|Vrf200": {
+        "109.1.0.77|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.78|global|Vrf200": {
+        "109.1.0.78|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.79|global|Vrf200": {
+        "109.1.0.79|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.7|global|Vrf200": {
+        "109.1.0.7|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.80|global|Vrf200": {
+        "109.1.0.80|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.81|global|Vrf200": {
+        "109.1.0.81|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.82|global|Vrf200": {
+        "109.1.0.82|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.83|global|Vrf200": {
+        "109.1.0.83|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.84|global|Vrf200": {
+        "109.1.0.84|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.85|global|Vrf200": {
+        "109.1.0.85|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.86|global|Vrf200": {
+        "109.1.0.86|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.87|global|Vrf200": {
+        "109.1.0.87|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.88|global|Vrf200": {
+        "109.1.0.88|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.89|global|Vrf200": {
+        "109.1.0.89|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.8|global|Vrf200": {
+        "109.1.0.8|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.90|global|Vrf200": {
+        "109.1.0.90|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.91|global|Vrf200": {
+        "109.1.0.91|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.92|global|Vrf200": {
+        "109.1.0.92|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.93|global|Vrf200": {
+        "109.1.0.93|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.94|global|Vrf200": {
+        "109.1.0.94|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.95|global|Vrf200": {
+        "109.1.0.95|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.96|global|Vrf200": {
+        "109.1.0.96|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.97|global|Vrf200": {
+        "109.1.0.97|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.98|global|Vrf200": {
+        "109.1.0.98|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.99|global|Vrf200": {
+        "109.1.0.99|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109.1.0.9|global|Vrf200": {
+        "109.1.0.9|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v4"
         }, 
-        "109:1::10|global|Vrf200": {
+        "109:1::10|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::11|global|Vrf200": {
+        "109:1::11|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::12|global|Vrf200": {
+        "109:1::12|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::13|global|Vrf200": {
+        "109:1::13|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::14|global|Vrf200": {
+        "109:1::14|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::15|global|Vrf200": {
+        "109:1::15|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::16|global|Vrf200": {
+        "109:1::16|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::17|global|Vrf200": {
+        "109:1::17|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::18|global|Vrf200": {
+        "109:1::18|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::19|global|Vrf200": {
+        "109:1::19|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::1a|global|Vrf200": {
+        "109:1::1a|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::1b|global|Vrf200": {
+        "109:1::1b|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::1c|global|Vrf200": {
+        "109:1::1c|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::1d|global|Vrf200": {
+        "109:1::1d|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::1e|global|Vrf200": {
+        "109:1::1e|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::1f|global|Vrf200": {
+        "109:1::1f|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::20|global|Vrf200": {
+        "109:1::20|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::21|global|Vrf200": {
+        "109:1::21|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::22|global|Vrf200": {
+        "109:1::22|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::23|global|Vrf200": {
+        "109:1::23|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::24|global|Vrf200": {
+        "109:1::24|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::25|global|Vrf200": {
+        "109:1::25|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::26|global|Vrf200": {
+        "109:1::26|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::27|global|Vrf200": {
+        "109:1::27|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::28|global|Vrf200": {
+        "109:1::28|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::29|global|Vrf200": {
+        "109:1::29|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::2a|global|Vrf200": {
+        "109:1::2a|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::2b|global|Vrf200": {
+        "109:1::2b|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::2c|global|Vrf200": {
+        "109:1::2c|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::2d|global|Vrf200": {
+        "109:1::2d|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::2e|global|Vrf200": {
+        "109:1::2e|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::2f|global|Vrf200": {
+        "109:1::2f|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::2|global|Vrf200": {
+        "109:1::2|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::30|global|Vrf200": {
+        "109:1::30|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::31|global|Vrf200": {
+        "109:1::31|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::32|global|Vrf200": {
+        "109:1::32|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::33|global|Vrf200": {
+        "109:1::33|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::34|global|Vrf200": {
+        "109:1::34|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::35|global|Vrf200": {
+        "109:1::35|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::36|global|Vrf200": {
+        "109:1::36|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::37|global|Vrf200": {
+        "109:1::37|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::38|global|Vrf200": {
+        "109:1::38|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::39|global|Vrf200": {
+        "109:1::39|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::3a|global|Vrf200": {
+        "109:1::3a|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::3b|global|Vrf200": {
+        "109:1::3b|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::3c|global|Vrf200": {
+        "109:1::3c|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::3d|global|Vrf200": {
+        "109:1::3d|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::3e|global|Vrf200": {
+        "109:1::3e|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::3f|global|Vrf200": {
+        "109:1::3f|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::3|global|Vrf200": {
+        "109:1::3|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::40|global|Vrf200": {
+        "109:1::40|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::41|global|Vrf200": {
+        "109:1::41|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::42|global|Vrf200": {
+        "109:1::42|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::43|global|Vrf200": {
+        "109:1::43|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::44|global|Vrf200": {
+        "109:1::44|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::45|global|Vrf200": {
+        "109:1::45|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::46|global|Vrf200": {
+        "109:1::46|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::47|global|Vrf200": {
+        "109:1::47|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::48|global|Vrf200": {
+        "109:1::48|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::49|global|Vrf200": {
+        "109:1::49|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::4a|global|Vrf200": {
+        "109:1::4a|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::4b|global|Vrf200": {
+        "109:1::4b|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::4c|global|Vrf200": {
+        "109:1::4c|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::4d|global|Vrf200": {
+        "109:1::4d|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::4e|global|Vrf200": {
+        "109:1::4e|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::4f|global|Vrf200": {
+        "109:1::4f|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::4|global|Vrf200": {
+        "109:1::4|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::50|global|Vrf200": {
+        "109:1::50|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::51|global|Vrf200": {
+        "109:1::51|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::52|global|Vrf200": {
+        "109:1::52|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::53|global|Vrf200": {
+        "109:1::53|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::54|global|Vrf200": {
+        "109:1::54|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::55|global|Vrf200": {
+        "109:1::55|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::56|global|Vrf200": {
+        "109:1::56|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::57|global|Vrf200": {
+        "109:1::57|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::58|global|Vrf200": {
+        "109:1::58|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::59|global|Vrf200": {
+        "109:1::59|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::5a|global|Vrf200": {
+        "109:1::5a|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::5b|global|Vrf200": {
+        "109:1::5b|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::5c|global|Vrf200": {
+        "109:1::5c|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::5d|global|Vrf200": {
+        "109:1::5d|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::5e|global|Vrf200": {
+        "109:1::5e|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::5f|global|Vrf200": {
+        "109:1::5f|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::5|global|Vrf200": {
+        "109:1::5|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::60|global|Vrf200": {
+        "109:1::60|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::61|global|Vrf200": {
+        "109:1::61|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::62|global|Vrf200": {
+        "109:1::62|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::63|global|Vrf200": {
+        "109:1::63|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::64|global|Vrf200": {
+        "109:1::64|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::65|global|Vrf200": {
+        "109:1::65|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::6|global|Vrf200": {
+        "109:1::6|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::7|global|Vrf200": {
+        "109:1::7|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::8|global|Vrf200": {
+        "109:1::8|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::9|global|Vrf200": {
+        "109:1::9|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::a|global|Vrf200": {
+        "109:1::a|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::b|global|Vrf200": {
+        "109:1::b|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::c|global|Vrf200": {
+        "109:1::c|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::d|global|Vrf200": {
+        "109:1::d|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::e|global|Vrf200": {
+        "109:1::e|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "109:1::f|global|Vrf200": {
+        "109:1::f|global|long-vrf-TG-bfd1": {
             "in_group": "ixia_v6"
         }, 
-        "11.10.100.2|Vrf501": {
+        "11.10.100.2|long-vrf-501": {
             "admin_status": "up", 
             "in_group": "RJ-MC-Aliyun-public"
         }, 
-        "11.10.100.2|global|Vrf501": {
+        "11.10.100.2|global|long-vrf-501": {
             "admin_status": "up", 
             "in_group": "RJ-MC-Aliyun-public"
         }, 
-        "11.10.102.2|Vrf502": {
+        "11.10.102.2|long-vrf-502": {
             "admin_status": "up", 
             "in_group": "RJ-MC-Aliyun"
         }, 
-        "11.10.102.2|global|Vrf502": {
+        "11.10.102.2|global|long-vrf-502": {
             "admin_status": "up", 
             "in_group": "RJ-MC-Aliyun"
         }, 
-        "11.108.100.2|Vrf501": {
+        "11.108.100.2|long-vrf-501": {
             "admin_status": "up", 
             "in_group": "MC-Aliyun-public"
         }, 
-        "11.108.100.2|global|Vrf501": {
+        "11.108.100.2|global|long-vrf-501": {
             "admin_status": "up", 
             "bfd": "true", 
             "detect_multiplier": "3", 
@@ -2136,11 +1524,11 @@
             "rx_timer": "100", 
             "tx_timer": "100"
         }, 
-        "11.108.102.2|Vrf502": {
+        "11.108.102.2|long-vrf-502": {
             "admin_status": "up", 
             "in_group": "MC-Aliyun"
         }, 
-        "11.108.102.2|global|Vrf502": {
+        "11.108.102.2|global|long-vrf-502": {
             "admin_status": "up", 
             "bfd": "true", 
             "detect_multiplier": "3", 
@@ -2148,59 +1536,59 @@
             "rx_timer": "100", 
             "tx_timer": "100"
         }, 
-        "11.109.104.2|Vrf-public": {
+        "11.109.104.2|long-vrf-503": {
             "admin_status": "up", 
             "in_group": "TC1_TO_MC"
         }, 
-        "11.109.104.2|global|Vrf-public": {
+        "11.109.104.2|global|long-vrf-503": {
             "admin_status": "up", 
             "in_group": "TC1_TO_MC"
         }, 
-        "11.109.106.2|Vrf504": {
+        "11.109.106.2|long-vrf-504": {
             "admin_status": "up", 
             "in_group": "TC1_TO_MC"
         }, 
-        "11.109.106.2|global|Vrf504": {
+        "11.109.106.2|global|long-vrf-504": {
             "admin_status": "up", 
             "in_group": "TC1_TO_MC"
         }, 
-        "11.11.100.2|Vrf501": {
+        "11.11.100.2|long-vrf-501": {
             "admin_status": "up", 
             "in_group": "RJ-MC-Aliyun-public"
         }, 
-        "11.11.100.2|global|Vrf501": {
+        "11.11.100.2|global|long-vrf-501": {
             "admin_status": "up", 
             "in_group": "RJ-MC-Aliyun-public"
         }, 
-        "11.11.102.2|Vrf502": {
+        "11.11.102.2|long-vrf-502": {
             "admin_status": "up", 
             "in_group": "RJ-MC-Aliyun"
         }, 
-        "11.11.102.2|global|Vrf502": {
+        "11.11.102.2|global|long-vrf-502": {
             "admin_status": "up", 
             "in_group": "RJ-MC-Aliyun"
         }, 
-        "11.110.104.2|Vrf-public": {
+        "11.110.104.2|long-vrf-503": {
             "admin_status": "up", 
             "in_group": "TC1_TO_MC"
         }, 
-        "11.110.104.2|global|Vrf-public": {
+        "11.110.104.2|global|long-vrf-503": {
             "admin_status": "up", 
             "in_group": "TC1_TO_MC"
         }, 
-        "11.110.106.2|Vrf504": {
+        "11.110.106.2|long-vrf-504": {
             "admin_status": "up", 
             "in_group": "TC1_TO_MC"
         }, 
-        "11.110.106.2|global|Vrf504": {
+        "11.110.106.2|global|long-vrf-504": {
             "admin_status": "up", 
             "in_group": "TC1_TO_MC"
         }, 
-        "11.12.104.2|Vrf-public": {
+        "11.12.104.2|long-vrf-503": {
             "admin_status": "up", 
             "in_group": "MC-Aliyun-public"
         }, 
-        "11.12.104.2|global|Vrf-public": {
+        "11.12.104.2|global|long-vrf-503": {
             "admin_status": "up", 
             "bfd": "true", 
             "detect_multiplier": "3", 
@@ -2208,11 +1596,11 @@
             "rx_timer": "100", 
             "tx_timer": "100"
         }, 
-        "11.12.106.2|Vrf504": {
+        "11.12.106.2|long-vrf-504": {
             "admin_status": "up", 
             "in_group": "MC-Aliyun"
         }, 
-        "11.12.106.2|global|Vrf504": {
+        "11.12.106.2|global|long-vrf-504": {
             "admin_status": "up", 
             "bfd": "true", 
             "detect_multiplier": "3", 
@@ -2220,11 +1608,11 @@
             "rx_timer": "100", 
             "tx_timer": "100"
         }, 
-        "11.16.104.2|Vrf-public": {
+        "11.16.104.2|long-vrf-503": {
             "admin_status": "up", 
             "in_group": "MC-Aliyun-public"
         }, 
-        "11.16.104.2|global|Vrf-public": {
+        "11.16.104.2|global|long-vrf-503": {
             "admin_status": "up", 
             "bfd": "true", 
             "detect_multiplier": "3", 
@@ -2232,11 +1620,11 @@
             "rx_timer": "100", 
             "tx_timer": "100"
         }, 
-        "11.16.106.2|Vrf504": {
+        "11.16.106.2|long-vrf-504": {
             "admin_status": "up", 
             "in_group": "MC-Aliyun"
         }, 
-        "11.16.106.2|global|Vrf504": {
+        "11.16.106.2|global|long-vrf-504": {
             "admin_status": "up", 
             "bfd": "true", 
             "detect_multiplier": "3", 
@@ -2244,11 +1632,11 @@
             "rx_timer": "100", 
             "tx_timer": "100"
         }, 
-        "11.28.104.2|Vrf-public": {
+        "11.28.104.2|long-vrf-503": {
             "admin_status": "up", 
             "in_group": "MC-Aliyun-public"
         }, 
-        "11.28.104.2|global|Vrf-public": {
+        "11.28.104.2|global|long-vrf-503": {
             "admin_status": "up", 
             "bfd": "true", 
             "detect_multiplier": "3", 
@@ -2256,11 +1644,11 @@
             "rx_timer": "100", 
             "tx_timer": "100"
         }, 
-        "11.28.106.2|Vrf504": {
+        "11.28.106.2|long-vrf-504": {
             "admin_status": "up", 
             "in_group": "MC-Aliyun"
         }, 
-        "11.28.106.2|global|Vrf504": {
+        "11.28.106.2|global|long-vrf-504": {
             "admin_status": "up", 
             "bfd": "true", 
             "detect_multiplier": "3", 
@@ -2268,11 +1656,11 @@
             "rx_timer": "100", 
             "tx_timer": "100"
         }, 
-        "11.32.104.2|Vrf-public": {
+        "11.32.104.2|long-vrf-503": {
             "admin_status": "up", 
             "in_group": "MC-Aliyun-public"
         }, 
-        "11.32.104.2|global|Vrf-public": {
+        "11.32.104.2|global|long-vrf-503": {
             "admin_status": "up", 
             "bfd": "true", 
             "detect_multiplier": "3", 
@@ -2280,11 +1668,11 @@
             "rx_timer": "100", 
             "tx_timer": "100"
         }, 
-        "11.32.106.2|Vrf504": {
+        "11.32.106.2|long-vrf-504": {
             "admin_status": "up", 
             "in_group": "MC-Aliyun"
         }, 
-        "11.32.106.2|global|Vrf504": {
+        "11.32.106.2|global|long-vrf-504": {
             "admin_status": "up", 
             "bfd": "true", 
             "detect_multiplier": "3", 
@@ -2292,11 +1680,11 @@
             "rx_timer": "100", 
             "tx_timer": "100"
         }, 
-        "11.44.104.2|Vrf-public": {
+        "11.44.104.2|long-vrf-503": {
             "admin_status": "up", 
             "in_group": "MC-Aliyun-public"
         }, 
-        "11.44.104.2|global|Vrf-public": {
+        "11.44.104.2|global|long-vrf-503": {
             "admin_status": "up", 
             "bfd": "true", 
             "detect_multiplier": "3", 
@@ -2304,11 +1692,11 @@
             "rx_timer": "100", 
             "tx_timer": "100"
         }, 
-        "11.44.106.2|Vrf504": {
+        "11.44.106.2|long-vrf-504": {
             "admin_status": "up", 
             "in_group": "MC-Aliyun"
         }, 
-        "11.44.106.2|global|Vrf504": {
+        "11.44.106.2|global|long-vrf-504": {
             "admin_status": "up", 
             "bfd": "true", 
             "detect_multiplier": "3", 
@@ -2316,11 +1704,11 @@
             "rx_timer": "100", 
             "tx_timer": "100"
         }, 
-        "11.60.104.2|Vrf-public": {
+        "11.60.104.2|long-vrf-503": {
             "admin_status": "up", 
             "in_group": "MC-Aliyun-public"
         }, 
-        "11.60.104.2|global|Vrf-public": {
+        "11.60.104.2|global|long-vrf-503": {
             "admin_status": "up", 
             "bfd": "true", 
             "detect_multiplier": "3", 
@@ -2328,11 +1716,11 @@
             "rx_timer": "100", 
             "tx_timer": "100"
         }, 
-        "11.60.106.2|Vrf504": {
+        "11.60.106.2|long-vrf-504": {
             "admin_status": "up", 
             "in_group": "MC-Aliyun"
         }, 
-        "11.60.106.2|global|Vrf504": {
+        "11.60.106.2|global|long-vrf-504": {
             "admin_status": "up", 
             "bfd": "true", 
             "detect_multiplier": "3", 
@@ -2340,43 +1728,43 @@
             "rx_timer": "100", 
             "tx_timer": "100"
         }, 
-        "11.8.100.2|Vrf501": {
+        "11.8.100.2|long-vrf-501": {
             "admin_status": "up", 
             "in_group": "RJ-MC-Aliyun-public"
         }, 
-        "11.8.100.2|global|Vrf501": {
+        "11.8.100.2|global|long-vrf-501": {
             "admin_status": "up", 
             "in_group": "RJ-MC-Aliyun-public"
         }, 
-        "11.8.102.2|Vrf502": {
+        "11.8.102.2|long-vrf-502": {
             "admin_status": "up", 
             "in_group": "RJ-MC-Aliyun"
         }, 
-        "11.8.102.2|global|Vrf502": {
+        "11.8.102.2|global|long-vrf-502": {
             "admin_status": "up", 
             "in_group": "RJ-MC-Aliyun"
         }, 
-        "11.9.100.2|Vrf501": {
+        "11.9.100.2|long-vrf-501": {
             "admin_status": "up", 
             "in_group": "RJ-MC-Aliyun-public"
         }, 
-        "11.9.100.2|global|Vrf501": {
+        "11.9.100.2|global|long-vrf-501": {
             "admin_status": "up", 
             "in_group": "RJ-MC-Aliyun-public"
         }, 
-        "11.9.102.2|Vrf502": {
+        "11.9.102.2|long-vrf-502": {
             "admin_status": "up", 
             "in_group": "RJ-MC-Aliyun"
         }, 
-        "11.9.102.2|global|Vrf502": {
+        "11.9.102.2|global|long-vrf-502": {
             "admin_status": "up", 
             "in_group": "RJ-MC-Aliyun"
         }, 
-        "11.92.100.2|Vrf501": {
+        "11.92.100.2|long-vrf-501": {
             "admin_status": "up", 
             "in_group": "MC-Aliyun-public"
         }, 
-        "11.92.100.2|global|Vrf501": {
+        "11.92.100.2|global|long-vrf-501": {
             "admin_status": "up", 
             "bfd": "true", 
             "detect_multiplier": "3", 
@@ -2384,11 +1772,11 @@
             "rx_timer": "100", 
             "tx_timer": "100"
         }, 
-        "11.92.102.2|Vrf502": {
+        "11.92.102.2|long-vrf-502": {
             "admin_status": "up", 
             "in_group": "MC-Aliyun"
         }, 
-        "11.92.102.2|global|Vrf502": {
+        "11.92.102.2|global|long-vrf-502": {
             "admin_status": "up", 
             "bfd": "true", 
             "detect_multiplier": "3", 
@@ -2396,11 +1784,11 @@
             "rx_timer": "100", 
             "tx_timer": "100"
         }, 
-        "11.96.100.1|Vrf501": {
+        "11.96.100.1|long-vrf-501": {
             "admin_status": "up", 
             "in_group": "MC-Aliyun-public"
         }, 
-        "11.96.100.2|global|Vrf501": {
+        "11.96.100.2|global|long-vrf-501": {
             "admin_status": "up", 
             "bfd": "true", 
             "detect_multiplier": "3", 
@@ -2408,11 +1796,11 @@
             "rx_timer": "100", 
             "tx_timer": "100"
         }, 
-        "11.96.102.2|Vrf502": {
+        "11.96.102.2|long-vrf-502": {
             "admin_status": "up", 
             "in_group": "MC-Aliyun"
         }, 
-        "11.96.102.2|global|Vrf502": {
+        "11.96.102.2|global|long-vrf-502": {
             "admin_status": "up", 
             "bfd": "true", 
             "detect_multiplier": "3", 
@@ -2420,1217 +1808,617 @@
             "rx_timer": "100", 
             "tx_timer": "100"
         }, 
-        "110.0.0.100|global|Vrf201": {
+        "110.2.0.100|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.101|global|Vrf201": {
+        "110.2.0.101|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.10|global|Vrf201": {
+        "110.2.0.10|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.11|global|Vrf201": {
+        "110.2.0.11|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.12|global|Vrf201": {
+        "110.2.0.12|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.13|global|Vrf201": {
+        "110.2.0.13|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.14|global|Vrf201": {
+        "110.2.0.14|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.15|global|Vrf201": {
+        "110.2.0.15|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.16|global|Vrf201": {
+        "110.2.0.16|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.17|global|Vrf201": {
+        "110.2.0.17|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.18|global|Vrf201": {
+        "110.2.0.18|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.19|global|Vrf201": {
+        "110.2.0.19|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.20|global|Vrf201": {
+        "110.2.0.20|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.21|global|Vrf201": {
+        "110.2.0.21|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.22|global|Vrf201": {
+        "110.2.0.22|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.23|global|Vrf201": {
+        "110.2.0.23|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.24|global|Vrf201": {
+        "110.2.0.24|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.25|global|Vrf201": {
+        "110.2.0.25|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.26|global|Vrf201": {
+        "110.2.0.26|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.27|global|Vrf201": {
+        "110.2.0.27|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.28|global|Vrf201": {
+        "110.2.0.28|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.29|global|Vrf201": {
+        "110.2.0.29|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.2|global|Vrf201": {
+        "110.2.0.2|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.30|global|Vrf201": {
+        "110.2.0.30|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.31|global|Vrf201": {
+        "110.2.0.31|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.32|global|Vrf201": {
+        "110.2.0.32|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.33|global|Vrf201": {
+        "110.2.0.33|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.34|global|Vrf201": {
+        "110.2.0.34|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.35|global|Vrf201": {
+        "110.2.0.35|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.36|global|Vrf201": {
+        "110.2.0.36|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.37|global|Vrf201": {
+        "110.2.0.37|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.38|global|Vrf201": {
+        "110.2.0.38|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.39|global|Vrf201": {
+        "110.2.0.39|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.3|global|Vrf201": {
+        "110.2.0.3|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.40|global|Vrf201": {
+        "110.2.0.40|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.41|global|Vrf201": {
+        "110.2.0.41|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.42|global|Vrf201": {
+        "110.2.0.42|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.43|global|Vrf201": {
+        "110.2.0.43|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.44|global|Vrf201": {
+        "110.2.0.44|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.45|global|Vrf201": {
+        "110.2.0.45|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.46|global|Vrf201": {
+        "110.2.0.46|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.47|global|Vrf201": {
+        "110.2.0.47|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.48|global|Vrf201": {
+        "110.2.0.48|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.49|global|Vrf201": {
+        "110.2.0.49|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.4|global|Vrf201": {
+        "110.2.0.4|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.50|global|Vrf201": {
+        "110.2.0.50|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.51|global|Vrf201": {
+        "110.2.0.51|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.52|global|Vrf201": {
+        "110.2.0.52|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.53|global|Vrf201": {
+        "110.2.0.53|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.54|global|Vrf201": {
+        "110.2.0.54|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.55|global|Vrf201": {
+        "110.2.0.55|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.56|global|Vrf201": {
+        "110.2.0.56|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.57|global|Vrf201": {
+        "110.2.0.57|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.58|global|Vrf201": {
+        "110.2.0.58|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.59|global|Vrf201": {
+        "110.2.0.59|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.5|global|Vrf201": {
+        "110.2.0.5|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.60|global|Vrf201": {
+        "110.2.0.60|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.61|global|Vrf201": {
+        "110.2.0.61|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.62|global|Vrf201": {
+        "110.2.0.62|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.63|global|Vrf201": {
+        "110.2.0.63|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.64|global|Vrf201": {
+        "110.2.0.64|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.65|global|Vrf201": {
+        "110.2.0.65|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.66|global|Vrf201": {
+        "110.2.0.66|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.67|global|Vrf201": {
+        "110.2.0.67|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.68|global|Vrf201": {
+        "110.2.0.68|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.69|global|Vrf201": {
+        "110.2.0.69|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.6|global|Vrf201": {
+        "110.2.0.6|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.70|global|Vrf201": {
+        "110.2.0.70|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.71|global|Vrf201": {
+        "110.2.0.71|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.72|global|Vrf201": {
+        "110.2.0.72|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.73|global|Vrf201": {
+        "110.2.0.73|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.74|global|Vrf201": {
+        "110.2.0.74|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.75|global|Vrf201": {
+        "110.2.0.75|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.76|global|Vrf201": {
+        "110.2.0.76|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.77|global|Vrf201": {
+        "110.2.0.77|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.78|global|Vrf201": {
+        "110.2.0.78|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.79|global|Vrf201": {
+        "110.2.0.79|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.7|global|Vrf201": {
+        "110.2.0.7|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.80|global|Vrf201": {
+        "110.2.0.80|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.81|global|Vrf201": {
+        "110.2.0.81|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.82|global|Vrf201": {
+        "110.2.0.82|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.83|global|Vrf201": {
+        "110.2.0.83|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.84|global|Vrf201": {
+        "110.2.0.84|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.85|global|Vrf201": {
+        "110.2.0.85|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.86|global|Vrf201": {
+        "110.2.0.86|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.87|global|Vrf201": {
+        "110.2.0.87|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.88|global|Vrf201": {
+        "110.2.0.88|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.89|global|Vrf201": {
+        "110.2.0.89|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.8|global|Vrf201": {
+        "110.2.0.8|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.90|global|Vrf201": {
+        "110.2.0.90|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.91|global|Vrf201": {
+        "110.2.0.91|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.92|global|Vrf201": {
+        "110.2.0.92|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.93|global|Vrf201": {
+        "110.2.0.93|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.94|global|Vrf201": {
+        "110.2.0.94|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.95|global|Vrf201": {
+        "110.2.0.95|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.96|global|Vrf201": {
+        "110.2.0.96|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.97|global|Vrf201": {
+        "110.2.0.97|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.98|global|Vrf201": {
+        "110.2.0.98|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.99|global|Vrf201": {
+        "110.2.0.99|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.0.0.9|global|Vrf201": {
+        "110.2.0.9|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
         }, 
-        "110.2.0.100|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.101|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.10|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.11|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.12|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.13|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.14|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.15|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.16|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.17|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.18|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.19|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.20|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.21|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.22|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.23|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.24|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.25|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.26|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.27|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.28|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.29|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.2|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.30|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.31|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.32|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.33|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.34|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.35|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.36|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.37|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.38|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.39|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.3|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.40|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.41|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.42|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.43|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.44|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.45|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.46|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.47|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.48|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.49|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.4|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.50|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.51|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.52|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.53|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.54|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.55|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.56|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.57|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.58|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.59|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.5|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.60|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.61|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.62|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.63|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.64|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.65|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.66|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.67|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.68|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.69|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.6|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.70|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.71|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.72|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.73|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.74|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.75|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.76|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.77|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.78|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.79|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.7|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.80|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.81|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.82|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.83|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.84|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.85|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.86|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.87|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.88|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.89|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.8|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.90|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.91|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.92|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.93|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.94|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.95|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.96|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.97|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.98|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.99|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110.2.0.9|global|Vrf201": {
-            "in_group": "ixia2_v4"
-        }, 
-        "110:2::10|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::11|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::12|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::13|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::14|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::15|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::16|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::17|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::18|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::19|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::1a|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::1b|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::1c|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::1d|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::1e|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::1f|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::20|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::21|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::22|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::23|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::24|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::25|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::26|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::27|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::28|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::29|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::2a|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::2b|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::2c|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::2d|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::2e|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::2f|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::2|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::30|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::31|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::32|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::33|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::34|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::35|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::36|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::37|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::38|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::39|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::3a|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::3b|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::3c|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::3d|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::3e|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::3f|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::3|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::40|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::41|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::42|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::43|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::44|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::45|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::46|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::47|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::48|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::49|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::4a|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::4b|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::4c|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::4d|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::4e|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::4f|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::4|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::50|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::51|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::52|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::53|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::54|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::55|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::56|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::57|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::58|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::59|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::5a|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::5b|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::5c|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::5d|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::5e|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::5f|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::5|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::60|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::61|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::62|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::63|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::64|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::65|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::6|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::7|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::8|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::9|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::a|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::b|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::c|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::d|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::e|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110:2::f|global|Vrf201": {
-            "in_group": "ixia2_v6"
-        }, 
-        "110::10|global|Vrf201": {
+        "110:2::10|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::11|global|Vrf201": {
+        "110:2::11|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::12|global|Vrf201": {
+        "110:2::12|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::13|global|Vrf201": {
+        "110:2::13|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::14|global|Vrf201": {
+        "110:2::14|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::15|global|Vrf201": {
+        "110:2::15|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::16|global|Vrf201": {
+        "110:2::16|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::17|global|Vrf201": {
+        "110:2::17|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::18|global|Vrf201": {
+        "110:2::18|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::19|global|Vrf201": {
+        "110:2::19|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::1a|global|Vrf201": {
+        "110:2::1a|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::1b|global|Vrf201": {
+        "110:2::1b|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::1c|global|Vrf201": {
+        "110:2::1c|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::1d|global|Vrf201": {
+        "110:2::1d|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::1e|global|Vrf201": {
+        "110:2::1e|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::1f|global|Vrf201": {
+        "110:2::1f|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::20|global|Vrf201": {
+        "110:2::20|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::21|global|Vrf201": {
+        "110:2::21|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::22|global|Vrf201": {
+        "110:2::22|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::23|global|Vrf201": {
+        "110:2::23|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::24|global|Vrf201": {
+        "110:2::24|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::25|global|Vrf201": {
+        "110:2::25|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::26|global|Vrf201": {
+        "110:2::26|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::27|global|Vrf201": {
+        "110:2::27|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::28|global|Vrf201": {
+        "110:2::28|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::29|global|Vrf201": {
+        "110:2::29|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::2a|global|Vrf201": {
+        "110:2::2a|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::2b|global|Vrf201": {
+        "110:2::2b|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::2c|global|Vrf201": {
+        "110:2::2c|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::2d|global|Vrf201": {
+        "110:2::2d|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::2e|global|Vrf201": {
+        "110:2::2e|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::2f|global|Vrf201": {
+        "110:2::2f|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::2|global|Vrf201": {
+        "110:2::2|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::30|global|Vrf201": {
+        "110:2::30|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::31|global|Vrf201": {
+        "110:2::31|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::32|global|Vrf201": {
+        "110:2::32|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::33|global|Vrf201": {
+        "110:2::33|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::34|global|Vrf201": {
+        "110:2::34|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::35|global|Vrf201": {
+        "110:2::35|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::36|global|Vrf201": {
+        "110:2::36|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::37|global|Vrf201": {
+        "110:2::37|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::38|global|Vrf201": {
+        "110:2::38|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::39|global|Vrf201": {
+        "110:2::39|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::3a|global|Vrf201": {
+        "110:2::3a|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::3b|global|Vrf201": {
+        "110:2::3b|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::3c|global|Vrf201": {
+        "110:2::3c|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::3d|global|Vrf201": {
+        "110:2::3d|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::3e|global|Vrf201": {
+        "110:2::3e|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::3f|global|Vrf201": {
+        "110:2::3f|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::3|global|Vrf201": {
+        "110:2::3|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::40|global|Vrf201": {
+        "110:2::40|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::41|global|Vrf201": {
+        "110:2::41|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::42|global|Vrf201": {
+        "110:2::42|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::43|global|Vrf201": {
+        "110:2::43|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::44|global|Vrf201": {
+        "110:2::44|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::45|global|Vrf201": {
+        "110:2::45|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::46|global|Vrf201": {
+        "110:2::46|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::47|global|Vrf201": {
+        "110:2::47|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::48|global|Vrf201": {
+        "110:2::48|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::49|global|Vrf201": {
+        "110:2::49|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::4a|global|Vrf201": {
+        "110:2::4a|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::4b|global|Vrf201": {
+        "110:2::4b|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::4c|global|Vrf201": {
+        "110:2::4c|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::4d|global|Vrf201": {
+        "110:2::4d|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::4e|global|Vrf201": {
+        "110:2::4e|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::4f|global|Vrf201": {
+        "110:2::4f|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::4|global|Vrf201": {
+        "110:2::4|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::50|global|Vrf201": {
+        "110:2::50|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::51|global|Vrf201": {
+        "110:2::51|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::52|global|Vrf201": {
+        "110:2::52|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::53|global|Vrf201": {
+        "110:2::53|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::54|global|Vrf201": {
+        "110:2::54|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::55|global|Vrf201": {
+        "110:2::55|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::56|global|Vrf201": {
+        "110:2::56|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::57|global|Vrf201": {
+        "110:2::57|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::58|global|Vrf201": {
+        "110:2::58|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::59|global|Vrf201": {
+        "110:2::59|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::5a|global|Vrf201": {
+        "110:2::5a|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::5b|global|Vrf201": {
+        "110:2::5b|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::5c|global|Vrf201": {
+        "110:2::5c|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::5d|global|Vrf201": {
+        "110:2::5d|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::5e|global|Vrf201": {
+        "110:2::5e|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::5f|global|Vrf201": {
+        "110:2::5f|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::5|global|Vrf201": {
+        "110:2::5|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::60|global|Vrf201": {
+        "110:2::60|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::61|global|Vrf201": {
+        "110:2::61|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::62|global|Vrf201": {
+        "110:2::62|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::63|global|Vrf201": {
+        "110:2::63|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::64|global|Vrf201": {
+        "110:2::64|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::65|global|Vrf201": {
+        "110:2::65|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::6|global|Vrf201": {
+        "110:2::6|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::7|global|Vrf201": {
+        "110:2::7|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::8|global|Vrf201": {
+        "110:2::8|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::9|global|Vrf201": {
+        "110:2::9|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::a|global|Vrf201": {
+        "110:2::a|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::b|global|Vrf201": {
+        "110:2::b|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::c|global|Vrf201": {
+        "110:2::c|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::d|global|Vrf201": {
+        "110:2::d|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::e|global|Vrf201": {
+        "110:2::e|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "110::f|global|Vrf201": {
+        "110:2::f|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v6"
         }, 
-        "192:1::179|global|Vrf101": {
+        "192:1::179|global|long-vrf-101": {
             "asn": "179", 
             "bfd": "true", 
             "detect_multiplier": "3", 
             "rx_timer": "500", 
             "tx_timer": "500"
         }, 
-        "192:1::179|ipv6|Vrf101": {
+        "192:1::179|ipv6|long-vrf-101": {
             "activate": "true"
         }, 
-        "MC-Aliyun-public-v6|Vrf-public": {
+        "MC-Aliyun-public-v6|long-vrf-503": {
             "activate": "true", 
             "addr_family": "ipv6", 
             "admin_status": "up", 
@@ -3639,17 +2427,17 @@
             "peer_group": "true", 
             "soft_reconfiguration_inbound": "true"
         }, 
-        "MC-Aliyun-public-v6|global|Vrf-public": {
+        "MC-Aliyun-public-v6|global|long-vrf-503": {
             "admin_status": "up", 
             "advertisement_interval": "0", 
             "asn": "4200015155", 
             "peer_group": "true"
         }, 
-        "MC-Aliyun-public-v6|ipv6|Vrf-public": {
+        "MC-Aliyun-public-v6|ipv6|long-vrf-503": {
             "activate": "true", 
             "soft_reconfiguration_inbound": "true"
         }, 
-        "MC-Aliyun-public|Vrf-public": {
+        "MC-Aliyun-public|long-vrf-503": {
             "activate": "true", 
             "addr_family": "ipv4", 
             "admin_status": "up", 
@@ -3658,7 +2446,7 @@
             "peer_group": "true", 
             "soft_reconfiguration_inbound": "true"
         }, 
-        "MC-Aliyun-public|Vrf501": {
+        "MC-Aliyun-public|long-vrf-501": {
             "activate": "true", 
             "addr_family": "ipv4", 
             "admin_status": "up", 
@@ -3667,7 +2455,7 @@
             "peer_group": "true", 
             "soft_reconfiguration_inbound": "true"
         }, 
-        "MC-Aliyun-public|Vrf502": {
+        "MC-Aliyun-public|long-vrf-502": {
             "activate": "true", 
             "addr_family": "ipv4", 
             "admin_status": "up", 
@@ -3676,37 +2464,37 @@
             "peer_group": "true", 
             "soft_reconfiguration_inbound": "true"
         }, 
-        "MC-Aliyun-public|global|Vrf-public": {
+        "MC-Aliyun-public|global|long-vrf-503": {
             "admin_status": "up", 
             "advertisement_interval": "0", 
             "asn": "4200015155", 
             "peer_group": "true"
         }, 
-        "MC-Aliyun-public|global|Vrf501": {
+        "MC-Aliyun-public|global|long-vrf-501": {
             "admin_status": "up", 
             "advertisement_interval": "0", 
             "asn": "4200015155", 
             "peer_group": "true"
         }, 
-        "MC-Aliyun-public|global|Vrf502": {
+        "MC-Aliyun-public|global|long-vrf-502": {
             "admin_status": "up", 
             "advertisement_interval": "0", 
             "asn": "4200015155", 
             "peer_group": "true"
         }, 
-        "MC-Aliyun-public|ipv4|Vrf-public": {
+        "MC-Aliyun-public|ipv4|long-vrf-503": {
             "activate": "true", 
             "soft_reconfiguration_inbound": "true"
         }, 
-        "MC-Aliyun-public|ipv4|Vrf501": {
+        "MC-Aliyun-public|ipv4|long-vrf-501": {
             "activate": "true", 
             "soft_reconfiguration_inbound": "true"
         }, 
-        "MC-Aliyun-public|ipv4|Vrf502": {
+        "MC-Aliyun-public|ipv4|long-vrf-502": {
             "activate": "true", 
             "soft_reconfiguration_inbound": "true"
         }, 
-        "MC-Aliyun-v6|Vrf501": {
+        "MC-Aliyun-v6|long-vrf-501": {
             "activate": "true", 
             "addr_family": "ipv6", 
             "admin_status": "up", 
@@ -3715,7 +2503,7 @@
             "peer_group": "true", 
             "soft_reconfiguration_inbound": "true"
         }, 
-        "MC-Aliyun-v6|Vrf502": {
+        "MC-Aliyun-v6|long-vrf-502": {
             "activate": "true", 
             "addr_family": "ipv6", 
             "admin_status": "up", 
@@ -3724,7 +2512,7 @@
             "peer_group": "true", 
             "soft_reconfiguration_inbound": "true"
         }, 
-        "MC-Aliyun-v6|Vrf504": {
+        "MC-Aliyun-v6|long-vrf-504": {
             "activate": "true", 
             "addr_family": "ipv6", 
             "admin_status": "up", 
@@ -3733,37 +2521,37 @@
             "peer_group": "true", 
             "soft_reconfiguration_inbound": "true"
         }, 
-        "MC-Aliyun-v6|global|Vrf501": {
+        "MC-Aliyun-v6|global|long-vrf-501": {
             "admin_status": "up", 
             "advertisement_interval": "0", 
             "asn": "4200015155", 
             "peer_group": "true"
         }, 
-        "MC-Aliyun-v6|global|Vrf502": {
+        "MC-Aliyun-v6|global|long-vrf-502": {
             "admin_status": "up", 
             "advertisement_interval": "0", 
             "asn": "4200015155", 
             "peer_group": "true"
         }, 
-        "MC-Aliyun-v6|global|Vrf504": {
+        "MC-Aliyun-v6|global|long-vrf-504": {
             "admin_status": "up", 
             "advertisement_interval": "0", 
             "asn": "4200015155", 
             "peer_group": "true"
         }, 
-        "MC-Aliyun-v6|ipv6|Vrf501": {
+        "MC-Aliyun-v6|ipv6|long-vrf-501": {
             "activate": "true", 
             "soft_reconfiguration_inbound": "true"
         }, 
-        "MC-Aliyun-v6|ipv6|Vrf502": {
+        "MC-Aliyun-v6|ipv6|long-vrf-502": {
             "activate": "true", 
             "soft_reconfiguration_inbound": "true"
         }, 
-        "MC-Aliyun-v6|ipv6|Vrf504": {
+        "MC-Aliyun-v6|ipv6|long-vrf-504": {
             "activate": "true", 
             "soft_reconfiguration_inbound": "true"
         }, 
-        "MC-Aliyun|Vrf501": {
+        "MC-Aliyun|long-vrf-501": {
             "activate": "true", 
             "addr_family": "ipv4", 
             "admin_status": "up", 
@@ -3772,7 +2560,7 @@
             "peer_group": "true", 
             "soft_reconfiguration_inbound": "true"
         }, 
-        "MC-Aliyun|Vrf502": {
+        "MC-Aliyun|long-vrf-502": {
             "activate": "true", 
             "addr_family": "ipv4", 
             "admin_status": "up", 
@@ -3781,7 +2569,7 @@
             "peer_group": "true", 
             "soft_reconfiguration_inbound": "true"
         }, 
-        "MC-Aliyun|Vrf504": {
+        "MC-Aliyun|long-vrf-504": {
             "activate": "true", 
             "addr_family": "ipv4", 
             "admin_status": "up", 
@@ -3790,37 +2578,37 @@
             "peer_group": "true", 
             "soft_reconfiguration_inbound": "true"
         }, 
-        "MC-Aliyun|global|Vrf501": {
+        "MC-Aliyun|global|long-vrf-501": {
             "admin_status": "up", 
             "advertisement_interval": "0", 
             "asn": "4200015155", 
             "peer_group": "true"
         }, 
-        "MC-Aliyun|global|Vrf502": {
+        "MC-Aliyun|global|long-vrf-502": {
             "admin_status": "up", 
             "advertisement_interval": "0", 
             "asn": "4200015155", 
             "peer_group": "true"
         }, 
-        "MC-Aliyun|global|Vrf504": {
+        "MC-Aliyun|global|long-vrf-504": {
             "admin_status": "up", 
             "advertisement_interval": "0", 
             "asn": "4200015155", 
             "peer_group": "true"
         }, 
-        "MC-Aliyun|ipv4|Vrf501": {
+        "MC-Aliyun|ipv4|long-vrf-501": {
             "activate": "true", 
             "soft_reconfiguration_inbound": "true"
         }, 
-        "MC-Aliyun|ipv4|Vrf502": {
+        "MC-Aliyun|ipv4|long-vrf-502": {
             "activate": "true", 
             "soft_reconfiguration_inbound": "true"
         }, 
-        "MC-Aliyun|ipv4|Vrf504": {
+        "MC-Aliyun|ipv4|long-vrf-504": {
             "activate": "true", 
             "soft_reconfiguration_inbound": "true"
         }, 
-        "RJ-MC-Aliyun-public-public|Vrf501": {
+        "RJ-MC-Aliyun-public-public|long-vrf-501": {
             "activate": "true", 
             "addr_family": "ipv4", 
             "admin_status": "up", 
@@ -3829,68 +2617,17 @@
             "peer_group": "true", 
             "soft_reconfiguration_inbound": "true"
         }, 
-        "RJ-MC-Aliyun-public-v6|global|Vrf501": {
+        "RJ-MC-Aliyun-public-v6|global|long-vrf-501": {
             "admin_status": "up", 
             "advertisement_interval": "0", 
             "asn": "4200015157", 
             "peer_group": "true"
         }, 
-        "RJ-MC-Aliyun-public-v6|ipv6|Vrf501": {
+        "RJ-MC-Aliyun-public-v6|ipv6|long-vrf-501": {
             "activate": "true", 
             "soft_reconfiguration_inbound": "true"
         }, 
-        "RJ-MC-Aliyun-public|global|Vrf501": {
-            "admin_status": "up", 
-            "advertisement_interval": "0", 
-            "asn": "4200015157", 
-            "bfd": "true", 
-            "detect_multiplier": "3", 
-            "peer_group": "true", 
-            "rx_timer": "100", 
-            "tx_timer": "100"
-        }, 
-        "RJ-MC-Aliyun-public|ipv4|Vrf501": {
-            "activate": "true", 
-            "soft_reconfiguration_inbound": "true"
-        }, 
-        "RJ-MC-Aliyun-v6|Vrf501": {
-            "activate": "true", 
-            "addr_family": "ipv6", 
-            "admin_status": "up", 
-            "advertisement_interval": "0", 
-            "asn": "4200015157", 
-            "peer_group": "true", 
-            "soft_reconfiguration_inbound": "true"
-        }, 
-        "RJ-MC-Aliyun-v6|Vrf502": {
-            "activate": "true", 
-            "addr_family": "ipv6", 
-            "admin_status": "up", 
-            "advertisement_interval": "0", 
-            "asn": "4200015157", 
-            "peer_group": "true", 
-            "soft_reconfiguration_inbound": "true"
-        }, 
-        "RJ-MC-Aliyun-v6|global|Vrf502": {
-            "admin_status": "up", 
-            "advertisement_interval": "0", 
-            "asn": "4200015157", 
-            "peer_group": "true"
-        }, 
-        "RJ-MC-Aliyun-v6|ipv6|Vrf502": {
-            "activate": "true", 
-            "soft_reconfiguration_inbound": "true"
-        }, 
-        "RJ-MC-Aliyun|Vrf502": {
-            "activate": "true", 
-            "addr_family": "ipv4", 
-            "admin_status": "up", 
-            "advertisement_interval": "0", 
-            "asn": "4200015157", 
-            "peer_group": "true", 
-            "soft_reconfiguration_inbound": "true"
-        }, 
-        "RJ-MC-Aliyun|global|Vrf502": {
+        "RJ-MC-Aliyun-public|global|long-vrf-501": {
             "admin_status": "up", 
             "advertisement_interval": "0", 
             "asn": "4200015157", 
@@ -3900,11 +2637,62 @@
             "rx_timer": "200", 
             "tx_timer": "200"
         }, 
-        "RJ-MC-Aliyun|ipv4|Vrf502": {
+        "RJ-MC-Aliyun-public|ipv4|long-vrf-501": {
             "activate": "true", 
             "soft_reconfiguration_inbound": "true"
         }, 
-        "TC1_TO_MC-v6|Vrf-public": {
+        "RJ-MC-Aliyun-v6|long-vrf-501": {
+            "activate": "true", 
+            "addr_family": "ipv6", 
+            "admin_status": "up", 
+            "advertisement_interval": "0", 
+            "asn": "4200015157", 
+            "peer_group": "true", 
+            "soft_reconfiguration_inbound": "true"
+        }, 
+        "RJ-MC-Aliyun-v6|long-vrf-502": {
+            "activate": "true", 
+            "addr_family": "ipv6", 
+            "admin_status": "up", 
+            "advertisement_interval": "0", 
+            "asn": "4200015157", 
+            "peer_group": "true", 
+            "soft_reconfiguration_inbound": "true"
+        }, 
+        "RJ-MC-Aliyun-v6|global|long-vrf-502": {
+            "admin_status": "up", 
+            "advertisement_interval": "0", 
+            "asn": "4200015157", 
+            "peer_group": "true"
+        }, 
+        "RJ-MC-Aliyun-v6|ipv6|long-vrf-502": {
+            "activate": "true", 
+            "soft_reconfiguration_inbound": "true"
+        }, 
+        "RJ-MC-Aliyun|long-vrf-502": {
+            "activate": "true", 
+            "addr_family": "ipv4", 
+            "admin_status": "up", 
+            "advertisement_interval": "0", 
+            "asn": "4200015157", 
+            "peer_group": "true", 
+            "soft_reconfiguration_inbound": "true"
+        }, 
+        "RJ-MC-Aliyun|global|long-vrf-502": {
+            "admin_status": "up", 
+            "advertisement_interval": "0", 
+            "asn": "4200015157", 
+            "bfd": "true", 
+            "detect_multiplier": "3", 
+            "peer_group": "true", 
+            "rx_timer": "100", 
+            "tx_timer": "100"
+        }, 
+        "RJ-MC-Aliyun|ipv4|long-vrf-502": {
+            "activate": "true", 
+            "soft_reconfiguration_inbound": "true"
+        }, 
+        "TC1_TO_MC-v6|long-vrf-503": {
             "activate": "true", 
             "addr_family": "ipv4", 
             "admin_status": "up", 
@@ -3913,7 +2701,7 @@
             "peer_group": "true", 
             "soft_reconfiguration_inbound": "true"
         }, 
-        "TC1_TO_MC-v6|Vrf504": {
+        "TC1_TO_MC-v6|long-vrf-504": {
             "activate": "true", 
             "addr_family": "ipv4", 
             "admin_status": "up", 
@@ -3922,29 +2710,29 @@
             "peer_group": "true", 
             "soft_reconfiguration_inbound": "true"
         }, 
-        "TC1_TO_MC-v6|global|Vrf-public": {
+        "TC1_TO_MC-v6|global|long-vrf-503": {
             "admin_status": "up", 
             "advertisement_interval": "0", 
             "asn": "4200015156", 
             "peer_group": "true"
         }, 
-        "TC1_TO_MC-v6|global|Vrf504": {
+        "TC1_TO_MC-v6|global|long-vrf-504": {
             "admin_status": "up", 
             "advertisement_interval": "0", 
             "asn": "4200015156", 
             "peer_group": "true"
         }, 
-        "TC1_TO_MC-v6|ipv6|Vrf-public": {
+        "TC1_TO_MC-v6|ipv6|long-vrf-503": {
             "activate": "true", 
             "route_map_out": "zlydeny", 
             "soft_reconfiguration_inbound": "true"
         }, 
-        "TC1_TO_MC-v6|ipv6|Vrf504": {
+        "TC1_TO_MC-v6|ipv6|long-vrf-504": {
             "activate": "true", 
             "route_map_out": "zlydeny", 
             "soft_reconfiguration_inbound": "true"
         }, 
-        "TC1_TO_MC|Vrf-public": {
+        "TC1_TO_MC|long-vrf-503": {
             "activate": "true", 
             "addr_family": "ipv4", 
             "admin_status": "up", 
@@ -3953,7 +2741,7 @@
             "peer_group": "true", 
             "soft_reconfiguration_inbound": "true"
         }, 
-        "TC1_TO_MC|Vrf504": {
+        "TC1_TO_MC|long-vrf-504": {
             "activate": "true", 
             "addr_family": "ipv4", 
             "admin_status": "up", 
@@ -3962,7 +2750,7 @@
             "peer_group": "true", 
             "soft_reconfiguration_inbound": "true"
         }, 
-        "TC1_TO_MC|global|Vrf-public": {
+        "TC1_TO_MC|global|long-vrf-503": {
             "admin_status": "up", 
             "advertisement_interval": "0", 
             "asn": "4200015156", 
@@ -3972,7 +2760,7 @@
             "rx_timer": "100", 
             "tx_timer": "100"
         }, 
-        "TC1_TO_MC|global|Vrf504": {
+        "TC1_TO_MC|global|long-vrf-504": {
             "admin_status": "up", 
             "advertisement_interval": "0", 
             "asn": "4200015156", 
@@ -3982,17 +2770,17 @@
             "rx_timer": "100", 
             "tx_timer": "100"
         }, 
-        "TC1_TO_MC|ipv4|Vrf-public": {
+        "TC1_TO_MC|ipv4|long-vrf-503": {
             "activate": "true", 
             "route_map_out": "zlydeny", 
             "soft_reconfiguration_inbound": "true"
         }, 
-        "TC1_TO_MC|ipv4|Vrf504": {
+        "TC1_TO_MC|ipv4|long-vrf-504": {
             "activate": "true", 
             "route_map_out": "zlydeny", 
             "soft_reconfiguration_inbound": "true"
         }, 
-        "dut1_v4|global|Vrf-bfd1": {
+        "dut1_v4|global|long-vrf-dut-bfd1": {
             "asn": "4200015155", 
             "bfd": "true", 
             "detect_multiplier": "3", 
@@ -4000,10 +2788,10 @@
             "rx_timer": "100", 
             "tx_timer": "100"
         }, 
-        "dut1_v4|ipv4|Vrf-bfd1": {
+        "dut1_v4|ipv4|long-vrf-dut-bfd1": {
             "activate": "true"
         }, 
-        "dut1_v6|global|Vrf-bfd1": {
+        "dut1_v6|global|long-vrf-dut-bfd1": {
             "asn": "4200015155", 
             "bfd": "true", 
             "detect_multiplier": "3", 
@@ -4011,26 +2799,26 @@
             "rx_timer": "100", 
             "tx_timer": "100"
         }, 
-        "dut1_v6|ipv6|Vrf-bfd1": {
+        "dut1_v6|ipv6|long-vrf-dut-bfd1": {
             "activate": "true"
         }, 
-        "fd40:4100:0:3110::2|Vrf-public": {
+        "fd40:4100:0:3110::2|long-vrf-503": {
             "admin_status": "up", 
             "in_group": "TC1_TO_MC-v6"
         }, 
-        "fd40:4100:0:3110::2|global|Vrf-public": {
+        "fd40:4100:0:3110::2|global|long-vrf-503": {
             "admin_status": "up", 
             "in_group": "TC1_TO_MC-v6"
         }, 
-        "fd40:4100:0:4110::2|Vrf504": {
+        "fd40:4100:0:4110::2|long-vrf-504": {
             "admin_status": "up", 
             "in_group": "TC1_TO_MC-v6"
         }, 
-        "fd40:4100:0:4110::2|global|Vrf504": {
+        "fd40:4100:0:4110::2|global|long-vrf-504": {
             "admin_status": "up", 
             "in_group": "TC1_TO_MC-v6"
         }, 
-        "ixia2_v4|global|Vrf201": {
+        "ixia2_v4|global|long-vrf-TG-bfd2": {
             "asn": "4200015156", 
             "bfd": "true", 
             "detect_multiplier": "3", 
@@ -4038,10 +2826,10 @@
             "rx_timer": "100", 
             "tx_timer": "100"
         }, 
-        "ixia2_v4|ipv4|Vrf201": {
+        "ixia2_v4|ipv4|long-vrf-TG-bfd2": {
             "activate": "true"
         }, 
-        "ixia2_v6|global|Vrf201": {
+        "ixia2_v6|global|long-vrf-TG-bfd2": {
             "asn": "4200015156", 
             "bfd": "true", 
             "detect_multiplier": "3", 
@@ -4049,10 +2837,10 @@
             "rx_timer": "100", 
             "tx_timer": "100"
         }, 
-        "ixia2_v6|ipv6|Vrf201": {
+        "ixia2_v6|ipv6|long-vrf-TG-bfd2": {
             "activate": "true"
         }, 
-        "ixia_v4|global|Vrf200": {
+        "ixia_v4|global|long-vrf-TG-bfd1": {
             "asn": "4200015156", 
             "bfd": "true", 
             "detect_multiplier": "3", 
@@ -4060,13 +2848,13 @@
             "rx_timer": "100", 
             "tx_timer": "100"
         }, 
-        "ixia_v4|ipv4|Vrf200": {
+        "ixia_v4|ipv4|long-vrf-TG-bfd1": {
             "activate": "true"
         }, 
-        "ixia_v4|ipv6|Vrf201": {
+        "ixia_v4|ipv6|long-vrf-TG-bfd2": {
             "activate": "false"
         }, 
-        "ixia_v6|global|Vrf200": {
+        "ixia_v6|global|long-vrf-TG-bfd1": {
             "asn": "4200015156", 
             "bfd": "true", 
             "detect_multiplier": "3", 
@@ -4074,28 +2862,28 @@
             "rx_timer": "100", 
             "tx_timer": "100"
         }, 
-        "ixia_v6|ipv6|Vrf200": {
+        "ixia_v6|ipv6|long-vrf-TG-bfd1": {
             "activate": "true"
         }
     }, 
     "BGP_NETWORK": {
-        "11.161.62.178/32|ipv4|Vrf-public": {}, 
-        "11.161.62.178/32|ipv4|Vrf504": {}, 
+        "11.161.62.178/32|ipv4|long-vrf-503": {}, 
+        "11.161.62.178/32|ipv4|long-vrf-504": {}, 
         "11.161.62.178/32|ipv4|Vrf_504": {}, 
         "11.161.62.178/32|ipv4|Vrf_Aliyun-public": {}
     }, 
     "BGP_PARAMETERS": {
-        "4200015154|global|Vrf101": {
+        "4200015154|global|long-vrf-101": {
             "bgp_router_id": "192.0.0.178", 
             "bgp_timers": "10 30"
         }, 
-        "4200015154|global|Vrf200": {
+        "4200015154|global|long-vrf-TG-bfd1": {
             "bgp_router_id": "192.0.0.178"
         }, 
-        "4200015154|global|Vrf201": {
+        "4200015154|global|long-vrf-TG-bfd2": {
             "bgp_router_id": "192.0.0.178"
         }, 
-        "4200015154|Vrf502": {
+        "4200015154|long-vrf-502": {
             "bgp_maximum_paths": "64", 
             "bgp_peer_up_delay": "600", 
             "bgp_router_id": "11.161.62.178", 
@@ -4104,72 +2892,72 @@
             "rt_export": "37963:15120", 
             "rt_import": "37963:15120"
         }, 
-        "4200015154|global|Vrf-bfd1": {
+        "4200015154|global|long-vrf-dut-bfd1": {
             "bgp_router_id": "192.0.0.178"
         }, 
-        "4200015154|global|Vrf-public": {
+        "4200015154|global|long-vrf-503": {
             "bgp_peer_up_delay": "600", 
             "bgp_router_id": "11.161.62.178", 
             "bgp_timers": "10 30"
         }, 
-        "4200015154|global|Vrf501": {
+        "4200015154|global|long-vrf-501": {
             "bgp_peer_up_delay": "600", 
             "bgp_router_id": "11.161.62.178", 
             "bgp_timers": "10 30"
         }, 
-        "4200015154|global|Vrf502": {
+        "4200015154|global|long-vrf-502": {
             "bgp_peer_up_delay": "600", 
             "bgp_router_id": "11.161.62.178", 
             "bgp_timers": "10 30"
         }, 
-        "4200015154|global|Vrf504": {
+        "4200015154|global|long-vrf-504": {
             "bgp_peer_up_delay": "600", 
             "bgp_router_id": "11.161.62.178", 
             "bgp_timers": "10 30"
         }, 
-        "4200015154|ipv4|Vrf-public": {
+        "4200015154|ipv4|long-vrf-503": {
             "bgp_maximum_paths": "64", 
             "rd": "37963:513305291", 
             "rt_export": "37963:15130", 
             "rt_import": "37963:15130"
         }, 
-        "4200015154|ipv4|Vrf501": {
+        "4200015154|ipv4|long-vrf-501": {
             "bgp_maximum_paths": "64", 
             "rd": "37963:511305291", 
             "rt_export": "37963:15110", 
             "rt_import": "37963:15110"
         }, 
-        "4200015154|ipv4|Vrf502": {
+        "4200015154|ipv4|long-vrf-502": {
             "bgp_maximum_paths": "64", 
             "rd": "37963:512305291", 
             "rt_export": "37963:15120", 
             "rt_import": "37963:15120"
         }, 
-        "4200015154|ipv4|Vrf504": {
+        "4200015154|ipv4|long-vrf-504": {
             "bgp_maximum_paths": "64", 
             "rd": "37963:514305291", 
             "rt_export": "37963:15140", 
             "rt_import": "37963:15140"
         }, 
-        "4200015154|ipv6|Vrf-public": {
+        "4200015154|ipv6|long-vrf-503": {
             "bgp_maximum_paths": "64", 
             "rd": "37963:513305291", 
             "rt_export": "37963:15130", 
             "rt_import": "37963:15130"
         }, 
-        "4200015154|ipv6|Vrf501": {
+        "4200015154|ipv6|long-vrf-501": {
             "bgp_maximum_paths": "64", 
             "rd": "37963:511305291", 
             "rt_export": "37963:15110", 
             "rt_import": "37963:15110"
         }, 
-        "4200015154|ipv6|Vrf502": {
+        "4200015154|ipv6|long-vrf-502": {
             "bgp_maximum_paths": "64", 
             "rd": "37963:512305291", 
             "rt_export": "37963:15120", 
             "rt_import": "37963:15120"
         }, 
-        "4200015154|ipv6|Vrf504": {
+        "4200015154|ipv6|long-vrf-504": {
             "bgp_maximum_paths": "64", 
             "rd": "37963:514305291", 
             "rt_export": "37963:15140", 
@@ -4356,7 +3144,7 @@
     }, 
     "LOOPBACK_INTERFACE": {
         "Loopback1": {
-            "vrf_name": "Vrf-public"
+            "vrf_name": "long-vrf-503"
         }, 
         "Loopback1|11.161.62.178/32": {}
     }, 
@@ -4471,6 +3259,12 @@
                 "Eth103.504", 
                 "Eth104.503", 
                 "Eth104.504", 
+                "Eth109.503",
+                "Eth109.504",
+                "Eth109.600",
+                "Eth110.503",
+                "Eth110.504",
+                "Eth110.600",
                 "Eth11.100", 
                 "Eth11.102", 
                 "Eth12.100", 
@@ -6480,691 +5274,691 @@
     "SUB_PORT": {
         "Eth10.501": {
             "admin_status": "up", 
-            "vrf_name": "Vrf501"
+            "vrf_name": "long-vrf-501"
         }, 
         "Eth10.502": {
             "admin_status": "up", 
-            "vrf_name": "Vrf502"
+            "vrf_name": "long-vrf-502"
         }, 
         "Eth108.501": {
             "admin_status": "up", 
-            "vrf_name": "Vrf501"
+            "vrf_name": "long-vrf-501"
         }, 
         "Eth108.502": {
             "admin_status": "up", 
-            "vrf_name": "Vrf502"
+            "vrf_name": "long-vrf-502"
         }, 
         "Eth109.503": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-public"
+            "vrf_name": "long-vrf-503"
         }, 
         "Eth109.504": {
             "admin_status": "up", 
-            "vrf_name": "Vrf504"
+            "vrf_name": "long-vrf-504"
         }, 
         "Eth109.600": {
             "admin_status": "up", 
-            "vrf_name": "Vrf200"
+            "vrf_name": "long-vrf-TG-bfd1"
         }, 
         "Eth11.501": {
             "admin_status": "up", 
-            "vrf_name": "Vrf501"
+            "vrf_name": "long-vrf-501"
         }, 
         "Eth11.502": {
             "admin_status": "up", 
-            "vrf_name": "Vrf502"
+            "vrf_name": "long-vrf-502"
         }, 
         "Eth110.503": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-public"
+            "vrf_name": "long-vrf-503"
         }, 
         "Eth110.504": {
             "admin_status": "up", 
-            "vrf_name": "Vrf504"
+            "vrf_name": "long-vrf-504"
         }, 
         "Eth110.600": {
             "admin_status": "up", 
-            "vrf_name": "Vrf201"
+            "vrf_name": "long-vrf-TG-bfd2"
         }, 
         "Eth12.503": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-public"
+            "vrf_name": "long-vrf-503"
         }, 
         "Eth12.504": {
             "admin_status": "up", 
-            "vrf_name": "Vrf504"
+            "vrf_name": "long-vrf-504"
         }, 
         "Eth13.1001": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1002": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1003": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1004": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1005": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1006": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1007": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1008": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1009": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1010": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1011": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1012": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1013": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1014": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1015": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1016": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1017": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1018": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1019": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1020": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1021": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1022": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1023": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1024": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1025": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1026": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1027": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1028": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1029": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1030": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1031": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1032": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1033": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1034": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1035": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1036": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1037": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1038": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1039": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1040": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1041": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1042": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1043": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1044": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1045": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1046": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1047": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1048": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1049": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1050": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1051": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1052": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1053": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1054": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1055": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1056": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1057": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1058": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1059": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1060": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1061": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1062": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1063": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1064": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1065": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1066": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1067": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1068": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1069": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1070": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1071": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1072": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1073": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1074": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1075": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1076": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1077": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1078": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1079": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1080": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1081": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1082": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1083": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1084": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1085": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1086": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1087": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1088": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1089": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1090": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1091": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1092": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1093": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1094": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1095": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1096": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1097": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1098": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1099": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1100": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1101": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1102": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1103": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1104": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1105": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1106": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1107": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1108": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1109": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1110": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1111": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1112": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1113": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1114": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1115": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1116": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1117": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1118": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1119": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1120": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1121": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1122": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1123": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1124": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1125": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1126": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1127": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1128": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1129": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1130": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1131": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1132": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1133": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1134": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1135": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1136": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1137": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1138": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1139": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth13.1140": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-bfd1"
+            "vrf_name": "long-vrf-dut-bfd1"
         }, 
         "Eth16.503": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-public"
+            "vrf_name": "long-vrf-503"
         }, 
         "Eth16.504": {
             "admin_status": "up", 
-            "vrf_name": "Vrf504"
+            "vrf_name": "long-vrf-504"
         }, 
         "Eth28.503": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-public"
+            "vrf_name": "long-vrf-503"
         }, 
         "Eth28.504": {
             "admin_status": "up", 
-            "vrf_name": "Vrf504"
+            "vrf_name": "long-vrf-504"
         }, 
         "Eth32.503": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-public"
+            "vrf_name": "long-vrf-503"
         }, 
         "Eth32.504": {
             "admin_status": "up", 
-            "vrf_name": "Vrf504"
+            "vrf_name": "long-vrf-504"
         }, 
         "Eth44.503": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-public"
+            "vrf_name": "long-vrf-503"
         }, 
         "Eth44.504": {
             "admin_status": "up", 
-            "vrf_name": "Vrf504"
+            "vrf_name": "long-vrf-504"
         }, 
         "Eth60.503": {
             "admin_status": "up", 
-            "vrf_name": "Vrf-public"
+            "vrf_name": "long-vrf-503"
         }, 
         "Eth60.504": {
             "admin_status": "up", 
-            "vrf_name": "Vrf504"
+            "vrf_name": "long-vrf-504"
         }, 
         "Eth8.501": {
             "admin_status": "up", 
-            "vrf_name": "Vrf501"
+            "vrf_name": "long-vrf-501"
         }, 
         "Eth8.502": {
             "admin_status": "up", 
-            "vrf_name": "Vrf502"
+            "vrf_name": "long-vrf-502"
         }, 
         "Eth9.501": {
             "admin_status": "up", 
-            "vrf_name": "Vrf501"
+            "vrf_name": "long-vrf-501"
         }, 
         "Eth9.502": {
             "admin_status": "up", 
-            "vrf_name": "Vrf502"
+            "vrf_name": "long-vrf-502"
         }, 
         "Eth92.501": {
             "admin_status": "up", 
-            "vrf_name": "Vrf501"
+            "vrf_name": "long-vrf-501"
         }, 
         "Eth92.502": {
             "admin_status": "up", 
-            "vrf_name": "Vrf502"
+            "vrf_name": "long-vrf-502"
         }, 
         "Eth96.501": {
             "admin_status": "up", 
-            "vrf_name": "Vrf501"
+            "vrf_name": "long-vrf-501"
         }, 
         "Eth96.502": {
             "admin_status": "up", 
-            "vrf_name": "Vrf502"
+            "vrf_name": "long-vrf-502"
         }
     }, 
     "SYSLOG_SERVER": {
@@ -7184,13 +5978,13 @@
             "passkey": "tbsa123", 
             "priority": "1", 
             "tcp_port": "49", 
-            "vrf": "Vrf-public"
+            "vrf": "long-vrf-503"
         }, 
         "10.137.96.6": {
             "passkey": "tbsa123", 
             "priority": "2", 
             "tcp_port": "49", 
-            "vrf": "Vrf-public"
+            "vrf": "long-vrf-503"
         }
     }, 
     "TC_TO_QUEUE_MAP": {
@@ -7229,14 +6023,14 @@
             "shell": "/usr/bin/cli"
         }
     }, 
-    "VRF": {
-        "Vrf-bfd1": {}, 
-        "Vrf-public": {}, 
-        "Vrf101": {}, 
-        "Vrf200": {}, 
-        "Vrf201": {}, 
-        "Vrf501": {}, 
-        "Vrf502": {}, 
-        "Vrf504": {}
+    "VRF_ALIAS": {
+        "long-vrf-101": {}, 
+        "long-vrf-501": {}, 
+        "long-vrf-502": {}, 
+        "long-vrf-504": {}, 
+        "long-vrf-503": {}, 
+        "long-vrf-TG-bfd1": {}, 
+        "long-vrf-TG-bfd2": {}, 
+        "long-vrf-dut-bfd1": {}
     }
 }

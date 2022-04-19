@@ -287,6 +287,25 @@ def cos_module_hooks(request):
     st.log('Stream output:{}'.format(stream))
     data.streams['EAPOL'] = stream['stream_id']
 
+    stream = data.tg.tg_traffic_config(port_handle=data.tg_ph_1, mode='create', length_mode='fixed', frame_size=128,
+                                    rate_pps=rate['BFD'], l2_encap='ethernet_ii_vlan',
+                                    transmit_mode='continuous', l3_protocol='ipv4',
+                                    mac_src='00:0a:01:01:23:01',
+                                    mac_dst=data.dut_rt_int_mac, ip_src_addr=data.ipv4_source_address,
+                                    ip_dst_addr=data.ipv4_address, ip_ttl="255",l4_protocol='udp', udp_dst_port=3784)
+    st.log('Stream output:{}'.format(stream))
+    data.streams['BFD'] = stream['stream_id']
+
+    stream = data.tg.tg_traffic_config(port_handle=data.tg_ph_1, mode='create', length_mode='fixed', frame_size=128,
+                                    rate_pps=rate['BFDV6'], l2_encap='ethernet_ii_vlan',
+                                    transmit_mode='continuous', l3_protocol='ipv6',
+                                    mac_src='00:0a:01:01:23:01',
+                                    mac_dst=data.dut_rt_int_mac, ipv6_src_addr=data.ipv6_source_address,
+                                    ipv6_dst_addr=data.ipv6_address, ipv6_hop_limit="255",
+                                    l4_protocol="udp", udp_dst_port=3784)
+    st.log('Stream output:{}'.format(stream))
+    data.streams['BFDV6'] = stream['stream_id']
+
     yield
 
     cos_module_config(config='no')
@@ -312,7 +331,7 @@ def cos_func_hooks(request):
     if st.get_func_name(request) == 'test_ft_cos_bypass_pkt_verify':
         cos_bypass_streams_config()
     yield
-    if st.get_func_name(request) == 'test_ft_cos_cpu_counters':
+    if st.get_func_name(request) == 'test_ft_cos_cpu_counters' or st.get_func_name(request) == 'test_ft_cos_set_copp_rate':
         ip_obj.delete_ip_interface(vars.D1, vars.D1T1P1, data.ipv6_address, data.ipv6_subnet, family="ipv6")
         ip_obj.delete_ip_interface(vars.D1, vars.D1T1P1, data.ipv4_address, data.subnet, family="ipv4")
 
@@ -358,9 +377,11 @@ def cos_variables():
     data.vlan_priority1 = "4"
     data.queue = "5"
     data.pkts_per_burst = "100"
+    data.unsupported_set_queue_list = ['ttl0/1']
     rate = {'BGP_KEEPALIVE':6000*5, 'BGPV6':4000*5, 'BGPV6_KEEPALIVE':6000*5, 'BGP':4000*5, 'EAPOL':6000*5, 'LACP':4000*5,
         'ARP_REPLY':4000*5, 'ND':2000*5, 'ARP':2000*5, 'NTP':2000*5, 'LLDP':2000*5, 'GRPC':10000*5, 'SNMP':2000*5, 'UDLD':2000*5,
-        'DHCP':4000*5, 'TTL0/1':1500*10, 'ICMP':1000*10, 'SSH':10000*5, 'DIRECT_SUBNET':2000*5, 'IP2ME':2000*5}
+        'DHCP':4000*5, 'TTL0/1':1500*10, 'ICMP':1000*10, 'SSH':10000*5, 'DIRECT_SUBNET':2000*5, 'IP2ME':2000*5,
+        'BFD':10000*5, 'BFDV6':10000*5}
 
 
 def configuring_ipv4_and_ipv6_address():
@@ -416,7 +437,7 @@ def cos_counters_checking(value=None,loopCnt=3):
             else:
                 accept_ratio = 0.0
             actual_cir = accept_ratio*rate[value]
-            st.log(" yao actual:{} expect:{}".format(actual_cir,expect_cir))
+            st.log("actual:{} expect:{}".format(actual_cir,expect_cir))
             if expect_cir <= 1000:
                 meter_max_threshold = 1.3
                 meter_min_threshold = 0.8
@@ -685,9 +706,40 @@ def test_ft_cos_cpu_counters():
         status = False
     data.tg.tg_traffic_control(action='stop', stream_handle=data.streams['EAPOL'])
 
+    st.log("Sending BFD")
+    data.tg.tg_traffic_control(action='run', stream_handle=data.streams['BFD'])
+    if not cos_counters_checking(value="BFD"):
+        status = False
+    data.tg.tg_traffic_control(action='stop', stream_handle=data.streams['BFD'])
+
+    st.log("Sending BFDV6")
+    data.tg.tg_traffic_control(action='run', stream_handle=data.streams['BFDV6'])
+    if not cos_counters_checking(value="BFDV6"):
+        status = False
+    data.tg.tg_traffic_control(action='stop', stream_handle=data.streams['BFDV6'])
+
     if not status:
         st.report_fail('queue_traffic_failed')
     st.report_pass("test_case_passed")
+
+@pytest.mark.cos_queue
+@pytest.mark.community_unsupported
+def test_ft_cos_set_copp_rate():
+    st.banner("modify all copp queue rate")
+
+    get_queue_list = show_queue_counters(vars.D1, "CPU")
+    for i in range(len(get_queue_list)):
+        queue = get_queue_list[i]['copp']
+        config_cmd = queue.lower()
+        if not config_cmd in data.unsupported_set_queue_list:
+            rate = get_queue_list[i]['cir']
+            new_rate = int(rate)/2
+            cmd = "copp type {} rate {} ".format(config_cmd, str(new_rate))
+            st.config(vars.D1, cmd, type='alicli')
+
+    st.banner("re-rest copp queue")
+    test_ft_cos_cpu_counters()
+
 
 @pytest.mark.cos_cpu_counters
 @pytest.mark.community_unsupported

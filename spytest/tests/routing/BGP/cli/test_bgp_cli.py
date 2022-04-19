@@ -371,7 +371,7 @@ def test_cli_bgp_bfd_with_param_v4():
 
     ### check frr running-config ##
     st.log("check frr running-config")
-    frr_key = "router bgp {}|neighbor {} bfd".format(bgpcli_obj.get_local_as() ,peer_ip)
+    frr_key = "router bgp {}|neighbor {} bfd {} {} {}".format(bgpcli_obj.get_local_as() ,peer_ip, 3, 300, 200)
     frr_config_checkpoint(bgpcli_obj, frr_key, True, 'check2')
 
     ### reboot and check config recovery ### 

@@ -480,7 +480,7 @@ def verify_bfd_peer(dut,**kwargs):
     if 'vrf_name' in kwargs:
         vrf = kwargs['vrf_name']
         if vrf == 'default-vrf':
-            vrf = 'default'
+            vrf = 'Default'
         del kwargs['vrf_name']
     else:
         vrf = 'Default'
@@ -566,7 +566,7 @@ def verify_bfd_peer(dut,**kwargs):
                         for peer_ip, localaddress, intf in zip(kwargs['peer'], kwargs['local_addr'], kwargs['interface']):
                             cmd = "show bfd" + " peer " + peer_ip + " vrf " + vrf + " multihop local-address " + localaddress + " interface " + intf
     else:
-        if vrf == 'default':
+        if vrf == 'Default':
             cmd = "show bfd peers"
         else:
             if cli_type == 'click' or cli_type == 'alicli':
@@ -578,6 +578,9 @@ def verify_bfd_peer(dut,**kwargs):
     if cli_type in ['click', 'klish', 'alicli']:
         cli_type = "vtysh" if cli_type == "click" else cli_type
         try:
+            #if cli_type == 'alicli':
+            #    cmd = "cli -c 'no page' -c '" + cmd +"' "
+            #    cli_type = 'click'
             parsed_output = st.show(dut, cmd, type=cli_type)
         except Exception as e:
             st.error("The BFD session is not exist either deleted or not configured: exception is {} ".format(e))
@@ -727,6 +730,9 @@ def get_bfd_peer_counters(dut,**kwargs):
     if cli_type in ['click', 'klish', 'alicli']:
         cli_type = "vtysh" if cli_type == "click" else cli_type
         try:
+            if cli_type == 'alicli' and vrf == 'default':
+                cmd = "cli -c 'no page' -c '" + cmd +"' "
+                cli_type = 'click'
             parsed_output = st.show(dut, cmd, type=cli_type)
         except Exception as e:
             st.error("The BFD session is not existing either deleted or not configured: exception is {} ".format(e))

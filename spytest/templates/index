@@ -198,6 +198,7 @@ bcmcmd_pmap.tmpl, .*, sonic, bcmcmd "show pmap"
 bcmcmd_ps.tmpl, .*, sonic, bcmcmd "ps"
 show_bfd_peers_brief.tmpl, .* , sonic, show bfd peers brief
 show_bfd_couters.tmpl, .*, sonic, show bfd peers counters
+show_bfd_couters.tmpl, .*, sonic,  cli .* 'show bfd peers counters'
 show_bfd_couters.tmpl, .*, sonic, show bfd peer.* counters
 show_bfd_couters.tmpl, .*, sonic, show bfd peer counters.*
 show_bfd_peer.tmpl, .*, sonic, show bfd peer*

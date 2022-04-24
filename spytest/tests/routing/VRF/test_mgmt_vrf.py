@@ -145,6 +145,7 @@ def test_mgmt_vrf_by_sflow():
     command += "sflow interface {} enable\n".format(data.dut_ports[1])
     command += "sflow interface sample-rate {} 256".format(data.dut_ports[1])
     st.config(dut, command, skip_error_check=True, type='alicli')
+    st.wait(30)
 
     (tg1, tg_ph_1, tg2, tg_ph_2) = get_handles()
     #stats1 = tgapi.get_traffic_stats(tg1, port_handle=tg_ph_1, mode="aggregate")

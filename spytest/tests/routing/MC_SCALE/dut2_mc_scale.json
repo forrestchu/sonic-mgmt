@@ -288,6 +288,20 @@
         "ipv6*|.*": {
             ".*": "ISOLATE_V6"
         }
+    },
+    "BGP_BMP": {
+        "bmptest|global|long-vrf-501": {
+            "bmp_server_address": "192.0.0.250|5555|100|200"
+        }, 
+        "bmptest|global|long-vrf-502": {
+            "bmp_server_address": "192.0.0.250|5555|100|200"
+        }, 
+        "bmptest|global|long-vrf-503": {
+            "bmp_server_address": "192.0.0.250|5555|100|200"
+        }, 
+        "bmptest|global|long-vrf-504": {
+            "bmp_server_address": "192.0.0.250|5555|100|200"
+        }
     }, 
     "BGP_NEIGHBOR": {
         "100.1.1.1|global|long-vrf-dut-bfd1": {

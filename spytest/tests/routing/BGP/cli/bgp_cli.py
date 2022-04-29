@@ -67,11 +67,11 @@ class BGP_CLI():
             st.config(self.dut, cmd)
 
     def create_bgp_route(self, as_num):
-        router_bpg = ROUTE_BGP_VIEW.format(as_num)
-        create_bgp_route = "{} -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, router_bpg)
+        router_bgp = ROUTE_BGP_VIEW.format(as_num)
+        create_bgp_route = "{} -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, router_bgp)
         st.config(self.dut, create_bgp_route)
         self.local_as = as_num
-        self.router_view = router_bpg
+        self.router_view = router_bgp
 
     def config_bgp_router_id(self, rid):
         bgp_rid = BGP_RID_CONFIG.format(rid)
@@ -121,6 +121,7 @@ class BGP_CLI():
             act_cmd = "{} neighbor {} activate".format('no' if activate=='false' else '', peer)
             cmd = ''
             if af is not None:
+                af_cmd = "{} {} {}".format('address-family', af_pro, af_mod)
                 cmd = "{} -c '{}' -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, self.router_view, af_cmd, act_cmd)
             else:
                 cmd = "{} -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, self.router_view, act_cmd)

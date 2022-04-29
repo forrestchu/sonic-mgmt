@@ -1,0 +1,29 @@
+Value VRF_NAME (\w+)
+Value ROUTE_MIRROR_PENDING_BYTES (\d+)
+Value ROUTE_MIRROR_BUFFER_USED_BYTES (\d+)
+Value TARGETS (\w+)
+Value MIRROT_ENABLE (\w+)
+Value CONN_CLIENTS (\d+)
+Value REMOTE ([\w\.:]+)
+Value UPTIME (-)
+Value MONSENT (\d+)
+Value MIRRSENT (\d+)
+Value MIRRLOST (\d+)
+Value BYTESENT (\d+)
+Value BYTEQ (\d+)
+Value BYTEQKERNEL (\d+)
+Value ROUTEMONITORING (Route Monitoring.*policy)
+
+Start
+  ^BMP\s+state\s+for\s+BGP\s+VRF\s+${VRF_NAME}:\s*$$
+  ^\s*$$
+  ^\s*Route Mirroring\s+${ROUTE_MIRROR_PENDING_BYTES}\s+bytes\s+(\d+\s+messages)\s+pending\s*$$
+  ^\s*${ROUTE_MIRROR_BUFFER_USED_BYTES}\s+bytes maximum buffer used$$ -> Record
+  ^\s*Targets "${TARGETS}":$$
+  ^\s*Route Mirroring\s+${MIRROT_ENABLE}$$
+  ^\s*(Listeners:|${ROUTEMONITORING})$$ -> Continue 
+  ^\s*$$
+  ^\s*${CONN_CLIENTS}\s+connected clients:$$ -> Record
+  ^\s*${REMOTE}\s+${UPTIME}\s+${MONSENT}\s+${MIRRSENT}\s+${MIRRLOST}\s+${BYTESENT}\s+${BYTEQ}\s+${BYTEQKERNEL}.* -> Record
+
+EOF

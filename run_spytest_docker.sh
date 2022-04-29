@@ -24,6 +24,7 @@ fi
 
 docker run --rm=true --privileged \
            -v $BUILD_DIR:/var/$USER/ \
+           -v /var/spytest:/var/spytest \
            -w /var/$USER/ \
            -ti $BUILD_IMAGE:latest \
            bash

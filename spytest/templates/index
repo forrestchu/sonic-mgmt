@@ -594,3 +594,5 @@ show_ldap_server.tmpl,.*,sonic,show ldap-server
 show_logging_servers.tmpl, .*, sonic, show logging servers
 show_kdump_status.tmpl, .*, sonic, show kdump status
 show_kdump_status.tmpl, .*, sonic, sudo show kdump status
+
+show_bmp.tmpl, .*, sonic, show bmp

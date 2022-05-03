@@ -845,7 +845,6 @@ def l3_base_unconfig():
     command = "show arp"
     st.show(dut1, command)
 
-
 @pytest.mark.community
 @pytest.mark.community_pass
 def test_subintf_503_504_traffic():
@@ -1192,7 +1191,8 @@ def test_read_all_bfd_counter():
     data.my_dut_list = st.get_dut_names()
     dut1 = data.my_dut_list[0]
     dut2 = data.my_dut_list[1]
-    err_session = 0
+    err_status_session = 0
+    tx_stats_session = 0
     interval = int(data.dut_bfd_timer)
     sample_time =30
     result = 0
@@ -1210,13 +1210,13 @@ def test_read_all_bfd_counter():
         tx_pps = (int(tx_counter2) - int(tx_counter1))/sample_time
         if tx_pps > 2*(1000/interval) or tx_pps < (1000/interval)/2:
             st.log("current bfd session {} tx pps:{}".format(output1[i]['peeraddress'], tx_pps))
-            result = 1
+            tx_stats_session += 1
         elif down_env1 != down_env2:
             st.log("current bfd session {} down notfiy occur".format(output1[i]['peeraddress']))
-            err_session += 1
+            err_status_session += 1
 
-    if err_session > 0:
-        st.log("error bfd session {} ".format(err_session))
+    if err_status_session > 0 or tx_stats_session > 10:
+        st.log("bfd session status eror:{} tx counter error:{}".format(err_session,tx_double_session))
         result = 1
 
     if result == 0:
@@ -1295,7 +1295,7 @@ def test_bfd_attr_set():
     bfd_interval = ['200','100']
     for i in range(2):
         if not bfdapi.verify_bfd_peer(dut2, peer=remote_ip_list[i], local_addr=local_ip_list[i], vrf_name=vrf[i], 
-                                    rx_interval=[[bfd_interval[i],bfd_interval[i]]], status='up'):
+                                        status='up'):
             st.log("verify_bfd_peer {} failed".format(remote_ip_list[i]))
             st.report_fail("bfd non-work", local_ip_list[i], dut2)
 
@@ -1476,7 +1476,7 @@ def test_dut_bfd_flap_in_vrf_503():
     st.log("disable TG bfd flap")
     ixia_bfd_params_modify(bfd_handler = data.tg1_handle[0]['bfd_v4'][0], ipver='4')
     ixia_bfd_params_modify(bfd_handler = data.tg1_handle[1]['bfd_v4'][0], ipver='4')
-    st.wait(60)
+    st.wait(90)
 
     loop = 0
     loop_max = 3
@@ -1535,4 +1535,3 @@ def test_dut_bfd_flap_in_vrf_503():
         st.report_fail("bfd statue check failed")
     elif result == 2:
         st.report_fail("validate_tgen_traffic failed")
-

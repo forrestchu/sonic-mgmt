@@ -113,7 +113,7 @@ def base_config():
 
     #st.reboot(dut)
     reboot.config_save_reboot(dut)
-    st.wait(150)
+    st.wait(30)
     st.log("finish need config")
 
 @pytest.mark.community
@@ -145,20 +145,23 @@ def test_mgmt_vrf_by_sflow():
     command += "sflow interface {} enable\n".format(data.dut_ports[1])
     command += "sflow interface sample-rate {} 256".format(data.dut_ports[1])
     st.config(dut, command, skip_error_check=True, type='alicli')
-    st.wait(30)
+    st.wait(5)
+    st.show(dut, "show sflow")
 
     (tg1, tg_ph_1, tg2, tg_ph_2) = get_handles()
     #stats1 = tgapi.get_traffic_stats(tg1, port_handle=tg_ph_1, mode="aggregate")
     tg2.tg_traffic_control(action='clear_stats', port_handle=tg_ph_1)
-    tg2.tg_traffic_control(action = 'run', stream_handle = data.streams.get('sflow'), duration = '10')
-    st.wait(20)
+    tg2.tg_traffic_control(action = 'run', stream_handle = data.streams.get('sflow'))
+    st.wait(10)
     tg2.tg_traffic_control(action = 'stop', stream_handle = data.streams.get('sflow'))
     st.wait(5)
 
+    stats1 = tgapi.get_traffic_stats(tg1, port_handle=tg_ph_2, mode="aggregate")
     stats2 = tgapi.get_traffic_stats(tg1, port_handle=tg_ph_1, mode="aggregate")
+    total_tx = stats1.tx.total_packets
     total_rx = stats2.rx.total_packets
-    st.log("total_rx:{}".format(total_rx))
-    if total_rx > 130:      #1000 pkt /7.5
+    st.log("total_tx:{}, total_rx:{}".format(total_tx, total_rx))
+    if total_rx > (total_tx/256)/7.5:      #1000 pkt /7.5
         st.report_pass("test_case_passed")
     else:
         st.report_fail("TG rx count not equal with sflow pkt count")

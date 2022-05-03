@@ -8,6 +8,7 @@ import pyfiglet
 from spytest.version import get_git_ver
 from spytest.framework import parse_batch_args
 from spytest.framework import parse_suite_files
+from spytest.framework import get_test_status
 import spytest.env as env
 
 import utilities.common as utils
@@ -186,6 +187,9 @@ def main(silent=False):
     if not silent:
         _print_git_ver()
     retval = pytest.main()
+    rv = get_test_status()
+    if rv.has_key('status') and rv['status'] == 'Fail':
+        retval = -1
     return retval
 
 

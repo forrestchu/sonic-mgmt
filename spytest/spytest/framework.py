@@ -64,6 +64,7 @@ reused_test_results = OrderedDict()
 current_test = SpyTestDict()
 current_module = SpyTestDict()
 gWorkArea = None
+test_fail_status = dict()
 
 results_map = OrderedDict([
     ("", ""),
@@ -179,6 +180,9 @@ def _get_module_random(name, cfg=None):
         return global_ro, global_ro
     ro_module = tcmap.get_module_info(name).random
     return global_ro, ro_module
+
+def get_test_status():
+        return test_fail_status
 
 class Context(object):
 
@@ -921,6 +925,7 @@ class WorkArea(object):
 
     def report_fail(self, msgid, *args):
         self.last_error = "Fail"
+        test_fail_status['status'] = "Fail"
         msg = self._context.report(self.last_error, msgid, *args)
         self.report_pdb()
         self.onfail_debug_dump()

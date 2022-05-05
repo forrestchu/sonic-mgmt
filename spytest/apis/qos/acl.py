@@ -589,7 +589,7 @@ def delete_acl_table(dut, acl_type=None, acl_table_name=None, cli_type=""):
                 else [acl_table_name]
             commands = ""
             for acl_table in table_name:
-                commands += "{} {};".format(command, acl_table)
+                commands += "{} {}".format(command, acl_table)
             if commands:
                 st.config(dut, commands)
         else:

@@ -546,7 +546,7 @@ def test_VrfFun_26_27():
     bgp_api.config_bgp(dut = data.dut1, vrf_name = vrf_name[0], local_as = dut1_as[0], neighbor = tg1_dut1_vrf_ip[0], remote_as = dut1_tg_as, config = 'no', config_type_list =['neighbor'])
     bgp_api.config_bgp(dut = data.dut1, vrf_name = vrf_name[0],local_as = dut1_as[0], neighbor = tg1_dut1_vrf_ip[0], remote_as = dut1_tg_as,  config = 'yes',config_type_list =['neighbor'])
     bgp_api.config_bgp(dut = data.dut1, vrf_name = vrf_name[0],local_as = dut1_as[0], neighbor = tg1_dut1_vrf_ip[0], remote_as = dut1_tg_as,  config = 'yes',config_type_list =['activate'])
-    st.wait(5)
+    st.wait(30)
     if not ip_api.verify_ip_route(data.dut1, vrf_name = vrf_name[0], type='B', nexthop = tg1_dut1_vrf_ip[0], interface = 'Vlan'+dut1_tg1_vlan[0]):
         st.log('IPv4 routes on VRF-101, not learnt on DUT1')
         result += 1

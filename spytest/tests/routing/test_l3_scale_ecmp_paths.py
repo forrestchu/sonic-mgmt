@@ -143,9 +143,9 @@ def check_end_to_end_intf_traffic_counters():
         entry1 = filter_and_select(output, ["tx_bps"], {'iface': vars.D1T1P1})
         for i in entry1:
             p1_txmt = i['tx_bps']
-            p1_txmt = p1_txmt.replace(" MB/s","")
-            p1_txmt = p1_txmt.replace(" KB/s","")
-            p1_txmt = p1_txmt.replace(" B/s","")
+            p1_txmt = p1_txmt.replace(" Mb/s","")
+            p1_txmt = p1_txmt.replace(" Kb/s","")
+            p1_txmt = p1_txmt.replace(" b/s","")
         if (abs(int(float(p1_txmt))) == 0):
             st.show(dut1, "show arp")
             st.error("End to End traffic is Zero")
@@ -160,9 +160,9 @@ def check_end_to_end_intf_traffic_counters():
 def intf_traffic_stats(entry_tx):
     for i in entry_tx:
         p_txmt = i['tx_bps']
-        p_txmt = p_txmt.replace(" MB/s","")
-        p_txmt = p_txmt.replace(" KB/s","")
-        p_txmt = p_txmt.replace(" B/s","")
+        p_txmt = p_txmt.replace(" Mb/s","")
+        p_txmt = p_txmt.replace(" Kb/s","")
+        p_txmt = p_txmt.replace(" b/s","")
 
     p_tx = abs(int(float(p_txmt)))
     return p_tx
@@ -203,24 +203,24 @@ def check_inter_dut_intf_traffic_counters():
         entry4 = filter_and_select(output, ["tx_bps"], {'iface': vars.D2D1P4})
         for i in entry1:
             p1_txmt = i['tx_bps']
-            p1_txmt = p1_txmt.replace(" MB/s","")
-            p1_txmt = p1_txmt.replace(" KB/s","")
-            p1_txmt = p1_txmt.replace(" B/s","")
+            p1_txmt = p1_txmt.replace(" Mb/s","")
+            p1_txmt = p1_txmt.replace(" Kb/s","")
+            p1_txmt = p1_txmt.replace(" b/s","")
         for i in entry2:
             p2_txmt = i['tx_bps']
-            p2_txmt = p2_txmt.replace(" MB/s","")
-            p2_txmt = p2_txmt.replace(" KB/s","")
-            p2_txmt = p2_txmt.replace(" B/s","")
+            p2_txmt = p2_txmt.replace(" Mb/s","")
+            p2_txmt = p2_txmt.replace(" Kb/s","")
+            p2_txmt = p2_txmt.replace(" b/s","")
         for i in entry3:
             p3_txmt = i['tx_bps']
-            p3_txmt = p3_txmt.replace(" MB/s","")
-            p3_txmt = p3_txmt.replace(" KB/s","")
-            p3_txmt = p3_txmt.replace(" B/s","")
+            p3_txmt = p3_txmt.replace(" Mb/s","")
+            p3_txmt = p3_txmt.replace(" Kb/s","")
+            p3_txmt = p3_txmt.replace(" b/s","")
         for i in entry4:
             p4_txmt = i['tx_bps']
-            p4_txmt = p4_txmt.replace(" MB/s","")
-            p4_txmt = p4_txmt.replace(" KB/s","")
-            p4_txmt = p4_txmt.replace(" B/s","")
+            p4_txmt = p4_txmt.replace(" Mb/s","")
+            p4_txmt = p4_txmt.replace(" Kb/s","")
+            p4_txmt = p4_txmt.replace(" b/s","")
 
         st.log("Inter Dut port stats  tx_ok xounter value on DUT Egress ports : {} {} {} {}".format(p1_txmt, p2_txmt, p3_txmt, p4_txmt))
         if (abs(int(float(p1_txmt))) == 0) | (abs(int(float(p2_txmt))) == 0) | (abs(int(float(p3_txmt))) == 0) | (abs(int(float(p4_txmt))) == 0):
@@ -287,9 +287,9 @@ def check_intf_traffic_counters():
 
     for i in DUT_tx_value:
         p2_txmt = i['tx_bps']
-        p2_txmt = p2_txmt.replace(" MB/s","")
-        p2_txmt = p2_txmt.replace(" KB/s","")
-        p2_txmt = p2_txmt.replace(" B/s","")
+        p2_txmt = p2_txmt.replace(" Mb/s","")
+        p2_txmt = p2_txmt.replace(" Kb/s","")
+        p2_txmt = p2_txmt.replace(" b/s","")
 
     st.log("tx_ok xounter value on DUT Egress port : {}".format(p2_txmt))
 
@@ -298,9 +298,9 @@ def check_intf_traffic_counters():
         entry1 = filter_and_select(output, ["tx_bps"], {'iface': vars.D1T1P4})
         for i in entry1:
             p2_txmt = i['tx_bps']
-            p2_txmt = p2_txmt.replace(" MB/s","")
-            p2_txmt = p2_txmt.replace(" KB/s","")
-            p2_txmt = p2_txmt.replace(" B/s","")
+            p2_txmt = p2_txmt.replace(" Mb/s","")
+            p2_txmt = p2_txmt.replace(" Kb/s","")
+            p2_txmt = p2_txmt.replace(" b/s","")
         st.log("RETRY tx_ok xounter value on DUT Egress port : {}".format(p2_txmt))
         if (abs(int(float(p2_txmt))) == 0):
             st.show(dut1, "show arp")
@@ -341,24 +341,24 @@ def check_intf_traffic_bo_counters():
         entry4 = filter_and_select(output, ["tx_bps"], {'iface': vars.D1T1P4})
         for i in entry1:
             p1_txmt = i['tx_bps']
-            p1_txmt = p1_txmt.replace(" MB/s","")
-            p1_txmt = p1_txmt.replace(" KB/s","")
-            p1_txmt = p1_txmt.replace(" B/s","")
+            p1_txmt = p1_txmt.replace(" Mb/s","")
+            p1_txmt = p1_txmt.replace(" Kb/s","")
+            p1_txmt = p1_txmt.replace(" b/s","")
         for i in entry2:
             p2_txmt = i['tx_bps']
-            p2_txmt = p2_txmt.replace(" MB/s","")
-            p2_txmt = p2_txmt.replace(" KB/s","")
-            p2_txmt = p2_txmt.replace(" B/s","")
+            p2_txmt = p2_txmt.replace(" Mb/s","")
+            p2_txmt = p2_txmt.replace(" Kb/s","")
+            p2_txmt = p2_txmt.replace(" b/s","")
         for i in entry3:
             p3_txmt = i['tx_bps']
-            p3_txmt = p3_txmt.replace(" MB/s","")
-            p3_txmt = p3_txmt.replace(" KB/s","")
-            p3_txmt = p3_txmt.replace(" B/s","")
+            p3_txmt = p3_txmt.replace(" Mb/s","")
+            p3_txmt = p3_txmt.replace(" Kb/s","")
+            p3_txmt = p3_txmt.replace(" b/s","")
         for i in entry4:
             p4_txmt = i['tx_bps']
-            p4_txmt = p4_txmt.replace(" MB/s","")
-            p4_txmt = p4_txmt.replace(" KB/s","")
-            p4_txmt = p4_txmt.replace(" B/s","")
+            p4_txmt = p4_txmt.replace(" Mb/s","")
+            p4_txmt = p4_txmt.replace(" Kb/s","")
+            p4_txmt = p4_txmt.replace(" b/s","")
 
         st.log("RETRY tx_ok xounter value on DUT Egress ports : {} {} {} {}".format(p1_txmt, p2_txmt, p3_txmt, p4_txmt))
         if (abs(int(float(p2_txmt))) == 0) | (abs(int(float(p3_txmt))) == 0) | (abs(int(float(p4_txmt))) == 0):
@@ -391,13 +391,17 @@ def l3_max_route_max_path_scaling_tc(max_paths, max_routes, use_config_file, fam
         ipfeature.clear_ip_configuration(st.get_dut_names())
         vapi.clear_vlan_configuration(st.get_dut_names())
         st.banner("Started doing the needed config.")
-        cmd = "config vlan range add 2 129"
-        st.config(dut, cmd)
-        st.config(dut2, cmd)
-        command = "config vlan member add 2 {}".format(member_dut1)
-        st.config(dut, command)
-        command = "config vlan member add 2 {}".format(member_dut2)
-        st.config(dut2, command)
+        #cmd = "config vlan range add 2 129"
+        #st.config(dut, cmd)
+        #st.config(dut2, cmd)
+        vapi.config_vlan_range(dut, '2 129', config='add', skip_verify=True)
+        vapi.config_vlan_range(dut2, '2 129', config='add', skip_verify=True)
+        #command = "config vlan member add 2 {}".format(member_dut1)
+        #st.config(dut, command)
+        vapi.add_vlan_member(dut, '2', member_dut1, tagging_mode=True)
+        #command = "config vlan member add 2 {}".format(member_dut2)
+        #st.config(dut2, command)
+        vapi.add_vlan_member(dut2, '2', member_dut2, tagging_mode=True)
         max_vlan = max_paths/4
         base_vlan = 3
         max_vlan = max_vlan - base_vlan
@@ -423,11 +427,15 @@ def l3_max_route_max_path_scaling_tc(max_paths, max_routes, use_config_file, fam
         ix_vlan_val = 2
         #command = "config interface ip add "+ "Vlan" + str(data.vlan_val) + " " + ip_addr+'/24'
         if family == "ipv4":
-            command1 = "config interface ip add "+ "Vlan" + str(ix_vlan_val) + " " + ip_addr
-            command2 = "config interface ip add "+ "Vlan" + str(ix_vlan_val) + " " + ip_addr2
+            #command1 = "config interface ip add "+ "Vlan" + str(ix_vlan_val) + " " + ip_addr
+            #command2 = "config interface ip add "+ "Vlan" + str(ix_vlan_val) + " " + ip_addr2
+            command1 = "cfgmgr intf add "+ ip_addr +" dev Vlan" + str(ix_vlan_val)
+            command2 = "cfgmgr intf add "+ ip_addr2 +" dev Vlan" + str(ix_vlan_val)
         else:
-            command1 = "config interface ip add "+ "Vlan" + str(ix_vlan_val) + " " + v6_ip_addr
-            command2 = "config interface ip add "+ "Vlan" + str(ix_vlan_val) + " " + v6_ip_addr2
+            #command1 = "config interface ip add "+ "Vlan" + str(ix_vlan_val) + " " + v6_ip_addr
+            #command2 = "config interface ip add "+ "Vlan" + str(ix_vlan_val) + " " + v6_ip_addr2
+            command1 = "cfgmgr intf add "+ v6_ip_addr +" dev Vlan" + str(ix_vlan_val)
+            command2 = "cfgmgr intf add "+ v6_ip_addr2 +" dev Vlan" + str(ix_vlan_val)
         st.config(dut1, command1)
         st.config(dut2, command2)
         ip_addr2 = data.dut2_start_ip_addr
@@ -438,14 +446,18 @@ def l3_max_route_max_path_scaling_tc(max_paths, max_routes, use_config_file, fam
             if family == "ipv4":
                 (_, ip_addr) = ipfeature.increment_ip_addr(ip_addr, "network")
                 (_, ip_addr2) = ipfeature.increment_ip_addr(ip_addr2, "network")
-                command = "config interface ip add "+ "Vlan" + str(index) + " " + ip_addr
-                command_dut2 = "config interface ip add "+ "Vlan" + str(index) + " " + ip_addr2
+                #command = "config interface ip add "+ "Vlan" + str(index) + " " + ip_addr
+                #command_dut2 = "config interface ip add "+ "Vlan" + str(index) + " " + ip_addr2
+                command = "cfgmgr intf add "+ ip_addr +" dev Vlan" + str(index)
+                command_dut2 = "cfgmgr intf add "+ ip_addr2 +" dev Vlan" + str(index)
             else:
                 v6_tok = str(hex(index)[2:])
                 v6_ip_addr = "2100:0:" + v6_tok + "::1/64"
                 v6_ip_addr2 = "2100:0:" + v6_tok + "::2/64"
-                command = "config interface ip add "+ "Vlan" + str(index) + " " + v6_ip_addr
-                command_dut2 = "config interface ip add "+ "Vlan" + str(index) + " " + v6_ip_addr2
+                #command = "config interface ip add "+ "Vlan" + str(index) + " " + v6_ip_addr
+                #command_dut2 = "config interface ip add "+ "Vlan" + str(index) + " " + v6_ip_addr2
+                command = "cfgmgr intf add "+ v6_ip_addr +" dev Vlan" + str(index)
+                command_dut2 = "cfgmgr intf add "+ v6_ip_addr2 +" dev Vlan" + str(index)
             st.config(dut, command)
             st.config(dut2, command_dut2)
 
@@ -472,7 +484,6 @@ def l3_max_route_max_path_scaling_tc(max_paths, max_routes, use_config_file, fam
                   ipv6_gateway='2200:0:2::2', src_mac_addr='00:0b:01:00:00:01', vlan='1', vlan_id='2', arp_send_req='1')
         st.show(dut2, "show ndp")
         arp_obj.show_arp(dut2)
-
     if family == "ipv4":
         bgpfeature.create_bgp_router(dut, data.as_num, '')
         bgpfeature.create_bgp_router(dut2, data.new_as_num, '')
@@ -527,9 +538,9 @@ def l3_max_route_max_path_scaling_tc(max_paths, max_routes, use_config_file, fam
         st.wait(10)
 
         def f1(d):
-            st.config(d, "show bgp ipv4 summary")
+            st.config(d, "show ip bgp summary")
             st.config(d, "show interface status")
-            st.config(d, "show ip route | head -1000")
+            #st.config(d, "show ip route")
             arp_obj.show_arp(d)
 
         st.banner("ARP entries before traffic is initiated on Dut1 and Dut2")
@@ -568,8 +579,8 @@ def l3_max_route_max_path_scaling_tc(max_paths, max_routes, use_config_file, fam
         def f1(d):
             st.config(d, "show run bgp")
             st.config(d, "show ndp")
-            st.config(d, "show bgp ipv6 summary")
-            st.config(d, "show ipv6 route | head -1000")
+            st.config(d, "show ip bgp summary")
+            #st.config(d, "show ipv6 route")
             arp_obj.show_arp(d)
         st.banner("ARP entries before traffic is initiated on Dut1 and Dut2")
         st.exec_each([dut, dut2], f1)
@@ -609,8 +620,10 @@ def l3_max_route_max_path_scaling_tc(max_paths, max_routes, use_config_file, fam
         max_range = max_paths + 1
         for index in range(base_range, max_range):
             if family == "ipv4":
-                command1 = "config interface ip remove "+ "Vlan" + str(index) + " " + ip_addr
-                command2 = "config interface ip remove "+ "Vlan" + str(index) + " " + ip_addr2
+                #command1 = "config interface ip remove "+ "Vlan" + str(index) + " " + ip_addr
+                #command2 = "config interface ip remove "+ "Vlan" + str(index) + " " + ip_addr2
+                command1 = "cfgmgr intf del "+ ip_addr +" dev Vlan" + str(index)
+                command2 = "cfgmgr intf del "+ ip_addr2 +" dev Vlan" + str(index)
                 (_, ip_addr) = ipfeature.increment_ip_addr(ip_addr, "network")
                 (_, ip_addr2) = ipfeature.increment_ip_addr(ip_addr2, "network")
             else:
@@ -620,8 +633,10 @@ def l3_max_route_max_path_scaling_tc(max_paths, max_routes, use_config_file, fam
                 else:
                     v6_ip_addr2 = "2100:0:" + v6_tok + "::2/64"
                 v6_ip_addr = "2100:0:" + v6_tok + "::1/64"
-                command1 = "config interface ip remove "+ "Vlan" + str(index) + " " + v6_ip_addr
-                command2 = "config interface ip remove "+ "Vlan" + str(index) + " " + v6_ip_addr2
+                #command1 = "config interface ip remove "+ "Vlan" + str(index) + " " + v6_ip_addr
+                #command2 = "config interface ip remove "+ "Vlan" + str(index) + " " + v6_ip_addr2
+                command1 = "cfgmgr intf del "+ v6_ip_addr +" dev Vlan" + str(index)
+                command2 = "cfgmgr intf del "+ v6_ip_addr2 +" dev Vlan" + str(index)
             st.config(dut, command1)
             st.config(dut2, command2)
         max_vlan = max_paths/4
@@ -642,12 +657,15 @@ def l3_max_route_max_path_scaling_tc(max_paths, max_routes, use_config_file, fam
             v_range_t = str(base_vlan) + " " + str(max_vlan)
             vapi.config_vlan_range_members(dut1, v_range_t, data.dut1_ports[index], config='del')
             vapi.config_vlan_range_members(dut2, v_range_t, data.dut2_ports[index], config='del')
-        cmd = "config vlan range del 2 129"
-        st.config(dut, cmd)
+        #cmd = "config vlan range del 2 129"
+        #st.config(dut, cmd)
+        vapi.config_vlan_range(dut, '2 129', config='del', skip_verify=True)
         my_cmd = "no router bgp {}".format(data.as_num)
         st.vtysh_config(dut, my_cmd)
+        st.show(dut, "show ip bgp summary")
         my_cmd = "no router bgp {}".format(data.new_as_num)
         st.vtysh_config(dut2, my_cmd)
+        st.show(dut2, "show ip bgp summary")
 
     st.debug("ret1: {} , ret2: {}".format(ret1, ret2))
     if ret1 is True and ret2 is True:
@@ -685,34 +703,37 @@ def l3_ecmp_scaling_tc(max_ecmp, use_config_file):
 
     if apply_file is False:
         ipfeature.clear_ip_configuration(st.get_dut_names())
-        command = "config vlan add {}".format(data.vlan_val)
-        st.config(dut, command)
-        command = "config vlan member add {} {}".format(data.vlan_val, member3)
-        st.config(dut, command)
+        #command = "config vlan add {}".format(data.vlan_val)
+        #st.config(dut, command)
+        vapi.create_vlan(dut, data.vlan_val)
+
+        #command = "config vlan member add {} {}".format(data.vlan_val, member3)
+        #st.config(dut, command)
+        vapi.add_vlan_member(dut, data.vlan_val, member3, tagging_mode=True)
+
         ip_addr = data.start_ip_addr
         #command = "config interface ip add "+ "Vlan" + str(data.vlan_val) + " " + ip_addr+'/24'
-        command = "config interface ip add "+ "Vlan" + str(data.vlan_val) + " " + ip_addr
+        command = "cfgmgr intf add "+ ip_addr +" dev Vlan" + str(data.vlan_val)
         st.config(dut, command)
         for index in range(base_range, max_range):
-            command = "config vlan add {}".format(index)
-            st.config(dut, command)
-            command = "config vlan member add {} {}".format(index, member3)
-            st.config(dut, command)
+            #command = "config vlan add {}".format(index)
+            #st.config(dut, command)
+            vapi.create_vlan(dut, index)
+            #command = "covnfig vlan member add {} {}".format(index, member3)
+            #st.config(dut, command)
+            vapi.add_vlan_member(dut, index, member3, tagging_mode=True)
             (_, ip_addr) = ipfeature.increment_ip_addr(ip_addr, "network")
-            command = "config interface ip add "+ "Vlan" + str(index) + " " + ip_addr
+            #command = "config interface ip add "+ "Vlan" + str(index) + " " + ip_addr
+            command = "cfgmgr intf add "+ ip_addr +" dev Vlan" + str(index)
             st.config(dut, command)
         tg_vlan = 101
-        command = "config vlan member del {} {}".format(tg_vlan, member3)
-        st.config(dut, command)
-        command = "config vlan member add {} {}".format(tg_vlan, member4)
-        st.config(dut, command)
+        #command = "config vlan member del {} {}".format(tg_vlan, member3)
+        #st.config(dut, command)
+        vapi.delete_vlan_member(dut, tg_vlan, member3, tagging_mode=True)
+        #command = "config vlan member add {} {}".format(tg_vlan, member4)
+        #st.config(dut, command)
+        vapi.add_vlan_member(dut, tg_vlan, member4, tagging_mode=True)
 
-    for index in range(base_range, max_range):
-      #vapi.add_member(dut, data.vlans[index], member, True)
-      (_, nexthop) = ipfeature.increment_ip_addr(nexthop, "network")
-      nexthop1 = nexthop
-      formatted_next_hop = nexthop1.replace("/32","")
-      ipfeature.create_static_route(dut, formatted_next_hop, data.static_route)
     # L3 INTF SCALING TEST CASE 1.1 END
 
 
@@ -731,16 +752,23 @@ def l3_ecmp_scaling_tc(max_ecmp, use_config_file):
     #h1=tg1.tg_interface_config(port_handle=tg_ph_1, mode='config', intf_ip_addr='10.2.101.10', gateway='10.2.101.1', count='8', gateway_step='0.0.1.0', netmask='255.255.255.0', vlan='1', vlan_id='101', vlan_id_count='8', intf_ip_addr_step='0.0.1.0', arp_send_req='1')
     #h2=tg2.tg_interface_config(port_handle=tg_ph_2, mode='config', intf_ip_addr='10.2.109.10', gateway='10.2.109.1', count='8', gateway_step='0.0.1.0', netmask='255.255.255.0', vlan='1', vlan_id='109', vlan_id_count='7', intf_ip_addr_step='0.0.1.0', arp_send_req='1')
     vid_count = max_ecmp-1
-    h1=tg1.tg_interface_config(port_handle=tg_ph_1, mode='config', intf_ip_addr='10.2.102.10',  gateway='10.2.102.1', src_mac_addr='00:0c:01:00:00:01', vlan='1', vlan_id='102', count=vid_count, arp_send_req='1', gateway_step='0.0.1.0', intf_ip_addr_step='0.0.1.0')
+    h1=tg1.tg_interface_config(port_handle=tg_ph_1, mode='config', intf_ip_addr='10.2.102.10',  gateway='10.2.102.1', src_mac_addr='00:0c:01:00:00:01', vlan='1', vlan_id='102', count=vid_count, arp_send_req='1', gateway_step='0.0.1.0', intf_ip_addr_step='0.0.1.0', vlan_id_step = '1')
 
     h2=tg1.tg_interface_config(port_handle=tg_ph_2, mode='config', intf_ip_addr='10.2.101.10',  gateway='10.2.101.1', src_mac_addr='00:0d:01:00:00:01', vlan='1', vlan_id='101', arp_send_req='1', gateway_step='0.0.1.0', intf_ip_addr_step='0.0.1.0')
     #h2=tg1.tg_interface_config(port_handle=tg_ph_2, mode='config', intf_ip_addr='10.2.109.10',  gateway='10.2.109.1', src_mac_addr='00:0c:01:00:00:01', vlan='1', vlan_id='109', vlan_id_count='8', arp_send_req='1', gateway_step='0.0.1.0', intf_ip_addr_step='0.0.1.0')
     h3=tg1.tg_interface_config(port_handle=tg_ph_1, mode='config', intf_ip_addr='10.2.100.10', gateway='10.2.100.1', netmask='255.255.255.0', vlan='1', vlan_id='100', arp_send_req='1')
 
+    st.wait(5)
+    for index in range(base_range, max_range):
+        #vapi.add_member(dut, data.vlans[index], member, True)
+        (_, nexthop) = ipfeature.increment_ip_addr(nexthop, "network")
+        nexthop1 = nexthop
+        formatted_next_hop = nexthop1.replace("/32","")
+        ipfeature.create_static_route(dut, formatted_next_hop, data.static_route)
 
     #tr1=tg1.tg_traffic_config(port_handle=tg_ph_1, emulation_src_handle=h3['handle'], ip_dst_addr='200.1.0.1', ip_dst_mode='increment', ip_dst_count='200', ip_dst_step='0.0.0.1', l3_protocol='ipv4', circuit_endpoint_type='ipv4', mode='create', transmit_mode='continuous', length_mode='fixed', rate_pps=512000, enable_stream_only_gen='1')
     asicapi.dump_l3_egress(dut)
-    tr1=tg1.tg_traffic_config(port_handle=tg_ph_1, mac_src='00:11:01:00:00:01', mac_dst='b8:6a:97:fd:b6:06', ip_dst_mode='increment', ip_dst_count=200, ip_dst_step='0.0.0.1',ip_src_addr='10.2.100.10', ip_dst_addr='200.1.0.1',  l3_protocol='ipv4', l2_encap='ethernet_ii_vlan', vlan_id='100', vlan='enable', mode='create', transmit_mode='continuous', length_mode='fixed', rate_pps=512000, enable_stream_only_gen='1')
+    tr1=tg1.tg_traffic_config(port_handle=tg_ph_1, mac_src='00:11:01:00:00:01', mac_dst='b4:05:5d:84:d8:5a', ip_dst_mode='increment', ip_dst_count=200, ip_dst_step='0.0.0.1',ip_src_addr='10.2.100.10', ip_dst_addr='200.1.0.1',  l3_protocol='ipv4', l2_encap='ethernet_ii_vlan', vlan_id='100', vlan='enable', mode='create', transmit_mode='continuous', length_mode='fixed', rate_pps=512000, enable_stream_only_gen='1')
 
     tg2.tg_traffic_control(action='run', handle=tr1['stream_id'])
     count = 0
@@ -757,20 +785,25 @@ def l3_ecmp_scaling_tc(max_ecmp, use_config_file):
     h4=tg1.tg_interface_config(port_handle=tg_ph_1, mode='config', intf_ip_addr='10.2.101.10',  gateway='10.2.101.1', src_mac_addr='00:0e:01:00:00:01', vlan='1', vlan_id='101', arp_send_req='1', gateway_step='0.0.1.0', intf_ip_addr_step='0.0.1.0')
 
     tg_vlan = 101
-    command = "config vlan member del {} {}".format(tg_vlan, member4)
-    st.config(dut, command)
-    command = "config vlan member add {} {}".format(tg_vlan, member3)
-    st.config(dut, command)
+    #command = "config vlan member del {} {}".format(tg_vlan, member4)
+    #st.config(dut, command)
+    vapi.delete_vlan_member(dut, tg_vlan, member4, tagging_mode=True)
+    #command = "config vlan member add {} {}".format(tg_vlan, member3)
+    #st.config(dut, command)
+    vapi.add_vlan_member(dut, tg_vlan, member3, tagging_mode=True)
 
     tg_intf_ip_addr = data.tg_start_ip_addr
     max_range = data.base_val+max_ecmp
     base_range = data.base_val+1
     for index in range(base_range, max_range):
       data.thresh = 4
-      command = "config vlan member del {} {}".format(index, member3)
-      st.config(dut, command)
-      command = "config vlan member add {} {}".format(index, member4)
-      st.config(dut, command)
+      #command = "config vlan member del {} {}".format(index, member3)
+      #st.config(dut, command)
+      vapi.delete_vlan_member(dut, index, member3, tagging_mode=True)
+      #command = "config vlan member add {} {}".format(index, member4)
+      #st.config(dut, command)
+      vapi.add_vlan_member(dut, index, member4, tagging_mode=True)
+
       (_, tg_intf_ip_addr) = ipfeature.increment_ip_addr(tg_intf_ip_addr, "network")
       tg_intf_ip_addr_x = tg_intf_ip_addr;
       tg_formatted_intf_addr = tg_intf_ip_addr_x.replace("/24","")
@@ -792,10 +825,12 @@ def l3_ecmp_scaling_tc(max_ecmp, use_config_file):
           st.log('Traffic test Failed')
 
       tg1.tg_interface_config(port_handle=tg_ph_2, handle=h2['handle'], mode='destroy')
-      command = "config vlan member del {} {}".format(index, member4)
-      st.config(dut, command)
-      command = "config vlan member add {} {}".format(index, member3)
-      st.config(dut, command)
+      #command = "config vlan member del {} {}".format(index, member4)
+      #st.config(dut, command)
+      vapi.delete_vlan_member(dut, index, member4, tagging_mode=True)
+      #command = "config vlan member add {} {}".format(index, member3)
+      #st.config(dut, command)
+      vapi.add_vlan_member(dut, index, member3, tagging_mode=True)
       #res1=verify_ping(src_obj=tg1, port_handle=tg_ph_1, dev_handle=h1['handle'], dst_ip=ping_formatted_gw_addr,\
       #                                                          ping_count='6', exp_count='6')
 
@@ -820,12 +855,15 @@ def l3_ecmp_scaling_tc(max_ecmp, use_config_file):
         #max_range = data.base_val+max_ecmp-1
         max_range = data.base_val+max_ecmp
         for index in range(base_range, max_range):
-            command = "config interface ip remove "+ "Vlan" + str(index) + " " + ip_addr
+            #command = "config interface ip remove "+ "Vlan" + str(index) + " " + ip_addr
+            command = "cfgmgr intf del "+ ip_addr +" dev Vlan" + str(index)
             st.config(dut, command)
-            command = "config vlan member del {} {}".format(index, member3)
-            st.config(dut, command)
-            command = "config vlan del {}".format(index)
-            st.config(dut, command)
+            #command = "config vlan member del {} {}".format(index, member3)
+            #st.config(dut, command)
+            vapi.delete_vlan_member(dut, index, member3, tagging_mode=True)
+            #command = "config vlan del {}".format(index)
+            #st.config(dut, command)
+            vapi.delete_vlan(dut, index)
             (_, ip_addr) = ipfeature.increment_ip_addr(ip_addr, "network")
         #del_vlan = max_range
         #command = "config interface ip remove "+ "Vlan" + str(del_vlan) + " " + ip_addr
@@ -865,47 +903,47 @@ def test_ft_l3_Xecmp_scaling_tc():
 
 
 
-@pytest.mark.l3_scale_ut_nr
-def nest_l3_32ecmp_scaling_tc():
-    (dut) = (data.dut)
-    max_ecmp_32 = data.max_ecmp/4
-    use_config_file = True
-    ipfeature.clear_ip_configuration([dut])
-    ret = l3_ecmp_scaling_tc(max_ecmp_32, use_config_file)
-    if ret is True:
-        st.log("Test Case 1.13 PASSED")
-        st.report_pass("operation_successful")
-    else:
-        st.log("Test Case 1.13 FAILED")
-        st.report_fail("operation_failed")
-    st.report_pass("operation_successful")
+# @pytest.mark.l3_scale_ut_nr
+# def nest_l3_32ecmp_scaling_tc():
+#     (dut) = (data.dut)
+#     max_ecmp_32 = data.max_ecmp/4
+#     use_config_file = True
+#     ipfeature.clear_ip_configuration([dut])
+#     ret = l3_ecmp_scaling_tc(max_ecmp_32, use_config_file)
+#     if ret is True:
+#         st.log("Test Case 1.13 PASSED")
+#         st.report_pass("operation_successful")
+#     else:
+#         st.log("Test Case 1.13 FAILED")
+#         st.report_fail("operation_failed")
+#     st.report_pass("operation_successful")
 
-@pytest.mark.l3_scale_ut_long_run
-def test_l3_64ecmp_scaling_tc():
-    max_ecmp_64 = data.max_ecmp/2
-    use_config_file = True
-    ret = l3_ecmp_scaling_tc(max_ecmp_64, use_config_file)
-    if ret is True:
-        st.log("Test Case 1.14 PASSED")
-        st.report_pass("operation_successful")
-    else:
-        st.log("Test Case 1.14 FAILED")
-        st.report_fail("operation_failed")
-    st.report_pass("operation_successful")
+# @pytest.mark.l3_scale_ut_long_run
+# def test_l3_64ecmp_scaling_tc():
+#     max_ecmp_64 = data.max_ecmp/2
+#     use_config_file = True
+#     ret = l3_ecmp_scaling_tc(max_ecmp_64, use_config_file)
+#     if ret is True:
+#         st.log("Test Case 1.14 PASSED")
+#         st.report_pass("operation_successful")
+#     else:
+#         st.log("Test Case 1.14 FAILED")
+#         st.report_fail("operation_failed")
+#     st.report_pass("operation_successful")
 
-@pytest.mark.l3_scale_ut_long_run
-def test_l3_128ecmp_scaling_tc():
-    max_ecmp_128 = data.max_ecmp
-    use_config_file = True
-    ret = l3_ecmp_scaling_tc(max_ecmp_128, use_config_file)
+# @pytest.mark.l3_scale_ut_long_run
+# def test_l3_128ecmp_scaling_tc():
+#     max_ecmp_128 = data.max_ecmp
+#     use_config_file = True
+#     ret = l3_ecmp_scaling_tc(max_ecmp_128, use_config_file)
 
-    if ret is True:
-        st.log("Test Case 1.15 PASSED")
-        st.report_pass("operation_successful")
-    else:
-        st.log("Test Case 1.15 FAILED")
-        st.report_fail("operation_failed")
-    st.report_pass("operation_successful")
+#     if ret is True:
+#         st.log("Test Case 1.15 PASSED")
+#         st.report_pass("operation_successful")
+#     else:
+#         st.log("Test Case 1.15 FAILED")
+#         st.report_fail("operation_failed")
+#     st.report_pass("operation_successful")
 
 @pytest.mark.l3_scale_ut_ft
 def test_max_v4_route_with_max_paths():
@@ -998,22 +1036,29 @@ def test_l3_ecmp_4paths_on_bo_tc():
     max_range = data.base_val+4
     base_range = data.base_val-1
     if apply_file is False:
-        command = "config vlan range add 100 105"
-        st.config(dut, command)
-        command = "config vlan member add 100 {}".format(member4)
-        st.config(dut, command)
-        command = "config vlan member add 101 {}".format(member1)
-        st.config(dut, command)
-        command = "config vlan member add 102 {}".format(member2)
-        st.config(dut, command)
-        command = "config vlan member add 103 {}".format(member3)
-        st.config(dut, command)
-        command = "config vlan member add 104 {}".format(member4)
-        st.config(dut, command)
+        #command = "config vlan range add 100 105"
+        #st.config(dut, command)
+        vapi.config_vlan_range(dut, '100 105', config='add', skip_verify=True)
+        #command = "config vlan member add 100 {}".format(member4)
+        #st.config(dut, command)
+        vapi.add_vlan_member(dut, '100', member4, tagging_mode=True)
+        #command = "config vlan member add 101 {}".format(member1)
+        #st.config(dut, command)
+        vapi.add_vlan_member(dut, '101', member1, tagging_mode=True)
+        #command = "config vlan member add 102 {}".format(member2)
+        #st.config(dut, command)
+        vapi.add_vlan_member(dut, '102', member2, tagging_mode=True)
+        #command = "config vlan member add 103 {}".format(member3)
+        #st.config(dut, command)
+        vapi.add_vlan_member(dut, '103', member3, tagging_mode=True)
+        #command = "config vlan member add 104 {}".format(member4)
+        #st.config(dut, command)
+        vapi.add_vlan_member(dut, '104', member4, tagging_mode=True)
         #ip_addr = data.start_ip_addr
         ip_addr = "10.2.100.1/24"
         for index in range(base_range, max_range):
-            command = "config interface ip add "+ "Vlan" + str(index) + " " + ip_addr
+            #command = "config interface ip add "+ "Vlan" + str(index) + " " + ip_addr
+            command = "cfgmgr intf add "+ ip_addr +" dev Vlan" + str(index)
             st.config(dut, command)
             (_, ip_addr) = ipfeature.increment_ip_addr(ip_addr, "network")
 
@@ -1091,21 +1136,28 @@ def test_l3_ecmp_4paths_on_bo_tc():
         ip_addr = data.start_ip_addr
         max_range = data.base_val+4
         for index in range(base_range, max_range):
-            command = "config interface ip remove "+ "Vlan" + str(index) + " " + ip_addr
+            #command = "config interface ip remove "+ "Vlan" + str(index) + " " + ip_addr
+            command = "cfgmgr intf del "+ ip_addr +" dev Vlan" + str(index)
             st.config(dut, command)
             (_, ip_addr) = ipfeature.increment_ip_addr(ip_addr, "network")
-        command = "config vlan member del 100 {}".format(member4)
-        st.config(dut, command)
-        command = "config vlan member del 101 {}".format(member1)
-        st.config(dut, command)
-        command = "config vlan member del 102 {}".format(member2)
-        st.config(dut, command)
-        command = "config vlan member del 103 {}".format(member3)
-        st.config(dut, command)
-        command = "config vlan member del 104 {}".format(member4)
-        st.config(dut, command)
-        command = "config vlan range del 100 105"
-        st.config(dut, command)
+        #command = "config vlan member del 100 {}".format(member4)
+        #st.config(dut, command)
+        vapi.delete_vlan_member(dut, '100', member4, tagging_mode=True)
+        #command = "config vlan member del 101 {}".format(member1)
+        #st.config(dut, command)
+        vapi.delete_vlan_member(dut, '101', member1, tagging_mode=True)
+        #command = "config vlan member del 102 {}".format(member2)
+        #st.config(dut, command)
+        vapi.delete_vlan_member(dut, '102', member2, tagging_mode=True)
+        #command = "config vlan member del 103 {}".format(member3)
+        #st.config(dut, command)
+        vapi.delete_vlan_member(dut, '103', member3, tagging_mode=True)
+        #command = "config vlan member del 104 {}".format(member4)
+        #st.config(dut, command)
+        vapi.delete_vlan_member(dut, '104', member4, tagging_mode=True)
+        #command = "config vlan range del 100 105"
+        #st.config(dut, command)
+        vapi.config_vlan_range(dut, '100 105', config='del', skip_verify=True)
 
     if ret is True:
         st.log("Test Case PASSED")

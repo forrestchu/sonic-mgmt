@@ -6,6 +6,7 @@ from utilities import parallel
 
 from spytest import st, tgapi, SpyTestDict
 from spytest.utils import filter_and_select
+from utilities.utils import retry_api
 
 import apis.common.asic as asicapi
 import apis.switching.vlan as vapi
@@ -17,7 +18,10 @@ import apis.system.interface as intfapi
 import apis.routing.bgp as bgp_api
 import apis.routing.arp as arp_obj
 import apis.routing.bfd as bfdapi
-
+import apis.routing.ip_bgp as ip_bgp
+import mc_lib as loc_lib
+from mc_vars import * #all the variables used for vrf testcase
+from mc_vars import data
 #
 #            +-------------------+                 +-------------------+
 # TG1_1====  |                    |                |                    |
@@ -43,7 +47,7 @@ import apis.routing.bfd as bfdapi
 #                                                     ||
 #                                                     TG3_1#
 
-data = SpyTestDict()
+#data = SpyTestDict()
 
 def var_init():
     global vars
@@ -53,10 +57,14 @@ def var_init():
     data.ecmp_501_502_dut1_dut2_portlist = ['Ethernet92', 'Ethernet96', 'Ethernet108']
     data.ecmp_501_502_dut_RJ_portlist = ['Ethernet8', 'Ethernet9', 'Ethernet10', 'Ethernet11']
     data.ecmp_501_502_dut_tg_portlist = ['Ethernet111', 'Ethernet112']
+    data.dut_ecmp_scale_start_subintf = '201'
+    data.dut_ecmp_scale_subintf_num = 13
     data.dut_bfd_port_list = ['Ethernet12']
     data.dut1_vrf1_ip_addr = ["12.109.104.2", "12.110.104.2", "12.111.100.2", " 12.112.100.2"]
+    data.dut1_vrf1_ipv6_addr = ["fd40:12:109:104::2", "fd40:12:110:104::2", "fd40:12:111:100::2", "fd40:12:112:100::2"]
     data.dut1_vrf1_id = ["503", "503", "501", "501"]
     data.dut1_vrf2_ip_addr = ["12.109.106.2", "12.110.106.2", "12.111.102.2", "12.112.102.2"]
+    data.dut1_vrf2_ipv6_addr = ["fd40:12:109:106::2", "fd40:12:110:106::2", "fd40:12:111:102::2", "fd40:12:112:102::2"]
     data.dut1_vrf2_id = ["504", "504", "502", "502"]
     data.dut_traffic_vrf_name = {"501": "long-vrf-501", "502": "long-vrf-502", 
                                 "503": "long-vrf-503", "504": "long-vrf-504"}
@@ -65,8 +73,10 @@ def var_init():
     data.dut1_dut2_bfd_vrf_name = ["long-vrf-dut-bfd1"]
 
     data.dut2_vrf1_ip_addr = ["11.109.104.1", "11.110.104.1"]
+    data.dut2_vrf1_ipv6_addr = ["fd40:11:109:104::1", "fd40:11:110:104::1"]
     data.dut2_vrf1_id = ["503", "503"]
     data.dut2_vrf2_ip_addr = ["11.109.106.1", "11.110.106.1"]
+    data.dut2_vrf2_ipv6_addr = ["fd40:11:109:106::1", "fd40:11:110:106::1"]
     data.dut2_vrf2_id = ["504", "504"]
 
     data.dut3_vrf1_ip_addr = ["11.61.100.1", "11.62.100.1"]
@@ -84,18 +94,30 @@ def var_init():
     data.tg2_bfdv6_start_ip_addr = ["109:1::2","110:2::2"]
 
     data.tg1_vrf1_ip_addr = ["12.109.104.1", "12.110.104.1", "12.111.100.1", "12.112.100.1"]
+    data.tg1_vrf1_ipv6_addr = ["fd40:12:109:104::1", "fd40:12:110:104::1", "fd40:12:111:100::1", "fd40:12:112:100::1"]
     data.tg1_vrf2_ip_addr = ["12.109.106.1", "12.110.106.1", "12.111.102.1", "12.112.102.1"]
+    data.tg1_vrf2_ipv6_addr = ["fd40:12:109:106::1", "fd40:12:110:106::1", "fd40:12:111:102::1", "fd40:12:112:102::1"]
     data.tg1_vrf1_router_prefix_list = ["202.1.0.0", "202.1.0.0", "204.1.0.0", "204.1.0.0"]
+    data.tg1_vrf1_router_v6_prefix_list = ["3000:1::1", "3000:1::1", "3000:2::1", "3000:2::1"]
     data.tg1_vrf2_router_prefix_list = ["202.2.0.0", "202.2.0.0", "204.2.0.0", "204.2.0.0"]
+    data.tg1_vrf2_router_v6_prefix_list = ["3001:1::1", "3001:1::1", "3001:1::1", "3001:1::1"]
     data.tg1_vrf1_router_count_list = ["100000","100000","50000","50000"]
+    data.tg1_vrf1_router_v6_count_list = ['50000', '50000','50000','50000']
     data.tg1_vrf2_router_count_list = ["100000","100000","50000", "50000"]
+    data.tg1_vrf2_router_v6_count_list = ['50000', '50000','50000','50000']
     data.tg1_router_prefix_length = "31"
+    data.tg1_router_v6_prefix_length = "64"
 
-    data.tg2_vrf1_ip_addr = ["11.109.104.2", "11.110.104.2", "11.61.100.2", "11.62.100.2"]
-    data.tg2_vrf2_ip_addr = ["11.109.106.2", "11.110.106.2", "11.61.100.2", "11.62.100.2"]
+    data.tg2_vrf1_ip_addr = ["11.109.104.2", "11.110.104.2"]
+    data.tg2_vrf1_ipv6_addr = ["fd40:11:109:104::2", "fd40:11:110:104::2"]
+    data.tg2_vrf2_ip_addr = ["11.109.106.2", "11.110.106.2"]
+    data.tg2_vrf2_ipv6_addr = ["fd40:11:109:106::2", "fd40:11:110:106::2"]
     data.tg2_vrf1_router_prefix = "200.1.0.0"
+    data.tg2_vrf1_router_v6_prefix = "4000:1::1"
     data.tg2_vrf2_router_prefix = "200.2.0.0"
+    data.tg2_vrf2_router_v6_prefix = "4001:1::1"
     data.tg2_router_prefix_length = "32"
+    data.tg2_router_v6_prefix_length = "64"
     data.tg2_router_count = "10000"
 
     data.tg3_vrf1_ip_addr = ["11.61.100.2", "11.62.100.2"]
@@ -212,6 +234,18 @@ def get_handles():
     tg_ph_list = [tg_ph_1, tg_ph_2, tg_ph_3, tg_ph_4, tg_ph_5, tg_ph_6, tg_ph_7, tg_ph_8]
     return (tg_list, tg_ph_list)
 
+def get_dut_ip():
+    data.my_dut_list = st.get_dut_names()
+    dut1 = data.my_dut_list[0]
+    dut2 = data.my_dut_list[1]
+
+    cmd = "cli -c 'no page' -c 'show ip interface brief'"
+    output1 = st.show(dut1, cmd)
+    output2 = st.show(dut2, cmd)
+
+    data.dut1_all_ip_addr = copy.deepcopy(output1)
+    data.dut2_all_ip_addr = copy.deepcopy(output2)
+
 def ixia_bfd_params_modify(bfd_handler, ipver, flap_interval='0', tx_interval='100', rx_interval='100'):
     tg = data.tg_list[0]
 
@@ -241,7 +275,9 @@ def ixia_bfd_params_modify(bfd_handler, ipver, flap_interval='0', tx_interval='1
 def mc_scale_module_hooks(request):
     #add things at the start of this module
 
-    var_init()
+    #var_init()
+    global vars
+    vars = st.ensure_min_topology("D1D2:4","D1T1:6","D2T1:2")
     (data.tg_list, data.tg_ph_list) = get_handles()
     for i in range(6):
         data.tg_list[i].tg_traffic_control(action='reset',port_handle=data.tg_ph_list[i])
@@ -250,17 +286,18 @@ def mc_scale_module_hooks(request):
     tg1_base_config()
     tg2_base_config()
     tg3_base_config()
+    data.tg_list[0].tg_test_control(action='stop_all_protocols')
+    st.wait(20)
     tg1_bgp_router_add()
     tg2_bgp_router_add()
-    tg3_bgp_router_add()
-    data.tg_list[0].tg_test_control(action='stop_all_protocols')
-    st.wait(10)
+    tg3_bgp_router_add()    
     data.tg_list[0].tg_test_control(action='start_all_protocols')
     st.wait(150)
     vrfs_traffic_add()
-
+    vrfs_traffic_v6_add()
+    get_dut_ip()
     yield
-
+    import pdb; pdb.set_trace()
     l3_base_unconfig()
 
 @pytest.fixture(scope="function", autouse=True)
@@ -271,8 +308,13 @@ def mc_scale_func_hooks(request):
     dut2 = data.my_dut_list[1]
 
     yield
-    st.show(dut1,"show vrf")
-    st.show(dut2,"show vrf")
+    if st.get_func_name(request) == 'test_bgp_fast_isolate_and_recover':
+        if not loc_lib.check_bgp_isolate(dut1, 'no-isolate'):
+            no_isolate_cmd = "no isolate fast"
+            st.config(dut1, no_isolate_cmd, type='alicli')
+    else:
+        st.show(dut1,"show vrf")
+        st.show(dut2,"show vrf")
 
 def duts_base_config():
     data.my_dut_list = st.get_dut_names()
@@ -307,11 +349,15 @@ def tg1_base_config():
         tg_ph = data.tg_ph_list[i]
         # create 3 devicegroup per ixia port: 1.vrf503; 2.vrf504; 3.vrf_bfd_scale
         h1_1=tg.tg_interface_config(port_handle=tg_ph, mode='config', intf_ip_addr=data.tg1_vrf1_ip_addr[i], 
-                                gateway=data.dut1_vrf1_ip_addr[i], vlan='1', vlan_id=data.dut1_vrf1_id[i], arp_send_req='1')
+                                gateway=data.dut1_vrf1_ip_addr[i], vlan='1', vlan_id=data.dut1_vrf1_id[i],
+                                ipv6_intf_addr=data.tg1_vrf1_ipv6_addr[i], ipv6_gateway=data.dut1_vrf1_ipv6_addr[i],ipv6_gateway_step='0::0',
+                                intf_ip_addr_step='0.0.0.1', ipv6_intf_addr_step = '::1', arp_send_req='1')
         intf_handle_list.insert(0,h1_1)
 
         h1_2=tg.tg_interface_config(port_handle=tg_ph, mode='config', intf_ip_addr=data.tg1_vrf2_ip_addr[i], 
-                                gateway=data.dut1_vrf2_ip_addr[i], vlan='1', vlan_id=data.dut1_vrf2_id[i], arp_send_req='1')
+                                gateway=data.dut1_vrf2_ip_addr[i], vlan='1', vlan_id=data.dut1_vrf2_id[i],
+                                ipv6_intf_addr=data.tg1_vrf2_ipv6_addr[i], ipv6_gateway=data.dut1_vrf2_ipv6_addr[i],ipv6_gateway_step='0::0',
+                                intf_ip_addr_step='0.0.0.1', ipv6_intf_addr_step = '::1', arp_send_req='1')
         intf_handle_list.insert(1,h1_2)
 
         h1_3=tg.tg_interface_config(port_handle=tg_ph, mode='config', intf_ip_addr=data.tg1_bfdv4_start_ip_addr[i], 
@@ -344,6 +390,24 @@ def tg1_base_config():
             #route_var = route_var,
             ctrl_var  = ctrl_start)
 
+        conf_var = {'mode'                 : 'enable',
+                'active_connect_enable' : '1',
+                'enable_4_byte_as'      : '1',
+                'local_as'              : data.tg1_vrf_bgp_as,
+                'remote_as'             : data.dut1_vrf_bgp_as,
+                'remote_ipv6_addr'      : data.dut1_vrf1_ipv6_addr[i],
+                'ip_version'            : '6',
+                'bfd_registration'      : '1',
+                'bfd_registration_mode' : 'single_hop'
+                }
+        route_var['prefix'] = data.tg1_vrf1_router_v6_prefix_list[i]
+        
+        bgp_v6_vrf1 = tgapi.tg_bgp_config(tg = tg,
+            handle    = h1_1['ipv6_handle'],
+            conf_var  = conf_var,
+            #route_var = route_var,
+            ctrl_var  = ctrl_start)
+
          # Configuring the BGP router in vrf2
         conf_var = {'mode'                 : 'enable',
                     'active_connect_enable' : '1',
@@ -364,6 +428,24 @@ def tg1_base_config():
             conf_var  = conf_var,
             #route_var = route_var,
             ctrl_var  = ctrl_start)
+        
+        conf_var = {'mode'                 : 'enable',
+                'active_connect_enable' : '1',
+                'enable_4_byte_as'      : '1',
+                'local_as'              : data.tg1_vrf_bgp_as,
+                'remote_as'             : data.dut1_vrf_bgp_as,
+                'remote_ipv6_addr'      : data.dut1_vrf2_ipv6_addr[i],
+                'ip_version'            : '6',
+                'bfd_registration'      : '1',
+                'bfd_registration_mode' : 'single_hop'
+                }
+        route_var['prefix'] = data.tg1_vrf2_router_v6_prefix_list[i]
+        
+        bgp_v6_vrf2 = tgapi.tg_bgp_config(tg = tg,
+            handle    = h1_2['ipv6_handle'],
+            conf_var  = conf_var,
+            #route_var = route_var,
+            ctrl_var  = ctrl_start)
 
          # Configuring the BGP router in vrf_bfd_scale
         conf_var = {'mode'                 : 'enable',
@@ -375,11 +457,7 @@ def tg1_base_config():
                     'bfd_registration'      : '1',
                     'bfd_registration_mode' : 'single_hop'
                     }
-        route_var = {'mode':'add', 
-                    'num_routes': "10000", 
-                    'prefix': data.tg1_vrf1_router_prefix_list[i], 
-                    'as_path':'as_seq:1'
-                    }
+ 
         bgp_v4_vrf_bfd = tgapi.tg_bgp_config(tg = tg,
             handle    = h1_3['ipv4_handle'],
             conf_var  = conf_var,
@@ -407,6 +485,8 @@ def tg1_base_config():
         bgp_v4_handle_list.insert(0,bgp_v4_vrf1)
         bgp_v4_handle_list.insert(1,bgp_v4_vrf2)
         bgp_v4_handle_list.insert(2,bgp_v4_vrf_bfd)
+        bgp_v6_handle_list.insert(0,bgp_v6_vrf1)
+        bgp_v6_handle_list.insert(1,bgp_v6_vrf2)
         bgp_v6_handle_list.insert(2,bgp_v6_vrf_bfd)
 
         st.log("create ipv4 bfd for each vrf")
@@ -423,7 +503,7 @@ def tg1_base_config():
             bfd_v4_handle_list.insert(j, bfd_v4_handle)
  
         st.log("create ipv6 bfd for each vrf")
-        for j in range(2,3):
+        for j in range(3):
             bfd_v6_handle = tg.tg_emulation_bfd_config(handle = intf_handle_list[j]['ipv6_handle'],
                 min_rx_interval                = data.dut_bfd_timer,
                 mode                           = "create",
@@ -448,6 +528,7 @@ def tg1_bgp_router_add():
 
     #init DUT1====TG
     tg1_port_vrf_route_list=[0,0,0]
+    tg1_port_vrf_route_v6_list=[0,0,0]
     for port_i in range(4):
         tg = data.tg_list[port_i]
         tg_ph = data.tg_ph_list[port_i]
@@ -461,6 +542,12 @@ def tg1_bgp_router_add():
                                     prefix_from=data.tg1_router_prefix_length, as_path='as_seq:1', active='1')
         tg1_port_vrf_route_list[0] = route1
 
+        route1_v6 = tg.tg_emulation_bgp_route_config(handle=port_handle['bgp_v6'][vrf_id]['conf']['handle'], mode='add', 
+                                    num_routes=data.tg1_vrf1_router_v6_count_list[port_i],
+                                    prefix=data.tg1_vrf1_router_v6_prefix_list[port_i], 
+                                    prefix_from=data.tg1_router_v6_prefix_length, as_path='as_seq:1', active='1', ip_version='6')
+        tg1_port_vrf_route_v6_list[0] = route1_v6
+
         #create vrf2 route
         vrf_id = 1
         route2 = tg.tg_emulation_bgp_route_config(handle=port_handle['bgp_v4'][vrf_id]['conf']['handle'], mode='add', 
@@ -469,12 +556,19 @@ def tg1_bgp_router_add():
                                     prefix_from=data.tg1_router_prefix_length, as_path='as_seq:1', active='1')
         tg1_port_vrf_route_list[1] = route2
 
+        route2_v6 = tg.tg_emulation_bgp_route_config(handle=port_handle['bgp_v6'][vrf_id]['conf']['handle'], mode='add', 
+                                    num_routes=data.tg1_vrf2_router_v6_count_list[port_i],
+                                    prefix=data.tg1_vrf2_router_v6_prefix_list[port_i], 
+                                    prefix_from=data.tg1_router_v6_prefix_length, as_path='as_seq:1', active='1', ip_version='6')
+        tg1_port_vrf_route_v6_list[1] = route2_v6
         data.tg1_handle[port_i]['route'] = copy.deepcopy(tg1_port_vrf_route_list)
+        data.tg1_handle[port_i]['route_v6'] = copy.deepcopy(tg1_port_vrf_route_v6_list)
 
 
 def tg2_bgp_router_add():
 
     tg2_port_vrf_route_list=[0,0,0]
+    tg2_port_vrf_route_v6_list=[0,0,0]
     for port_i in range(2):
         tg = data.tg_list[port_i+4]
         tg_ph = data.tg_ph_list[port_i+4]
@@ -487,6 +581,12 @@ def tg2_bgp_router_add():
                                     prefix_from=data.tg2_router_prefix_length, as_path='as_seq:1', active='1')
         tg2_port_vrf_route_list[0] = route1
 
+        route1_v6 = tg.tg_emulation_bgp_route_config(handle=port_handle['bgp_v6'][vrf_id]['conf']['handle'], mode='add', 
+                                    num_routes=data.tg2_router_count,
+                                    prefix=data.tg2_vrf1_router_v6_prefix, 
+                                    prefix_from=data.tg2_router_v6_prefix_length, as_path='as_seq:1', active='1', ip_version='6')
+        tg2_port_vrf_route_v6_list[0] = route1_v6
+
         #create vrf2 route
         vrf_id = 1
         route2 = tg.tg_emulation_bgp_route_config(handle=port_handle['bgp_v4'][vrf_id]['conf']['handle'], mode='add', 
@@ -494,7 +594,14 @@ def tg2_bgp_router_add():
                                     prefix_from=data.tg2_router_prefix_length, as_path='as_seq:1', active='1')
         tg2_port_vrf_route_list[1] = route2
 
+        route2_v6 = tg.tg_emulation_bgp_route_config(handle=port_handle['bgp_v6'][vrf_id]['conf']['handle'], mode='add', 
+                                    num_routes=data.tg2_router_count,
+                                    prefix=data.tg2_vrf1_router_v6_prefix,  
+                                    prefix_from=data.tg2_router_v6_prefix_length, as_path='as_seq:1', active='1', ip_version='6')
+        tg2_port_vrf_route_v6_list[1] = route2_v6
+
         data.tg2_handle[port_i]['route'] = copy.deepcopy(tg2_port_vrf_route_list)
+        data.tg2_handle[port_i]['route_v6'] = copy.deepcopy(tg2_port_vrf_route_v6_list)
 
 def tg3_bgp_router_add():
 
@@ -534,11 +641,15 @@ def tg2_base_config():
 
         # create 3 devicegroup per ixia port: 1.vrf503; 2.vrf504; 3.vrf_bfd_scale
         h1_1=tg.tg_interface_config(port_handle=tg_ph, mode='config', intf_ip_addr=data.tg2_vrf1_ip_addr[i], 
-                                gateway=data.dut2_vrf1_ip_addr[i], vlan='1', vlan_id=data.dut1_vrf1_id[i], arp_send_req='1')
+                                gateway=data.dut2_vrf1_ip_addr[i], vlan='1', vlan_id=data.dut1_vrf1_id[i],
+                                ipv6_intf_addr=data.tg2_vrf1_ipv6_addr[i],ipv6_gateway=data.dut2_vrf1_ipv6_addr[i],ipv6_gateway_step='0::0',
+                                intf_ip_addr_step='0.0.0.1', ipv6_intf_addr_step = '::1', arp_send_req='1')
         intf_handle_list[0] = h1_1
 
         h1_2=tg.tg_interface_config(port_handle=tg_ph, mode='config', intf_ip_addr=data.tg2_vrf2_ip_addr[i], 
-                                gateway=data.dut2_vrf2_ip_addr[i], vlan='1', vlan_id=data.dut1_vrf2_id[i], arp_send_req='1')
+                                gateway=data.dut2_vrf2_ip_addr[i], vlan='1', vlan_id=data.dut1_vrf2_id[i], 
+                                ipv6_intf_addr=data.tg2_vrf2_ipv6_addr[i],ipv6_gateway=data.dut2_vrf2_ipv6_addr[i],ipv6_gateway_step='0::0',
+                                intf_ip_addr_step='0.0.0.1', ipv6_intf_addr_step = '::1', arp_send_req='1')
         intf_handle_list[1] = h1_2
 
         h1_3=tg.tg_interface_config(port_handle=tg_ph, mode='config', intf_ip_addr=data.tg2_bfdv4_start_ip_addr[i], 
@@ -570,6 +681,22 @@ def tg2_base_config():
             conf_var  = conf_var,
             #route_var = route_var,
             ctrl_var  = ctrl_start)
+        
+        conf_var = {'mode'                 : 'enable',
+                'active_connect_enable' : '1',
+                'enable_4_byte_as'      : '1',
+                'local_as'              : data.tg2_vrf_bgp_as,
+                'remote_as'             : data.dut2_vrf_bgp_as,
+                'remote_ipv6_addr'      : data.dut2_vrf1_ipv6_addr[i],
+                'ip_version'            : '6',
+                'bfd_registration'      : '1',
+                'bfd_registration_mode' : 'single_hop'
+                }
+        bgp_v6_vrf1 = tgapi.tg_bgp_config(tg = tg,
+            handle    = h1_1['ipv6_handle'],
+            conf_var  = conf_var,
+            #route_var = route_var,
+            ctrl_var  = ctrl_start)
 
          # Configuring the BGP router in vrf2
         conf_var = {'mode'                 : 'enable',
@@ -581,13 +708,25 @@ def tg2_base_config():
                     'bfd_registration'      : '1',
                     'bfd_registration_mode' : 'single_hop'
                     }
-        route_var = {'mode':'add', 
-                    'num_routes': data.tg1_vrf2_router_count_list[i], 
-                    'prefix': data.tg2_vrf1_router_prefix, 
-                    'as_path':'as_seq:1'
-                    }
+
         bgp_v4_vrf2 = tgapi.tg_bgp_config(tg = tg,
             handle    = h1_2['ipv4_handle'],
+            conf_var  = conf_var,
+            #route_var = route_var,
+            ctrl_var  = ctrl_start)
+
+        conf_var = {'mode'                 : 'enable',
+                'active_connect_enable' : '1',
+                'enable_4_byte_as'      : '1',
+                'local_as'              : data.tg2_vrf_bgp_as,
+                'remote_as'             : data.dut2_vrf_bgp_as,
+                'remote_ipv6_addr'      : data.dut2_vrf2_ipv6_addr[i],
+                'ip_version'            : '6',
+                'bfd_registration'      : '1',
+                'bfd_registration_mode' : 'single_hop'
+                }
+        bgp_v6_vrf2 = tgapi.tg_bgp_config(tg = tg,
+            handle    = h1_2['ipv6_handle'],
             conf_var  = conf_var,
             #route_var = route_var,
             ctrl_var  = ctrl_start)
@@ -634,6 +773,8 @@ def tg2_base_config():
         bgp_v4_handle_list[0] = bgp_v4_vrf1
         bgp_v4_handle_list[1] = bgp_v4_vrf2
         bgp_v4_handle_list[2] = bgp_v4_vrf_bfd
+        bgp_v6_handle_list[0] = bgp_v6_vrf1
+        bgp_v6_handle_list[1] = bgp_v6_vrf2
         bgp_v6_handle_list[2] = bgp_v6_vrf_bfd
 
         st.log("create ipv4 bfd for each vrf")
@@ -650,7 +791,7 @@ def tg2_base_config():
             bfd_v4_handle_list[j] = bfd_v4_handle
 
         st.log("create ipv6 bfd for each vrf")
-        for j in range(2,3):
+        for j in range(3):
             bfd_v6_handle = tg.tg_emulation_bfd_config(handle = intf_handle_list[j]['ipv6_handle'],
                 min_rx_interval                = data.dut_bfd_timer,
                 mode                           = "create",
@@ -746,7 +887,6 @@ def vrfs_traffic_add():
     dut1 = data.my_dut_list[0]
     dut2 = data.my_dut_list[1]
     result = 0
-    ecmp_member_Gbps = 33
 
     # port 1(TG1_1)<===>port 5(TG2_1) vrf503
     vrf_id = 0
@@ -834,6 +974,56 @@ def vrfs_traffic_add():
                     transmit_mode='continuous', length_mode='fixed',frame_size='1500', rate_percent=data.traffic_rate_precent)
     data.streams['port7_to_port4_vrf_502'] = stream['stream_id']
 
+def vrfs_traffic_v6_add():
+    data.my_dut_list = st.get_dut_names()
+    dut1 = data.my_dut_list[0]
+    dut2 = data.my_dut_list[1]
+    result = 0
+
+    # port 1(TG1_1)<===>port 5(TG2_1) vrf503
+    vrf_id = 0
+    src_handle = data.tg1_handle[0]['route_v6'][vrf_id]
+    tg = data.tg_list[0]
+    tg_ph = data.tg_ph_list[0]
+    tg_ph_2 = data.tg_ph_list[4]
+    dst_handle_list = [data.tg2_handle[0]['route_v6'][vrf_id]['handle'], data.tg2_handle[1]['route_v6'][vrf_id]['handle']]
+    stream = tg.tg_traffic_config(port_handle=tg_ph, port_handle2=tg_ph_2, emulation_src_handle=src_handle['handle'],
+                emulation_dst_handle=dst_handle_list, circuit_endpoint_type='ipv6',mode='create',
+                transmit_mode='continuous', length_mode='fixed',frame_size='1500', rate_percent=data.traffic_rate_precent)
+    data.streams['port1_to_port5_vrf_503_v6'] = stream['stream_id']
+
+    tg = data.tg_list[4]
+    vrf_id = 0
+    src_handle = data.tg2_handle[0]['route_v6'][vrf_id]
+    dst_handle_list = [data.tg1_handle[0]['route_v6'][vrf_id]['handle'], data.tg1_handle[1]['route_v6'][vrf_id]['handle']]
+    stream = tg.tg_traffic_config(port_handle=tg_ph_2, port_handle2=tg_ph, emulation_src_handle=src_handle['handle'],
+                    emulation_dst_handle=dst_handle_list, circuit_endpoint_type='ipv6',mode='create',
+                    transmit_mode='continuous', length_mode='fixed',frame_size='1500', rate_percent=data.traffic_rate_precent)
+    data.streams['port5_to_port1_vrf_503_v6'] = stream['stream_id']
+
+
+    # port 2(TG1_2)<===>port 6(TG2_2) vrf504
+    vrf_id = 1
+    src_handle = data.tg1_handle[1]['route_v6'][vrf_id]
+    dst_handle_list = [data.tg2_handle[0]['route_v6'][vrf_id]['handle'], data.tg2_handle[1]['route_v6'][vrf_id]['handle']]
+    tg = data.tg_list[1]
+    tg_ph = data.tg_ph_list[1]
+    tg_ph_2 = data.tg_ph_list[5]
+    stream = tg.tg_traffic_config(port_handle=tg_ph, port_handle2=tg_ph_2, emulation_src_handle=src_handle['handle'],
+                emulation_dst_handle=dst_handle_list, circuit_endpoint_type='ipv6',mode='create',
+                transmit_mode='continuous', length_mode='fixed',frame_size='1500', rate_percent=data.traffic_rate_precent)
+    data.streams['port2_to_port6_vrf_504_v6'] = stream['stream_id']
+
+    tg = data.tg_list[5]
+    vrf_id = 1
+    src_handle = data.tg2_handle[1]['route_v6'][vrf_id]
+    dst_handle_list = [data.tg1_handle[0]['route_v6'][vrf_id]['handle'], data.tg1_handle[1]['route_v6'][vrf_id]['handle']]
+    stream = tg.tg_traffic_config(port_handle=tg_ph_2, port_handle2=tg_ph, emulation_src_handle=src_handle['handle'],
+                    emulation_dst_handle=dst_handle_list, circuit_endpoint_type='ipv6',mode='create',
+                    transmit_mode='continuous', length_mode='fixed',frame_size='1500', rate_percent=data.traffic_rate_precent)
+    data.streams['port6_to_port2_vrf_504_v6'] = stream['stream_id']
+
+
 def l3_base_unconfig():
 
     data.my_dut_list = st.get_dut_names()
@@ -842,8 +1032,8 @@ def l3_base_unconfig():
     st.log("remove l3 base config.")
     #ipfeature.clear_ip_configuration(st.get_dut_names())
     #vapi.clear_vlan_configuration(st.get_dut_names())
-    command = "show arp"
-    st.show(dut1, command)
+    #command = "show arp"
+    #st.show(dut1, command)
 
 @pytest.mark.community
 @pytest.mark.community_pass
@@ -855,18 +1045,20 @@ def test_subintf_503_504_traffic():
     tg_ph = data.tg_ph_list[0]
     tg_ph_2 = data.tg_ph_list[4]
     result = 0
+
     bandwidth = 2*float(data.traffic_rate_precent)
     ecmp_member_Gbps = int(bandwidth/len(data.ecmp_503_504_dut1_dut2_portlist))
     ixia_ecmp_Gbps = int(bandwidth/len(data.ecmp_503_504_dut_tg_portlist))
     traffic_vrf_503_list = [data.streams['port5_to_port1_vrf_503'], data.streams['port1_to_port5_vrf_503']]
     traffic_vrf_504_list = [data.streams['port6_to_port2_vrf_504'], data.streams['port2_to_port6_vrf_504']]
+    traffic_vrf_503_v6_list = [data.streams['port5_to_port1_vrf_503_v6'], data.streams['port1_to_port5_vrf_503_v6']]
 
     #step1 check lb in ecmp_503_504_dut1_dut2_portlist and end-to-end traffic statistic in vrf 503
     st.banner("step1: test traffic in vrf_503")
     tg.tg_traffic_control(action='clear_stats', port_handle=data.tg_ph_list)
     tg.tg_traffic_control(action='run', stream_handle=traffic_vrf_503_list)
 
-    st.wait(30)
+    st.wait(10)
     if not check_dut_intf_tx_traffic_counters(dut2,data.ecmp_503_504_dut1_dut2_portlist,ecmp_member_Gbps):
         st.log("dut2 dut-to-dut ecmp members rate check failed")
         result=1
@@ -875,7 +1067,7 @@ def test_subintf_503_504_traffic():
         st.log("dut1 dut-to-dut ecmp members rate check failed")
         result=1
 
-    st.wait(30)
+    st.wait(10)
     tg.tg_traffic_control(action='stop', stream_handle=traffic_vrf_503_list)
 
     st.banner("step1.1: check dut2-->dut1 port5_to_port1_vrf_503")
@@ -895,6 +1087,48 @@ def test_subintf_503_504_traffic():
             'rx_ports' : [vars.T1D2P1, vars.T1D2P2],
             'rx_obj' : [data.tg_list[4],data.tg_list[5]],
             'stream_list': [[data.streams['port1_to_port5_vrf_503']]]
+        }
+    }
+    #check ecmp port
+    if not tgapi.validate_tgen_traffic(traffic_details=traffic_details, mode='streamblock', comp_type='packet_count'):
+        st.log("validate_tgen_traffic failed")
+        result=1
+
+    traffic_vrf_503_v6_list = [data.streams['port5_to_port1_vrf_503_v6'], data.streams['port1_to_port5_vrf_503_v6']]
+
+    #step1 check lb in ecmp_503_504_dut1_dut2_portlist and end-to-end traffic v6 statistic in vrf 503
+    st.banner("step1.2: check dut2-->dut1 port5_to_port1_vrf_503_v6")
+    tg.tg_traffic_control(action='clear_stats', port_handle=data.tg_ph_list)
+    tg.tg_traffic_control(action='run', stream_handle=traffic_vrf_503_v6_list)
+
+    st.wait(10)
+    if not check_dut_intf_tx_traffic_counters(dut2,data.ecmp_503_504_dut1_dut2_portlist,ecmp_member_Gbps):
+        st.log("dut2 dut-to-dut ecmp members rate check failed")
+        result=1
+
+    if not check_dut_intf_tx_traffic_counters(dut1,data.ecmp_503_504_dut1_dut2_portlist,ecmp_member_Gbps):
+        st.log("dut1 dut-to-dut ecmp members rate check failed")
+        result=1
+
+    st.wait(10)
+    tg.tg_traffic_control(action='stop', stream_handle=traffic_vrf_503_v6_list)
+
+    traffic_details = {
+       '1': {
+            'tx_ports' : [vars.T1D2P1],
+            'tx_obj' : [data.tg_list[4]],
+            'exp_ratio' : [1],        #two ecmp port, each is 50%
+            'rx_ports' : [vars.T1D1P1, vars.T1D1P2],
+            'rx_obj' : [data.tg_list[0], data.tg_list[1]],
+            'stream_list': [[data.streams['port5_to_port1_vrf_503_v6']]]
+        },
+       '2': {
+            'tx_ports' : [vars.T1D1P1],
+            'tx_obj' : [data.tg_list[0]],
+            'exp_ratio' : [1],        #two ecmp port, each is 50%
+            'rx_ports' : [vars.T1D2P1, vars.T1D2P2],
+            'rx_obj' : [data.tg_list[4],data.tg_list[5]],
+            'stream_list': [[data.streams['port1_to_port5_vrf_503_v6']]]
         }
     }
     #check ecmp port
@@ -965,7 +1199,7 @@ def test_subintf_503_504_traffic():
     tg.tg_emulation_bgp_control(handle=data.tg2_handle[1]['bgp_v4'][1]['conf']['handle'],mode = 'restart')
     tg.tg_emulation_bgp_control(handle=data.tg1_handle[0]['bgp_v4'][1]['conf']['handle'],mode = 'restart')
     tg.tg_emulation_bgp_control(handle=data.tg2_handle[0]['bgp_v4'][1]['conf']['handle'],mode = 'restart')
-    st.wait(70)
+    st.wait(100)
 
     #check traffic after flaping disable
     tg.tg_traffic_control(action='clear_stats', port_handle=data.tg_ph_list)
@@ -1012,7 +1246,7 @@ def test_subintf_503_504_traffic():
     if not tgapi.validate_tgen_traffic(traffic_details=traffic_details, mode='streamblock', comp_type='packet_count'):
         st.log("validate_tgen_traffic port2 port6 failed")
         result=1
-
+    
     if result == 0:
         st.report_pass("test_case_passed")
     else:
@@ -1044,16 +1278,16 @@ def test_subintf_501_502_traffic():
     st.banner("step1: test traffic in vrf_501")
     tg.tg_traffic_control(action='clear_stats', port_handle=data.tg_ph_list)
     tg.tg_traffic_control(action='run', stream_handle=traffic_vrf_501_list)
-    st.wait(30)
-    if not check_dut_intf_tx_traffic_counters(dut2,data.ecmp_501_502_dut1_dut2_portlist,dut1_dut2_ecmp_member_Gbps):
+    st.wait(10)
+    if not retry_api(check_dut_intf_tx_traffic_counters,dut=dut2,portlist=data.ecmp_501_502_dut1_dut2_portlist,expect_val=dut1_dut2_ecmp_member_Gbps,retry_count= 3,delay= 3):
         st.log("dut2 dut-to-dut ecmp members rate check failed")
         result=1
 
-    if not check_dut_intf_tx_traffic_counters(dut1,data.ecmp_501_502_dut1_dut2_portlist,dut1_dut2_ecmp_member_Gbps):
+    if not retry_api(check_dut_intf_tx_traffic_counters,dut=dut1,portlist=data.ecmp_501_502_dut1_dut2_portlist,expect_val=dut1_dut2_ecmp_member_Gbps,retry_count= 3,delay= 3):
         st.log("dut1 dut-to-dut ecmp members rate check failed")
         result=1
 
-    st.wait(30)
+    st.wait(10)
     tg.tg_traffic_control(action='stop', stream_handle=traffic_vrf_501_list)
 
     st.banner("step1.1: check TG3-->dut1 port7_to_port3_vrf_501")
@@ -1133,7 +1367,7 @@ def test_subintf_501_502_traffic():
     tg.tg_emulation_bgp_control(handle=data.tg1_handle[2]['bgp_v4'][1]['conf']['handle'],mode = 'restart')
     tg.tg_emulation_bgp_control(handle=data.tg1_handle[3]['bgp_v4'][1]['conf']['handle'],mode = 'restart')
     tg.tg_emulation_bgp_control(handle=data.tg3_handle[0]['bgp_v4'][1]['conf']['handle'],mode = 'restart')
-    st.wait(70)
+    st.wait(100)
 
     #check traffic after flaping disable
     tg.tg_traffic_control(action='clear_stats', port_handle=data.tg_ph_list)
@@ -1192,7 +1426,7 @@ def test_read_all_bfd_counter():
     dut1 = data.my_dut_list[0]
     dut2 = data.my_dut_list[1]
     err_status_session = 0
-    tx_stats_session = 0
+    err_tx_session = 0
     interval = int(data.dut_bfd_timer)
     sample_time =30
     result = 0
@@ -1210,13 +1444,13 @@ def test_read_all_bfd_counter():
         tx_pps = (int(tx_counter2) - int(tx_counter1))/sample_time
         if tx_pps > 2*(1000/interval) or tx_pps < (1000/interval)/2:
             st.log("current bfd session {} tx pps:{}".format(output1[i]['peeraddress'], tx_pps))
-            tx_stats_session += 1
+            err_tx_session += 1
         elif down_env1 != down_env2:
             st.log("current bfd session {} down notfiy occur".format(output1[i]['peeraddress']))
             err_status_session += 1
 
-    if err_status_session > 0 or tx_stats_session > 10:
-        st.log("bfd session status eror:{} tx counter error:{}".format(err_session,tx_double_session))
+    if err_status_session > 0 or err_tx_session > 3:
+        st.log("error bfd session, status err:{} tx err:{}".format(err_status_session, err_tx_session))
         result = 1
 
     if result == 0:
@@ -1242,11 +1476,11 @@ def test_bfd_attr_set():
     local_ip_list = [data.dut1_vrf1_ip_addr[0], data.dut1_bfdv6_start_ip_addr[0]]
     remote_ip_list = [data.tg1_vrf1_ip_addr[0], data.tg1_bfdv6_start_ip_addr[0]]
     bfd_handler_list = [data.tg1_handle[0]['bfd_v4'][0], 
-                        data.tg1_handle[0]['bfd_v6'][0]]
+                        data.tg1_handle[0]['bfd_v6'][2]]
     ip_version = ['4', '6']
     for i in range(2):
-        if not bfdapi.verify_bfd_peer(dut1, peer=remote_ip_list[i], local_addr=local_ip_list[i], vrf_name=vrf[i], 
-                                    rx_interval=[[data.dut_bfd_timer,data.tg_bfd_timer]], status='up'):
+        if not retry_api(bfdapi.verify_bfd_peer, dut1, peer=remote_ip_list[i], local_addr=local_ip_list[i], vrf_name=vrf[i], 
+                                    rx_interval=[[data.dut_bfd_timer,data.tg_bfd_timer]], status='up', retry_count= 3, delay= 3):
             st.log("verify_bfd_peer {} failed".format(remote_ip_list[i]))
             st.report_fail("bfd non-work", local_ip_list[i], dut1)
 
@@ -1258,8 +1492,8 @@ def test_bfd_attr_set():
         st.wait(5)
 
         #skip multiplier check
-        if not bfdapi.verify_bfd_peer(dut1, peer=remote_ip_list[i], local_addr=local_ip_list[i], vrf_name=vrf[i], 
-                            rx_interval=[[new_interval,data.tg_bfd_timer]], status='up'):
+        if not retry_api(bfdapi.verify_bfd_peer, dut1, peer=remote_ip_list[i], local_addr=local_ip_list[i], vrf_name=vrf[i], 
+                            rx_interval=[[new_interval,data.tg_bfd_timer]], status='up', retry_count= 3, delay= 3):
             st.log("verify_bfd_peer {} failed".format(remote_ip_list[i]))
             st.report_fail("bfd status error", local_ip_list[i], dut1)
 
@@ -1268,8 +1502,8 @@ def test_bfd_attr_set():
         ixia_bfd_params_modify(bfd_handler = bfd_handler_list[i], ipver=ip_version[i], tx_interval=new_interval, rx_interval=new_interval)
         st.wait(20)
 
-        if not bfdapi.verify_bfd_peer(dut1, peer=remote_ip_list[i], local_addr=local_ip_list[i], vrf_name=vrf[i], 
-                                    rx_interval=[[new_interval,new_interval]], status='up'):
+        if not retry_api(bfdapi.verify_bfd_peer, dut1, peer=remote_ip_list[i], local_addr=local_ip_list[i], vrf_name=vrf[i], 
+                                    rx_interval=[[new_interval,new_interval]], status='up', retry_count= 3, delay= 3):
             st.log("verify_bfd_peer {} failed".format(remote_ip_list[i]))
             st.report_fail("bfd status error", local_ip_list[i], dut1)
 
@@ -1279,13 +1513,12 @@ def test_bfd_attr_set():
         st.config(dut1, cmd, skip_error_check=True, type='alicli')
         st.wait(5)
 
-        if not bfdapi.verify_bfd_peer(dut1, peer=remote_ip_list[i], local_addr=local_ip_list[i], rx_interval=[[data.dut_bfd_timer,new_interval]], 
-                                status='up', vrf_name=vrf[i]):
+        if not retry_api(bfdapi.verify_bfd_peer, dut1, peer=remote_ip_list[i], local_addr=local_ip_list[i], rx_interval=[[data.dut_bfd_timer,new_interval]], 
+                                status='up', vrf_name=vrf[i], retry_count= 3, delay= 3):
             st.log("verify_bfd_peer {} failed".format(remote_ip_list[i]))
             st.report_fail("bfd status error", local_ip_list[i], dut1)
 
         ixia_bfd_params_modify(bfd_handler = bfd_handler_list[i], ipver=ip_version[i], tx_interval=data.dut_bfd_timer, rx_interval=data.dut_bfd_timer)
-
 
     # dut2 mod long-vrf-dut-bfd1 
     vrf = [data.dut_traffic_vrf_name["501"], data.dut_traffic_vrf_name["502"]]
@@ -1294,8 +1527,8 @@ def test_bfd_attr_set():
     remote_ip_list = ['11.8.100.2', '11.8.102.2']
     bfd_interval = ['200','100']
     for i in range(2):
-        if not bfdapi.verify_bfd_peer(dut2, peer=remote_ip_list[i], local_addr=local_ip_list[i], vrf_name=vrf[i], 
-                                        status='up'):
+        if not retry_api(bfdapi.verify_bfd_peer, dut2, peer=remote_ip_list[i], local_addr=local_ip_list[i], vrf_name=vrf[i], 
+                            status='up', retry_count= 3, delay= 3):
             st.log("verify_bfd_peer {} failed".format(remote_ip_list[i]))
             st.report_fail("bfd non-work", local_ip_list[i], dut2)
 
@@ -1307,19 +1540,19 @@ def test_bfd_attr_set():
         st.wait(5)
 
         #skip multiplier check
-        if not bfdapi.verify_bfd_peer(dut2, peer=remote_ip_list[i], local_addr=local_ip_list[i], vrf_name=vrf[i], 
-                                    rx_interval=[[new_interval, bfd_interval[i]]], status='up'):
+        if not retry_api(bfdapi.verify_bfd_peer, dut2, peer=remote_ip_list[i], local_addr=local_ip_list[i], vrf_name=vrf[i], 
+                                    rx_interval=[[new_interval, bfd_interval[i]]], status='up', retry_count= 3, delay= 3):
             st.log("verify_bfd_peer {} failed".format(remote_ip_list[i]))
             st.report_fail("bfd status error", local_ip_list[i], dut2)
 
         cmd = "router bgp {} vrf {}\n".format(data.dut2_vrf_bgp_as, vrf[i])
-        cmd += "neighbor {} bfd 3 {} {}\n".format(peer_group[i], data.dut_bfd_timer, data.dut_bfd_timer)
+        cmd += "neighbor {} bfd 3 {} {}\n".format(peer_group[i], bfd_interval[i], bfd_interval[i])
         cmd += "exit\n"
         st.config(dut2, cmd, skip_error_check=True, type='alicli')
         st.wait(5)
 
-        if not bfdapi.verify_bfd_peer(dut2, peer=remote_ip_list[i], local_addr=local_ip_list[i], rx_interval=[[data.dut_bfd_timer, bfd_interval[i]]], 
-                                status='up', vrf_name=vrf[i]):
+        if not retry_api(bfdapi.verify_bfd_peer, dut2, peer=remote_ip_list[i], local_addr=local_ip_list[i], rx_interval=[[bfd_interval[i], bfd_interval[i]]], 
+                                status='up', vrf_name=vrf[i], retry_count= 3, delay= 3):
             st.log("verify_bfd_peer {} failed".format(remote_ip_list[i]))
             st.report_fail("bfd status error", local_ip_list[i], dut2)
     
@@ -1356,14 +1589,14 @@ def test_ixia_bfd_flap_in_bfd_vrf():
     for i in range(4):
         #ixia_bfd_params_modify(bfd_handler = data.tg1_handle[0]['bfd_v4'][0], flap_interval = flap_timer, ipver='4')
         ixia_bfd_params_modify(bfd_handler = data.tg1_handle[i]['bfd_v4'][2], flap_interval = flap_timer, ipver='4')
-        ixia_bfd_params_modify(bfd_handler = data.tg1_handle[i]['bfd_v6'][0], flap_interval = flap_timer, ipver='6')
+        ixia_bfd_params_modify(bfd_handler = data.tg1_handle[i]['bfd_v6'][2], flap_interval = flap_timer, ipver='6')
     st.wait(100)
 
     st.log("disable TG bfd flap")
     for i in range(4):
         #ixia_bfd_params_modify(bfd_handler = data.tg1_handle[0]['bfd_v4'][0], ipver='4')
         ixia_bfd_params_modify(bfd_handler = data.tg1_handle[i]['bfd_v4'][2], ipver='4')
-        ixia_bfd_params_modify(bfd_handler = data.tg1_handle[i]['bfd_v6'][0], ipver='6')
+        ixia_bfd_params_modify(bfd_handler = data.tg1_handle[i]['bfd_v6'][2], ipver='6')
 
     st.wait(30)
 
@@ -1445,6 +1678,7 @@ def test_dut_bfd_flap_in_vrf_503():
     result = 0
     init_down_session = 0
     traffic_vrf_503_list = [data.streams['port5_to_port1_vrf_503'], data.streams['port1_to_port5_vrf_503']]
+    traffic_vrf_503_v6_list = [data.streams['port5_to_port1_vrf_503_v6'], data.streams['port1_to_port5_vrf_503_v6']]
 
     cmd = "show bfd peers"
     output1 = st.show(dut1, cmd, type='vtysh')
@@ -1504,7 +1738,6 @@ def test_dut_bfd_flap_in_vrf_503():
 
     tg.tg_traffic_control(action='clear_stats', port_handle=data.tg_ph_list)
     st.wait(20)
-
     tg.tg_traffic_control(action='stop', stream_handle=traffic_vrf_503_list)
     traffic_details = {
        '1': {
@@ -1529,9 +1762,197 @@ def test_dut_bfd_flap_in_vrf_503():
         st.log("validate_tgen_traffic failed")
         result=2
 
+    tg.tg_traffic_control(action='clear_stats', port_handle=data.tg_ph_list)
+    tg.tg_traffic_control(action='run', stream_handle=traffic_vrf_503_v6_list)
+    st.wait(20)
+    tg.tg_traffic_control(action='stop', stream_handle=traffic_vrf_503_v6_list)
+    traffic_details = {
+       '1': {
+            'tx_ports' : [vars.T1D2P1],
+            'tx_obj' : [data.tg_list[4]],
+            'exp_ratio' : [1],        #two ecmp port, each is 50%
+            'rx_ports' : [vars.T1D1P1, vars.T1D1P2],
+            'rx_obj' : [data.tg_list[0], data.tg_list[1]],
+            'stream_list': [[data.streams['port5_to_port1_vrf_503_v6']]]
+        },
+        '2': {
+            'tx_ports' : [vars.T1D1P1],
+            'tx_obj' : [data.tg_list[0]],
+            'exp_ratio' : [1],        #two ecmp port, each is 50%
+            'rx_ports' : [vars.T1D2P1, vars.T1D2P2],
+            'rx_obj' : [data.tg_list[4],data.tg_list[5]],
+            'stream_list': [[data.streams['port1_to_port5_vrf_503_v6']]]
+        },
+    }
+    #check ecmp port
+    if not tgapi.validate_tgen_traffic(traffic_details=traffic_details, mode='streamblock', comp_type='packet_count'):
+        st.log("validate_tgen_traffic failed")
+        result=2
+    
     if result == 0:
         st.report_pass("test_case_passed")
     elif result == 1:
         st.report_fail("bfd statue check failed")
     elif result == 2:
         st.report_fail("validate_tgen_traffic failed")
+
+@pytest.mark.community
+@pytest.mark.community_pass
+def test_bgp_fast_isolate_and_recover():
+
+    data.my_dut_list = st.get_dut_names()
+    dut1 = data.my_dut_list[0]
+    dut2 = data.my_dut_list[1]
+    tg = data.tg_list[0]
+    traffic_list = [data.streams['port5_to_port1_vrf_503'], data.streams['port1_to_port5_vrf_503'],
+                    data.streams['port3_to_port7_vrf_501'], data.streams['port7_to_port3_vrf_501']]
+    test_vrf = data.dut_traffic_vrf_name['503']
+    all_route = dict()
+    vrf_route = dict()
+
+    loc_lib.dut_load_bgp_isolate_peer_group(dut1, data.dut1_vrf_bgp_as, data.dut2_vrf_bgp_as, test_vrf, data.dut2_all_ip_addr, config='yes')
+    loc_lib.dut_load_bgp_isolate_peer_group(dut2, data.dut2_vrf_bgp_as, data.dut1_vrf_bgp_as, test_vrf, data.dut1_all_ip_addr, config='yes')
+    st.wait(60)
+
+    for vrf in data.dut_traffic_vrf_name.keys():
+        publish_route = 0
+        vrf_neigh_list = []
+        vrf_route_list = []
+        vrf_isolate_route_list = []
+        output=bgp_api.show_bgp_ipv4_summary_vtysh(dut2,vrf=data.dut_traffic_vrf_name[vrf])
+        for nbr in output:
+            if nbr['asn'] == data.dut1_vrf_bgp_as:
+                vrf_neigh_list.append(nbr['neighbor'])
+                vrf_route_list.append(nbr['state'])
+        for ip in data.dut1_all_ip_addr:
+            if ip['interface'].startswith('Loopback') and (ip['vrf'] == data.dut_traffic_vrf_name[vrf]):
+                publish_route += 1
+        for i in range(len(vrf_neigh_list)):
+            vrf_isolate_route_list.append(str(publish_route))
+        vrf_route['neighbor'] = vrf_neigh_list
+        vrf_route['state'] = vrf_route_list
+        vrf_route['isolate_state'] = vrf_isolate_route_list
+        all_route[data.dut_traffic_vrf_name[vrf]] = copy.deepcopy(vrf_route)
+
+    st.banner("precheck bgp status")
+    loc_lib.precheck_bgp_isolate(dut1)
+    
+    st.banner("start isolate and check")
+    isolate_cmd = "isolate fast"
+    st.config(dut1, isolate_cmd, type='alicli')
+    st.wait(20)
+
+    if not retry_api(loc_lib.check_bgp_isolate, dut=dut1, check_status='isolate', retry_count= 3, delay= 3):
+        st.report_fail("bgp isolate execute failed")
+
+    st.wait(90)
+    for vrf in data.dut_traffic_vrf_name.keys():
+        name = data.dut_traffic_vrf_name[vrf]
+        if not retry_api(ip_bgp.check_bgp_session, dut=dut2,nbr_list=all_route[name]['neighbor'], state_list=all_route[name]['isolate_state'], vrf_name=name, retry_count= 3, delay= 10):
+            st.report_fail("bgp isolate failed")
+
+    st.wait(30)
+    tg.tg_traffic_control(action='clear_stats', port_handle=data.tg_ph_list)
+    tg.tg_traffic_control(action='run', stream_handle=traffic_list)
+    st.wait(10)
+    traffic_details = {
+    '1': {
+            'tx_ports' : [vars.T1D2P1],
+            'tx_obj' : [data.tg_list[4]],
+            'exp_ratio' : [0],        #two ecmp port, each is 50%
+            'rx_ports' : [vars.T1D1P1, vars.T1D1P2],
+            'rx_obj' : [data.tg_list[0], data.tg_list[1]],
+            'stream_list': [[data.streams['port5_to_port1_vrf_503']]]
+        },
+        '2': {
+            'tx_ports' : [vars.T1D1P1],
+            'tx_obj' : [data.tg_list[0]],
+            'exp_ratio' : [1],        #two ecmp port, each is 50%
+            'rx_ports' : [vars.T1D2P1, vars.T1D2P2],
+            'rx_obj' : [data.tg_list[4],data.tg_list[5]],
+            'stream_list': [[data.streams['port1_to_port5_vrf_503']]]
+        },
+        '3': {
+            'tx_ports' : [vars.T1D1P3],
+            'tx_obj' : [data.tg_list[2]],
+            'exp_ratio' : [1],        #TG3 use only one 200G port
+            'rx_ports' : [vars.T1D1P5],
+            'rx_obj' : [data.tg_list[6]],
+            'stream_list': [[data.streams['port3_to_port7_vrf_501']]]
+        },
+        '4': {
+            'tx_ports' : [vars.T1D1P5],
+            'tx_obj' : [data.tg_list[6]],
+            'exp_ratio' : [0],        #two ecmp port, each is 50%
+            'rx_ports' : [vars.T1D1P3, vars.T1D1P4],
+            'rx_obj' : [data.tg_list[2], data.tg_list[3]],
+            'stream_list': [[data.streams['port7_to_port3_vrf_501']]]
+        }
+    }
+
+    #check ecmp port
+    if not tgapi.validate_tgen_traffic(traffic_details=traffic_details, mode='streamblock', comp_type='packet_count'):
+        st.report_fail("validate_tgen_traffic failed")
+    
+
+    st.banner("recover isolate and check")
+    no_isolate_cmd = "no isolate fast"
+    st.config(dut1, no_isolate_cmd, type='alicli')
+    st.wait(10)
+
+    if not retry_api(loc_lib.check_bgp_isolate, dut=dut1, check_status='no-isolate', retry_count= 3, delay= 3):
+        st.report_fail("bgp isolate recover failed")
+    
+    st.wait(150)
+    
+    for vrf in data.dut_traffic_vrf_name.keys():
+        name = data.dut_traffic_vrf_name[vrf]
+        if not retry_api(ip_bgp.check_bgp_session, dut=dut2, nbr_list=all_route[name]['neighbor'], state_list=all_route[name]['state'], vrf_name=name, retry_count= 3, delay= 10):
+            st.report_fail("bgp isolate recover failed")
+    st.wait(60)
+
+    tg.tg_traffic_control(action='clear_stats', port_handle=data.tg_ph_list)
+
+    st.wait(10)
+    traffic_details = {
+       '1': {
+            'tx_ports' : [vars.T1D2P1],
+            'tx_obj' : [data.tg_list[4]],
+            'exp_ratio' : [1],        #two ecmp port, each is 50%
+            'rx_ports' : [vars.T1D1P1, vars.T1D1P2],
+            'rx_obj' : [data.tg_list[0], data.tg_list[1]],
+            'stream_list': [[data.streams['port5_to_port1_vrf_503']]]
+        },
+        '2': {
+            'tx_ports' : [vars.T1D1P1],
+            'tx_obj' : [data.tg_list[0]],
+            'exp_ratio' : [1],        #two ecmp port, each is 50%
+            'rx_ports' : [vars.T1D2P1, vars.T1D2P2],
+            'rx_obj' : [data.tg_list[4],data.tg_list[5]],
+            'stream_list': [[data.streams['port1_to_port5_vrf_503']]]
+        },
+        '3': {
+            'tx_ports' : [vars.T1D1P3],
+            'tx_obj' : [data.tg_list[2]],
+            'exp_ratio' : [1],        #TG3 use only one 200G port
+            'rx_ports' : [vars.T1D1P5],
+            'rx_obj' : [data.tg_list[6]],
+            'stream_list': [[data.streams['port3_to_port7_vrf_501']]]
+        },
+        '4': {
+            'tx_ports' : [vars.T1D1P5],
+            'tx_obj' : [data.tg_list[6]],
+            'exp_ratio' : [1],        #two ecmp port, each is 50%
+            'rx_ports' : [vars.T1D1P3, vars.T1D1P4],
+            'rx_obj' : [data.tg_list[2], data.tg_list[3]],
+            'stream_list': [[data.streams['port7_to_port3_vrf_501']]]
+        }
+    }
+
+    tg.tg_traffic_control(action='stop', stream_handle=traffic_list)
+
+    #check ecmp port
+    if not tgapi.validate_tgen_traffic(traffic_details=traffic_details, mode='streamblock', comp_type='packet_count'):
+        st.report_fail("validate_tgen_traffic failed")
+
+    st.report_pass("test_case_passed")

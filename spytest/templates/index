@@ -66,6 +66,7 @@ show_bgp_neighbor.tmpl, .*,  sonic, show bgp .* unicast neighbors.*
 show_bgp_neighbor.tmpl, .*,  sonic, show bgp ipv(4|6) unicast vrf .* neighbors.*
 show_bgp_neighbor.tmpl, .*,  sonic, show bgp ipv4 neighbor.*
 show_ip_interfaces_brief.tmpl, .*, sonic, show ip interface breif
+show_ip_interfaces_brief.tmpl, .*, sonic, cli .* 'show ip interface brief'
 show_ip_interfaces.tmpl, .*, sonic, show ip interface
 show_ip_interfaces.tmpl, .*, sonic, show ipv6 interface
 show_ip_loadshare.tmpl, .*, sonic, show ip load-share
@@ -594,5 +595,7 @@ show_ldap_server.tmpl,.*,sonic,show ldap-server
 show_logging_servers.tmpl, .*, sonic, show logging servers
 show_kdump_status.tmpl, .*, sonic, show kdump status
 show_kdump_status.tmpl, .*, sonic, sudo show kdump status
-
 show_bmp.tmpl, .*, sonic, show bmp
+show_isolated_precheck.tmpl, .*, sonic, cli .* 'show isolated_precheck'
+show_isolated_bgp.tmpl, .*, sonic, cli .* 'show isolated_bgp'
+show_link_delay.tmpl, .*, sonic, show link delay .*

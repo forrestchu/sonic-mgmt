@@ -1,4 +1,5 @@
 import pytest
+import re, time
 
 from spytest import st, tgapi, SpyTestDict
 import apis.switching.vlan as vlanapi
@@ -91,6 +92,9 @@ def initialize_variables():
     intf_data.vlan_id = str(random_vlan_list()[0])
     intf_data.mtu_default = intfapi.get_interface_property(vars.D1, vars.D1T1P1, 'mtu')[0]
     intf_data.wait_sec = 10
+    intf_data.down_delay_ms = '20000'
+    intf_data.down_delay_time_check = 8
+    intf_data.up_delay_ms = '200'
 
 
 def port_fec_no_fec(vars, speed, fec=["none", "rs"]):
@@ -138,6 +142,39 @@ def port_fec_no_fec(vars, speed, fec=["none", "rs"]):
         if not st.poll_wait(intfapi.verify_interface_status, 20, vars.D2, [vars.D2D1P1, vars.D2D1P2], 'oper', 'up'):
             st.report_fail("interface_is_down_on_dut", [vars.D2D1P1, vars.D2D1P2])
 
+def check_intf_range(intf_range):
+    pattern = re.compile(r"^[0-9]+(_[0-9]+){0,1}((-|,)[0-9]+(_[0-9]+){0,1}){0,}$")
+    if pattern.match(intf_range):
+        return True
+    else:
+        return False
+
+def intf_cmp(x):
+    return re.findall('[A-Za-z]+', x) + [int(port_num) for port_num in re.findall('\d+', x)]
+
+def expand_intf_range_to_name(intf_range):
+    """
+    intf_range: '1_1-4_4,17-20'
+    return: [Ethernet1-1,Ethernet2,Ethernet3,Ethernet4,Ethernet17,Ethernet18,Ethernet19,Ethernet20]
+    """
+    if not check_intf_range(intf_range):
+        return []
+    result_list = []
+    items = intf_range.split(',')
+    for item in items:
+        name_range = item.split('-')
+        if len(name_range) == 2:
+            lo = name_range[0]
+            hi = name_range[1]
+            if int(lo) > int(hi):
+                return []
+            for i in range(int(lo),int(hi)+1):
+                result_list.append(str(i))
+        else:
+            result_list.append(item)
+    result_list = list(set(result_list))
+    result_list.sort(key = intf_cmp)
+    return result_list
 
 @pytest.mark.regression
 @pytest.mark.interface_ft
@@ -274,3 +311,142 @@ def test_ft_ovr_counters():
     if flag == 0:
         st.report_fail("test_case_failed")
     st.report_pass("test_case_passed")
+
+@pytest.mark.regression
+@pytest.mark.interface_ft
+@pytest.mark.community
+@pytest.mark.community_pass
+def test_port_link_delay_up_down():
+    
+#1. config port:delay_port with delay up and delay down 
+#2. add port:delay_add_port in delay up and delay down list
+#3. show link delay
+#4. del port:delay_add_port in delay up and delay down list
+#5. shutdown port and no shutdown port check delay work
+#6. no delay up and delay down
+    dut1 = vars.D1
+    dut2 = vars.D2
+    delay_port_eth = vars.D1D2P1
+    delay_port = vars.D1D2P1[8:]
+    delay_add_port_eth = vars.D1D2P2
+    delay_add_port = vars.D1D2P2[8:]
+    up_delay_ms = intf_data.up_delay_ms
+    down_delay_ms = intf_data.down_delay_ms
+    intf_list = []
+    result = 0
+    create_up_cmd = "link delay {} up ms {}\n".format(delay_port,up_delay_ms)
+    add_up_cmd = "link delay add {} up\n".format(delay_add_port)
+    create_down_cmd = "link delay {} down ms {}\n".format(delay_port,down_delay_ms)
+    add_down_cmd = "link delay add {} down\n".format(delay_add_port)
+    cmd = create_up_cmd + add_up_cmd + create_down_cmd + add_down_cmd
+    st.config(dut1, cmd, type='alicli')
+    
+    cmd = 'show link delay down'
+    output = st.show(dut1, cmd, type='alicli')
+    intf_list = expand_intf_range_to_name(output[0]['interface'])
+    if output[0]['time'] != down_delay_ms or len(intf_list) != 2:
+        st.report_fail("failed_to_config_interface")
+
+    cmd = 'show link delay up'
+    output = st.show(dut1, cmd, type='alicli')
+    intf_list = expand_intf_range_to_name(output[0]['interface'])
+    if output[0]['time'] != up_delay_ms or len(intf_list) != 2:
+        st.report_fail("failed_to_config_interface")
+
+    del_up_cmd = "link delay del {} up\n".format(delay_add_port)
+    del_down_cmd = "link delay del {} down\n".format(delay_add_port)
+    cmd = del_up_cmd + del_down_cmd
+    st.config(dut1, cmd, type='alicli')
+
+    cmd = 'show link delay down'
+    output = st.show(dut1, cmd, type='alicli')
+    if output[0]:
+        intf_list = expand_intf_range_to_name(output[0]['interface'])
+        if delay_port not in intf_list or len(intf_list) != 1:
+            st.report_fail("failed_to_config_interface")
+    else:
+        st.report_fail("failed_to_config_interface")
+
+    cmd = 'show link delay up'
+    output = st.show(dut1, cmd, type='alicli')
+    if output[0]:
+        intf_list = expand_intf_range_to_name(output[0]['interface'])
+        if delay_port not in intf_list or len(intf_list) != 1:
+            st.report_fail("failed_to_config_interface")
+    else:
+        st.report_fail("failed_to_config_interface")
+
+    output = intfapi.interface_status_show(dut2, delay_port_eth)
+    if output[0]['oper'] == 'down':
+        st.report_fail("failed_to_config_interface")
+    intfapi.interface_shutdown(dut2, delay_port_eth, skip_verify=True)
+    output = intfapi.interface_status_show(dut2, delay_port_eth)
+    if output[0]['admin'] == 'up':
+        st.report_fail("failed_to_config_interface")
+    for i in range(10):
+        output = intfapi.interface_status_show(dut2, interfaces=delay_port_eth)
+        if output[0]['oper'] == 'up':
+            time.sleep(1)
+        else:
+            break
+
+    st.log("dut2 operation status=down,check dut1 operation status")
+    for i in range(intf_data.down_delay_time_check):
+        output = intfapi.interface_status_show(dut1, interfaces=delay_port_eth)
+        if output[0]['oper'] == 'up':
+            time.sleep(1)
+        else:
+            st.log("unexpected down in down delay")
+            result = 1
+
+    st.log("recover {} admin status".format(delay_port_eth))
+    intfapi.interface_noshutdown(dut2, delay_port_eth, skip_verify=True)
+    output = intfapi.interface_status_show(dut2, delay_port_eth)
+    for i in range(10):
+        output = intfapi.interface_status_show(dut2, interfaces=delay_port_eth)
+        if output[0]['oper'] == 'down':
+            time.sleep(3)
+        else:
+            break
+
+    st.log("dut2 operation status=up,check dut1 operation status")
+    status_up = 0
+    for i in range(3):
+        output = intfapi.interface_status_show(dut1, interfaces=delay_port_eth)
+        if output[0]['oper'] == 'down':
+            time.sleep(1)
+        else:
+            status_up = 1
+            break
+    
+    if status_up == 0:
+        st.log("dut port {} recover up status failed".format(delay_port_eth))
+        result = 1
+
+    del_up_cmd = "no link delay up\n"
+    del_down_cmd = "no link delay down\n"
+    cmd = del_up_cmd + del_down_cmd
+    st.config(dut1, cmd, type='alicli')
+
+    cmd = 'show link delay down'
+    output = st.show(dut1, cmd, type='alicli')
+
+    if output:
+        intf_list = expand_intf_range_to_name(output[0]['interface'])
+        if delay_port in intf_list:
+            st.log("unexpected port Ethernet{} in down delay list".format(delay_port))
+            st.report_fail("failed_to_config_interface")
+
+    cmd = 'show link delay up'
+    output = st.show(dut1, cmd, type='alicli')
+
+    if output:
+        intf_list = expand_intf_range_to_name(output[0]['interface'])
+        if delay_port in intf_list:
+            st.log("unexpected port Ethernet{} in up delay list".format(delay_port))
+            st.report_fail("failed_to_config_interface")
+
+    if result != 0:
+        st.report_fail("failed_to_config_interface")
+
+    st.report_pass("test_case_passed") 

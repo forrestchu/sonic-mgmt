@@ -3036,7 +3036,7 @@ class Net(object):
         reboot_delay_factor = 10
         cmd_timetaken = None
         if not self._is_console_connection(devname):
-            reboot_static_wait = 120
+            reboot_static_wait = 200
             if onie:
                 reboot_static_wait = 600
             ssh_patterns = r"(systemctl daemon-reload|requested COLD shutdown|[#|\$]\s*$)"

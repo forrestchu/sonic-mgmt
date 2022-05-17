@@ -99,8 +99,16 @@ def check_dut_intf_tx_traffic_counters(dut, portlist, expect_val):
     papi.clear_interface_counters(dut)
     st.wait(5)
     output = papi.get_interface_counters_all(dut)
+    retry = 0
+    while len(output) == 0 and retry < 10:
+        output = papi.get_interface_counters_all(dut)
+        retry += 1
+        st.wait(2)
+    if retry == 10:
+        st.error("Error: Dut port stats")
+        return False
+
     tx_bps_list = []
-    
     for port in portlist: 
         tx_bps = intf_traffic_stats(filter_and_select(output, ["tx_bps"], {'iface': port}))
         tx_bps_list.append(tx_bps)

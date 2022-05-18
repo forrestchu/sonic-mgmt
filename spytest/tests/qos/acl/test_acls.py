@@ -103,8 +103,9 @@ def clear_module_configuration():
     # delete Ipv6 address
     ip_obj.clear_ip_configuration([vars.D1], family='ipv6')
 
-    print_log("Clearing module configuration")
-    [_, exceptions] = utils.exec_all(True, [[acl_obj.acl_delete, vars.D1]])
+    #clear acl table wull take too much time
+    #print_log("Clearing module configuration")
+    #[_, exceptions] = utils.exec_all(True, [[acl_obj.acl_delete, vars.D1]])
 
     #Clear static arp entries
     print_log("Clearing ARP entries")

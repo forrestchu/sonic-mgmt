@@ -14,6 +14,7 @@
 +file:routing/MC_SCALE/test_mc_scale.py
 +file:routing/BGP/cli/test_bgp_cli.py
 +file:routing/BGP/cli/test_route_map_cli.py
++file:routing/test_ip.py
 
 # test cases requiring link state propagation
 -test:test_ft_cos_tc_queue_map

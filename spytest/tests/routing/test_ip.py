@@ -6,6 +6,7 @@ import pytest
 
 from spytest import st, tgapi, SpyTestDict
 from spytest.utils import random_vlan_list
+from utilities import parallel
 
 import apis.routing.ip as ipfeature
 import apis.switching.vlan as vlan_obj
@@ -17,6 +18,8 @@ import apis.system.interface as intf_obj
 import apis.routing.route_map as rmap_obj
 import apis.switching.mac as mac_obj
 import apis.routing.arp as arp_obj
+import apis.routing.vrf as vrf_api
+import apis.system.reboot as reboot
 
 vars = dict()
 data = SpyTestDict()
@@ -57,6 +60,9 @@ data.host2_vlan="101"
 data.vlan1_ip="10.10.10.2"
 data.vlan2_ip="10.10.11.3"
 data_tg_ip="10.10.10.1"
+data.vrf_name = ["MC-Aliyun-vrf-long-name-test-abcdefg-101", 
+                "MC-Aliyun-vrf-long-name-test-abcdefg-102",
+                "MC-Aliyun-vrf-long-name-test-abcdefg-103"]
 
 
 @pytest.fixture(scope="module", autouse=True)
@@ -68,16 +74,22 @@ def ip_module_hooks(request):
     # Initialize TG and TG port handlers
     tg_handler = tgapi.get_handles_byname("T1D1P1", "T1D1P2", "T1D2P1", "T1D2P2")
     tg = tg_handler["tg"]
+
     # IP module configuration
     st.log("Vlan routing configuration on D1D2P1,D2D1P1")
     vlan_obj.create_vlan(vars.D1, data.vlan_1)
     vlan_obj.add_vlan_member(vars.D1, data.vlan_1, [vars.D1D2P1], tagging_mode=True)
     vlan_obj.create_vlan(vars.D2, data.vlan_1)
     vlan_obj.add_vlan_member(vars.D2, data.vlan_1, [vars.D2D1P1], tagging_mode=True)
+    dict1 = {'vrf_name':[data.vrf_name[0]],'skip_error':True}
+    parallel.exec_parallel(True, [vars.D1, vars.D2], vrf_api.config_vrf, [dict1, dict1])
+    dict1 = {'vrf_name':data.vrf_name[0], 'intf_name':data.vlan_int_1,'skip_error':True}
+    parallel.exec_parallel(True, [vars.D1, vars.D2], vrf_api.bind_vrf_interface, [dict1, dict1])
     ipfeature.config_ip_addr_interface(vars.D1, data.vlan_int_1, data.ip4_addr[2], 24, family=data.af_ipv4)
     ipfeature.config_ip_addr_interface(vars.D1, data.vlan_int_1, data.ip6_addr[2], 96, family=data.af_ipv6)
     ipfeature.config_ip_addr_interface(vars.D2, data.vlan_int_1, data.ip4_addr[3],24, family = data.af_ipv4)
     ipfeature.config_ip_addr_interface(vars.D2, data.vlan_int_1, data.ip6_addr[3], 96, family=data.af_ipv6)
+
     st.log("Port routing configuration on port-channel")
     data.dut1_pc_members = [vars.D1D2P2, vars.D1D2P3]
     data.dut2_pc_members = [vars.D2D1P2, vars.D2D1P3]
@@ -85,38 +97,59 @@ def ip_module_hooks(request):
     pc_obj.add_portchannel_member(vars.D1, data.port_channel, data.dut1_pc_members)
     pc_obj.create_portchannel(vars.D2, data.port_channel)
     pc_obj.add_portchannel_member(vars.D2, data.port_channel, data.dut2_pc_members)
+    dict1 = {'vrf_name':[data.vrf_name[1]],'skip_error':True}
+    parallel.exec_parallel(True, [vars.D1, vars.D2], vrf_api.config_vrf, [dict1, dict1])
+    dict1 = {'vrf_name':[data.vrf_name[1]], 'intf_name':data.port_channel,'skip_error':True}
+    parallel.exec_parallel(True, [vars.D1, vars.D2], vrf_api.bind_vrf_interface, [dict1, dict1])
     ipfeature.config_ip_addr_interface(vars.D1, data.port_channel, data.ip4_addr[4], 24, family=data.af_ipv4)
     ipfeature.config_ip_addr_interface(vars.D2, data.port_channel, data.ip4_addr[5], 24, family=data.af_ipv4)
     ipfeature.config_ip_addr_interface(vars.D1, data.port_channel, data.ip6_addr[4], 96, family=data.af_ipv6)
     ipfeature.config_ip_addr_interface(vars.D2, data.port_channel, data.ip6_addr[5], 96, family=data.af_ipv6)
+
     st.log("port routing configuration on  D1D2P4,D2D1P4")
+    dict1 = {'vrf_name':[data.vrf_name[2]],'skip_error':True}
+    parallel.exec_parallel(True, [vars.D1, vars.D2], vrf_api.config_vrf, [dict1, dict1])
+    vrf_api.bind_vrf_interface(vars.D1, intf_name=vars.D1D2P4, vrf_name=data.vrf_name[2], skip_error=True)
     ipfeature.config_ip_addr_interface(vars.D1, vars.D1D2P4, data.ip4_addr[6], 24, family=data.af_ipv4)
+    vrf_api.bind_vrf_interface(vars.D2, intf_name=vars.D2D1P4, vrf_name=data.vrf_name[2], skip_error=True)
     ipfeature.config_ip_addr_interface(vars.D2, vars.D2D1P4, data.ip4_addr[7], 24, family=data.af_ipv4)
+    vrf_api.bind_vrf_interface(vars.D1, intf_name=vars.D1D2P4, vrf_name=data.vrf_name[2], skip_error=True)
     ipfeature.config_ip_addr_interface(vars.D1, vars.D1D2P4, data.ip6_addr[6], 96, family=data.af_ipv6)
+    vrf_api.bind_vrf_interface(vars.D2, intf_name=vars.D2D1P4, vrf_name=data.vrf_name[2], skip_error=True)
     ipfeature.config_ip_addr_interface(vars.D2, vars.D2D1P4, data.ip6_addr[7], 96, family=data.af_ipv6)
     st.log("configuring the dut1 ports connected to TGen with ip addresses")
+    vrf_api.bind_vrf_interface(vars.D1, intf_name=vars.D1T1P1, vrf_name=data.vrf_name[2], skip_error=True)
     ipfeature.config_ip_addr_interface(vars.D1, vars.D1T1P1, data.ip4_addr[1], 24, family=data.af_ipv4)
+    vrf_api.bind_vrf_interface(vars.D1, intf_name=vars.D1T1P2, vrf_name=data.vrf_name[2], skip_error=True)
     ipfeature.config_ip_addr_interface(vars.D1, vars.D1T1P2, data.ip6_addr[1], 96, family=data.af_ipv6)
-    ipfeature.create_static_route(vars.D1, data.ip6_addr[7], data.static_ip6_rt, shell=data.shell_vtysh,
-                              family=data.af_ipv6)
+    if not ipfeature.ping_poll(vars.D1, data.ip6_addr[7], family=data.af_ipv6, iter=5, count=1, interface=data.vrf_name[2]):
+        st.report_fail("ping_fail",data.ip6_addr[7])
+    if not ipfeature.ping_poll(vars.D1, data.ip4_addr[7], family=data.af_ipv4, iter=5, count=1, interface=data.vrf_name[2]):
+        st.report_fail("ping_fail",data.ip4_addr[7])
     ipfeature.create_static_route(vars.D1, data.ip4_addr[7], data.static_ip_rt, shell=data.shell_vtysh,
-                                  family=data.af_ipv4)
+                                  family=data.af_ipv4, vrf=data.vrf_name[2], cli_type="alicli")
     st.log("configuring the dut2 ports connected to TGen with ip addresses")
+    vrf_api.bind_vrf_interface(vars.D2, intf_name=vars.D2T1P1, vrf_name=data.vrf_name[2], skip_error=True)
     ipfeature.config_ip_addr_interface(vars.D2, vars.D2T1P1, data.ip4_addr[8], 24, family=data.af_ipv4)
+    vrf_api.bind_vrf_interface(vars.D2, intf_name=vars.D2T1P2, vrf_name=data.vrf_name[2], skip_error=True)
     ipfeature.config_ip_addr_interface(vars.D2, vars.D2T1P2, data.ip6_addr[8], 96, family=data.af_ipv6)
 
     yield
-    ipfeature.clear_ip_configuration(st.get_dut_names())
-    ipfeature.clear_ip_configuration(st.get_dut_names(), 'ipv6')
+    ipfeature.clear_ip_configuration(st.get_dut_names(), cli_type="alicli")
+    ipfeature.clear_ip_configuration(st.get_dut_names(), 'ipv6', cli_type="alicli")
     vlan_obj.clear_vlan_configuration(st.get_dut_names())
     pc_obj.clear_portchannel_configuration(st.get_dut_names())
     ipfeature.delete_static_route(vars.D1, data.ip4_addr[7], data.static_ip_rt, shell=data.shell_vtysh,
-                                  family=data.af_ipv4)
+                                  family=data.af_ipv4, vrf=data.vrf_name[2])
     ipfeature.delete_static_route(vars.D1, data.static_ip6_rt_drop, data.static_ip6_rt, shell=data.shell_vtysh,
-                                  family=data.af_ipv6)
+                                  family=data.af_ipv6, vrf=data.vrf_name[2])
 
 @pytest.fixture(scope="function", autouse=True)
 def ip_func_hooks(request):
+    if st.get_func_name(request) == "test_l3_v6_route_po_1":
+        if not ipfeature.ping_poll(vars.D1, data.ip6_addr[7], family=data.af_ipv6, iter=5, count=1, interface=data.vrf_name[2]):
+            st.log("ping_fail",data.ip6_addr[7])
+        ipfeature.create_static_route(vars.D1, data.ip6_addr[7], data.static_ip6_rt, family=data.af_ipv6, vrf=data.vrf_name[2])
     yield
 
 def delete_bgp_router(dut, router_id, as_num):
@@ -146,12 +179,15 @@ def create_v4_route(route_count):
     vars = st.get_testbed_vars()
     dut = vars.D1
 
-    ipfeature.show_ip_route(dut)
-    ipfeature.get_interface_ip_address(dut)
+    ipfeature.show_ip_route(dut,vrf_name=data.vrf_name[2])
+    ipfeature.get_interface_ip_address(dut, cli_type='alicli')
     intf_obj.interface_status_show(dut)
 
-    bgpfeature.create_bgp_router(dut, data.as_num, '')
-    bgpfeature.create_bgp_neighbor(dut, data.as_num, data.ip4_addr[0], data.remote_as_num)
+    #bgpfeature.create_bgp_router(dut, data.as_num, '')
+    #bgpfeature.create_bgp_neighbor(dut, data.as_num, data.ip4_addr[0], data.remote_as_num)
+    bgpfeature.config_bgp(dut = dut, router_id = '192.0.0.176', local_as=data.as_num, 
+                    neighbor=data.ip4_addr[0], remote_as=data.remote_as_num, vrf_name=data.vrf_name[2], 
+                    config_type_list =["neighbor", "activate"], config='yes', cli_type = "alicli")
 
     tg_handler = tgapi.get_handles_byname("T1D1P1", "T1D2P1")
     tg = tg_handler["tg"]
@@ -220,8 +256,32 @@ def create_v4_route(route_count):
     aggrResult = tgapi.validate_tgen_traffic(traffic_details=traffic_details, mode='aggregate', comp_type='packet_count')
     if not aggrResult:
       return False
+    st.banner("verify traffic after dut reboot")
 
-    return True
+    reboot.config_save_reboot(dut)
+    if not ipfeature.ping_poll(vars.D1, data.ip4_addr[7], family=data.af_ipv4, iter=20, delay=5, count=1, interface=data.vrf_name[2]):
+        st.report_fail("ping_fail",data.ip4_addr[7])
+    #st.wait(60)
+    tg.tg_traffic_control(action="clear_stats", port_handle=tg_handler["tg_ph_list"])
+    res = tg.tg_traffic_control(action='run', stream_handle=tr1['stream_id'])
+    st.log("TR_CTRL: " + str(res))
+    tg.tg_traffic_control(action='stop', stream_handle=tr1['stream_id'])
+    st.log("Checking the stats and verifying the traffic flow")
+    traffic_details = {
+       '1': {
+          'tx_ports' : [vars.T1D1P1],
+          'tx_obj' : [tg_handler["tg"]],
+          'exp_ratio' : [1],
+          'rx_ports' : [vars.T1D2P1],
+         'rx_obj' : [tg_handler["tg"]],
+      }
+    }
+    # verify statistics
+    aggrResult = tgapi.validate_tgen_traffic(traffic_details=traffic_details, mode='aggregate', comp_type='packet_count')
+    if not aggrResult:
+      return False
+    else:
+      return True
 
 def test_l3_v4_route_po_1():
     dut = vars.D1
@@ -240,10 +300,13 @@ def create_v6_route(route_count):
     dut = vars.D1
 
     ipfeature.show_ip_route(dut, family='ipv6')
-    ipfeature.get_interface_ip_address(dut, family='ipv6')
+    ipfeature.get_interface_ip_address(dut, family='ipv6',cli_type='alicli')
 
-    bgpfeature.create_bgp_router(dut, data.as_num, '')
-    bgpfeature.create_bgp_neighbor(dut, data.as_num, data.ip6_addr[0], data.remote_as_num, family="ipv6")
+    #bgpfeature.create_bgp_router(dut, data.as_num, '')
+    #bgpfeature.create_bgp_neighbor(dut, data.as_num, data.ip6_addr[0], data.remote_as_num, family="ipv6")
+    bgpfeature.config_bgp(dut = dut, router_id = '192.0.0.176', local_as=data.as_num, 
+                    neighbor=data.ip6_addr[0], remote_as=data.remote_as_num, vrf_name=data.vrf_name[2], 
+                    config_type_list =["neighbor", "activate"], config='yes', cli_type = "alicli")
     create_bgp_neighbor_route_map_config(dut, data.as_num, data.ip6_addr[0], data.routemap)
 
     tg_handler = tgapi.get_handles_byname("T1D1P2", "T1D2P2")
@@ -331,10 +394,10 @@ def test_l3_v6_route_po_1():
 def test_ft_ping_v4_v6_vlan():
     # Objective - Verify that IPv6 & Ipv4 ping is successful over vlan routing interfaces.
     st.log("Checking IPv4 ping from {} to {} over vlan routing interface".format(vars.D1, vars.D2))
-    if not ipfeature.ping(vars.D1, data.ip4_addr[3], family=data.af_ipv4, count=1):
+    if not ipfeature.ping(vars.D1, data.ip4_addr[3], family=data.af_ipv4, count=1, interface=data.vrf_name[0]):
         st.report_fail("ping_fail",data.ip4_addr[2], data.ip4_addr[3])
     st.log("Checking IPv6 ping from {} to {} over vlan routing interface".format(vars.D1, vars.D2))
-    if not ipfeature.ping(vars.D2, data.ip6_addr[2], family=data.af_ipv6, count=1):
+    if not ipfeature.ping(vars.D2, data.ip6_addr[2], family=data.af_ipv6, count=1, interface=data.vrf_name[0]):
         st.report_fail("ping_fail",data.ip6_addr[3], data.ip6_addr[2])
     st.report_pass("test_case_passed")
 
@@ -349,10 +412,10 @@ def test_ft_ping__v4_v6_after_ip_change_pc():
     if not pc_obj.verify_portchannel_state(vars.D2, data.port_channel, state="up"):
         st.report_fail("portchannel_state_fail", data.port_channel, vars.D2, "Up")
     st.log("Checking IPv4 ping from {} to {} over portchannel routing interface".format(vars.D1, vars.D2))
-    if not ipfeature.ping_poll(vars.D1, data.ip4_addr[5], family=data.af_ipv4, iter=5, count=1):
+    if not ipfeature.ping_poll(vars.D1, data.ip4_addr[5], family=data.af_ipv4, iter=5, count=1, interface=data.vrf_name[1]):
         st.report_fail("ping_fail",data.ip4_addr[4], data.ip4_addr[5])
-    st.log("Checking IPv6 ping from {} to {} over portchannel routing interface".format(vars.D1, vars.D2))
-    if not ipfeature.ping_poll(vars.D2, data.ip6_addr[4], family=data.af_ipv6, iter=5, count=1):
+    st.log("Checking IPv6 ping from {} to {} over portchannel routing interface {}".format(vars.D1, vars.D2, data.vrf_name[1]))
+    if not ipfeature.ping_poll(vars.D2, data.ip6_addr[4], family=data.af_ipv6, iter=5, count=1, interface=data.vrf_name[1]):
         st.report_fail("ping_fail",data.ip6_addr[5], data.ip6_addr[4])
     st.log("Removing the Ipv4 address on portchannel")
     ipfeature.delete_ip_interface(vars.D1, data.port_channel, data.ip4_addr[4],24, family = data.af_ipv4)
@@ -361,6 +424,8 @@ def test_ft_ping__v4_v6_after_ip_change_pc():
     ipfeature.delete_ip_interface(vars.D1, data.port_channel, data.ip6_addr[4], 96, family = data.af_ipv6)
     ipfeature.delete_ip_interface(vars.D2, data.port_channel, data.ip6_addr[5], 96, family = data.af_ipv6)
     st.log("configuring new Ipv4 address on portchannel")
+    dict1 = {'vrf_name':data.vrf_name[1], 'intf_name':data.port_channel,'skip_error':True}
+    parallel.exec_parallel(True, [vars.D1, vars.D2], vrf_api.bind_vrf_interface, [dict1, dict1])
     ipfeature.config_ip_addr_interface(vars.D1, data.port_channel, data.ip4_addr[10], 24, family=data.af_ipv4)
     ipfeature.config_ip_addr_interface(vars.D2, data.port_channel, data.ip4_addr[11], 24, family=data.af_ipv4)
     st.log("configuring new Ipv6 address on portchannel")
@@ -369,11 +434,11 @@ def test_ft_ping__v4_v6_after_ip_change_pc():
     ipfeature.config_ip_addr_interface(vars.D2, data.port_channel, data.ip6_addr[11], 96, family=data.af_ipv6)
     st.log("After Ipv4 address change, checking IPv4 ping from {} to {} over portchannel "
                "routing interface".format(vars.D1, vars.D2))
-    if not ipfeature.ping_poll(vars.D1, data.ip4_addr[11], family=data.af_ipv4, iter=5, count=1):
+    if not ipfeature.ping_poll(vars.D1, data.ip4_addr[11], family=data.af_ipv4, iter=5, count=1, interface=data.vrf_name[1]):
         st.report_fail("ping_fail",data.ip4_addr[10],data.ip4_addr[11])
     st.log("After Ipv6 address change, checking IPv6 ping from {} to {} over portchannel "
                "routing interface".format(vars.D1, vars.D2))
-    if not ipfeature.ping_poll(vars.D1, data.ip6_addr[11], family=data.af_ipv6, iter=5, count=1):
+    if not ipfeature.ping_poll(vars.D1, data.ip6_addr[11], family=data.af_ipv6, iter=5, count=1, interface=data.vrf_name[1]):
         st.report_fail("ping_fail",data.ip6_addr[10], data.ip6_addr[11])
     st.report_pass("test_case_passed")
 
@@ -436,10 +501,10 @@ def test_ft_ip6_static_route_traffic_forward_blackhole():
     if not aggrResult:
        st.report_fail("traffic_verification_failed")
     ipfeature.delete_static_route(vars.D1, data.ip6_addr[7], data.static_ip6_rt, shell=data.shell_vtysh,
-                                  family=data.af_ipv6)
+                                  family=data.af_ipv6, vrf=data.vrf_name[2])
     st.log("Create a static route with nexthop as blackhole")
     ipfeature.create_static_route(vars.D1, data.static_ip6_rt_drop, data.static_ip6_rt, shell=data.shell_vtysh,
-                                  family=data.af_ipv6)
+                                  family=data.af_ipv6, vrf=data.vrf_name[2], cli_type="alicli")
     tg.tg_traffic_control(action="clear_stats", port_handle=tg_handler["tg_ph_list"])
 
     res = tg.tg_traffic_control(action='run', stream_handle=tr1['stream_id'])
@@ -515,10 +580,10 @@ def test_ft_ip_static_route_traffic_forward():
 def test_ft_ip_v4_v6_L2_L3_translation():
     # Objective - Verify that L2 port to IPv4 L3 port transition and vice-versa is successful.
     st.log("Checking IPv4 ping from {} to {} over  routing interface".format(vars.D1, vars.D2))
-    if not ipfeature.ping(vars.D1, data.ip4_addr[7], family=data.af_ipv4, count=1):
+    if not ipfeature.ping(vars.D1, data.ip4_addr[7], family=data.af_ipv4, count=1, interface=data.vrf_name[2]):
         st.report_fail("ping_fail",data.ip4_addr[6], data.ip4_addr[7])
     st.log("Checking IPv6 ping from {} to {} over vlan routing interface".format(vars.D1, vars.D2))
-    if not ipfeature.ping(vars.D2, data.ip6_addr[6], family=data.af_ipv6, count=1):
+    if not ipfeature.ping(vars.D2, data.ip6_addr[6], family=data.af_ipv6, count=1, interface=data.vrf_name[2]):
         st.report_fail("ping_fail",data.ip6_addr[7], data.ip6_addr[6])
     st.log("L3 to L2 port transition")
     st.log("Removing ipv4,ipv6 address from interface")
@@ -528,9 +593,13 @@ def test_ft_ip_v4_v6_L2_L3_translation():
     ipfeature.delete_ip_interface(vars.D2, vars.D2D1P4, data.ip6_addr[7], 96, family=data.af_ipv6)
     ipfeature.delete_ip_interface(vars.D1, vars.D1T1P1, data.ip4_addr[1], 24, family=data.af_ipv4)
     ipfeature.delete_ip_interface(vars.D2, vars.D2T1P1, data.ip4_addr[8], 24, family=data.af_ipv4)
+    vrf_api.bind_vrf_interface(vars.D1, intf_name=vars.D1D2P4, vrf_name=data.vrf_name[2], skip_error=True, config='no')
+    vrf_api.bind_vrf_interface(vars.D1, intf_name=vars.D1T1P1, vrf_name=data.vrf_name[2], skip_error=True, config='no')
+    vrf_api.bind_vrf_interface(vars.D2, intf_name=vars.D2D1P4, vrf_name=data.vrf_name[2], skip_error=True, config='no')
+    vrf_api.bind_vrf_interface(vars.D2, intf_name=vars.D2T1P1, vrf_name=data.vrf_name[2], skip_error=True, config='no')
     st.log("Removing the static routes")
-    ipfeature.delete_static_route(vars.D1, data.ip4_addr[7], data.static_ip_rt, shell=data.shell_vtysh, family=data.af_ipv4)
-    ipfeature.delete_static_route(vars.D1, data.static_ip6_rt_drop, data.static_ip6_rt, shell=data.shell_vtysh, family=data.af_ipv6)
+    ipfeature.delete_static_route(vars.D1, data.ip4_addr[7], data.static_ip_rt, shell=data.shell_vtysh, family=data.af_ipv4, vrf=data.vrf_name[2], type='alicli')
+    ipfeature.delete_static_route(vars.D1, data.static_ip6_rt_drop, data.static_ip6_rt, shell=data.shell_vtysh, family=data.af_ipv6, vrf=data.vrf_name[2])
     st.log("Vlan creation and port association configuration")
     vlan_obj.create_vlan(vars.D1, data.vlan_2)
     st.log("Adding back to back connecting ports to vlan {}".format(data.vlan_2))
@@ -572,17 +641,19 @@ def test_ft_ip_v4_v6_L2_L3_translation():
     vlan_obj.delete_vlan_member(vars.D1, data.vlan_2, [vars.D1D2P4, vars.D1T1P1], True)
     vlan_obj.delete_vlan_member(vars.D2, data.vlan_2, [vars.D2D1P4, vars.D2T1P1], True)
     st.log("L2 to L3 port transition")
+    vrf_api.bind_vrf_interface(vars.D1, intf_name=vars.D1D2P4, vrf_name=data.vrf_name[2], skip_error=True)
+    vrf_api.bind_vrf_interface(vars.D2, intf_name=vars.D2D1P4, vrf_name=data.vrf_name[2], skip_error=True)
     ipfeature.config_ip_addr_interface(vars.D1, vars.D1D2P4, data.ip4_addr[6], 24, family=data.af_ipv4)
     ipfeature.config_ip_addr_interface(vars.D2, vars.D2D1P4, data.ip4_addr[7], 24, family=data.af_ipv4)
-    ipfeature.create_static_route(vars.D1, data.ip4_addr[7], data.static_ip_rt, shell=data.shell_vtysh, family=data.af_ipv4)
+    ipfeature.create_static_route(vars.D1, data.ip4_addr[7], data.static_ip_rt, shell=data.shell_vtysh, family=data.af_ipv4, vrf=data.vrf_name[2], cli_type="alicli")
     st.log("Checking IPv4 ping from {} to {} over routing interface".format(vars.D1, vars.D2))
-    if not ipfeature.ping(vars.D1, data.ip4_addr[7], family=data.af_ipv4, count=1):
+    if not ipfeature.ping(vars.D1, data.ip4_addr[7], family=data.af_ipv4, count=1, interface=data.vrf_name[2]):
         st.report_fail("ping_fail",data.ip4_addr[6], data.ip4_addr[7])
     ipfeature.config_ip_addr_interface(vars.D1, vars.D1D2P4, data.ip6_addr[6], 96, family=data.af_ipv6)
     ipfeature.config_ip_addr_interface(vars.D2, vars.D2D1P4, data.ip6_addr[7], 96, family=data.af_ipv6)
-    ipfeature.create_static_route(vars.D1, data.static_ip6_rt_drop, data.static_ip6_rt, shell=data.shell_vtysh, family=data.af_ipv6)
+    ipfeature.create_static_route(vars.D1, data.static_ip6_rt_drop, data.static_ip6_rt, shell=data.shell_vtysh, family=data.af_ipv6, vrf=data.vrf_name[2], cli_type="alicli")
     st.log("Checking IPv6 ping from {} to {} over vlan routing interface".format(vars.D1, vars.D2))
-    if not ipfeature.ping(vars.D2, data.ip6_addr[6], family=data.af_ipv6, count=1):
+    if not ipfeature.ping(vars.D2, data.ip6_addr[6], family=data.af_ipv6, count=1,  interface=data.vrf_name[2]):
         st.report_fail("ping_fail",data.ip6_addr[7], data.ip6_addr[6])
     st.report_pass("test_case_passed")
 
@@ -616,7 +687,7 @@ def test_ft_verify_interfaces_order():
         _, ipv6_addr = ipfeature.increment_ip_addr(ipv6_addr, "network", family="ipv6")
         ipfeature.config_ip_addr_interface(vars.D1, interface_name=req_ports[i+int(math.ceil(float(data.no_of_ports)/2))],
                                            ip_address=ipv6_addr.split('/')[0], subnet=data.ipv6_mask, family="ipv6")
-    output = ipfeature.get_interface_ip_address(vars.D1)
+    output = ipfeature.get_interface_ip_address(vars.D1, cli_type='alicli')
     for each in output:
         intf_list.append(each['interface'])
     temp = lambda text: int(text) if text.isdigit() else text
@@ -629,7 +700,7 @@ def test_ft_verify_interfaces_order():
         flag = 0
     del intf_list[:]
     del intf_list_sorted[:]
-    output = ipfeature.get_interface_ip_address(vars.D1, family="ipv6")
+    output = ipfeature.get_interface_ip_address(vars.D1, family="ipv6", cli_type='alicli')
     for each in output:
         intf_list.append(each['interface'])
     temp = lambda text: int(text) if text.isdigit() else text

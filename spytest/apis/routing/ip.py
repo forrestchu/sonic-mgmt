@@ -371,10 +371,12 @@ def get_interface_ip_address(dut, interface_name=None, family="ipv4",cli_type=''
     cli_type = st.get_ui_type(dut, cli_type=cli_type)
     if cli_type in ['rest-patch', 'rest-put']:
         cli_type = 'klish'                      #OC-YANG URLs are not available for show ip/ipv6 interface. Reported JIRA: SONIC-23677 for this.
-    if cli_type in ['click', 'klish']:
+    if cli_type in ['click', 'klish', 'alicli']:
         command = "show ip interface"
         if family == "ipv6":
             command = "show ipv6 interface"
+        if cli_type == 'alicli':
+            command = "show ip interface brief"
         output = st.show(dut, command,type=cli_type)
         result = output if family == "ipv4" else prepare_show_ipv6_interface_output(output)
         if interface_name:
@@ -539,6 +541,26 @@ def create_static_route(dut, next_hop=None, static_ip=None, shell="vtysh", famil
         if not config_rest(dut, http_method=cli_type, rest_url=url, json_data=config_data):
             st.error("Failed to create IP address")
             return False
+    elif cli_type == "alicli":
+        if family.lower() == "ipv4" or family.lower() == "":
+            if next_hop:
+                command = "ip route {} {}".format(static_ip, next_hop)
+            else:
+                command = "ip route {}".format(static_ip)
+        elif family.lower() == "ipv6":
+            if next_hop:
+                command = "ipv6 route {} {}".format(static_ip, next_hop)
+            else:
+                command = "ipv6 route {}".format(static_ip)
+        if interface:
+            command +=" {}".format(interface)
+        if vrf:
+            command +=" vrf {}".format(vrf)
+        if nexthop_vrf:
+            command += " nexthop-vrf {}".format(nexthop_vrf)
+        if "track" in kwargs:
+            command += " track {}".format(kwargs["track"])
+        st.config(dut, command, type='alicli')
     else:
         st.error("UNSUPPORTED CLI TYPE -- {}".format(cli_type))
         return False

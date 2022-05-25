@@ -5,6 +5,7 @@ from collections import OrderedDict
 from spytest import st, tgapi, SpyTestDict
 from spytest.utils import filter_and_select
 from utilities.utils import retry_api
+from apis.common import redis
 
 import apis.common.asic as asicapi
 import apis.switching.vlan as vapi
@@ -14,6 +15,7 @@ import apis.system.port as papi
 import apis.routing.bgp as bgp_api
 import apis.routing.arp as arp_obj
 import apis.routing.bfd as bfdapi
+
 
 def get_handles():
     tg1, tg_ph_1 = tgapi.get_handle_byname("T1D1P1")
@@ -36,7 +38,7 @@ def bfd_module_hooks(request):
     data.neigh_v6_ip_addr = "2100:0:2::2/64"
     data.neigh_ip_addr = "10.2.2.2/24"
     data.dut1_ports = [vars.D1T1P1,vars.D1T1P2]
-    data.as_num = 176
+    data.as_num = 178
     data.remote_as_num = 200
     data.new_as_num = 300
     data.vrf = "bfd-test-12345678-abcdefg"
@@ -92,7 +94,8 @@ def l3_base_config():
 
     h1=tg1.tg_interface_config(port_handle=tg_ph_1, mode='config', intf_ip_addr=formatted_dut1_neigh_ip_addr,
                 ipv6_intf_addr=formatted_dut1_neigh_ipv6_addr,ipv6_gateway='2100:0:2::1',
-                gateway='10.2.2.1', src_mac_addr='00:0a:01:00:00:01', vlan='1', vlan_id='100', arp_send_req='1')
+                gateway='10.2.2.1', src_mac_addr='00:0a:01:00:00:01', vlan='1', vlan_id='100', arp_send_req='1',
+                vlan_user_priority = '7', vlan_user_priority_step='0')
     print(h1)
     arp_obj.show_arp(dut)
 
@@ -387,17 +390,34 @@ def test_bfd_ipv4_attr_set():
     st.wait(10) # wait hw-bfd work
     if not bfdapi.verify_bfd_peer(dut1, peer=neigh_ip_addr, local_addr=dut1_ip_addr, vrf_name=data.vrf, 
                                 rx_interval=[[data.dut_bfd_timer,data.tg_bfd_timer]], status='up', cli_type='alicli'):
-        st.report_fail("bfd non-work", ip_addr, dut1)
+        st.report_fail("bfd non-work", dut1_ip_addr, dut1)
 
     st.log("bfd status check ok, set dut bfd params: multiplier=5, rx_intv=50, tx_intv=50")
     bfdapi.configure_bfd(dut1, local_asn=data.as_num, neighbor_ip=neigh_ip_addr, 
                         config="yes",vrf_name=data.vrf, cli_type='alicli', multiplier=5, rx_intv=50, tx_intv=50)
     st.wait(5)
 
+    key = "BFD_PEER:{}*".format(neigh_ip_addr)
+    command = redis.build(dut1, redis.APPL_DB, "keys '{}' ".format(key))
+    output = st.show(dut1, command)
+    if output[0]:
+        seq_key = output[0]['name']
+    else:
+        seq_key = ''
+    command = redis.build(dut1, redis.APPL_DB, "hgetall '{}' ".format(seq_key))
+    output = st.show(dut1, command)
+
+    match_list = [{"donor_intf": '50000'}, {"donor_intf": '60000'}]
+    for match in match_list:
+        entries = filter_and_select(output, None, match)
+        if not entries:
+            st.log("{} is not match".format(match))
+            st.report_fail("bfd status error", dut1_ip_addr, dut1)
+
     #skip multiplier check
     if not bfdapi.verify_bfd_peer(dut1, peer=neigh_ip_addr, local_addr=dut1_ip_addr, rx_interval=[['50',data.tg_bfd_timer]], 
                             status='up', cli_type='alicli', vrf_name=data.vrf):
-        st.report_fail("bfd status error", ip_addr, dut1)
+        st.report_fail("bfd status error", dut1_ip_addr, dut1)
 
     st.log("set TG bfd params")
     # TG BFD params change
@@ -421,7 +441,7 @@ def test_bfd_ipv4_attr_set():
 
     if not bfdapi.verify_bfd_peer(dut1, peer=neigh_ip_addr, local_addr=dut1_ip_addr, rx_interval=[['50','50']], 
                             status='up', cli_type='alicli', vrf_name=data.vrf):
-        st.report_fail("bfd status error", ip_addr, dut1)
+        st.report_fail("bfd status error", dut1_ip_addr, dut1)
 
     bfdapi.configure_bfd(dut1, local_asn=data.as_num, neighbor_ip=neigh_ip_addr, 
                         config="yes",vrf_name=data.vrf, cli_type='alicli', multiplier=3, rx_intv=int(data.dut_bfd_timer), tx_intv=int(data.dut_bfd_timer))
@@ -429,7 +449,7 @@ def test_bfd_ipv4_attr_set():
 
     if not bfdapi.verify_bfd_peer(dut1, peer=neigh_ip_addr, local_addr=dut1_ip_addr, rx_interval=[[data.dut_bfd_timer,'50']], 
                             status='up', cli_type='alicli', vrf_name=data.vrf):
-        st.report_fail("bfd status error", ip_addr, dut1)
+        st.report_fail("bfd status error", dut1_ip_addr, dut1)
 
     st.report_pass("test_case_passed")
 
@@ -581,6 +601,23 @@ def test_bfd_ipv6_attr_set():
                             status='up', cli_type='alicli', vrf_name=data.vrf):
         st.report_fail("bfd status error", dut1_ipv6_addr, dut1)
     
+    key = "BFD_PEER:{}*".format(neigh_ipv6_addr)
+    command = redis.build(dut1, redis.APPL_DB, "keys '{}' ".format(key))
+    output = st.show(dut1, command)
+    if output[0]:
+        seq_key = output[0]['name']
+    else:
+        seq_key = ''
+    command = redis.build(dut1, redis.APPL_DB, "hgetall '{}' ".format(seq_key))
+    output = st.show(dut1, command)
+
+    match_list = [{"donor_intf": '50000'}, {"donor_intf": '60000'}]
+    for match in match_list:
+        entries = filter_and_select(output, None, match)
+        if not entries:
+            st.log("{} is not match".format(match))
+            st.report_fail("bfd status error", dut1_ip_addr, dut1)
+
     output = bfdapi.get_bfd_peer_counters(dut1, peer=neigh_ipv6_addr, local_addr=dut1_ipv6_addr, cli_type='alicli', vrf_name=data.vrf)
     tx_counter1 = output[0]['cntrlpktout']
     st.wait(5)

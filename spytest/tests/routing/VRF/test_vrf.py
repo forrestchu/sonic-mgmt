@@ -435,7 +435,7 @@ def test_VrfFun_34_46():
         st.report_fail('test_case_failed')
 
 def clear_ip_bgp_vrf_cli(dut, vrf, value="*"):
-    command = "clear bgp vrf {} {}".format(vrf, value)
+    command = "cli -c 'clear bgp vrf {} {}'".format(vrf, value)
     st.config(dut, command)
     st.wait(2)
 

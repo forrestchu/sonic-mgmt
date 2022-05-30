@@ -34,6 +34,10 @@ data.match_tag_inc = "110"
 data.match_source_protocol = "bgp"
 data.match_source_protocol_inc = "ospf"
 
+data.default_rm_delay_time = "20"
+data.rm_delay_time1 = "15"
+data.rm_delay_time2 = "30"
+
 def get_single_dut():
     vars = st.get_testbed_vars()
     data['dut'] = vars.D1
@@ -73,6 +77,9 @@ def cli_function_hooks(request):
 def get_configdb_key_routemap(route_map):
     s_list = route_map.split(' ')
     return "ROUTE_MAP|{}|{}|{}".format(s_list[1], s_list[2], s_list[3])
+
+def get_configdb_key_rm_delay_time():
+    return "ROUTE_MAP_DELAY|TIME"
 
 def get_frr_key_routemap(route_map):
     return route_map
@@ -118,6 +125,20 @@ def frr_config_checkpoint(obj, key, subkey, expect = True, checkpoint = ''):
 
     if output[key][subkey] != "true":
         st.report_fail("{} frr config subkey {} not equal to true".format(checkpoint, subkey))
+
+def frr_config_checkpoint_onekey(obj, key, expect = True, checkpoint = ''):
+    output = obj.show_frr_running_config_json()
+    if key not in output:
+        st.report_fail("{} frr config has no {} config".format(checkpoint, key))
+    
+    if output[key] != "true":
+        st.report_fail("{} frr config key {} not equal to true".format(checkpoint, key))
+
+    if expect == "null":
+        if key in output:
+            st.report_fail("{} frr config has key {} config, expect null".format(checkpoint, key))
+        else:
+            return
 
 
 @pytest.mark.routemap_cli
@@ -381,10 +402,12 @@ def test_cli_routemap_match_source_protocol():
     st.log("test sub case 1...")
     test_obj.match_source_protocol(route_map, data['match_source_protocol'])
     configdb_checkpoint(dut, key_configdb, "match_source_protocol", data['match_source_protocol'], True, "check1")
+    st.wait(2)
     frr_config_checkpoint(test_obj, key_frr, "match source-protocol {}".format(data['match_source_protocol']), True, "check2")
 
     test_obj.no_match_source_protocol_val(route_map, data['match_source_protocol'])
     configdb_checkpoint(dut, key_configdb, "match_source_protocol", "null", True, "check3")
+    st.wait(2)
     frr_config_checkpoint(test_obj, key_frr, "match source-protocol {}".format(data['match_source_protocol']), "null", "check4")
 
     # case 2:
@@ -399,5 +422,38 @@ def test_cli_routemap_match_source_protocol():
     # delete route-map
     st.log("delete route-map")
     test_obj.delete_route_map(route_map)
+
+    st.report_pass("test_case_passed")
+
+@pytest.mark.routemap_cli
+def test_cli_routemap_delay_time():
+    st.log("test_cli_routemap_delay_time begin")
+    test_obj = data['rm_obj']
+    dut = data['dut']
+
+    # check default route-map delay-time
+    st.log("check default route-map delay-time")
+    frr_config_checkpoint_onekey(test_obj, 'bgp route-map delay-timer {}'.format(data['default_rm_delay_time']),
+        expect = True, checkpoint = "check1")
+
+    # config route-map delay-time
+    st.log("config route-map delay-time")
+    test_obj.rm_delay_time_config(data['rm_delay_time1'])
+    key_configdb = get_configdb_key_rm_delay_time()
+    configdb_checkpoint(dut, key_configdb, "delay_time", data['rm_delay_time1'], True, "check2")
+    frr_config_checkpoint_onekey(test_obj, 'bgp route-map delay-timer {}'.format(data['rm_delay_time1']),
+        expect = True, checkpoint = "check2")
+
+    # save and reboot
+    st.log("save and reboot")
+    test_obj.save_config_and_reboot()
+    key_configdb = get_configdb_key_rm_delay_time()
+    configdb_checkpoint(dut, key_configdb, "delay_time", data['rm_delay_time1'], True, "check3")
+    frr_config_checkpoint_onekey(test_obj, 'bgp route-map delay-timer {}'.format(data['rm_delay_time1']),
+        expect = True, checkpoint = "check3")
+
+    # restore to default
+    st.log("restore to default")
+    test_obj.rm_delay_time_config(data['default_rm_delay_time'])
 
     st.report_pass("test_case_passed")

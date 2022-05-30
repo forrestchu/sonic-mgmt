@@ -148,6 +148,13 @@ class ROUTE_MAP_CLI():
         st.config(self.dut, cmd)
         st.wait(CMD_INTERVAL)
 
+    def rm_delay_time_config(self, delay_time):
+        st.log("Route-map match source_protocol")
+        sub_cmd = "bgp route-map delay-timer {}".format(delay_time)
+        cmd = "{} -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
     def save_config_and_reboot(self):
         cmd = "{} -c '{}' -c 'copy running-config startup-config'".format(ALICLI_VIEW, CONFIG_VIEW)
         st.config(self.dut, cmd)

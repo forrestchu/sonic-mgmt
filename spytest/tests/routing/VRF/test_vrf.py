@@ -434,6 +434,38 @@ def test_VrfFun_34_46():
         loc_lib.debug_bgp_vrf()
         st.report_fail('test_case_failed')
 
+def clear_ip_bgp_vrf_cli(dut, vrf, value="*"):
+    command = "clear bgp vrf {} {}".format(vrf, value)
+    st.config(dut, command)
+    st.wait(2)
+
+@pytest.mark.functionality
+def test_VrfFun_cli_clear_cmd():
+
+    st.log('#######################################################################################################################')
+    st.log('######------Combining FtRtVrfFun005, FtRtVrfFun034 and FtRtVrfFun046 -----######')
+    st.log('#######################################################################################################################')
+    result = 0
+
+    clear_ip_bgp_vrf_cli(data.dut1, vrf_name[0])
+    clear_ip_bgp_vrf_cli(data.dut1, vrf_name[1])
+    clear_ip_bgp_vrf_cli(data.dut1, vrf_name[2])
+
+    if not loc_lib.retry_api(ip_api.verify_ip_route, dut = data.dut2, vrf_name = vrf_name[1], type='B', nexthop = dut1_dut2_vrf_ip[0], interface = 'Vlan'+dut2_dut1_vlan[0], retry_count= 2, delay= 10):
+        st.log('IPv4 routes on VRF-102, not learnt on DUT2')
+        result += 1
+    if not loc_lib.retry_api(ip_api.verify_ip_route, dut = data.dut2, vrf_name = vrf_name[1], type='B', nexthop = dut1_dut2_vrf_ipv6[0], interface = 'Vlan'+dut2_dut1_vlan[0],family='ipv6',retry_count= 2, delay= 10):
+        st.log('IPv6 routes on VRF-102, not learnt on DUT2')
+        result += 1
+    if not loc_lib.retry_api(ip_api.verify_ip_route, dut = data.dut2, family='ipv6', vrf_name = vrf_name[2], type='B', nexthop = dut1_dut2_vrf_ipv6[0], interface = 'PortChannel10',retry_count= 2, delay= 10):
+        st.log('IPv6 routes on VRF-103, not learnt on DUT2')
+        result += 1
+    if result == 0:
+        st.report_pass('test_case_passed')
+    else:
+        loc_lib.debug_bgp_vrf()
+        st.report_fail('test_case_failed')
+
 def vrf_tc_38_39_48():
     st.log('IPv6 BGP session did not come up, after delete/add IPv6 IBGP and EBGP config.')
     bgp_api.config_bgp(dut = data.dut1, vrf_name = vrf_name[2], addr_family ='ipv6',  config = 'yes', local_as = dut1_as[2], neighbor = dut2_dut1_vrf_ipv6[0], remote_as = dut2_as[2], config_type_list =['neighbor'])

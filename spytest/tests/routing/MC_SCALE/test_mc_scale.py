@@ -1511,6 +1511,7 @@ def test_ixia_bfd_flap_in_bfd_vrf():
     current_down_session = 0
     while loop < loop_max:
         current_up_session = 0
+        current_down_session = 0
         output2  = st.show(dut1, cmd, type='vtysh')
         for i in range(all_session):
             if 'down' == output2[i]['status']:

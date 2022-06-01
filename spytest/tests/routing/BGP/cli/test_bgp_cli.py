@@ -1,6 +1,7 @@
 # -*- coding:utf-8 -*-
 import pytest
 import json
+import re
 
 from spytest import st, tgapi, SpyTestDict
 import apis.routing.bgp as bgpfeature
@@ -1048,5 +1049,199 @@ def test_cli_bgp_aspath_access_list_with_command_typo():
             st.report_fail("check2-2: frr check failed: {} {} {}".format(item[i][0], item[i][1], item[i][2]))
 
     bgpcli_obj.flush_bgp_aspath_access_lists()
+
+    st.report_pass("test_case_passed")
+
+def cli_exist_check(pattern, out, cmd):
+    ret = pattern.findall(out)
+    st.log(ret)
+    if ret is not None and len(ret) > 0:
+        st.report_fail("{} output is {}".format(cmd, out))
+
+
+## clear bgp vrf xxxxx
+@pytest.mark.bgp_cli
+def test_cli_clear_bgp_vrf_command():
+    st.log("test_cli_clear_bgp_vrf_command begin")
+    bgpcli_obj = data['bgpcli_obj']
+    dut = data['dut']
+
+    pattern = re.compile(r"% Unknown command")
+
+    st.log("clear bgp vrf * cli test")
+    cmd = "clear bgp vrf Default *"
+    out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
+    cli_exist_check(pattern, out, cmd)
+
+    cmd = "clear bgp vrf Default * in"
+    out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
+    cli_exist_check(pattern, out, cmd)
+
+    cmd = "clear bgp vrf Default * in prefix-filter"
+    out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
+    cli_exist_check(pattern, out, cmd) 
+
+    cmd = "clear bgp vrf Default * out"
+    out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
+    cli_exist_check(pattern, out, cmd) 
+
+    cmd = "clear bgp vrf Default * soft"
+    out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
+    cli_exist_check(pattern, out, cmd) 
+
+    cmd = "clear bgp vrf Default * soft in"
+    out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
+    cli_exist_check(pattern, out, cmd) 
+
+    cmd = "clear bgp vrf Default * soft out"
+    out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
+    cli_exist_check(pattern, out, cmd) 
+
+    st.log("clear bgp vrf peer-group cli test")
+    cmd = "clear bgp vrf Default peer-group X1"
+    out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
+    cli_exist_check(pattern, out, cmd)    
+
+    cmd = "clear bgp vrf Default peer-group X1 in"
+    out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
+    cli_exist_check(pattern, out, cmd)   
+
+    cmd = "clear bgp vrf Default peer-group X1 in prefix-filter"
+    out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
+    cli_exist_check(pattern, out, cmd)
+
+    cmd = "clear bgp vrf Default peer-group X1 out"
+    out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
+    cli_exist_check(pattern, out, cmd)
+
+    cmd = "clear bgp vrf Default peer-group X1 soft"
+    out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
+    cli_exist_check(pattern, out, cmd)
+
+    cmd = "clear bgp vrf Default peer-group X1 soft in"
+    out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
+    cli_exist_check(pattern, out, cmd)
+
+    cmd = "clear bgp vrf Default peer-group X1 soft out"
+    out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
+    cli_exist_check(pattern, out, cmd)
+
+
+    st.log("clear bgp vrf peer cli test")
+    cmd = "clear bgp vrf Default 100"
+    out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
+    cli_exist_check(pattern, out, cmd)  
+
+    cmd = "clear bgp vrf Default 1.1.1.1  in"
+    out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
+    cli_exist_check(pattern, out, cmd)  
+
+    cmd = "clear bgp vrf Default 2000::1  in prefix-filter"
+    out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
+    cli_exist_check(pattern, out, cmd)  
+
+    cmd = "clear bgp vrf Default testpeer out"
+    out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
+    cli_exist_check(pattern, out, cmd)    
+
+    cmd = "clear bgp vrf Default external soft"
+    out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
+    cli_exist_check(pattern, out, cmd)
+
+    cmd = "clear bgp vrf Default 100 soft in"
+    out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
+    cli_exist_check(pattern, out, cmd)
+
+    cmd = "clear bgp vrf Default 1.1.1.1 soft out"
+    out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
+    cli_exist_check(pattern, out, cmd)
+
+
+    st.log("clear bgp vrf address family * cli test")
+    cmd = "clear bgp vrf Default ipv4 unicast 100"
+    out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
+    cli_exist_check(pattern, out, cmd)
+
+    cmd = "clear bgp vrf Default ipv4 unicast 1.1.1.1  in"
+    out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
+    cli_exist_check(pattern, out, cmd)  
+
+    cmd = "clear bgp vrf Default ipv6 unicast 2000::1  in prefix-filter"
+    out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
+    cli_exist_check(pattern, out, cmd)  
+
+    cmd = "clear bgp vrf Default ipv6 unicast testpeer out"
+    out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
+    cli_exist_check(pattern, out, cmd)
+
+    cmd = "clear bgp vrf Default ipv6 unicast external soft"
+    out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
+    cli_exist_check(pattern, out, cmd)
+
+    cmd = "clear bgp vrf Default ipv6 unicast 100 soft in"
+    out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
+    cli_exist_check(pattern, out, cmd)
+
+    cmd = "clear bgp vrf Default ipv4 unicast 1.1.1.1 soft out"
+    out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
+    cli_exist_check(pattern, out, cmd)
+
+    st.log("clear bgp vrf address family peergroup cli test")
+    cmd = "clear bgp vrf Default ipv4 unicast peer-group X1"
+    out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
+    cli_exist_check(pattern, out, cmd)
+
+    cmd = "clear bgp vrf Default ipv4 unicast peer-group X1  in"
+    out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
+    cli_exist_check(pattern, out, cmd)   
+
+    cmd = "clear bgp vrf Default ipv4 unicast peer-group X1  in prefix-filter"
+    out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
+    cli_exist_check(pattern, out, cmd)
+
+    cmd = "clear bgp vrf Default ipv6 unicast peer-group X1 out"
+    out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
+    cli_exist_check(pattern, out, cmd)
+
+    cmd = "clear bgp vrf Default ipv6 unicast peer-group X1 soft"
+    out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
+    cli_exist_check(pattern, out, cmd)
+
+    cmd = "clear bgp vrf Default ipv6 unicast peer-group X1 soft in"
+    out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
+    cli_exist_check(pattern, out, cmd)
+
+    cmd = "clear bgp vrf Default ipv6 unicast peer-group X1 soft out"
+    out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
+    cli_exist_check(pattern, out, cmd)
+
+    st.log("clear bgp vrf address family * cli test")
+    cmd = "clear bgp vrf Default ipv4 unicast *"
+    out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
+    cli_exist_check(pattern, out, cmd)
+
+    cmd = "clear bgp vrf Default ipv4 unicast * in"
+    out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
+    cli_exist_check(pattern, out, cmd)
+
+    cmd = "clear bgp vrf Default ipv4 unicast * in prefix-filter"
+    out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
+    cli_exist_check(pattern, out, cmd) 
+
+    cmd = "clear bgp vrf Default ipv6 unicast * out"
+    out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
+    cli_exist_check(pattern, out, cmd)
+
+    cmd = "clear bgp vrf Default ipv6 unicast * soft"
+    out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
+    cli_exist_check(pattern, out, cmd)
+
+    cmd = "clear bgp vrf Default ipv6 unicast * soft in"
+    out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
+    cli_exist_check(pattern, out, cmd)
+
+    cmd = "clear bgp vrf Default ipv6 unicast * soft out"
+    out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
+    cli_exist_check(pattern, out, cmd)
 
     st.report_pass("test_case_passed")

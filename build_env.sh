@@ -28,6 +28,7 @@ apt-get install -y libxss1
 apt-get install -y libxss-dev 
 apt-get install -y expect
 apt-get install -y vim
+apt-get install -y snmp
 
 #BASE_URL="http://30.57.186.117/spytest"
 BASE_URL="http://10.97.244.220/spytest"

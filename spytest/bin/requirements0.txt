@@ -1,4 +1,5 @@
 pyfiglet
+lazy-object-proxy==1.6.0
 pylint==1.8.1
 textfsm
 netmiko==2.4.2

@@ -25,7 +25,7 @@ class ROUTE_MAP_CLI():
         return route_map
 
     def delete_route_map(self, route_map):
-        cmd = "{} -c '{}' -c no '{}'".format(ALICLI_VIEW, CONFIG_VIEW, route_map)
+        cmd = "{} -c '{}' -c 'no {}'".format(ALICLI_VIEW, CONFIG_VIEW, route_map)
         st.config(self.dut, cmd)
         st.wait(CMD_INTERVAL)
 

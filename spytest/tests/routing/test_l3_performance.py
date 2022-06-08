@@ -1,9 +1,11 @@
 import pytest
 import datetime
 import time
+import json
 
 from spytest import st, tgapi, SpyTestDict
 from spytest.utils import filter_and_select
+from apis.common import redis   
 
 import apis.routing.ip as ipfeature
 import apis.system.port as papi
@@ -28,7 +30,7 @@ data.intf_ipv6_addr = "3000::1"
 data.neigh_ipv6_addr2 = "3000::2"
 data.ipv6_prefixlen = "64"
 data.test_bgp_route_count = 20000
-data.ip6_full_mask_num = 30000
+data.ip6_full_mask_num = 3
 data.traffic_rate_pps = data.test_bgp_route_count
 data.includeTraffic = False
 
@@ -70,6 +72,8 @@ def l3_performance_enhancements_module_hooks(request):
     # Get the default route count from DUT
     def_v4_route_count = asicapi.get_ipv4_route_count(dut)
     def_v6_route_count = asicapi.get_ipv6_route_count(dut)
+
+    load_dut_crm_poll_timer_config(dut, timer='30')
 
     yield
     # Module Cleanup
@@ -195,6 +199,14 @@ def verify_bgp_route_count(dut,family='ipv4',shell="sonic",**kwargs):
             return 0
     return 0
 
+def load_dut_crm_poll_timer_config(dut, timer='30'):
+    final_data = dict()
+    temp_data = dict()
+    temp_data['Config'] = {"polling_interval": timer}
+    final_data['CRM'] = temp_data
+    final_data = json.dumps(final_data)
+    st.apply_json(dut, final_data)
+
 @pytest.fixture(scope="function")
 def fixture_v4(request):
     global h1, h2, bgp_rtr1
@@ -300,6 +312,28 @@ def bgp_router_cli_validation(dut,type = "vtysh"):
     else:
         st.config(dut, cmd, type=type, skip_error_check=True)
 
+def check_route_table_alarm(dut, type='IPV4'):
+    key = "ALARM_TABLE|ROUTE|ROUTE_TABLE_FULL|{}|*".format(type)
+    command = redis.build(dut, redis.SYSMON_DB, "keys '{}' ".format(key))
+    output = st.show(dut, command)
+    if output[0]:
+        full_key = output[0]['name']
+    else:
+        st.log('get route alarm table key failed')
+        return False
+    command = redis.build(dut, redis.SYSMON_DB, "hgetall '{}' ".format(full_key))
+    output = st.show(dut, command)
+    print(output)
+
+    match_list = [{'field_value': '100%', 'field_name': 'percentage'}, {'field_value': '0', 'field_name': 'free_count'}]
+    for match in match_list:
+        entries = filter_and_select(output, None, match)
+        if not entries:
+            st.log("{} is not match".format(match))
+            return False
+    
+    return True
+    
 @pytest.mark.test_ft_l3_performance_enhancements_v4_route_intstall_withdraw
 def test_ft_l3_performance_enhancements_v4_route_intstall_withdraw(fixture_v4):
     ################# Author Details ################
@@ -432,6 +466,9 @@ def test_ft_l3_performance_enhancements_v4_route_intstall_withdraw(fixture_v4):
     # Stopping the TG traffic
     if data.includeTraffic:
         tg.tg_traffic_control(action='stop', handle=tr1['stream_id'])
+
+    if not check_route_table_alarm(dut, type='IPV4'):
+        st.report_fail("route_table_not_alarm")
     st.report_pass("test_case_passed")
 
 
@@ -552,6 +589,9 @@ def test_ft_l3_performance_enhancements_v6_route_intstall_withdraw(fixture_v6):
     if data.includeTraffic:
         # Stopping the TG traffic
         tg.tg_traffic_control(action='stop', handle=tr2['stream_id'])
+    
+    if not check_route_table_alarm(dut, type='IPV6'):
+        st.report_fail("route_table_not_alarm")
     st.report_pass("test_case_passed")
 
 def test_ft_l3_performance_enhancements_v4_bgp_link_flap_convergence_time(fixture_v4):

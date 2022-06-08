@@ -126,7 +126,7 @@ def DeviceConnection(**kws):
                 msg = "TRY ALT Authentication: {} {} {}".format(ip_port, username, password)
             else:
                 msg = "TRY Authentication: {} {} {}".format(ip_port, username, password)
-            log_msg(logger, devname, logging.INFO, msg)
+            #log_msg(logger, devname, logging.INFO, msg)
             kwargs["username"], kwargs["password"] = username, password
             if "altpassword" in kwargs and kwargs["altpassword"] == password:
                 tmp_pwd = kwargs["password"]

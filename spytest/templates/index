@@ -507,6 +507,7 @@ show_redis_cli_dom.tmpl, .*, sonic, redis-cli(?: -p \d+)? -n 6 hgetall "TRANSCEI
 show_redis_cli_bgp_info_db.tmpl, .*, sonic, redis-cli(?: -p \d+)? -n 4 hgetall "COMMUNITY_LIST*
 show_redis_cli_bgp_info_db.tmpl, .*, sonic, redis-cli(?: -p \d+)? -n 4 hgetall "ASPATH_ACCESS_LIST*
 show_redis-cli_keys.tmpl, .*, sonic, redis-cli(?: -p \d+)? -n 8 keys ERROR.*
+show_redis_cli_dom.tmpl, .*, sonic, redis-cli(?: -p \d+)? -n 10 hgetall \S+
 show_redis_error_db.tmpl, .*, sonic,   redis-cli(?: -p \d+)? -n 8 hgetall .*
 show_redis_cli_key_search.tmpl, .*, sonic, redis-cli(?: -p \d+)? HGETALL \S+
 show_redis_cli_key_search.tmpl, .*, sonic, redis-cli(?: -p \d+)? -n 0 HGETALL \S+

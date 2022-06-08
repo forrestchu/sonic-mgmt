@@ -12,6 +12,7 @@ FLEX_COUNTER_DB = "FLEX_COUNTER_DB"
 STATE_DB = "STATE_DB"
 SNMP_OVERLAY_DB = "SNMP_OVERLAY_DB"
 ERROR_DB = "ERROR_DB"
+SYSMON_DB = "SYSMON_DB"
 
 ########################## TODO ####################################
 # read db_port_map from /var/run/redis/sonic-db/database_config.json
@@ -26,7 +27,8 @@ db_id_map = {
     FLEX_COUNTER_DB: 5,
     STATE_DB: 6,
     SNMP_OVERLAY_DB: 7,
-    ERROR_DB: 8
+    ERROR_DB: 8,
+    SYSMON_DB: 10
 }
 
 # Port map used for A/A+/B/B-MR
@@ -40,7 +42,8 @@ db_default_port_map = {
     FLEX_COUNTER_DB: 6379,
     STATE_DB: 6379,
     SNMP_OVERLAY_DB: 6379,
-    ERROR_DB: 6379
+    ERROR_DB: 6379,
+    SYSMON_DB: 6379
 }
 
 # Read /var/run/redis/sonic-db/database_config.json on DUT and populate db_port_map

@@ -582,3 +582,66 @@ def test_cli_routemap_delay_time_exception():
         expect = True, checkpoint = "check13")
 
     st.report_pass("test_case_passed")
+
+@pytest.mark.routemap_cli
+def test_cli_prefix_list_base_case():
+    st.log("test_cli_prefix_list_base_case begin")
+    test_obj = data['rm_obj']
+    dut = data['dut']
+    
+    #  config ip prefix-list 
+    PREFIX_NAME = 'plv4'
+    PREFIX_E1 = '1.1.1.1/32'
+    PREFIX_E2 = '2.2.2.2/32'
+    PREFIX_E3 = '3.3.3.3/32'
+    
+    cmd = "cli -c 'config t' -c 'ip prefix-list {} permit {}'".format(PREFIX_NAME, PREFIX_E1)
+    st.config(dut, cmd)
+    st.wait(2)
+
+    cmd = "cli -c 'config t' -c 'ip prefix-list {} permit {}'".format(PREFIX_NAME, PREFIX_E2)
+    st.config(dut, cmd)
+    st.wait(2)
+
+    cmd = "cli -c 'config t' -c 'ip prefix-list {} permit {}'".format(PREFIX_NAME, PREFIX_E3)
+    st.config(dut, cmd)
+    st.wait(2)
+
+    #  check ip prefix-list 
+    configdb_checkpoint(dut, "IP_PREFIX_LIST|{}|seq|10".format(PREFIX_NAME), "permit", PREFIX_E1, True, "check1")
+    configdb_checkpoint(dut, "IP_PREFIX_LIST|{}|seq|20".format(PREFIX_NAME), "permit", PREFIX_E2, True, "check2")
+    configdb_checkpoint(dut, "IP_PREFIX_LIST|{}|seq|30".format(PREFIX_NAME), "permit", PREFIX_E3, True, "check3")
+
+    frr_config_checkpoint_onekey(test_obj, "ip prefix-list {} seq 10 permit {}".format(PREFIX_NAME,PREFIX_E1), True, "check4")
+    frr_config_checkpoint_onekey(test_obj, "ip prefix-list {} seq 20 permit {}".format(PREFIX_NAME,PREFIX_E2), True, "check5")
+    frr_config_checkpoint_onekey(test_obj, "ip prefix-list {} seq 30 permit {}".format(PREFIX_NAME,PREFIX_E3), True, "check6")
+
+
+    #  config ipv6 prefix-list 
+    PREFIX6_NAME = 'plv6'
+    PREFIX6_E1 = '2000::1/128'
+    PREFIX6_E2 = '2000::2/128'
+    PREFIX6_E3 = '2000::3/128'
+    
+    cmd = "cli -c 'config t' -c 'ipv6 prefix-list {} permit {}'".format(PREFIX6_NAME, PREFIX6_E1)
+    st.config(dut, cmd)
+    st.wait(2)
+
+    cmd = "cli -c 'config t' -c 'ipv6 prefix-list {} permit {}'".format(PREFIX6_NAME, PREFIX6_E2)
+    st.config(dut, cmd)
+    st.wait(2)
+
+    cmd = "cli -c 'config t' -c 'ipv6 prefix-list {} permit {}'".format(PREFIX6_NAME, PREFIX6_E3)
+    st.config(dut, cmd)
+    st.wait(2)
+
+    #  check ip6 prefix-list 
+    configdb_checkpoint(dut, "IPV6_PREFIX_LIST|{}|seq|10".format(PREFIX6_NAME), "permit", PREFIX6_E1, True, "check7")
+    configdb_checkpoint(dut, "IPV6_PREFIX_LIST|{}|seq|20".format(PREFIX6_NAME), "permit", PREFIX6_E2, True, "check8")
+    configdb_checkpoint(dut, "IPV6_PREFIX_LIST|{}|seq|30".format(PREFIX6_NAME), "permit", PREFIX6_E3, True, "check9")
+
+    frr_config_checkpoint_onekey(test_obj, "ipv6 prefix-list {} seq 10 permit {}".format(PREFIX6_NAME,PREFIX6_E1), True, "check10")
+    frr_config_checkpoint_onekey(test_obj, "ipv6 prefix-list {} seq 20 permit {}".format(PREFIX6_NAME,PREFIX6_E2), True, "check11")
+    frr_config_checkpoint_onekey(test_obj, "ipv6 prefix-list {} seq 30 permit {}".format(PREFIX6_NAME,PREFIX6_E3), True, "check12")
+
+    st.report_pass("test_case_passed")

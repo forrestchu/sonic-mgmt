@@ -49,3 +49,11 @@ def show_macsec_mka(dut, port):
 def show_macsec_mib(dut, port):
     command = "cli -c 'no page' -c 'show macsec mib interface {}'".format(port)
     return st.show(dut, command, skip_tmpl=True, skip_error_check=True)
+
+def show_macsec_statistics(dut, port):
+    command = "cli -c 'no page' -c 'show macsec statistics interface {}'".format(port)
+    return st.show(dut, command, skip_tmpl=True, skip_error_check=True)
+
+def show_macsec_profiles(dut):
+    command = "cli -c 'no page' -c 'show macsec profiles'"
+    return st.show(dut, command, skip_tmpl=True, skip_error_check=True)

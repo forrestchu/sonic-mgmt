@@ -3,6 +3,7 @@ import re
 
 from spytest import st, tgapi, SpyTestDict
 import apis.macsec.macsec as macsec_api
+import apis.system.reboot as reboot
 
 data = SpyTestDict()
 data.port = "Ethernet1"
@@ -29,6 +30,10 @@ def test_macsec_simple_config():
     if not ret:
         st.report_fail("Failed to create macsec profile {}".format(data.profile_name))
 
+    output = macsec_api.show_macsec_profiles(vars.D1)
+    if data.profile_name not in output:
+        st.report_fail("Failed to create macsec profile {}".format(data.profile_name))
+
     # 2. enable port
     st.log("enable macsec port {} with profile {}".format(data.port, data.profile_name))
     ret = macsec_api.enable_macsec_port(vars.D1, data.port, data.profile_name)
@@ -51,6 +56,10 @@ def test_macsec_simple_config():
     st.log("create macsec profile {}".format(data.profile_name_2))
     ret = macsec_api.create_macsec_profile(vars.D1, data.profile_name_2, data.cipher_suite, data.primary_cak, data.primary_ckn)
     if not ret:
+        st.report_fail("Failed to create macsec profile {}".format(data.profile_name_2))
+
+    output = macsec_api.show_macsec_profiles(vars.D1)
+    if data.profile_name_2 not in output:
         st.report_fail("Failed to create macsec profile {}".format(data.profile_name_2))
 
     # 6. replace profile
@@ -114,6 +123,26 @@ def test_macsec_full_config():
         ret = macsec_api.check_wpa_supplicant_process(vars.D1, interface)
         if not ret:
             st.report_fail("The wpa_supplicant for the port {} wasn't started.".format(interface))
+
+    ###########################################
+    # Reboot and Check if the macsec was restored
+
+    reboot.config_save_reboot(vars.D1)
+    st.log("Wait another 120s for MACSec to initialize...")
+    st.wait(120)
+
+    # check wpa_supplicant
+    st.wait(3)
+    for interface in interfaces:
+        ret = macsec_api.check_wpa_supplicant_process(vars.D1, interface)
+        if not ret:
+            st.report_fail("The wpa_supplicant for the port {} wasn't started.".format(interface))
+
+        output = macsec_api.show_macsec_connections(vars.D1, interface)
+        if "TXSC" not in output:
+            st.report_fail("TXSC is not created for the port {}.".format(interface))
+    ###########################################
+
 
     # disable all macsec port
     st.wait(3)

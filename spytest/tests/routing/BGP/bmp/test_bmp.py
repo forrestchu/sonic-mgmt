@@ -17,7 +17,8 @@ import apis.routing.bgp as bgp_api
 import apis.routing.arp as arp_obj
 import apis.routing.bfd as bfdapi
 from bmp_cli import BMP_INS
-
+import psutil
+import signal
 
 data = SpyTestDict()
 
@@ -175,6 +176,18 @@ def frr_config_checkpoint2(obj, key, subkey, subkey2, expect = True, checkpoint 
         st.report_fail("{} frr config subkey {} not equal to true".format(checkpoint, subkey))
 
 
+def check_pid_status(pid_name):
+    # show processes info
+    pids = psutil.pids()
+    for pid in pids:
+        p = psutil.Process(pid)
+        # get process name according to pid
+        process_name = p.name()
+
+        if (pid_name == process_name):
+            return True
+    return False
+
 @pytest.mark.bmp
 def test_bmp_global_case():
     st.log("test_bmp_global_case begin")
@@ -207,7 +220,7 @@ def test_bmp_global_case():
     
     st.log("check bmp monitor")
     BMP_INS.bmp_server_data_read(topic3)
-    st.config(dut2, "cli -c 'configure terminal' -c 'router bgp 200' -c 'address-family ipv4 unicast' -c 'network 100.1.1.10/32 non-connected'")
+    st.config(dut1, "cli -c 'configure terminal' -c 'router bgp 178' -c 'address-family ipv4 unicast' -c 'network 100.1.1.10/32 non-connected'")
     
     st.wait(30)
     BMP_INS.read_bmp_data(topic3)
@@ -216,12 +229,64 @@ def test_bmp_global_case():
         st.report_fail("{} action {} key {} value {} is not expected - check1".format(topic3, 'add', 'rib.prefix', '100.1.1.10'))
 
     # del bmp
-    st.config(dut1, "cli -c 'configure terminal' -c 'bmp' -c 'no bmp target bmp01'")
+    st.config(dut2, "cli -c 'configure terminal' -c 'bmp' -c 'no bmp target bmp01'")
     st.wait(5)
-    st.config(dut1, "cli -c 'configure terminal' -c 'no bmp'")
+    st.config(dut2, "cli -c 'configure terminal' -c 'no bmp'")
 
     st.report_pass("test_case_passed")
 
+
+@pytest.mark.bmp
+def test_bmp_global_del_bgp_case():
+    st.log("test_bmp_global_del_bgp_case begin")
+    data.my_dut_list = st.get_dut_names()
+    dut1 = data.my_dut_list[0]
+    dut2 = data.my_dut_list[1]
+    topic1 = 'openbmp.parsed.router'
+    topic2 = 'openbmp.parsed.peer'
+    topic3 = 'openbmp.parsed.unicast_prefix'
+
+    st.log("config global bmp")
+    st.config(dut2, "cli -c 'configure terminal' -c 'bmp' -c 'bmp target bmp02' -c 'bmp connect 192.0.0.250 port 5555 min-retry 100 max-retry 200'")
+
+    st.config(dut2, "cli -c 'configure terminal' -c 'bmp' -c 'bmp target bmp02' -c 'bmp monitor ipv4 unicast adj-in pre-policy'")
+
+    st.config(dut2, "cli -c 'configure terminal' -c 'bmp' -c 'bmp target bmp02' -c 'bmp monitor ipv4 unicast adj-in post-policy '")
+
+    st.wait(30)
+
+    st.config(dut2, "cli -c 'configure terminal' -c 'vrf VRF01'")
+    st.config(dut2, "cli -c 'configure terminal' -c 'router bgp 200 vrf VRF01' -c 'bgp router-id 10.10.10.10'")
+
+
+    st.config(dut1, "cli -c 'configure terminal' -c 'router bgp 178' -c 'address-family ipv4 unicast' -c 'network 100.1.1.11/32 non-connected'")
+    
+    st.wait(5)
+
+    BMP_INS.read_bmp_data(topic3)
+    ret = BMP_INS.match_bmp_msg(topic3, 'add', 'rib.prefix', '100.1.1.10')
+    if not ret:
+        st.report_fail("{} action {} key {} value {} is not expected - check1".format(topic3, 'add', 'rib.prefix', '100.1.1.11'))
+    
+    # del bgp ins
+    st.config(dut2, "cli -c 'configure terminal' -c 'no router bgp 200 view VRF01'")
+
+    st.wait(5)
+
+    cmd = "ps -ef | grep bgpd"
+    st.config(dut2, cmd, skip_error_check=True)
+
+    bgpd_status = check_pid_status('bgpd')
+    if not bgpd_status:
+        st.report_fail("bgpd is not running")
+
+
+    # del bmp
+    st.config(dut2, "cli -c 'configure terminal' -c 'bmp' -c 'no bmp target bmp02'")
+    st.wait(5)
+    st.config(dut2, "cli -c 'configure terminal' -c 'no bmp'")
+
+    st.report_pass("test_case_passed")
 
 @pytest.mark.bmp
 def test_bmp_bgp_case():
@@ -234,11 +299,11 @@ def test_bmp_bgp_case():
     topic3 = 'openbmp.parsed.unicast_prefix'
 
     st.log("config bgp bmp")
-    st.config(dut2, "cli -c 'configure terminal' -c 'router bgp 200' -c 'bmp target bmp02' -c 'bmp connect 192.0.0.250 port 5555 min-retry 100 max-retry 200'")
+    st.config(dut2, "cli -c 'configure terminal' -c 'router bgp 200' -c 'bmp target bmp03' -c 'bmp connect 192.0.0.250 port 5555 min-retry 100 max-retry 200'")
 
-    st.config(dut2, "cli -c 'configure terminal' -c 'router bgp 200' -c 'bmp target bmp02' -c 'bmp monitor ipv4 unicast adj-in pre-policy'")
+    st.config(dut2, "cli -c 'configure terminal' -c 'router bgp 200' -c 'bmp target bmp03' -c 'bmp monitor ipv4 unicast adj-in pre-policy'")
 
-    st.config(dut2, "cli -c 'configure terminal' -c 'router bgp 200' -c 'bmp target bmp02' -c 'bmp monitor ipv4 unicast adj-in post-policy '")
+    st.config(dut2, "cli -c 'configure terminal' -c 'router bgp 200' -c 'bmp target bmp03' -c 'bmp monitor ipv4 unicast adj-in post-policy '")
 
     st.wait(30)
 
@@ -264,6 +329,6 @@ def test_bmp_bgp_case():
         st.report_fail("{} action {} key {} value {} is not expected - check1".format(topic3, 'add', 'rib.prefix', '200.1.1.10'))
 
     # del bmp
-    st.config(dut1, "cli -c 'configure terminal' -c 'router bgp 200' -c 'no bmp target bmp02'")
+    st.config(dut2, "cli -c 'configure terminal' -c 'router bgp 200' -c 'no bmp target bmp03'")
 
     st.report_pass("test_case_passed")

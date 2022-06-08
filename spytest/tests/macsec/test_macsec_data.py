@@ -180,6 +180,61 @@ def test_macsec_mka_GCM_AES_XPN_256():
     destroy_macsec(vars.D2, vars.D2D1P1, profile)
     st.report_pass("test_case_passed")
 
+def test_macsec_linkflap():
+    profile = "GCM-AES-128-Profile"
+    cipher_suite = "GCM-AES-128"
+    setup_macsec(vars.D1, vars.D1D2P1, profile, cipher_suite)
+    setup_macsec(vars.D2, vars.D2D1P1, profile, cipher_suite)
+
+    check_macsec(vars.D1, vars.D1D2P1, cipher_suite)
+    check_macsec(vars.D2, vars.D2D1P1, cipher_suite)
+
+    pre_connection = macsec_api.show_macsec_connections(vars.D1, vars.D1D2P1, False)
+    st.log("Current Session TX AN {}".format(pre_connection[0]["tx_an"]))
+
+    # Flap < 6 seconds
+    command = "ifconfig {} down && sleep {} && ifconfig {} up".format(vars.D1D2P1, MKA_TIMEOUT-2, vars.D1D2P1)
+    st.config(vars.D1, command)
+    st.wait(3)
+    check_macsec(vars.D1, vars.D1D2P1, cipher_suite)
+    cur_connection = macsec_api.show_macsec_connections(vars.D1, vars.D1D2P1, False)
+    st.log("Current Session TX AN {}".format(cur_connection[0]["tx_an"]))
+    if cur_connection[0]["tx_an"] != pre_connection[0]["tx_an"]:
+        st.report_fail("The MKA session timeout")
+
+    # Flap > 6 seconds
+    command = "ifconfig {} down && sleep {} && ifconfig {} up".format(vars.D1D2P1, MKA_TIMEOUT+1, vars.D1D2P1)
+    st.config(vars.D1, command)
+    st.wait(3)
+    check_macsec(vars.D1, vars.D1D2P1, cipher_suite)
+    cur_connection = macsec_api.show_macsec_connections(vars.D1, vars.D1D2P1, False)
+    st.log("Current Session TX AN {}".format(cur_connection[0]["tx_an"]))
+    if cur_connection[0]["tx_an"] == pre_connection[0]["tx_an"]:
+        st.report_fail("The MKA session not timeout")
+
+    if not check_ping():
+        st.report_fail("Ping failed")
+
+    # Flap, shut/noshut ports
+    for i in range(3):
+        st.wait(1)
+        st.log("Bring port {} down".format(vars.D1D2P1))
+        port_api.shutdown(vars.D1, [vars.D1D2P1])
+        st.wait(MKA_TIMEOUT+1)
+        st.log("Bring port {} up".format(vars.D1D2P1))
+        port_api.noshutdown(vars.D1, [vars.D1D2P1])
+
+    # Check mka session after flap
+    st.wait(5)
+    check_macsec(vars.D1, vars.D1D2P1, cipher_suite)
+
+    if not check_ping():
+        st.report_fail("Ping failed")
+
+    destroy_macsec(vars.D1, vars.D1D2P1, profile)
+    destroy_macsec(vars.D2, vars.D2D1P1, profile)
+    st.report_pass("test_case_passed")
+
 def test_macsec_cak_mismatch():
     profile = "GCM-AES-128-Profile"
     cipher_suite = "GCM-AES-128"

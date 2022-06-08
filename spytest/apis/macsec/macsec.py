@@ -38,9 +38,9 @@ def disable_macsec_port(dut, port):
         return False
     return True
 
-def show_macsec_connections(dut, port):
+def show_macsec_connections(dut, port, skiptmpl=True):
     command = "cli -c 'no page' -c 'show macsec connections interface {}'".format(port)
-    return st.show(dut, command, skip_tmpl=True, skip_error_check=True)
+    return st.show(dut, command, skip_tmpl=skiptmpl, skip_error_check=True)
 
 def show_macsec_mka(dut, port):
     command = "cli -c 'no page' -c 'show macsec mka interface {}'".format(port)

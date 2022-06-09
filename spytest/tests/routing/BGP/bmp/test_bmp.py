@@ -17,8 +17,7 @@ import apis.routing.bgp as bgp_api
 import apis.routing.arp as arp_obj
 import apis.routing.bfd as bfdapi
 from bmp_cli import BMP_INS
-import psutil
-import signal
+import re
 
 data = SpyTestDict()
 
@@ -176,17 +175,13 @@ def frr_config_checkpoint2(obj, key, subkey, subkey2, expect = True, checkpoint 
         st.report_fail("{} frr config subkey {} not equal to true".format(checkpoint, subkey))
 
 
-def check_pid_status(pid_name):
-    # show processes info
-    pids = psutil.pids()
-    for pid in pids:
-        p = psutil.Process(pid)
-        # get process name according to pid
-        process_name = p.name()
-
-        if (pid_name == process_name):
-            return True
-    return False
+def pid_exist_check(pattern, out, cmd):
+    ret = pattern.findall(out)
+    st.log("re match result:")
+    st.log(ret)
+    if ret is None or len(ret) == 0:
+        st.report_fail("bgpd is not running, {} output is {}".format(cmd, out))
+    st.log("bgpd is running.")
 
 @pytest.mark.bmp
 def test_bmp_global_case():
@@ -273,13 +268,10 @@ def test_bmp_global_del_bgp_case():
 
     st.wait(5)
 
+    pattern = re.compile(r'\/usr\/lib\/frr\/bgpd') 
     cmd = "ps -ef | grep bgpd"
-    st.config(dut2, cmd, skip_error_check=True)
-
-    bgpd_status = check_pid_status('bgpd')
-    if not bgpd_status:
-        st.report_fail("bgpd is not running")
-
+    out = st.show(dut2, cmd, skip_tmpl=True)
+    pid_exist_check(pattern, out, cmd)
 
     # del bmp
     st.config(dut2, "cli -c 'configure terminal' -c 'bmp' -c 'no bmp target bmp02'")
@@ -314,7 +306,7 @@ def test_bmp_bgp_case():
     if not (ret1 or ret2):
         st.report_fail("{} action {} key {} value {} is not expected ".format(topic2, 'up', 'router_ip', '192.0.0.179'))
     
-    ret = BMP_INS.match_bmp_msg(topic1, 'init', 'ip_addr', '192.0.0.178')
+    ret = BMP_INS.match_bmp_msg(topic1, 'init', 'ip_addr', '192.0.0.179')
     if not ret:
         st.report_fail("{} action {} key {} value {} is not expected ".format(topic1, 'init', 'ip_addr', '192.0.0.179'))
     

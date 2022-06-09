@@ -47,7 +47,7 @@ def macsec_func_hooks(request):
     destroy_macsec(vars.D1, vars.D1D2P1, data.profile)
     destroy_macsec(vars.D2, vars.D2D1P1, data.profile)
 
-def setup_macsec(dut, port, profile_name, cipher_suite, cak=""):
+def setup_macsec(dut, port, profile_name, cipher_suite, cak="", sci=""):
     if cak:
         primary_cak = cak
     else:
@@ -56,9 +56,16 @@ def setup_macsec(dut, port, profile_name, cipher_suite, cak=""):
         else:
             primary_cak = data.primary_cak_64
 
+    priority = 0
+    policy = "security"
+    if sci == "true" or sci == "false":
+        send_sci = sci
+    else:
+        send_sci = "true"
+
     # 1. create profile
     st.log("create macsec profile {}".format(profile_name))
-    ret = macsec_api.create_macsec_profile(dut, profile_name, cipher_suite, primary_cak, data.primary_ckn)
+    ret = macsec_api.create_macsec_profile(dut, profile_name, cipher_suite, primary_cak, data.primary_ckn, priority, policy, send_sci)
     if not ret:
         st.report_fail("Failed to create macsec profile {}".format(profile_name))
 
@@ -245,6 +252,20 @@ def test_macsec_cak_mismatch():
     # cak mismatch
     setup_macsec(vars.D1, vars.D1D2P1, data.profile, data.cipher_suite)
     setup_macsec(vars.D2, vars.D2D1P1, data.profile, data.cipher_suite, data.primary_cak_wrong)
+
+    # expect ping failed
+    if check_ping():
+        st.report_fail("Ping result is not expected")
+
+    st.report_pass("test_case_passed")
+
+def test_macsec_send_sci_mismatch():
+    data.profile = "GCM-AES-128-Profile"
+    data.cipher_suite = "GCM-AES-128"
+
+    # cak mismatch
+    setup_macsec(vars.D1, vars.D1D2P1, data.profile, data.cipher_suite)
+    setup_macsec(vars.D2, vars.D2D1P1, data.profile, data.cipher_suite, sci="false")
 
     # expect ping failed
     if check_ping():

@@ -12,6 +12,9 @@ data.primary_cak = "00112233445566778899001122334455"
 data.primary_cak_64 = "0011223344556677889900112233445500112233445566778899001122334455"
 data.primary_cak_wrong = "00112233445566778899001122334456"
 
+data.profile = "GCM-AES-128-Profile"
+data.cipher_suite = "GCM-AES-128"
+
 data.ip4_addr = ["188.188.1.1", "188.188.1.2"]
 data.ip6_addr = ["188::1", "188::2"]
 data.af_ipv4 = "ipv4"
@@ -35,6 +38,14 @@ def macsec_module_hooks(request):
     ipfeature.delete_ip_interface(vars.D2, vars.D2D1P1, data.ip4_addr[1], 24, family=data.af_ipv4)
     ipfeature.delete_ip_interface(vars.D1, vars.D1D2P1, data.ip6_addr[0], 96, family=data.af_ipv6)
     ipfeature.delete_ip_interface(vars.D2, vars.D2D1P1, data.ip6_addr[1], 96, family=data.af_ipv6)
+
+@pytest.fixture(scope="function", autouse=True)
+def macsec_func_hooks(request):
+    # Function configuration
+    yield
+    # Function cleanup
+    destroy_macsec(vars.D1, vars.D1D2P1, data.profile)
+    destroy_macsec(vars.D2, vars.D2D1P1, data.profile)
 
 def setup_macsec(dut, port, profile_name, cipher_suite, cak=""):
     if cak:
@@ -113,81 +124,75 @@ def check_ping():
     return True
 
 def test_macsec_mka_GCM_AES_128():
-    profile = "GCM-AES-128-Profile"
-    cipher_suite = "GCM-AES-128"
-    setup_macsec(vars.D1, vars.D1D2P1, profile, cipher_suite)
-    setup_macsec(vars.D2, vars.D2D1P1, profile, cipher_suite)
+    data.profile = "GCM-AES-128-Profile"
+    data.cipher_suite = "GCM-AES-128"
 
-    check_macsec(vars.D1, vars.D1D2P1, cipher_suite)
-    check_macsec(vars.D2, vars.D2D1P1, cipher_suite)
+    setup_macsec(vars.D1, vars.D1D2P1, data.profile, data.cipher_suite)
+    setup_macsec(vars.D2, vars.D2D1P1, data.profile, data.cipher_suite)
+
+    check_macsec(vars.D1, vars.D1D2P1, data.cipher_suite)
+    check_macsec(vars.D2, vars.D2D1P1, data.cipher_suite)
     if not check_ping():
         st.report_fail("Ping failed")
-    check_macsec(vars.D1, vars.D1D2P1, cipher_suite)
-    check_macsec(vars.D2, vars.D2D1P1, cipher_suite)
 
-    destroy_macsec(vars.D1, vars.D1D2P1, profile)
-    destroy_macsec(vars.D2, vars.D2D1P1, profile)
+    check_macsec(vars.D1, vars.D1D2P1, data.cipher_suite)
+    check_macsec(vars.D2, vars.D2D1P1, data.cipher_suite)
+
     st.report_pass("test_case_passed")
 
 def test_macsec_mka_GCM_AES_XPN_128():
-    profile = "GCM-AES-XPN-128-Profile"
-    cipher_suite = "GCM-AES-XPN-128"
-    setup_macsec(vars.D1, vars.D1D2P1, profile, cipher_suite)
-    setup_macsec(vars.D2, vars.D2D1P1, profile, cipher_suite)
+    data.profile = "GCM-AES-XPN-128-Profile"
+    data.cipher_suite = "GCM-AES-XPN-128"
+    setup_macsec(vars.D1, vars.D1D2P1, data.profile, data.cipher_suite)
+    setup_macsec(vars.D2, vars.D2D1P1, data.profile, data.cipher_suite)
 
-    check_macsec(vars.D1, vars.D1D2P1, cipher_suite)
-    check_macsec(vars.D2, vars.D2D1P1, cipher_suite)
+    check_macsec(vars.D1, vars.D1D2P1, data.cipher_suite)
+    check_macsec(vars.D2, vars.D2D1P1, data.cipher_suite)
     if not check_ping():
         st.report_fail("Ping failed")
-    check_macsec(vars.D1, vars.D1D2P1, cipher_suite)
-    check_macsec(vars.D2, vars.D2D1P1, cipher_suite)
+    check_macsec(vars.D1, vars.D1D2P1, data.cipher_suite)
+    check_macsec(vars.D2, vars.D2D1P1, data.cipher_suite)
 
-    destroy_macsec(vars.D1, vars.D1D2P1, profile)
-    destroy_macsec(vars.D2, vars.D2D1P1, profile)
     st.report_pass("test_case_passed")
 
 def test_macsec_mka_GCM_AES_256():
-    profile = "GCM-AES-256-Profile"
-    cipher_suite = "GCM-AES-256"
-    setup_macsec(vars.D1, vars.D1D2P1, profile, cipher_suite)
-    setup_macsec(vars.D2, vars.D2D1P1, profile, cipher_suite)
+    data.profile = "GCM-AES-256-Profile"
+    data.cipher_suite = "GCM-AES-256"
+    setup_macsec(vars.D1, vars.D1D2P1, data.profile, data.cipher_suite)
+    setup_macsec(vars.D2, vars.D2D1P1, data.profile, data.cipher_suite)
 
-    check_macsec(vars.D1, vars.D1D2P1, cipher_suite)
-    check_macsec(vars.D2, vars.D2D1P1, cipher_suite)
+    check_macsec(vars.D1, vars.D1D2P1, data.cipher_suite)
+    check_macsec(vars.D2, vars.D2D1P1, data.cipher_suite)
     if not check_ping():
         st.report_fail("Ping failed")
-    check_macsec(vars.D1, vars.D1D2P1, cipher_suite)
-    check_macsec(vars.D2, vars.D2D1P1, cipher_suite)
+    check_macsec(vars.D1, vars.D1D2P1, data.cipher_suite)
+    check_macsec(vars.D2, vars.D2D1P1, data.cipher_suite)
 
-    destroy_macsec(vars.D1, vars.D1D2P1, profile)
-    destroy_macsec(vars.D2, vars.D2D1P1, profile)
     st.report_pass("test_case_passed")
 
 def test_macsec_mka_GCM_AES_XPN_256():
-    profile = "GCM-AES-XPN-256-Profile"
-    cipher_suite = "GCM-AES-XPN-256"
-    setup_macsec(vars.D1, vars.D1D2P1, profile, cipher_suite)
-    setup_macsec(vars.D2, vars.D2D1P1, profile, cipher_suite)
+    data.profile = "GCM-AES-XPN-256-Profile"
+    data.cipher_suite = "GCM-AES-XPN-256"
+    setup_macsec(vars.D1, vars.D1D2P1, data.profile, data.cipher_suite)
+    setup_macsec(vars.D2, vars.D2D1P1, data.profile, data.cipher_suite)
 
-    check_macsec(vars.D1, vars.D1D2P1, cipher_suite)
-    check_macsec(vars.D2, vars.D2D1P1, cipher_suite)
+    check_macsec(vars.D1, vars.D1D2P1, data.cipher_suite)
+    check_macsec(vars.D2, vars.D2D1P1, data.cipher_suite)
     if not check_ping():
         st.report_fail("Ping failed")
-    check_macsec(vars.D1, vars.D1D2P1, cipher_suite)
-    check_macsec(vars.D2, vars.D2D1P1, cipher_suite)
+    check_macsec(vars.D1, vars.D1D2P1, data.cipher_suite)
+    check_macsec(vars.D2, vars.D2D1P1, data.cipher_suite)
 
-    destroy_macsec(vars.D1, vars.D1D2P1, profile)
-    destroy_macsec(vars.D2, vars.D2D1P1, profile)
     st.report_pass("test_case_passed")
 
 def test_macsec_linkflap():
-    profile = "GCM-AES-128-Profile"
-    cipher_suite = "GCM-AES-128"
-    setup_macsec(vars.D1, vars.D1D2P1, profile, cipher_suite)
-    setup_macsec(vars.D2, vars.D2D1P1, profile, cipher_suite)
+    data.profile = "GCM-AES-128-Profile"
+    data.cipher_suite = "GCM-AES-128"
+    setup_macsec(vars.D1, vars.D1D2P1, data.profile, data.cipher_suite)
+    setup_macsec(vars.D2, vars.D2D1P1, data.profile, data.cipher_suite)
 
-    check_macsec(vars.D1, vars.D1D2P1, cipher_suite)
-    check_macsec(vars.D2, vars.D2D1P1, cipher_suite)
+    check_macsec(vars.D1, vars.D1D2P1, data.cipher_suite)
+    check_macsec(vars.D2, vars.D2D1P1, data.cipher_suite)
 
     pre_connection = macsec_api.show_macsec_connections(vars.D1, vars.D1D2P1, False)
     st.log("Current Session TX AN {}".format(pre_connection[0]["tx_an"]))
@@ -196,7 +201,7 @@ def test_macsec_linkflap():
     command = "ifconfig {} down && sleep {} && ifconfig {} up".format(vars.D1D2P1, MKA_TIMEOUT-2, vars.D1D2P1)
     st.config(vars.D1, command)
     st.wait(3)
-    check_macsec(vars.D1, vars.D1D2P1, cipher_suite)
+    check_macsec(vars.D1, vars.D1D2P1, data.cipher_suite)
     cur_connection = macsec_api.show_macsec_connections(vars.D1, vars.D1D2P1, False)
     st.log("Current Session TX AN {}".format(cur_connection[0]["tx_an"]))
     if cur_connection[0]["tx_an"] != pre_connection[0]["tx_an"]:
@@ -206,7 +211,7 @@ def test_macsec_linkflap():
     command = "ifconfig {} down && sleep {} && ifconfig {} up".format(vars.D1D2P1, MKA_TIMEOUT+1, vars.D1D2P1)
     st.config(vars.D1, command)
     st.wait(3)
-    check_macsec(vars.D1, vars.D1D2P1, cipher_suite)
+    check_macsec(vars.D1, vars.D1D2P1, data.cipher_suite)
     cur_connection = macsec_api.show_macsec_connections(vars.D1, vars.D1D2P1, False)
     st.log("Current Session TX AN {}".format(cur_connection[0]["tx_an"]))
     if cur_connection[0]["tx_an"] == pre_connection[0]["tx_an"]:
@@ -216,7 +221,7 @@ def test_macsec_linkflap():
         st.report_fail("Ping failed")
 
     # Flap, shut/noshut ports
-    for i in range(3):
+    for i in range(5):
         st.wait(1)
         st.log("Bring port {} down".format(vars.D1D2P1))
         port_api.shutdown(vars.D1, [vars.D1D2P1])
@@ -225,28 +230,24 @@ def test_macsec_linkflap():
         port_api.noshutdown(vars.D1, [vars.D1D2P1])
 
     # Check mka session after flap
-    st.wait(5)
-    check_macsec(vars.D1, vars.D1D2P1, cipher_suite)
+    st.wait(15)
+    check_macsec(vars.D1, vars.D1D2P1, data.cipher_suite)
 
     if not check_ping():
         st.report_fail("Ping failed")
 
-    destroy_macsec(vars.D1, vars.D1D2P1, profile)
-    destroy_macsec(vars.D2, vars.D2D1P1, profile)
     st.report_pass("test_case_passed")
 
 def test_macsec_cak_mismatch():
-    profile = "GCM-AES-128-Profile"
-    cipher_suite = "GCM-AES-128"
+    data.profile = "GCM-AES-128-Profile"
+    data.cipher_suite = "GCM-AES-128"
 
     # cak mismatch
-    setup_macsec(vars.D1, vars.D1D2P1, profile, cipher_suite)
-    setup_macsec(vars.D2, vars.D2D1P1, profile, cipher_suite, data.primary_cak_wrong)
+    setup_macsec(vars.D1, vars.D1D2P1, data.profile, data.cipher_suite)
+    setup_macsec(vars.D2, vars.D2D1P1, data.profile, data.cipher_suite, data.primary_cak_wrong)
 
     # expect ping failed
     if check_ping():
         st.report_fail("Ping result is not expected")
 
-    destroy_macsec(vars.D1, vars.D1D2P1, profile)
-    destroy_macsec(vars.D2, vars.D2D1P1, profile)
     st.report_pass("test_case_passed")

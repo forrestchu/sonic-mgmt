@@ -193,6 +193,8 @@ def test_bmp_global_case():
     topic2 = 'openbmp.parsed.peer'
     topic3 = 'openbmp.parsed.unicast_prefix'
 
+    dut2_mgmtip = st.get_mgmt_ip(dut2)
+
     st.log("config global bmp")
     st.config(dut2, "cli -c 'configure terminal' -c 'bmp' -c 'bmp target bmp01' -c 'bmp connect 192.0.0.250 port 5555 min-retry 100 max-retry 200'")
 
@@ -203,15 +205,16 @@ def test_bmp_global_case():
     st.wait(30)
 
     st.log("check bmp establish session")
-    ret1 = BMP_INS.match_bmp_msg(topic2, 'first', 'router_ip', '192.0.0.179')
-    ret2 = BMP_INS.match_bmp_msg(topic2, 'up', 'router_ip', '192.0.0.179')
+
+    ret1 = BMP_INS.match_bmp_msg(topic2, 'first', 'router_ip', dut2_mgmtip)
+    ret2 = BMP_INS.match_bmp_msg(topic2, 'up', 'router_ip', dut2_mgmtip)
 
     if not (ret1 or ret2):
-        st.report_fail("{} action {} key {} value {} is not expected ".format(topic2, 'up', 'router_ip', '192.0.0.179'))
+        st.report_fail("{} action {} key {} value {} is not expected ".format(topic2, 'up', 'router_ip', dut2_mgmtip))
     
-    ret = BMP_INS.match_bmp_msg(topic1, 'init', 'ip_addr', '192.0.0.179')
+    ret = BMP_INS.match_bmp_msg(topic1, 'init', 'ip_addr', dut2_mgmtip)
     if not ret:
-        st.report_fail("{} action {} key {} value {} is not expected ".format(topic1, 'init', 'ip_addr', '192.0.0.179'))
+        st.report_fail("{} action {} key {} value {} is not expected ".format(topic1, 'init', 'ip_addr', dut2_mgmtip))
     
     st.log("check bmp monitor")
     BMP_INS.bmp_server_data_read(topic3)
@@ -290,6 +293,8 @@ def test_bmp_bgp_case():
     topic2 = 'openbmp.parsed.peer'
     topic3 = 'openbmp.parsed.unicast_prefix'
 
+    dut2_mgmtip = st.get_mgmt_ip(dut2)
+
     st.log("config bgp bmp")
     st.config(dut2, "cli -c 'configure terminal' -c 'router bgp 200' -c 'bmp target bmp03' -c 'bmp connect 192.0.0.250 port 5555 min-retry 100 max-retry 200'")
 
@@ -300,15 +305,15 @@ def test_bmp_bgp_case():
     st.wait(30)
 
     st.log("check bmp establish session")
-    ret1 = BMP_INS.match_bmp_msg(topic2, 'first', 'router_ip', '192.0.0.179')
-    ret2 = BMP_INS.match_bmp_msg(topic2, 'up', 'router_ip', '192.0.0.179')
+    ret1 = BMP_INS.match_bmp_msg(topic2, 'first', 'router_ip', dut2_mgmtip)
+    ret2 = BMP_INS.match_bmp_msg(topic2, 'up', 'router_ip', dut2_mgmtip)
 
     if not (ret1 or ret2):
-        st.report_fail("{} action {} key {} value {} is not expected ".format(topic2, 'up', 'router_ip', '192.0.0.179'))
+        st.report_fail("{} action {} key {} value {} is not expected ".format(topic2, 'up', 'router_ip', dut2_mgmtip))
     
-    ret = BMP_INS.match_bmp_msg(topic1, 'init', 'ip_addr', '192.0.0.179')
+    ret = BMP_INS.match_bmp_msg(topic1, 'init', 'ip_addr', dut2_mgmtip)
     if not ret:
-        st.report_fail("{} action {} key {} value {} is not expected ".format(topic1, 'init', 'ip_addr', '192.0.0.179'))
+        st.report_fail("{} action {} key {} value {} is not expected ".format(topic1, 'init', 'ip_addr', dut2_mgmtip))
     
     st.log("check bmp monitor")
     BMP_INS.bmp_server_data_read(topic3)

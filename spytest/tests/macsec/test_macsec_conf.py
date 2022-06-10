@@ -3,7 +3,6 @@ import re
 
 from spytest import st, tgapi, SpyTestDict
 import apis.macsec.macsec as macsec_api
-import apis.system.reboot as reboot
 
 data = SpyTestDict()
 data.port = "Ethernet1"
@@ -19,10 +18,6 @@ def macsec_module_hooks(request):
     global vars
     vars = st.ensure_min_topology("D1")
 
-@pytest.mark.regression
-@pytest.mark.macsec
-@pytest.mark.community
-@pytest.mark.community_pass
 def test_macsec_simple_config():
     # 1. create profile
     st.log("create macsec profile {}".format(data.profile_name))
@@ -83,81 +78,6 @@ def test_macsec_simple_config():
     if not ret:
         st.report_fail("Failed to delete macsec profile {}".format(data.profile_name_2))
 
-    ret = macsec_api.delete_macsec_profile(vars.D1, data.profile_name)
-    if not ret:
-        st.report_fail("Failed to delete macsec profile {}".format(data.profile_name))
-
-    st.report_pass("test_case_passed")
-
-@pytest.mark.regression
-@pytest.mark.macsec
-@pytest.mark.community
-@pytest.mark.community_pass
-def test_macsec_full_config():
-    # 1. create profile
-    st.log("create macsec profile {}".format(data.profile_name))
-    ret = macsec_api.create_macsec_profile(vars.D1, data.profile_name, data.cipher_suite, data.primary_cak, data.primary_ckn)
-    if not ret:
-        st.report_fail("Failed to create macsec profile {}".format(data.profile_name))
-
-    # Get all interfaces
-    output = st.show(vars.D1, "show interfaces status")
-    interfaces = []
-    for entry in output:
-        # bypass breakout for Ethernet65_x
-        if entry['interface'] and "Ethernet" in entry['interface'] and "_" not in entry['interface']:
-            interfaces.append(entry['interface'])
-
-    if len(interfaces) == 0:
-        st.report_fail("Can't find any Ethernet interface")
-
-    # enable all macsec port
-    for interface in interfaces:
-        ret = macsec_api.enable_macsec_port(vars.D1, interface, data.profile_name)
-        if not ret:
-            st.report_fail("Failed to enable macsec port {} with profile {}".format(interface, data.profile_name))
-
-    # check wpa_supplicant
-    st.wait(3)
-    for interface in interfaces:
-        ret = macsec_api.check_wpa_supplicant_process(vars.D1, interface)
-        if not ret:
-            st.report_fail("The wpa_supplicant for the port {} wasn't started.".format(interface))
-
-    ###########################################
-    # Reboot and Check if the macsec was restored
-
-    reboot.config_save_reboot(vars.D1)
-    st.log("Wait another 120s for MACSec to initialize...")
-    st.wait(120)
-
-    # check wpa_supplicant
-    st.wait(3)
-    for interface in interfaces:
-        ret = macsec_api.check_wpa_supplicant_process(vars.D1, interface)
-        if not ret:
-            st.report_fail("The wpa_supplicant for the port {} wasn't started.".format(interface))
-
-        output = macsec_api.show_macsec_connections(vars.D1, interface)
-        if "TXSC" not in output:
-            st.report_fail("TXSC is not created for the port {}.".format(interface))
-    ###########################################
-
-
-    # disable all macsec port
-    st.wait(3)
-    for interface in interfaces:
-        ret = macsec_api.disable_macsec_port(vars.D1, interface)
-        if not ret:
-            st.report_fail("Failed to disable macsec port {}".format(interface))
-
-    # check wpa_supplicant
-    st.wait(3)
-    ret = macsec_api.check_wpa_supplicant_process(vars.D1, "")
-    if ret:
-        st.report_fail("The wpa_supplicant wasn't stopped.")
-
-    # delete profile
     ret = macsec_api.delete_macsec_profile(vars.D1, data.profile_name)
     if not ret:
         st.report_fail("Failed to delete macsec profile {}".format(data.profile_name))

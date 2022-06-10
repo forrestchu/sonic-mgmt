@@ -18,6 +18,7 @@
 +file:routing/BGP/bmp/test_bmp.py
 +file:macsec/test_macsec_conf.py
 +file:macsec/test_macsec_data.py
++file:macsec/test_macsec_reboot.py
 
 # test cases requiring link state propagation
 -test:test_ft_cos_tc_queue_map

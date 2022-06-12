@@ -263,6 +263,7 @@ def test_VrfFun003():
 def lib_test_VrfFun004():
     result = 0
     loc_lib.clear_tg()
+    st.wait(10)
     data.tg2.tg_traffic_control(action = 'run', stream_handle = data.stream_list.values(), duration = '2')
     st.log('Verify ping and traceroute on portchannel non-default vrf for both IPv4 and IPv6')
     if not ip_api.ping(data.dut1, dut2_dut1_vrf_ip[0], interface= vrf_name[2], count = 2):
@@ -510,6 +511,7 @@ def test_VrfFun_38_39_48():
     if result == 0:
         st.report_pass('test_case_passed')
     else:
+        loc_lib.debug_bgp_vrf()
         vrf_tc_38_39_48()
         loc_lib.debug_bgp_vrf()
         st.report_fail('test_case_failed')
@@ -574,11 +576,12 @@ def test_VrfFun_26_27():
     st.log('######------Remove EBGP IPv4 neighbor configuration from all the VRFs  ------######')
     bgp_api.config_bgp(dut = data.dut1, vrf_name = vrf_name[0], local_as = dut1_as[0], neighbor = dut2_dut1_vrf_ip[0], remote_as = dut2_as[0], config = 'no', config_type_list =['neighbor'])
     bgp_api.config_bgp(dut = data.dut1, vrf_name = vrf_name[0],local_as = dut1_as[0], neighbor = dut2_dut1_vrf_ip[0], remote_as = dut2_as[0], config = 'yes', config_type_list =['neighbor'])
+    st.show(data.dut1, "show arp")
     bgp_api.config_bgp(dut = data.dut1, vrf_name = vrf_name[0],local_as = dut1_as[0], neighbor = dut2_dut1_vrf_ip[0], remote_as = dut2_as[0], config = 'yes', config_type_list =['activate','nexthop_self'])
     bgp_api.config_bgp(dut = data.dut1, vrf_name = vrf_name[0], local_as = dut1_as[0], neighbor = tg1_dut1_vrf_ip[0], remote_as = dut1_tg_as, config = 'no', config_type_list =['neighbor'])
     bgp_api.config_bgp(dut = data.dut1, vrf_name = vrf_name[0],local_as = dut1_as[0], neighbor = tg1_dut1_vrf_ip[0], remote_as = dut1_tg_as,  config = 'yes',config_type_list =['neighbor'])
     bgp_api.config_bgp(dut = data.dut1, vrf_name = vrf_name[0],local_as = dut1_as[0], neighbor = tg1_dut1_vrf_ip[0], remote_as = dut1_tg_as,  config = 'yes',config_type_list =['activate'])
-    st.wait(30)
+    st.wait(5)
     if not ip_api.verify_ip_route(data.dut1, vrf_name = vrf_name[0], type='B', nexthop = tg1_dut1_vrf_ip[0], interface = 'Vlan'+dut1_tg1_vlan[0]):
         st.log('IPv4 routes on VRF-101, not learnt on DUT1')
         result += 1
@@ -588,6 +591,7 @@ def test_VrfFun_26_27():
     if result == 0:
         st.report_pass('test_case_passed')
     else:
+        loc_lib.debug_bgp_vrf()
         st.log('IPv4 BGP session did not come up, after delete/add IPv4 IBGP and EBGP config')
         vrf_tc_26_27()
         loc_lib.debug_bgp_vrf()

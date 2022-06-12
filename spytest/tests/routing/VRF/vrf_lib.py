@@ -80,17 +80,17 @@ def vrf_base_unconfig():
     data.tg1.tg_interface_config(port_handle = data.tg_dut2_p1, handle=data.d2_p1_intf_v6.get('18')['handle'], mode='destroy')
 
 def debug_bgp_vrf():
-    st.log("Dubug commands starts!")
-    cmd_list = ['show ip route vrf MC-Aliyun-vrf-long-name-test-abcdefg-101',
-                'show ip route vrf MC-Aliyun-vrf-long-name-test-abcdefg-102',
-                'show ip route vrf MC-Aliyun-vrf-long-name-test-abcdefg-103',
-                'show ipv6 route vrf MC-Aliyun-vrf-long-name-test-abcdefg-101',
-                'show ipv6 route vrf MC-Aliyun-vrf-long-name-test-abcdefg-102',
-                'show ipv6 route vrf MC-Aliyun-vrf-long-name-test-abcdefg-103',
+    st.log("Debug commands starts!")
+    cmd_list = ['vtysh',
+                'show run',
+                'show bgp vrf all summary',
+                'show ip route vrf all',
+                'show ipv6 route vrf all',
+                'exit',
                 'show arp',
                 'show ndp']
     utils.exec_all(True, [[st.apply_script, data.dut1, cmd_list], [st.apply_script, data.dut2, cmd_list]])
-    st.log(" End of Dubug commands")
+    st.log(" End of Debug commands")
 
 def vrf_config(**kwargs):
     if 'config' in kwargs:

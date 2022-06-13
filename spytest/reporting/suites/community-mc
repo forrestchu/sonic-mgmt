@@ -1,6 +1,7 @@
 +file:qos/test_cos.py
 +file:sanity/test_sanity_l3.py
 +file:routing/test_arp.py
++file:routing/test_route_miscellaneous.py
 +file:routing/test_l3_performance.py
 +file:routing/BGP/test_bgp.py
 +file:routing/VRF/test_vrf.py

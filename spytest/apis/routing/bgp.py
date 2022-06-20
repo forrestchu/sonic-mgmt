@@ -3641,9 +3641,11 @@ def config_bgp(dut, **kwargs):
             elif type1 == 'activate':
                 my_cmd += 'address-family {} unicast\n'.format(addr_family)
                 my_cmd += '{} neighbor {} activate\n'.format(config_cmd, neighbor)
+                my_cmd += 'exit\n'
             elif type1 == 'nexthop_self':
                 my_cmd += 'address-family {} unicast\n'.format(addr_family)
                 my_cmd += '{} neighbor {} next-hop-self\n'.format(config_cmd, neighbor)
+                my_cmd += 'exit\n'
             elif type1 == 'pswd':
                 my_cmd += '{} neighbor {} password {}\n'.format(config_cmd, neighbor, password)
             elif type1 == 'update_src' or type1 == 'update_src_intf':
@@ -5325,6 +5327,11 @@ def bgp_debug_config(dut, **kwargs):
            command += "debug bgp updates\n"
            command += "debug bgp update-groups\n"
     command += "log stdout\n"
+    if "disable" in kwargs:
+        if kwargs["disable"] == True:
+            command = "no debug bgp zebra\n"
+            command += "no debug bgp updates\n"
+            command += "no debug bgp update-groups\n"
     st.config(dut, command, type='vtysh')
 
 class ASPathAccessList:

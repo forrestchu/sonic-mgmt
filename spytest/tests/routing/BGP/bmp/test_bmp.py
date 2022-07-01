@@ -183,6 +183,14 @@ def pid_exist_check(pattern, out, cmd):
         st.report_fail("bgpd is not running, {} output is {}".format(cmd, out))
     st.log("bgpd is running.")
 
+def check_show_bmp(pattern, out, cmd):
+    ret = pattern.findall(out)
+    st.log("re match result:")
+    st.log(ret)
+    if ret is None or len(ret) == 0:
+        st.report_fail("{} show info is error : {}".format(cmd, out))
+    st.log("show info is right.")
+
 @pytest.mark.bmp
 def test_bmp_global_case():
     st.log("test_bmp_global_case begin")
@@ -225,6 +233,19 @@ def test_bmp_global_case():
     ret = BMP_INS.match_bmp_msg(topic3, 'add', 'rib.prefix', '100.1.1.10')
     if not ret:
         st.report_fail("{} action {} key {} value {} is not expected - check1".format(topic3, 'add', 'rib.prefix', '100.1.1.10'))
+
+    pattern1 = re.compile(r'Targets "bmp01" Statistics:') 
+    pattern2 = re.compile(r'BGP Peers monitored by BMP') 
+    st.log("===============show bmp================")
+    out = st.show(dut2, 'show bmp', skip_tmpl=True, type='vtysh')
+    check_show_bmp(pattern1, out, 'show bmp')
+    check_show_bmp(pattern2, out, 'show bmp')
+
+    st.log("===============show bmp targets================")
+    out = st.show(dut2, 'show bmp bmp01', skip_tmpl=True, type='vtysh' )
+    check_show_bmp(pattern1, out, 'show bmp bmp01')
+    check_show_bmp(pattern2, out, 'show bmp bmp01')
+
 
     # del bmp
     st.config(dut2, "cli -c 'configure terminal' -c 'bmp' -c 'no bmp target bmp01'")
@@ -324,6 +345,14 @@ def test_bmp_bgp_case():
     ret = BMP_INS.match_bmp_msg(topic3, 'add', 'rib.prefix', '200.1.1.10')
     if not ret:
         st.report_fail("{} action {} key {} value {} is not expected - check1".format(topic3, 'add', 'rib.prefix', '200.1.1.10'))
+
+    st.log("===============show bmp================")
+    out = st.show(dut2, 'show bmp', skip_tmpl=True, type='vtysh')
+
+    pattern1 = re.compile(r'Just support global bmp') 
+    st.log("===============show bmp targets================")
+    out = st.show(dut2, 'show bmp bmp03', skip_tmpl=True, type='vtysh' )
+    check_show_bmp(pattern1, out, 'show bmp bmp03')
 
     # del bmp
     st.config(dut2, "cli -c 'configure terminal' -c 'router bgp 200' -c 'no bmp target bmp03'")

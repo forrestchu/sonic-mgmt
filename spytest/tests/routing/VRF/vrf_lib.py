@@ -423,19 +423,19 @@ def dut_vrf_bgp(**kwargs):
         parallel.exec_parallel(True, [data.dut1, data.dut2], bgp_api.config_bgp, [dict1, dict2])
         st.wait(5)
 
-        dict1 = {'vrf_name':vrf_name[0],'local_as':dut1_as[0],'neighbor':dut2_dut1_vrf_ip[0],'remote_as':dut2_as[0],'config_type_list':['activate','nexthop_self']}
-        dict2 = {'vrf_name':vrf_name[0],'local_as':dut2_as[0],'neighbor':dut1_dut2_vrf_ip[0],'remote_as':dut1_as[0],'config_type_list':['activate','nexthop_self']}
+        dict1 = {'vrf_name':vrf_name[0],'local_as':dut1_as[0],'neighbor':dut2_dut1_vrf_ip[0],'remote_as':dut2_as[0],'config_type_list':['activate','nexthop_self'],'removeBGP':'yes'}
+        dict2 = {'vrf_name':vrf_name[0],'local_as':dut2_as[0],'neighbor':dut1_dut2_vrf_ip[0],'remote_as':dut1_as[0],'config_type_list':['activate','nexthop_self'],'removeBGP':'yes'}
         parallel.exec_parallel(True, [data.dut1, data.dut2], bgp_api.config_bgp, [dict1, dict2])
         st.wait(5)
 
         st.log('######------Configure BGPv4+ in vrf ------######')
-        dict1 = {'vrf_name':vrf_name[0],'router_id':dut1_router_id,'local_as':dut1_as[0],'addr_family':'ipv6','neighbor':dut2_dut1_vrf_ipv6[0],'remote_as':dut2_as[0],'config_type_list':['neighbor']}
-        dict2 = {'vrf_name':vrf_name[0],'router_id':dut2_router_id,'local_as':dut2_as[0],'addr_family':'ipv6','neighbor':dut1_dut2_vrf_ipv6[0],'remote_as':dut1_as[0],'config_type_list':['neighbor']}
+        dict1 = {'vrf_name':vrf_name[0],'router_id':dut1_router_id,'local_as':dut1_as[0],'addr_family':'ipv6','neighbor':dut2_dut1_vrf_ipv6[0],'remote_as':dut2_as[0],'config_type_list':['neighbor'],'removeBGP':'yes'}
+        dict2 = {'vrf_name':vrf_name[0],'router_id':dut2_router_id,'local_as':dut2_as[0],'addr_family':'ipv6','neighbor':dut1_dut2_vrf_ipv6[0],'remote_as':dut1_as[0],'config_type_list':['neighbor'],'removeBGP':'yes'}
         parallel.exec_parallel(True, [data.dut1, data.dut2], bgp_api.config_bgp, [dict1, dict2])
         st.wait(5)
 
-        dict1 = {'vrf_name':vrf_name[0],'local_as':dut1_as[0],'addr_family':'ipv6','neighbor':dut2_dut1_vrf_ipv6[0],'remote_as':dut2_as[0],'config_type_list':['activate','nexthop_self']}
-        dict2 = {'vrf_name':vrf_name[0],'local_as':dut2_as[0],'addr_family':'ipv6','neighbor':dut1_dut2_vrf_ipv6[0],'remote_as':dut1_as[0],'config_type_list':['activate','nexthop_self']}
+        dict1 = {'vrf_name':vrf_name[0],'local_as':dut1_as[0],'addr_family':'ipv6','neighbor':dut2_dut1_vrf_ipv6[0],'remote_as':dut2_as[0],'config_type_list':['activate','nexthop_self'],'removeBGP':'yes'}
+        dict2 = {'vrf_name':vrf_name[0],'local_as':dut2_as[0],'addr_family':'ipv6','neighbor':dut1_dut2_vrf_ipv6[0],'remote_as':dut1_as[0],'config_type_list':['activate','nexthop_self'],'removeBGP':'yes'}
         parallel.exec_parallel(True, [data.dut1, data.dut2], bgp_api.config_bgp, [dict1, dict2])
         st.wait(5)
 
@@ -452,19 +452,19 @@ def dut_vrf_bgp(**kwargs):
         parallel.exec_parallel(True, [data.dut1, data.dut2], bgp_api.config_bgp, [dict1, dict2])
         st.wait(5)
 
-        dict1 = {'vrf_name':vrf_name[1],'local_as':dut1_as[1],'neighbor':dut2_dut1_vrf_ip[0],'remote_as':dut2_as[1],'config_type_list':['activate','nexthop_self']}
-        dict2 = {'vrf_name':vrf_name[1],'local_as':dut2_as[1],'neighbor':dut1_dut2_vrf_ip[0],'remote_as':dut1_as[1],'config_type_list':['activate','nexthop_self']}
+        dict1 = {'vrf_name':vrf_name[1],'local_as':dut1_as[1],'neighbor':dut2_dut1_vrf_ip[0],'remote_as':dut2_as[1],'config_type_list':['activate','nexthop_self'],'removeBGP':'yes'}
+        dict2 = {'vrf_name':vrf_name[1],'local_as':dut2_as[1],'neighbor':dut1_dut2_vrf_ip[0],'remote_as':dut1_as[1],'config_type_list':['activate','nexthop_self'],'removeBGP':'yes'}
         parallel.exec_parallel(True, [data.dut1, data.dut2], bgp_api.config_bgp, [dict1, dict2])
         st.wait(5)
 
         st.log('######------Configure BGPv4+ in vrf ------######')
-        dict1 = {'vrf_name':vrf_name[1],'router_id':dut1_router_id,'local_as':dut1_as[1],'addr_family':'ipv6','neighbor':dut2_dut1_vrf_ipv6[0],'remote_as':dut2_as[1],'config_type_list':['neighbor']}
-        dict2 = {'vrf_name':vrf_name[1],'router_id':dut2_router_id,'local_as':dut2_as[1],'addr_family':'ipv6','neighbor':dut1_dut2_vrf_ipv6[0],'remote_as':dut1_as[1],'config_type_list':['neighbor']}
+        dict1 = {'vrf_name':vrf_name[1],'router_id':dut1_router_id,'local_as':dut1_as[1],'addr_family':'ipv6','neighbor':dut2_dut1_vrf_ipv6[0],'remote_as':dut2_as[1],'config_type_list':['neighbor'],'removeBGP':'yes'}
+        dict2 = {'vrf_name':vrf_name[1],'router_id':dut2_router_id,'local_as':dut2_as[1],'addr_family':'ipv6','neighbor':dut1_dut2_vrf_ipv6[0],'remote_as':dut1_as[1],'config_type_list':['neighbor'],'removeBGP':'yes'}
         parallel.exec_parallel(True, [data.dut1, data.dut2], bgp_api.config_bgp, [dict1, dict2])
         st.wait(5)
 
-        dict1 = {'vrf_name':vrf_name[1],'local_as':dut1_as[1],'addr_family':'ipv6','neighbor':dut2_dut1_vrf_ipv6[0],'remote_as':dut2_as[1],'config_type_list':['activate','nexthop_self']}
-        dict2 = {'vrf_name':vrf_name[1],'local_as':dut2_as[1],'addr_family':'ipv6','neighbor':dut1_dut2_vrf_ipv6[0],'remote_as':dut1_as[1],'config_type_list':['activate','nexthop_self']}
+        dict1 = {'vrf_name':vrf_name[1],'local_as':dut1_as[1],'addr_family':'ipv6','neighbor':dut2_dut1_vrf_ipv6[0],'remote_as':dut2_as[1],'config_type_list':['activate','nexthop_self'],'removeBGP':'yes'}
+        dict2 = {'vrf_name':vrf_name[1],'local_as':dut2_as[1],'addr_family':'ipv6','neighbor':dut1_dut2_vrf_ipv6[0],'remote_as':dut1_as[1],'config_type_list':['activate','nexthop_self'],'removeBGP':'yes'}
         parallel.exec_parallel(True, [data.dut1, data.dut2], bgp_api.config_bgp, [dict1, dict2])
         st.wait(5)
 
@@ -481,19 +481,19 @@ def dut_vrf_bgp(**kwargs):
         parallel.exec_parallel(True, [data.dut1, data.dut2], bgp_api.config_bgp, [dict1, dict2])
         st.wait(5)
 
-        dict1 = {'vrf_name':vrf_name[2],'local_as':dut1_as[2],'neighbor':dut2_dut1_vrf_ip[0],'remote_as':dut2_as[2],'config_type_list':['activate','nexthop_self']}
-        dict2 = {'vrf_name':vrf_name[2],'local_as':dut2_as[2],'neighbor':dut1_dut2_vrf_ip[0],'remote_as':dut1_as[2],'config_type_list':['activate','nexthop_self']}
+        dict1 = {'vrf_name':vrf_name[2],'local_as':dut1_as[2],'neighbor':dut2_dut1_vrf_ip[0],'remote_as':dut2_as[2],'config_type_list':['activate','nexthop_self'],'removeBGP':'yes'}
+        dict2 = {'vrf_name':vrf_name[2],'local_as':dut2_as[2],'neighbor':dut1_dut2_vrf_ip[0],'remote_as':dut1_as[2],'config_type_list':['activate','nexthop_self'],'removeBGP':'yes'}
         parallel.exec_parallel(True, [data.dut1, data.dut2], bgp_api.config_bgp, [dict1, dict2])
         st.wait(5)
 
         st.log('######------Configure BGPv4+ in vrf ------######')
-        dict1 = {'vrf_name':vrf_name[2],'router_id':dut1_router_id,'local_as':dut1_as[2],'addr_family':'ipv6','neighbor':dut2_dut1_vrf_ipv6[0],'remote_as':dut2_as[2],'config_type_list':['neighbor']}
-        dict2 = {'vrf_name':vrf_name[2],'router_id':dut2_router_id,'local_as':dut2_as[2],'addr_family':'ipv6','neighbor':dut1_dut2_vrf_ipv6[0],'remote_as':dut1_as[2],'config_type_list':['neighbor']}
+        dict1 = {'vrf_name':vrf_name[2],'router_id':dut1_router_id,'local_as':dut1_as[2],'addr_family':'ipv6','neighbor':dut2_dut1_vrf_ipv6[0],'remote_as':dut2_as[2],'config_type_list':['neighbor'],'removeBGP':'yes'}
+        dict2 = {'vrf_name':vrf_name[2],'router_id':dut2_router_id,'local_as':dut2_as[2],'addr_family':'ipv6','neighbor':dut1_dut2_vrf_ipv6[0],'remote_as':dut1_as[2],'config_type_list':['neighbor'],'removeBGP':'yes'}
         parallel.exec_parallel(True, [data.dut1, data.dut2], bgp_api.config_bgp, [dict1, dict2])
         st.wait(5)
 
-        dict1 = {'vrf_name':vrf_name[2],'local_as':dut1_as[2],'addr_family':'ipv6','neighbor':dut2_dut1_vrf_ipv6[0],'remote_as':dut2_as[2],'config_type_list':['activate','nexthop_self']}
-        dict2 = {'vrf_name':vrf_name[2],'local_as':dut2_as[2],'addr_family':'ipv6','neighbor':dut1_dut2_vrf_ipv6[0],'remote_as':dut1_as[2],'config_type_list':['activate','nexthop_self']}
+        dict1 = {'vrf_name':vrf_name[2],'local_as':dut1_as[2],'addr_family':'ipv6','neighbor':dut2_dut1_vrf_ipv6[0],'remote_as':dut2_as[2],'config_type_list':['activate','nexthop_self'],'removeBGP':'yes'}
+        dict2 = {'vrf_name':vrf_name[2],'local_as':dut2_as[2],'addr_family':'ipv6','neighbor':dut1_dut2_vrf_ipv6[0],'remote_as':dut1_as[2],'config_type_list':['activate','nexthop_self'],'removeBGP':'yes'}
         parallel.exec_parallel(True, [data.dut1, data.dut2], bgp_api.config_bgp, [dict1, dict2])
         st.wait(5)
 

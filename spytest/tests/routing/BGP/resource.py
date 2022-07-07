@@ -60,14 +60,32 @@ def resource_data(vars):
     # This is CLOS based Leaf-Spine topology, where all Spine nodes have same AS number
     # and all Leaf nodes have the same AS numbers, this is inline with various deployments.
     ##############################################################################################
-    data['spine_as'] = 65001
+    data['spine_as'] = 178
     # Fixing 4-byte value for leaf_as
-    data['leaf_as'] = 650002
+    data['leaf_as'] = 179
 
     data['spine_tg_as'] = 64001
     data['leaf_tg_as'] = 63001
 
     data.D1T1P1 = vars.D1T1P1
     data.D2T1P1 = vars.D2T1P1
+    data.D1T1P2 = vars.D1T1P2
+    data.D2T1P2 = vars.D2T1P2
 
+    data.backgroud_vrf = 'long-vrf-503'
+    data.leaf_backgroud_ip_addr = '12.110.104.1'
+    data.tg1_backgroud_ip_addr = '12.110.104.2'
+    data.tg1_backgroud_bgp_as = '4200015158'
+    data.leaf_backgroud_bgp_as = '4200015155'
+    data.tg1_router_count = '100000'
+
+    data.spine_backgroud_ip_addr = '11.110.104.1'
+    data.tg2_backgroud_ip_addr = '11.110.104.2'
+    data.tg2_backgroud_bgp_as = '4200015156'
+    data.spine_backgroud_bgp_as = '4200015154'
+    data.tg2_router_count = '100000'
+
+    data.bgp_flap_up_time = '60'
+    data.bgp_flap_down_time = '30'
+    
     return data

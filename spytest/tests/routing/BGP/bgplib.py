@@ -6,9 +6,10 @@
 import random
 import pprint
 
-from spytest import st, SpyTestDict
+from spytest import st, tgapi, SpyTestDict
 from spytest.tgen.tg import tgen_obj_dict
 from spytest.utils import filter_and_select
+from utilities.utils import retry_api
 
 import apis.routing.ip as ipapi
 import apis.routing.bgp as bgpapi
@@ -64,11 +65,11 @@ def l3tc_underlay_config_unconfig(config='yes', config_type='phy'):
     underlay_info['links'] = SpyTestDict()
     for leaf in data['leaf_routers']:
         underlay_info['links'][leaf] = SpyTestDict()
-        ipapi.get_interface_ip_address(data[leaf], family="ipv4")
-        ipapi.get_interface_ip_address(data[leaf], family="ipv6")
+        ipapi.get_interface_ip_address(data[leaf], family="ipv4", cli_type='alicli')
+        ipapi.get_interface_ip_address(data[leaf], family="ipv6", cli_type='alicli')
         for spine in data['spine_routers']:
-            ipapi.get_interface_ip_address(data[spine], family="ipv4")
-            ipapi.get_interface_ip_address(data[spine], family="ipv6")
+            ipapi.get_interface_ip_address(data[spine], family="ipv4", cli_type='alicli')
+            ipapi.get_interface_ip_address(data[spine], family="ipv6", cli_type='alicli')
             underlay_info['links'][leaf][spine] = []
             po_name = 'PortChannel'+str(po_id)
             # for physical interface underlay just store the underlay link info
@@ -418,13 +419,13 @@ def l3tc_vrfipv4v6_address_leafspine_ping_test(vrf_type='all', config_type='all'
                 if config_type == 'ipv4' or config_type == 'all':
                     #ipaddr1 = "{}.{}.{}.1".format(ipv4_adr, k, link)
                     ipaddr2 = "{}.{}.{}.2".format(ipv4_adr, k, link)
-                    if not ipapi.ping(data[leaf], ipaddr2, family='ipv4', count=ping_count):
+                    if not retry_api(ipapi.ping, data[leaf], ipaddr2, family='ipv4', count=ping_count, retry_count= 3, delay= 5):
                         st.log("{}- {} configured on {} - ping failed".format(data[leaf], local, ipaddr2))
                         result = False
                 if config_type == 'ipv6' or config_type == 'all':
                     #ip6addr_1 = "{}:{}:{}::1".format(ipv6_adr, k, link)
                     ip6addr_2 = "{}:{}:{}::2".format(ipv6_adr, k, link)
-                    if not ipapi.ping(data[leaf], ip6addr_2, family='ipv6', count=ping_count):
+                    if not retry_api(ipapi.ping, data[leaf], ip6addr_2, family='ipv6', count=ping_count, retry_count= 3, delay= 5):
                         st.log("{}- {} configured on {} - ping v6 failed".format(data[leaf], local, ip6addr_2))
                         result = False
                 link += 1
@@ -1453,3 +1454,135 @@ def show_bgp_neighbors(dut, af='ipv4'):
         utils.exec_foreach(True, utils.make_list(dut), bgpapi.show_bgp_ipv4_neighbor_vtysh)
     if af in ['ipv6', 'both']:
         utils.exec_foreach(True, utils.make_list(dut), bgpapi.show_bgp_ipv6_neighbor_vtysh)
+
+def bgp_leaf_backgound_flap_instance():
+    #leaf1
+    leaf = st.get_tg_links(data[tg_connected_routers[0]])
+    (local, partner, remote) = leaf[1]
+    dut = data.leaf1 
+
+    cmd = "vrf {}\n".format(data.backgroud_vrf)
+    cmd += "interface sub-interface {} 503\n".format(local)
+    cmd += "vrf {}\n".format(data.backgroud_vrf)
+    cmd += "ip address {}/24".format(data.leaf_backgroud_ip_addr)
+    st.config(dut, cmd, skip_error_check=True, type='alicli')
+
+    bgpapi.config_bgp(dut = dut, router_id = '192.0.0.179', local_as=data.leaf_backgroud_bgp_as, 
+        neighbor=data.tg1_backgroud_ip_addr, remote_as=data.tg1_backgroud_bgp_as, vrf_name=data.backgroud_vrf, 
+        config_type_list =["neighbor", "activate"], config='yes', cli_type = "alicli")
+
+    tg = tgen_obj_dict[partner]
+    tg_ph = tg.get_port_handle(remote)
+    h1 = tg.tg_interface_config(port_handle=tg_ph, mode='config', intf_ip_addr=data.tg1_backgroud_ip_addr, gateway=data.leaf_backgroud_ip_addr,
+                                netmask='255.255.255.0', arp_send_req='1',  vlan='1', vlan_id='503')
+
+    # Configuring the BGP router in vrf1
+    conf_var = {'mode'                 : 'enable',
+                'active_connect_enable' : '1',
+                'enable_4_byte_as'      : '1',
+                'local_as'              : data.tg1_backgroud_bgp_as,
+                'remote_as'             : data.leaf_backgroud_bgp_as,
+                'remote_ip_addr'        : data.leaf_backgroud_ip_addr,
+                'bfd_registration'      : '1',
+                'bfd_registration_mode' : 'single_hop',
+                'enable_flap'           : '1',
+                'flap_up_time'          : '30',
+                'flap_down_time'        : '10',
+                }
+    route_var = {'mode':'add', 
+                'num_routes': data.tg1_router_count, 
+                'as_path':'as_seq:1'
+                }
+    ctrl_start = { 'mode' : 'start'}
+    ctrl_stop = { 'mode' : 'stop'}
+
+    bgp_v4 = tgapi.tg_bgp_config(tg = tg,
+        handle    = h1['ipv4_handle'],
+        conf_var  = conf_var,
+        route_var = route_var,
+        ctrl_var  = ctrl_start)
+
+    data.tg1_bgp = bgp_v4
+    data.tg1_intf = h1
+
+def bgp_spine_backgound_flap_instance():
+    #spine1
+    spine = st.get_tg_links(data[tg_connected_routers[1]])
+    (local, partner, remote) = spine[1]
+    dut = data.spine1 
+
+    cmd = "vrf {}\n".format(data.backgroud_vrf)
+    cmd += "interface sub-interface {} 503\n".format(local)
+    cmd += "vrf {}\n".format(data.backgroud_vrf)
+    cmd += "ip address {}/24".format(data.spine_backgroud_ip_addr)
+    st.config(dut, cmd, skip_error_check=True, type='alicli')
+
+    bgpapi.config_bgp(dut = dut, router_id = '192.0.0.178', local_as=data.spine_backgroud_bgp_as, 
+        neighbor=data.tg2_backgroud_ip_addr, remote_as=data.tg2_backgroud_bgp_as, vrf_name=data.backgroud_vrf, 
+        config_type_list =["neighbor", "activate"], config='yes', cli_type = "alicli")
+
+    tg = tgen_obj_dict[partner]
+    tg_ph = tg.get_port_handle(remote)
+    h1 = tg.tg_interface_config(port_handle=tg_ph, mode='config', intf_ip_addr=data.tg2_backgroud_ip_addr, gateway=data.spine_backgroud_ip_addr,
+                                netmask='255.255.255.0', arp_send_req='1',  vlan='1', vlan_id='503')
+
+    # Configuring the BGP router in vrf1
+    conf_var = {'mode'                 : 'enable',
+                'active_connect_enable' : '1',
+                'enable_4_byte_as'      : '1',
+                'local_as'              : data.tg2_backgroud_bgp_as,
+                'remote_as'             : data.spine_backgroud_bgp_as,
+                'remote_ip_addr'        : data.spine_backgroud_ip_addr,
+                'bfd_registration'      : '1',
+                'bfd_registration_mode' : 'single_hop',
+                'enable_flap'           : '1',
+                'flap_up_time'          : data.bgp_flap_up_time,
+                'flap_down_time'        : data.bgp_flap_down_time,
+                }
+    route_var = {'mode':'add', 
+                'num_routes': data.tg2_router_count, 
+                'as_path':'as_seq:1'
+                }
+    ctrl_start = { 'mode' : 'start'}
+    ctrl_stop = { 'mode' : 'stop'}
+
+    bgp_v4 = tgapi.tg_bgp_config(tg = tg,
+        handle    = h1['ipv4_handle'],
+        conf_var  = conf_var,
+        route_var = route_var,
+        ctrl_var  = ctrl_start)
+
+    data.tg2_bgp = bgp_v4
+    data.tg2_intf = h1
+
+def bgp_backgound_flap_instance_ctrl(flap=1):
+    #spine1
+
+    spine = st.get_tg_links(data[tg_connected_routers[1]])
+    (local, partner, remote) = spine[1]
+    tg = tgen_obj_dict[partner]
+
+    if flap == 1:
+        start = '1'
+        active = '1'
+    else: 
+        start = '0'
+        active = '0'
+    # Configuring the BGP router
+    conf_var = {'mode'                 : 'modify',  
+                'enable_flap'           : start,
+                'active'                : active,
+                }
+    ctrl_start = { 'mode' : 'start'}
+
+    bgp_v4 = tgapi.tg_bgp_config(tg = tg,
+        handle    = data.tg1_bgp['conf']['handle'],
+        conf_var  = conf_var,
+        ctrl_var  = ctrl_start)
+
+    bgp_v4 = tgapi.tg_bgp_config(tg = tg,
+        handle    = data.tg2_bgp['conf']['handle'],
+        conf_var  = conf_var,
+        ctrl_var  = ctrl_start)
+    
+    st.wait(50)

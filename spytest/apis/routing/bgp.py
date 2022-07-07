@@ -237,7 +237,7 @@ def _cleanup_bgp_config(dut_list, cli_type=""):
     for dut in dut_li:
         if cli_type in ["click", "klish", "vtysh"]:
             command = "show running bgp"
-            output = st.show(dut, command, type="vtysh", skip_error_check=True)
+            output = st.show(dut, command, type="vtysh", skip_error_check=True, skip_tmpl=True)
             st.log("Cleanup BGP configuration on %s.." % dut)
             config = output.splitlines()
             line = 0

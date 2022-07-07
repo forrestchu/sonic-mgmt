@@ -20,7 +20,7 @@ rate_pps = 1000
 @pytest.fixture(scope="module", autouse=True)
 def bgp_module_hooks(request):
     global bgp_cli_type, vtysh_cli_type
-    vars = st.ensure_min_topology('D1D2:1', 'D1T1:1', 'D2T1:1')
+    vars = st.ensure_min_topology('D1D2:1', 'D1T1:2', 'D2T1:1')
     bgplib.init_resource_data(vars)
 
     if tgapi.is_soft_tgen(vars):
@@ -36,6 +36,8 @@ def bgp_module_hooks(request):
     bgp_pre_config()
     yield
     bgp_pre_config_cleanup()
+    my_dut_list = st.get_dut_names()
+    st.reboot(my_dut_list)
 
 
 # bgp module level pre config function
@@ -43,7 +45,7 @@ def bgp_pre_config():
     global topo
     st.banner("Running with {} CLI RUN".format(bgp_cli_type))
     st.banner("BGP MODULE CONFIG - START")
-    ipapi.clear_ip_configuration(st.get_dut_names(), family='all', thread=True)
+    #ipapi.clear_ip_configuration(st.get_dut_names(), family='all', thread=True)
     vlanapi.clear_vlan_configuration(st.get_dut_names())
     poapi.clear_portchannel_configuration(st.get_dut_names())
     # loopback config
@@ -51,8 +53,9 @@ def bgp_pre_config():
     # TG Configuration
     bgplib.l3tc_vrfipv4v6_address_leafspine_tg_config_unconfig(config='yes', config_type='all')
     bgplib.l3tc_vrfipv4v6_address_leafspine_tg_bgp_config(config='yes', config_type='all')
+    bgplib.bgp_spine_backgound_flap_instance()
+    bgplib.bgp_leaf_backgound_flap_instance()
     st.banner("BGP MODULE CONFIG - END")
-
 
 # bgp module level pre config cleanup function
 def bgp_pre_config_cleanup():
@@ -62,7 +65,7 @@ def bgp_pre_config_cleanup():
     # TG  uconfiguration
     bgplib.l3tc_vrfipv4v6_address_leafspine_tg_config_unconfig(config='no')
     bgplib.l3tc_vrfipv4v6_address_leafspine_tg_bgp_config(config='no')
-    ipapi.clear_ip_configuration(st.get_dut_names(), family='all', thread=True)
+    #ipapi.clear_ip_configuration(st.get_dut_names(), family='all', thread=True)
     for dut in st.get_dut_names() :
         bgpapi.unconfig_router_bgp(dut)
     vlanapi.clear_vlan_configuration(st.get_dut_names())
@@ -94,6 +97,7 @@ class TestBGPCommon:
         if func_name == "test_ft_bgp_peer_traffic_check":
             spine_as = int(bgplib.data['spine_as'])
             bgpapi.create_bgp_update_delay(topo.dut_list[0], spine_as, '0', cli_type=bgp_cli_type)
+            st.wait(30)
 
     def ft_bgp_clear(self):
         """
@@ -265,7 +269,7 @@ class TestBGPCommon:
         spine_name = info['D1']
 
         # Configure graceful restart capability on the Leaf router
-        bgpapi.config_bgp_graceful_restart(leaf_name, local_asn=info['D2_as'], user_command='preserve-fw-state',
+        bgpapi.config_bgp_graceful_restart(leaf_name, local_asn=info['D2_as'], preserve_state=True,
                                            config='add', cli_type=bgp_cli_type)
 
         # Verify bgp neighbors
@@ -275,7 +279,7 @@ class TestBGPCommon:
             bgplib.show_bgp_neighbors([leaf_name, spine_name], af='ipv4')
 
         # Delete the graceful restart capability
-        bgpapi.config_bgp_graceful_restart(leaf_name, local_asn=info['D2_as'], user_command='preserve-fw-state',
+        bgpapi.config_bgp_graceful_restart(leaf_name, local_asn=info['D2_as'], preserve_state=True,
                                            config='delete', cli_type=bgp_cli_type)
 
         if result:
@@ -388,7 +392,7 @@ class TestBGPCommon:
         st.wait(5)
 
         st.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
-        st.log(slog_obj.show_logging(spine_name, lines=200))
+        st.log(slog_obj.show_logging(spine_name, lines=20000))
         st.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
 
         st.log("Verify logs on spine to check if aggregator and atomic ")
@@ -405,6 +409,7 @@ class TestBGPCommon:
                                             summary="summary-only", family="ipv4", config="delete", cli_type=bgp_cli_type)
         tg_ob.tg_emulation_bgp_route_config(handle=bgp_handle['handle'], mode='remove', num_routes='4',
                                             prefix='123.1.1.0', as_path='as_seq:1')
+        bgpapi.bgp_debug_config(spine_name, disable=True)
         if not log_msg:
             st.report_fail("bgp_aggregation_fail", aggr_route)
         st.report_pass("test_case_passed")
@@ -552,6 +557,7 @@ def bgp_rif_pre_config():
     # underlay config
     bgplib.l3tc_underlay_config_unconfig(config='yes', config_type='phy')
     bgplib.l3tc_vrfipv4v6_address_leafspine_config_unconfig(config='yes', config_type='all')
+    st.wait(20)
     # Ping Verification
     if not bgplib.l3tc_vrfipv4v6_address_leafspine_ping_test(config_type='all', ping_count=3):
         st.error("Ping failed in between Spine - Leaf")
@@ -572,6 +578,7 @@ def bgp_rif_pre_config():
 
 def bgp_rif_pre_config_cleanup():
     st.banner("BGP RIF CLASS CONFIG CLEANUP - START")
+    bgplib.bgp_backgound_flap_instance_ctrl(0)
     bgplib.l3tc_vrfipv4v6_address_leafspine_bgp_config(config='no')
     bgplib.l3tc_vrfipv4v6_address_leafspine_config_unconfig(config='no')
     # cleanup underlay config
@@ -669,7 +676,7 @@ class TestBGPRif(TestBGPCommon):
     @pytest.mark.bgp_ft
     @pytest.mark.community
     @pytest.mark.community_fail
-    def test_ft_bgp_ipv4_route_aggregation_atomic_aggregate_without_as_set(self):
+    def test_ft_bgp_ipv4_route_aggregation_atomic_aggregate_without_as_set(self, bgp_rif_func_hook):
         TestBGPCommon.ft_bgp_ipv4_route_aggregation_atomic_aggregate_without_as_set(self)
 
     @pytest.mark.bgp_ft
@@ -911,6 +918,8 @@ class TestBGPRif(TestBGPCommon):
 
     @pytest.fixture(scope="function", autouse=False)
     def bgp_rif_func_hook(self, request):
+        if st.get_func_name(request) == "test_ft_bgp_ipv4_route_aggregation_atomic_aggregate_without_as_set":
+            bgplib.bgp_backgound_flap_instance_ctrl(0)
 
         yield
         if st.get_func_name(request) == "test_ft_bgp_rmap_out":
@@ -935,6 +944,8 @@ class TestBGPRif(TestBGPCommon):
                                          cli_type=vtysh_cli_type)
         elif st.get_func_name(request) == "test_ft_bgp_peer_traffic_check":
             TestBGPCommon.bgp_common_func_hook(self, st.get_func_name(request))
+        elif st.get_func_name(request) == "test_ft_bgp_ipv4_route_aggregation_atomic_aggregate_without_as_set":
+            bgplib.bgp_backgound_flap_instance_ctrl(1)
 
 
     @pytest.mark.bgp_ft
@@ -1167,7 +1178,7 @@ class TestBGPIPvxRouteAdvertisementFilter:
                               config_type_list=["routeMap"], routeMap='UseGlobal', diRection='in',
                               cli_type=vtysh_cli_type)
 
-    def configure_base_for_filter_prefix_on_community(self, peer_grp4_name, config, cli_type=""):
+    def configure_base_for_filter_prefix_on_community(self, peer_grp4_name, config, cli_type='vtysh'):
         bgpapi.config_bgp(dut=self.local_topo['dut1'], local_as=self.local_topo['dut1_as'], config=config,
                           config_type_list=["redist"], redistribute='static',cli_type=cli_type)
         bgpapi.config_bgp(dut=self.local_topo['dut2'], local_as=self.local_topo['dut2_as'],
@@ -1229,7 +1240,7 @@ class TestBGPIPvxRouteAdvertisementFilter:
 
         bgpapi.config_address_family_redistribute(self.local_topo['dut1'], self.local_topo['dut1_as'],
                                                   'ipv4', 'unicast', "static", config='yes', cli_type=bgp_cli_type)
-
+        st.wait(10)
         output = bgpapi.fetch_ip_bgp_route(self.local_topo['dut2'], family='ipv4',
                                            select=['network', 'as_path'])
 
@@ -1327,7 +1338,7 @@ class TestBGPIPvxRouteAdvertisementFilter:
                           config='yes',
                           neighbor=self.local_topo['dut1_addr_ipv4'],
                           config_type_list=["filter_list"], filter_list='FILTER', diRection='in',cli_type=vtysh_cli_type)
-
+        st.wait(10)
         output = bgpapi.fetch_ip_bgp_route(self.local_topo['dut2'], family='ipv4',
                                            match={'next_hop': self.local_topo['dut1_addr_ipv4']},
                                            select=['network', 'as_path'])
@@ -1561,7 +1572,7 @@ class TestBGPIPvxRouteAdvertisementFilter:
 
         bgpapi.config_address_family_redistribute(self.local_topo['dut1'], self.local_topo['dut1_as'],
                                                   'ipv6', 'unicast', "static", config='yes', cli_type=bgp_cli_type)
-
+        st.wait(10)
         output = bgpapi.fetch_ip_bgp_route(self.local_topo['dut2'], family='ipv6',
                                            select=['network', 'as_path'])
 
@@ -1854,7 +1865,10 @@ class TestBGPIPvxRouteAdvertisementFilter:
         ipapi.config_route_map(dut=self.local_topo['dut2'], route_map='rmap1', config='yes',
                                sequence='10', community='100:100')
         ipapi.create_static_route(dut=self.local_topo['dut1'], next_hop='blackhole', static_ip='40.1.1.1/32')
-        self.configure_base_for_filter_prefix_on_community('leaf_spine', 'yes')
+
+        info = bgplib.get_tg_topology_leafspine_bgp(dut_type='spine-leaf', max_tg_links='1', nodes='2')
+        spine_as = info['D1_as']
+        self.configure_base_for_filter_prefix_on_community(spine_as, 'yes')
         # Check the show command in leaf
         output = bgpapi.show_bgp_ipvx_prefix(self.local_topo['dut2'], prefix="40.1.1.1",
                                              masklen=32, family='ipv4')
@@ -1865,7 +1879,7 @@ class TestBGPIPvxRouteAdvertisementFilter:
                 result = True
             else:
                 result = False
-        self.configure_base_for_filter_prefix_on_community('leaf_spine', 'no')
+        self.configure_base_for_filter_prefix_on_community(spine_as, 'no')
         ipapi.config_route_map(dut=self.local_topo['dut2'], route_map='rmap1', config='no',
                                community='100:100')
         ipapi.delete_static_route(dut=self.local_topo['dut1'], next_hop='blackhole', static_ip='40.1.1.1/32')
@@ -2206,7 +2220,7 @@ class TestBGPIPvxRouteAdvertisementFilter:
 
         bgpapi.config_address_family_redistribute(self.local_topo['dut1'], self.local_topo['dut1_as'],
                                         'ipv6', 'unicast', "static", config='yes', cli_type=bgp_cli_type, route_map='rmap_blackhole')
-
+        st.wait(10)
         output = bgpapi.fetch_ip_bgp_route(self.local_topo['dut2'], family='ipv6',
                                            select=['network', 'as_path', 'metric'])
 
@@ -2257,10 +2271,11 @@ def bgp_ve_lag_pre_config():
     # underlay config - configure ve over lag
     #import pdb;pdb.set_trace()
     bgplib.l3tc_underlay_config_unconfig(config='yes', config_type='veLag')
+    bgplib.bgp_backgound_flap_instance_ctrl(1)
 
     # config ip on underlay interface
     bgplib.l3tc_vrfipv4v6_address_leafspine_config_unconfig(config='yes', config_type='all')
-
+    st.wait(20)
     # Ping Verification
     if not bgplib.l3tc_vrfipv4v6_address_leafspine_ping_test(config_type='all', ping_count=3):
         st.error("Ping failed in between Spine - Leaf")
@@ -2282,6 +2297,7 @@ def bgp_ve_lag_pre_config():
 
 def bgp_ve_lag_pre_config_cleanup():
     st.banner("BGP VE LAG CLASS CONFIG CLEANUP - START")
+    bgplib.bgp_backgound_flap_instance_ctrl(0)
     bgplib.l3tc_vrfipv4v6_address_leafspine_bgp_config(config='no', config_type='veLag')
     bgplib.l3tc_vrfipv4v6_address_leafspine_config_unconfig(config='no')
     bgplib.l3tc_underlay_config_unconfig(config='no', config_type='veLag')
@@ -2335,10 +2351,10 @@ def bgp_l3_lag_pre_config():
 
     # underlay config - configure ve over lag
     bgplib.l3tc_underlay_config_unconfig(config='yes', config_type='l3Lag')
-
+    bgplib.bgp_backgound_flap_instance_ctrl(1)
     # config ip on underlay interface
     bgplib.l3tc_vrfipv4v6_address_leafspine_config_unconfig(config='yes', config_type='all')
-
+    st.wait(20)
     # Ping Verification
     if not bgplib.l3tc_vrfipv4v6_address_leafspine_ping_test(config_type='all', ping_count=3):
         st.error("Ping failed in between Spine - Leaf")
@@ -2363,7 +2379,7 @@ def bgp_l3_lag_pre_config_cleanup():
     bgplib.l3tc_vrfipv4v6_address_leafspine_bgp_config(config='no')
     bgplib.l3tc_vrfipv4v6_address_leafspine_config_unconfig(config='no')
     bgpapi.cleanup_bgp_config(st.get_dut_names())
-    ipapi.clear_ip_configuration(st.get_dut_names(), family='all', thread=True, skip_error_check=True)
+    #ipapi.clear_ip_configuration(st.get_dut_names(), family='all', thread=True, skip_error_check=True)
     bgplib.l3tc_underlay_config_unconfig(config='no', config_type='l3Lag')
     st.banner("BGP L3 OVER LAG CLASS CONFIG CLEANUP - END")
 

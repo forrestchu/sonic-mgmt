@@ -286,6 +286,39 @@ def config_ip_addr_interface(dut, interface_name='', ip_address='', subnet='', f
             return True
         elif config == 'remove':
             return delete_ip_interface(dut, interface_name, ip_address, subnet, family, cli_type=cli_type, is_secondary_ip=is_secondary_ip)
+    if cli_type == 'alicli':
+        if config == 'add':
+            try:
+                if not interface_name:
+                    st.error("Please provide interface name..")
+                    return False
+                if not ip_address:
+                    st.error("Please provide ip|ipv6 address..")
+                    return False
+
+                if family == "ipv4":
+                    if not is_valid_ipv4_address(ip_address):
+                        st.error("Invalid IP address.")
+                        return False
+                    command = "interface {}\n ip address {}/{}\n".format(interface_name, ip_address, subnet)
+                elif family == "ipv6":
+                    if not is_valid_ipv6_address(ip_address):
+                        st.error("Invalid IPv6 address.")
+                        return False
+                    command = "interface {}\n ipv6 address {}/{}\n".format(interface_name, ip_address, subnet)
+                output = st.config(dut, command, skip_error_check=skip_error, type='alicli')
+            except Exception as e:
+                st.log(e)
+                return False
+            if "Error: " in output:
+                return False
+            else:
+                return True
+        elif config == 'remove':
+            return delete_ip_interface(dut, interface_name, ip_address, subnet, family, cli_type=cli_type)
+        else:
+            st.error("Invalid config used - {}.".format(config))
+            return False
     else:
         st.error("Invalid cli_type for this API - {}.".format(cli_type))
         return False
@@ -353,6 +386,10 @@ def delete_ip_interface(dut, interface_name, ip_address, subnet="32", family="ip
             st.error("Failed to remove IP address: {} on interface: {}".format(ip_address, interface_name))
             return False
         return True
+    elif cli_type == 'alicli':
+        command = "interface {}\n no ip address {}/{}\n".format(interface_name, ip_address, subnet)
+        st.config(dut, command, skip_error_check=skip_error, type='alicli')
+        return True
     else:
         st.log("Unsupported CLI TYPE {}".format(cli_type))
         return False
@@ -376,9 +413,14 @@ def get_interface_ip_address(dut, interface_name=None, family="ipv4",cli_type=''
         if family == "ipv6":
             command = "show ipv6 interface"
         if cli_type == 'alicli':
-            command = "show ip interface brief"
-        output = st.show(dut, command,type=cli_type)
-        result = output if family == "ipv4" else prepare_show_ipv6_interface_output(output)
+            command = "cli -c 'no page' -c 'show ip interface brief'"
+            output = st.show(dut, command)
+        else:
+            output = st.show(dut, command,type=cli_type)
+        if cli_type != 'alicli':
+            result = output if family == "ipv4" else prepare_show_ipv6_interface_output(output)
+        else:
+            result = output
         if interface_name:
             match = {"interface": interface_name}
             output = utils.filter_and_select(result, None, match)

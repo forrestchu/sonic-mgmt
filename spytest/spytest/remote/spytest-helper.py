@@ -284,7 +284,7 @@ def apply_file(filepath, method):
             commands_to_execute.append("cp {} {}".format(filepath, init_config_file))
         else:
             commands_to_execute.append("config load -y {}".format(filepath))
-            commands_to_execute.append("config save -y")
+            #commands_to_execute.append("config save -y")
     elif filepath.endswith('.copp'):
         filepath = json_fix(filepath)
         if method == "full":
@@ -877,6 +877,12 @@ def syslog_read_msgs(lvl, phase):
         lines = lines_count.split()
         syslog_lines = int(lines[0].split()[0])
     except Exception: syslog_lines = 0
+
+    #save syslog after module test
+    if phase.startswith("pre-module ") or phase.startswith("post-module "):
+        save_syslog_file = "{}/syslog{}.txt".format(spytest_dir, phase.split()[1].split(".")[0][4:])
+        module_log_offset = "{}/module_syslog.offset".format(spytest_dir)
+        read_messages(module_log_offset, var_file, var_file, save_syslog_file)
 
     if not syslog_lines:
         print("NO-SYSLOGS-CAPTURED")

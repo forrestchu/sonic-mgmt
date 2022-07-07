@@ -1355,7 +1355,7 @@ def test_read_all_bfd_counter():
             st.log("current bfd session {} down notfiy occur".format(output1[i]['peeraddress']))
             err_status_session += 1
 
-    if err_status_session > 0 or err_tx_session > 3:
+    if err_status_session > 0 or err_tx_session > 0:
         st.log("error bfd session, status err:{} tx err:{}".format(err_status_session, err_tx_session))
         result = 1
 
@@ -1508,10 +1508,9 @@ def test_ixia_bfd_flap_in_bfd_vrf():
 
     loop = 0
     loop_max = 3
-    current_down_session = 0
     while loop < loop_max:
-        current_up_session = 0
         current_down_session = 0
+        current_up_session = 0
         output2  = st.show(dut1, cmd, type='vtysh')
         for i in range(all_session):
             if 'down' == output2[i]['status']:
@@ -1613,6 +1612,13 @@ def test_dut_bfd_flap_in_vrf_503():
         flap_cmd += "neighbor dut1_v4 bfd 3 100 100\n"
         st.config(dut2,flap_cmd, type='alicli',skip_error_check=True)
         st.wait(6)
+    #for i in range(5):
+    #    flap_cmd = "interface {}\n shutdown\n".format(data.dut_bfd_port_list[0])
+    #    st.config(dut2, flap_cmd, type='alicli',skip_error_check=True)
+    #    st.wait(5)
+    #    flap_cmd = "interface {}\n no shutdown\n".format(data.dut_bfd_port_list[0])
+    #    st.config(dut2, flap_cmd, type='alicli',skip_error_check=True)
+    #    st.wait(6)
         
     st.log("disable TG bfd flap")
     ixia_bfd_params_modify(bfd_handler = data.tg1_handle[0]['bfd_v4'][0], ipver='4')

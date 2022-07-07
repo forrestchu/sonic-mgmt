@@ -24,8 +24,6 @@
 # test cases requiring link state propagation
 -test:test_ft_cos_tc_queue_map
 -test:TestBGPRif.test_ft_bgp_rmap_out
--test:TestBGPIPvxRouteAdvertisementFilter.test_redistribute_static_ipv4
--test:TestBGPIPvxRouteAdvertisementFilter.test_bgp_route_map_with_community
 -test:test_ft_lldp_docker_restart
 -test:test_ft_portchannel_behavior_with_tagged_traffic
 -test:test_ft_untagged_traffic_on_portchannel

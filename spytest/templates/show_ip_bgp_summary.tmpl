@@ -30,8 +30,8 @@ VTYSH
   ^RIB entries ${RIBENTRIES}, using ${RIBMEMORYINBYTES} (\S+) of memory\s*$$
   ^Peers ${PEERS}, using ${PEERSMEMORYINKBYTES} KiB of memory\s*$$
   ^(\s*)*$$ -> Continue
-  ^\s+Neighbor\s+V\s+AS\s+MsgRcvd\s+MsgSent\s+TblVer\s+InQ\s+OutQ\s+Up\/Down\s+State\/PfxRcd\s+ -> Continue
-  ^\s*${NEIGHBOR}\s+${VERSION}\s+${ASN}\s+${MSGRCVD}\s+${MSGSENT}\s+${TBLVER}\s+${INQ}\s+${OUTQ}\s+${UPDOWN}\s+${STATE}\s*$$ -> Record
+  ^\s+Neighbor\s+V\s+AS\s+MsgRcvd\s+MsgSent\s+TblVer\s+InQ\s+OutQ\s+Up\/Down\s+State\/PfxRcd\s+.* -> Continue
+  ^\s*${NEIGHBOR}\s+${VERSION}\s+${ASN}\s+${MSGRCVD}\s+${MSGSENT}\s+${TBLVER}\s+${INQ}\s+${OUTQ}\s+${UPDOWN}\s+${STATE}\s*.*$$ -> Record
   ^(\s*)*$$ -> Continue
   ^Total number of neighbors ${TOTAL_NBR}
   ^${DYNNBR} dynamic neighbor\(s\), limit ${DYNLIMIT}$$ -> Continue

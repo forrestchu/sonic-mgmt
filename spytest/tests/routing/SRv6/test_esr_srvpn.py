@@ -991,7 +991,7 @@ def test_base_config_srvpn_locator_01():
     vrf = 'Vrf1'
     ip_str = data.mysid_prefix['lsid1'][:-1]+data.mysid_opcode[vrf][2:]
     ipaddr = netaddr.IPAddress(ip_str)
-    key = 'SRV6_MY_SID_TABLE:' + ipaddr.__str__() + '/96'
+    key = 'SRV6_MY_SID_TABLE:' + ipaddr.__str__() + '/80'
     appdb_onefield_checkpoint(dut1, key, "block_len", data.mysid_base_prefix_len["block_len"], expect = True, checkpoint = checkpoint_msg)
     appdb_onefield_checkpoint(dut1, key, "node_len", data.mysid_base_prefix_len["node_len"], expect = True, checkpoint = checkpoint_msg)
     appdb_onefield_checkpoint(dut1, key, "func_len", data.mysid_base_prefix_len["func_len"], expect = True, checkpoint = checkpoint_msg)
@@ -1003,7 +1003,7 @@ def test_base_config_srvpn_locator_01():
     vrf = 'PUBLIC-TC11'
     ip_str = data.mysid_prefix['lsid1'][:-1]+data.mysid_opcode[vrf][2:]
     ipaddr = netaddr.IPAddress(ip_str)
-    key = 'SRV6_MY_SID_TABLE:' + ipaddr.__str__() + '/96'
+    key = 'SRV6_MY_SID_TABLE:' + ipaddr.__str__() + '/80'
     appdb_onefield_checkpoint(dut1, key, "block_len", data.mysid_base_prefix_len["block_len"], expect = True, checkpoint = checkpoint_msg)
     appdb_onefield_checkpoint(dut1, key, "node_len", data.mysid_base_prefix_len["node_len"], expect = True, checkpoint = checkpoint_msg)
     appdb_onefield_checkpoint(dut1, key, "func_len", data.mysid_base_prefix_len["func_len"], expect = True, checkpoint = checkpoint_msg)
@@ -1021,17 +1021,7 @@ def test_base_config_srvpn_locator_01():
     st.config(dut1, 'vtysh -c "config t" -c "vrf {}" -c "ip route 192.100.1.0/24 blackhole"'.format(vrf))
     st.config(dut1, 'vtysh -c "config t" -c "router bgp {} vrf {}" -c "address-family ipv4 unicast" -c "network 192.100.1.0/24"'.format(bgp_as, vrf))
 
-    #st.show(dut1, "show bgp ipv4 vpn", max_time=500, type="vtysh")
-    
     records = st.show(dut1, "show bgp ipv4 vpn", type="alicli")
-
-    # expected_vpn = {
-    #     'ip_address':'192.100.1.0/24',
-    #     'sid':'fd00:201:201:fff1:1::',
-    #     'label':'3',
-    #     'status_code':'*>',
-    #     'rd':'2:2'
-    # }
 
     expected_vpn = {
         'ip_address':'192.100.1.0/24',
@@ -1065,18 +1055,17 @@ def test_base_config_srvpn_locator_01():
     vrf_name = 'PUBLIC-TC11'
     locator_cmd = "locator {} prefix {}/80 block-len 32 node-len 16 func-bits 32 argu-bits 48".format(locator_name, data.mysid_prefix[locator_name])
     del_opc_cmd = 'cli -c "configure terminal" -c "segment-routing" -c "srv6" -c "locators" -c  "{}" -c "no opcode {}"'.format(locator_cmd, data.mysid_opcode[vrf_name])
-    #TODO
-    #st.config(dut1, del_opc_cmd)
 
-    route_entries = cli_show_json(dut1, "show ipv6 route fd00:201:201:fff1:11::/96 json", type="vtysh")
+    st.config(dut1, del_opc_cmd)
+
+    route_entries = cli_show_json(dut1, "show ipv6 route fd00:201:201:fff1:11::/80 json", type="vtysh")
     # expected json
-    cwd = os.getcwd()
     expected_route_path = cwd+"/routing/SRv6/locator_static_route_remove_01.json"
     expected_route_json = json.loads(open(expected_route_path).read())
     result = json_cmp(route_entries, expected_route_json)
     if not result:
         st.log ("step 5 test_base_config_srvpn_locator_01_failed")
-        #st.report_fail("step 5 test_base_config_srvpn_locator_01_failed")
+        st.report_fail("step 5 test_base_config_srvpn_locator_01_failed")
 
 
     # step 6 : del locator
@@ -1086,21 +1075,20 @@ def test_base_config_srvpn_locator_01():
 #    exit
 
     del_loc_cmd = 'cli -c "configure terminal" -c "segment-routing" -c "srv6" -c "locators" -c "no locator {}"'.format(locator_name)
-    # TODO
-    #st.config(dut1, del_loc_cmd)    
+    st.config(dut1, del_loc_cmd)
+    route_entries = cli_show_json(dut1, "show ipv6 route fd00:201:201:fff1:11::/80 json", type="vtysh")  
     expected_route_path = cwd+"/routing/SRv6/locator_static_route_remove_01.json"
     expected_route_json = json.loads(open(expected_route_path).read())
     result = json_cmp(route_entries, expected_route_json)
     if not result:
         st.log ("step 6 test_base_config_srvpn_locator_01_failed")
-        # TODO
-        #st.report_fail("step 5 test_base_config_srvpn_locator_01_failed")
+        st.report_fail("step 5 test_base_config_srvpn_locator_01_failed")
 
     # step 7 : del srv6-locator 
     vrf_name = 'Vrf1'
     bgp_as = '100'
-    # TODO
-    # st.config(dut1, 'cli -c "config t" -c "router bgp {} vrf {}" -c "no srv6-locator"'.format(vrf_name, bgp_as))
+
+    st.config(dut1, 'cli -c "config t" -c "router bgp {} vrf {}" -c "no srv6-locator"'.format(vrf_name, bgp_as))
 
     records = st.show(dut1, "show bgp ipv4 vpn", type='alicli')
 
@@ -1112,14 +1100,13 @@ def test_base_config_srvpn_locator_01():
     }
 
     if not records or len(records)==0:
-        # TODO
-        #st.report_fail("step 7 test_base_config_srvpn_locator_01_failed")
         st.log ("step 7 test_base_config_srvpn_locator_01_failed")
+        st.report_fail("step 7 test_base_config_srvpn_locator_01_failed")
+
     
     if 'sid' in records:
-        # TODO
-        #st.report_fail("step 7 test_base_config_srvpn_locator_01_failed")
         st.log ("step 7 test_base_config_srvpn_locator_01_failed")
+        st.report_fail("step 7 test_base_config_srvpn_locator_01_failed")
 
     check = False
     

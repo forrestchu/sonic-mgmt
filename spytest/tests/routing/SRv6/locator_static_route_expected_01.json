@@ -1,7 +1,7 @@
 {
-    "fd00:201:201:fff1:1::\/96":[
+    "fd00:201:201:fff1:1::\/80":[
         {
-          "prefix":"fd00:201:201:fff1:1::\/96",
+          "prefix":"fd00:201:201:fff1:1::\/80",
           "protocol":"static",
           "vrfId":0,
           "vrfName":"Default",
@@ -30,9 +30,9 @@
           ]
         }
       ],
-      "fd00:201:201:fff1:11::\/96":[
+      "fd00:201:201:fff1:11::\/80":[
         {
-          "prefix":"fd00:201:201:fff1:11::\/96",
+          "prefix":"fd00:201:201:fff1:11::\/80",
           "protocol":"static",
           "vrfId":0,
           "vrfName":"Default",

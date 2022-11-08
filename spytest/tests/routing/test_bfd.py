@@ -392,27 +392,57 @@ def test_bfd_ipv4_attr_set():
                                 rx_interval=[[data.dut_bfd_timer,data.tg_bfd_timer]], status='up', cli_type='alicli'):
         st.report_fail("bfd non-work", dut1_ip_addr, dut1)
 
-    st.log("bfd status check ok, set dut bfd params: multiplier=5, rx_intv=50, tx_intv=50")
-    bfdapi.configure_bfd(dut1, local_asn=data.as_num, neighbor_ip=neigh_ip_addr, 
-                        config="yes",vrf_name=data.vrf, cli_type='alicli', multiplier=5, rx_intv=50, tx_intv=50)
-    st.wait(5)
+    if 'eSR' == os.getenv('SPYTEST_PROJECT'):
+        st.log("bfd status check ok, set dut bfd params: multiplier=5, rx_intv=200, tx_intv=200")
+        bfdapi.configure_bfd(dut1, local_asn=data.as_num, neighbor_ip=neigh_ip_addr, 
+                            config="yes",vrf_name=data.vrf, cli_type='alicli', multiplier=5, rx_intv=200, tx_intv=200)
 
-    key = "BFD_PEER:{}*".format(neigh_ip_addr)
-    command = redis.build(dut1, redis.APPL_DB, "keys '{}' ".format(key))
-    output = st.show(dut1, command)
-    if output[0]:
-        seq_key = output[0]['name']
+        st.wait(5)
+
+        key = "BFD_PEER:{}*".format(neigh_ip_addr)
+        command = redis.build(dut1, redis.APPL_DB, "keys '{}' ".format(key))
+        output = st.show(dut1, command)
+        if output[0]:
+            seq_key = output[0]['name']
+        else:
+            seq_key = ''
+        command = redis.build(dut1, redis.APPL_DB, "hgetall '{}' ".format(seq_key))
+        output = st.show(dut1, command)
+
+        match_list = [{"donor_intf": '120000'}, {"donor_intf": '200000'}]
+        for match in match_list:
+            entries = filter_and_select(output, None, match)
+            if not entries:
+                st.log("{} is not match".format(match))
+                st.report_fail("bfd status error", dut1_ip_addr, dut1)
+        
+        # next same as mc case
+        st.log("bfd status check ok, set dut bfd params: multiplier=5, rx_intv=50, tx_intv=50")
+        bfdapi.configure_bfd(dut1, local_asn=data.as_num, neighbor_ip=neigh_ip_addr, 
+                            config="yes",vrf_name=data.vrf, cli_type='alicli', multiplier=5, rx_intv=50, tx_intv=50)
+        st.wait(5)
     else:
-        seq_key = ''
-    command = redis.build(dut1, redis.APPL_DB, "hgetall '{}' ".format(seq_key))
-    output = st.show(dut1, command)
+        st.log("bfd status check ok, set dut bfd params: multiplier=5, rx_intv=50, tx_intv=50")
+        bfdapi.configure_bfd(dut1, local_asn=data.as_num, neighbor_ip=neigh_ip_addr, 
+                            config="yes",vrf_name=data.vrf, cli_type='alicli', multiplier=5, rx_intv=50, tx_intv=50)
+        st.wait(5)
 
-    match_list = [{"donor_intf": '50000'}, {"donor_intf": '60000'}]
-    for match in match_list:
-        entries = filter_and_select(output, None, match)
-        if not entries:
-            st.log("{} is not match".format(match))
-            st.report_fail("bfd status error", dut1_ip_addr, dut1)
+        key = "BFD_PEER:{}*".format(neigh_ip_addr)
+        command = redis.build(dut1, redis.APPL_DB, "keys '{}' ".format(key))
+        output = st.show(dut1, command)
+        if output[0]:
+            seq_key = output[0]['name']
+        else:
+            seq_key = ''
+        command = redis.build(dut1, redis.APPL_DB, "hgetall '{}' ".format(seq_key))
+        output = st.show(dut1, command)
+
+        match_list = [{"donor_intf": '50000'}, {"donor_intf": '60000'}]
+        for match in match_list:
+            entries = filter_and_select(output, None, match)
+            if not entries:
+                st.log("{} is not match".format(match))
+                st.report_fail("bfd status error", dut1_ip_addr, dut1)
 
     #skip multiplier check
     if not bfdapi.verify_bfd_peer(dut1, peer=neigh_ip_addr, local_addr=dut1_ip_addr, rx_interval=[['50',data.tg_bfd_timer]], 

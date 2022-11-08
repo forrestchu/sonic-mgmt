@@ -2,6 +2,7 @@
 import pytest
 import json
 import re
+import os
 
 from spytest import st, tgapi, SpyTestDict
 import apis.routing.bgp as bgpfeature
@@ -330,7 +331,12 @@ def test_cli_bgp_bfd_v4():
 
     ### check frr running-config ##
     st.log("check frr running-config")
-    frr_key = "router bgp {}|neighbor {} bfd".format(bgpcli_obj.get_local_as() ,peer_ip)
+    
+    if 'eSR' == os.getenv('SPYTEST_PROJECT'):
+        frr_key = "router bgp {}|neighbor {} bfd 3 300 300".format(bgpcli_obj.get_local_as() ,peer_ip)
+    else:
+        frr_key = "router bgp {}|neighbor {} bfd".format(bgpcli_obj.get_local_as() ,peer_ip)
+
     frr_config_checkpoint(bgpcli_obj, frr_key, True, 'check2')
 
     ### reboot and check config recovery ### 

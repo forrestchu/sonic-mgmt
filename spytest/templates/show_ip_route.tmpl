@@ -11,6 +11,7 @@ Value Filldown DISTANCE (\d+)
 Value Filldown COST (\d+)
 Value Filldown vrf_name (\S+)
 Value dest_vrf_name (\S+)
+Value WEIGHT (\d+)
 
 Start
   ^\s*VRF ${vrf_name}:
@@ -18,6 +19,7 @@ Start
   ^\s*${TYPE}${SELECTED}${FIB}\s*${IP_ADDRESS}\s*\[${DISTANCE}\/${COST}\]\s*is directly connected,\s*${INTERFACE}\(vrf\s${dest_vrf_name}\),\s*${DURATION}\s*$$ -> Record
   ^\s*${TYPE}${SELECTED}${FIB}\s*${IP_ADDRESS}\s*\[${DISTANCE}\/${COST}\]\s*is directly connected,\s*${INTERFACE},\s*${DURATION}\s*$$ -> Record
   ^\s*${TYPE}${SELECTED}${FIB}\s*${IP_ADDRESS}\s*\[${DISTANCE}\/${COST}\]\s*is directly connected,\s*${INTERFACE}\s*inactive,\s*${DURATION}\s*$$ -> Record
+  ^\s*${TYPE}${SELECTED}${FIB}\s*${IP_ADDRESS}\s*\[${DISTANCE}\/${COST}\]\s*via\s*${NEXTHOP},\s*${INTERFACE},\sweight\s${WEIGHT},\s*${DURATION}\s*$$ -> Record
   ^\s*${TYPE}${SELECTED}${FIB}\s*${IP_ADDRESS}\s*\[${DISTANCE}\/${COST}\]\s*via\s*${NEXTHOP},\s*${INTERFACE},\s*${DURATION}\s*$$ -> Record
   ^\s*${FIB}\s*via\s*${NEXTHOP},\s*${INTERFACE},\s*${DURATION}\s*$$ -> Record
   ^\s*${TYPE}${SELECTED}${FIB}\s*${IP_ADDRESS}\s*\[${DISTANCE}\/${COST}\]\s*via\s*${NEXTHOP},\s*${INTERFACE}\s*onlink,\s*${DURATION}\s*$$ -> Record

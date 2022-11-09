@@ -52,6 +52,14 @@ from esr_vars import data
 
 #data = SpyTestDict()
 
+def add_bmp_config_background(dut):
+    st.log("config global bmp")
+    st.config(dut, "cli -c 'configure terminal' -c 'bmp' -c 'bmp target bmp01' -c 'bmp connect 192.0.0.250 port 5555 min-retry 500 max-retry 2000'")
+    st.config(dut, "cli -c 'configure terminal' -c 'bmp' -c 'bmp target bmp01' -c 'bmp monitor ipv4 unicast adj-in pre-policy'")
+    st.config(dut, "cli -c 'configure terminal' -c 'bmp' -c 'bmp target bmp01' -c 'bmp monitor ipv6 unicast adj-in pre-policy'")
+    st.config(dut, "cli -c 'configure terminal' -c 'bmp' -c 'bmp target bmp01' -c 'bmp monitor ipv4 unicast adj-in post-policy '")
+    st.config(dut, "cli -c 'configure terminal' -c 'bmp' -c 'bmp target bmp01' -c 'bmp monitor ipv6 unicast adj-in post-policy '")
+
 def verify_ping(src_obj,port_handle,dev_handle,dst_ip,ping_count=5,exp_count=5):
     ping_count,exp_count = int(ping_count),int(exp_count)
     if src_obj.tg_type == 'stc':
@@ -133,14 +141,14 @@ def check_dut_intf_tx_traffic_counters(dut, portlist, expect_val):
     return True
 
 def get_handles():
-    tg1, tg_ph_1 = tgapi.get_handle_byname("T1D1P1")
-    tg2, tg_ph_2 = tgapi.get_handle_byname("T1D1P2")
-    tg3, tg_ph_3 = tgapi.get_handle_byname("T1D1P3")
-    tg4, tg_ph_4 = tgapi.get_handle_byname("T1D1P4")
-    tg5, tg_ph_5 = tgapi.get_handle_byname("T1D2P1")
-    tg6, tg_ph_6 = tgapi.get_handle_byname("T1D2P2")
-    tg7, tg_ph_7 = tgapi.get_handle_byname("T1D1P5")
-    tg8, tg_ph_8 = tgapi.get_handle_byname("T1D1P6")
+    tg1, tg_ph_1 = tgapi.get_handle_byname("T1D1P1") # ixia - 179 Eth109
+    tg2, tg_ph_2 = tgapi.get_handle_byname("T1D1P2") # ixia - 179 Eth110
+    tg3, tg_ph_3 = tgapi.get_handle_byname("T1D1P3") # ixia - 179 Eth111
+    tg4, tg_ph_4 = tgapi.get_handle_byname("T1D1P4") # ixia - 179 Eth112
+    tg5, tg_ph_5 = tgapi.get_handle_byname("T1D2P1") # ixia - 178 Eth109
+    tg6, tg_ph_6 = tgapi.get_handle_byname("T1D2P2") # ixia - 178 Eth110
+    tg7, tg_ph_7 = tgapi.get_handle_byname("T1D1P5") # ixia - 179 Eth50
+    tg8, tg_ph_8 = tgapi.get_handle_byname("T1D1P6") # ixia - 179 Eth51
     tg_list = [tg1, tg2, tg3, tg4, tg5, tg6, tg7, tg8]
     tg_ph_list = [tg_ph_1, tg_ph_2, tg_ph_3, tg_ph_4, tg_ph_5, tg_ph_6, tg_ph_7, tg_ph_8]
     return (tg_list, tg_ph_list)
@@ -157,30 +165,137 @@ def get_dut_ip():
     data.dut1_all_ip_addr = copy.deepcopy(output1)
     data.dut2_all_ip_addr = copy.deepcopy(output2)
 
-def ixia_bfd_params_modify(bfd_handler, ipver, flap_interval='0', tx_interval='100', rx_interval='100'):
-    tg = data.tg_list[0]
+def egress_dut_ixia_config():
+    tg_dut2_eth109, tg_ph_dut2_eth109 = tgapi.get_handle_byname("T1D2P1") # ixia - 178 Eth109
+    tg_dut2_eth110, tg_ph_dut2_eth110 = tgapi.get_handle_byname("T1D2P2") # ixia - 178 Eth110
 
-    if ipver == "4":
-        handler = bfd_handler['bfd_v4_interface_handle']
-    elif ipver == "6":
-        handler = bfd_handler['bfd_v6_interface_handle']
+    tg_result1 = tg_dut2_eth109.tg_interface_config(port_handle=tg_ph_dut2_eth109, mode='config', 
+        intf_ip_addr='100.1.0.2', 
+        gateway='100.1.0.1',
+        arp_send_req='1')
+    
+    st.log("Topology - Port ip Unconfig tg api result = {}".format(tg_result1))
 
-    tg.tg_emulation_bfd_config(handle = handler,
-            control_plane_independent      = "0",
-            flap_tx_interval               = flap_interval,
-            min_rx_interval                = rx_interval,
-            mode                           = "modify",
-            detect_multiplier              = "3",
-            poll_interval                  = "0",
-            tx_interval                    = tx_interval,
-            ip_diff_serv                   = "0",
-            interface_active               = "1",
-            router_active                  = "1",
-            session_count                  = "0",
-            ip_version                     = ipver,
-            aggregate_bfd_session          = "1")
-    tg.tg_emulation_bfd_control(handle = handler, mode = "restart")
+    tg_result2 = tg_dut2_eth110.tg_interface_config(port_handle=tg_ph_dut2_eth110, mode='config', 
+        intf_ip_addr='100.2.0.2', 
+        gateway='100.2.0.1',
+        arp_send_req='1')
+    
+    st.log("Topology - Port ip Unconfig tg api result = {}".format(tg_result2))
 
+    # Configuring the BGP router in vrf
+    conf_var = {'mode'                 : 'enable',
+                'active_connect_enable' : '1',
+                'enable_4_byte_as'      : '1',
+                'local_as'              : 999,
+                'remote_as'             : 100,
+                'remote_ip_addr'        : '100.1.0.1',
+                'bfd_registration'      : '1',
+                'bfd_registration_mode' : 'single_hop'
+                }
+
+    ctrl_start = { 'mode' : 'start'}
+    ctrl_stop = { 'mode' : 'stop'}
+
+    tg_dut2_eth109_bgp_v4_vrf = tgapi.tg_bgp_config(tg = tg_dut2_eth109,
+        handle    = tg_result1['ipv4_handle'],
+        conf_var  = conf_var,
+        #route_var = route_var,
+        ctrl_var  = ctrl_start)
+    
+    st.log("tg_bgp_config result {}".format(tg_dut2_eth109_bgp_v4_vrf))
+
+    # Configuring the BGP router in vrf
+    conf_var = {'mode'                 : 'enable',
+                'active_connect_enable' : '1',
+                'enable_4_byte_as'      : '1',
+                'local_as'              : 998,
+                'remote_as'             : 100,
+                'remote_ip_addr'        : '100.2.0.1',
+                'bfd_registration'      : '1',
+                'bfd_registration_mode' : 'single_hop'
+                }
+
+    ctrl_start = { 'mode' : 'start'}
+    ctrl_stop = { 'mode' : 'stop'}
+
+    tg_dut2_eth110_bgp_v4_vrf = tgapi.tg_bgp_config(tg = tg_dut2_eth110,
+        handle    = tg_result2['ipv4_handle'],
+        conf_var  = conf_var,
+        #route_var = route_var,
+        ctrl_var  = ctrl_start)
+
+    st.log("tg_bgp_config result {}".format(tg_dut2_eth110_bgp_v4_vrf))
+
+def ingress_dut_ixia_config():
+    tg_dut1_eth109, tg_ph_dut1_eth109 = tgapi.get_handle_byname("T1D1P1") # ixia - 179 Eth109
+    tg_dut1_eth110, tg_ph_dut1_eth110 = tgapi.get_handle_byname("T1D1P2") # ixia - 179 Eth110
+
+    tg_result1 = tg_dut1_eth109.tg_interface_config(port_handle=tg_ph_dut1_eth109, mode='config', 
+        intf_ip_addr='101.1.0.2', 
+        gateway='101.1.0.1',
+        arp_send_req='1')
+    
+    st.log("Topology - Port ip Unconfig tg api result = {}".format(tg_result1))
+
+    tg_result2 = tg_dut1_eth110.tg_interface_config(port_handle=tg_ph_dut1_eth110, mode='config', 
+        intf_ip_addr='101.2.0.2', 
+        gateway='101.2.0.1',
+        arp_send_req='1')
+    
+    st.log("Topology - Port ip Unconfig tg api result = {}".format(tg_result2))
+
+    # Configuring the BGP router in vrf
+    conf_var = {'mode'                 : 'enable',
+                'active_connect_enable' : '1',
+                'enable_4_byte_as'      : '1',
+                'local_as'              : 999,
+                'remote_as'             : 100,
+                'remote_ip_addr'        : '101.1.0.1',
+                'bfd_registration'      : '1',
+                'bfd_registration_mode' : 'single_hop'
+                }
+    route_var = {'mode':'add', 
+                'num_routes': '10', 
+                'prefix': '201.1.0.0', 
+                'as_path':'as_seq:1'
+                }
+    ctrl_start = { 'mode' : 'start'}
+    ctrl_stop = { 'mode' : 'stop'}
+
+    tg_dut1_eth109_bgp_v4_vrf = tgapi.tg_bgp_config(tg = tg_dut1_eth109,
+        handle    = tg_result1['ipv4_handle'],
+        conf_var  = conf_var,
+        route_var = route_var,
+        ctrl_var  = ctrl_start)
+    
+    st.log("tg_bgp_config result {}".format(tg_dut1_eth109_bgp_v4_vrf))
+
+    # Configuring the BGP router in vrf
+    conf_var = {'mode'                 : 'enable',
+                'active_connect_enable' : '1',
+                'enable_4_byte_as'      : '1',
+                'local_as'              : 998,
+                'remote_as'             : 100,
+                'remote_ip_addr'        : '101.2.0.1',
+                'bfd_registration'      : '1',
+                'bfd_registration_mode' : 'single_hop'
+                }
+    route_var = {'mode':'add', 
+                'num_routes': '10', 
+                'prefix': '202.1.0.0', 
+                'as_path':'as_seq:1'
+                }
+    ctrl_start = { 'mode' : 'start'}
+    ctrl_stop = { 'mode' : 'stop'}
+
+    tg_dut1_eth110_bgp_v4_vrf = tgapi.tg_bgp_config(tg = tg_dut1_eth110,
+        handle    = tg_result2['ipv4_handle'],
+        conf_var  = conf_var,
+        route_var = route_var,
+        ctrl_var  = ctrl_start)
+
+    st.log("tg_bgp_config result {}".format(tg_dut1_eth110_bgp_v4_vrf))
 
 @pytest.fixture(scope="module", autouse=True)
 def esr_srvpn_module_hooks(request):
@@ -193,6 +308,8 @@ def esr_srvpn_module_hooks(request):
         data.tg_list[i].tg_traffic_control(action='reset',port_handle=data.tg_ph_list[i])
     
     duts_base_config()
+    egress_dut_ixia_config()
+    ingress_dut_ixia_config()
     # tg1_base_config()
     # tg2_base_config()
     # tg3_base_config()
@@ -243,195 +360,6 @@ def duts_base_config():
     #dict1 = {}
     #parallel.exec_parallel(True, [dut1, dut2], arp_api.show_arp, [dict1, dict1])
     #parallel.exec_parallel(True, [dut1, dut2], st.reboot, [dict1, dict1])
-
-def tg1_base_config():
-    tg1_p_handle = dict()
-
-    #init DUT1====TG
-    for i in range(4):
-        intf_handle_list = []
-        bgp_v4_handle_list = []
-        bgp_v6_handle_list = []
-        bfd_v4_handle_list = []
-        bfd_v6_handle_list = []
-        tg = data.tg_list[i]
-        tg_ph = data.tg_ph_list[i]
-        # create 3 devicegroup per ixia port: 1.vrf503; 2.vrf504; 3.vrf_bfd_scale
-        h1_1=tg.tg_interface_config(port_handle=tg_ph, mode='config', intf_ip_addr=data.tg1_vrf1_ip_addr[i], 
-                                gateway=data.dut1_vrf1_ip_addr[i], vlan='1', vlan_id=data.dut1_vrf1_id[i],
-                                ipv6_intf_addr=data.tg1_vrf1_ipv6_addr[i], ipv6_gateway=data.dut1_vrf1_ipv6_addr[i],ipv6_gateway_step='0::0',
-                                intf_ip_addr_step='0.0.0.1', ipv6_intf_addr_step = '::1', arp_send_req='1')
-        intf_handle_list.insert(0,h1_1)
-
-        h1_2=tg.tg_interface_config(port_handle=tg_ph, mode='config', intf_ip_addr=data.tg1_vrf2_ip_addr[i], 
-                                gateway=data.dut1_vrf2_ip_addr[i], vlan='1', vlan_id=data.dut1_vrf2_id[i],
-                                ipv6_intf_addr=data.tg1_vrf2_ipv6_addr[i], ipv6_gateway=data.dut1_vrf2_ipv6_addr[i],ipv6_gateway_step='0::0',
-                                intf_ip_addr_step='0.0.0.1', ipv6_intf_addr_step = '::1', arp_send_req='1')
-        intf_handle_list.insert(1,h1_2)
-
-        h1_3=tg.tg_interface_config(port_handle=tg_ph, mode='config', intf_ip_addr=data.tg1_bfdv4_start_ip_addr[i], 
-                                gateway=data.dut1_bfdv4_start_ip_addr[i], gateway_step="0.0.0.0",vlan='1', vlan_id='600', 
-                                ipv6_intf_addr=data.tg1_bfdv6_start_ip_addr[i], ipv6_gateway=data.dut1_bfdv6_start_ip_addr[i],ipv6_gateway_step='0::0',
-                                intf_ip_addr_step='0.0.0.1', ipv6_intf_addr_step = '::1', arp_send_req='1', device_group_multiplier='98')
-        intf_handle_list.insert(2,h1_3)
-
-        # Configuring the BGP router in vrf1
-        conf_var = {'mode'                 : 'enable',
-                    'active_connect_enable' : '1',
-                    'enable_4_byte_as'      : '1',
-                    'local_as'              : data.tg1_vrf_bgp_as,
-                    'remote_as'             : data.dut1_vrf_bgp_as,
-                    'remote_ip_addr'        : data.dut1_vrf1_ip_addr[i],
-                    'bfd_registration'      : '1',
-                    'bfd_registration_mode' : 'single_hop'
-                    }
-        route_var = {'mode':'add', 
-                    'num_routes': data.tg1_vrf1_router_count_list[i], 
-                    'prefix': data.tg1_vrf1_router_prefix_list[i], 
-                    'as_path':'as_seq:1'
-                    }
-        ctrl_start = { 'mode' : 'start'}
-        ctrl_stop = { 'mode' : 'stop'}
-
-        bgp_v4_vrf1 = tgapi.tg_bgp_config(tg = tg,
-            handle    = h1_1['ipv4_handle'],
-            conf_var  = conf_var,
-            #route_var = route_var,
-            ctrl_var  = ctrl_start)
-
-        conf_var = {'mode'                 : 'enable',
-                'active_connect_enable' : '1',
-                'enable_4_byte_as'      : '1',
-                'local_as'              : data.tg1_vrf_bgp_as,
-                'remote_as'             : data.dut1_vrf_bgp_as,
-                'remote_ipv6_addr'      : data.dut1_vrf1_ipv6_addr[i],
-                'ip_version'            : '6',
-                'bfd_registration'      : '1',
-                'bfd_registration_mode' : 'single_hop'
-                }
-        route_var['prefix'] = data.tg1_vrf1_router_v6_prefix_list[i]
-        
-        bgp_v6_vrf1 = tgapi.tg_bgp_config(tg = tg,
-            handle    = h1_1['ipv6_handle'],
-            conf_var  = conf_var,
-            #route_var = route_var,
-            ctrl_var  = ctrl_start)
-
-         # Configuring the BGP router in vrf2
-        conf_var = {'mode'                 : 'enable',
-                    'active_connect_enable' : '1',
-                    'enable_4_byte_as'      : '1',
-                    'local_as'              : data.tg1_vrf_bgp_as,
-                    'remote_as'             : data.dut1_vrf_bgp_as,
-                    'remote_ip_addr'        : data.dut1_vrf2_ip_addr[i],
-                    'bfd_registration'      : '1',
-                    'bfd_registration_mode' : 'single_hop'
-                    }
-        route_var = {'mode':'add', 
-                    'num_routes': data.tg1_vrf2_router_count_list[i], 
-                    'prefix': data.tg1_vrf2_router_prefix_list[i], 
-                    'as_path':'as_seq:1'
-                    }
-        bgp_v4_vrf2 = tgapi.tg_bgp_config(tg = tg,
-            handle    = h1_2['ipv4_handle'],
-            conf_var  = conf_var,
-            #route_var = route_var,
-            ctrl_var  = ctrl_start)
-        
-        conf_var = {'mode'                 : 'enable',
-                'active_connect_enable' : '1',
-                'enable_4_byte_as'      : '1',
-                'local_as'              : data.tg1_vrf_bgp_as,
-                'remote_as'             : data.dut1_vrf_bgp_as,
-                'remote_ipv6_addr'      : data.dut1_vrf2_ipv6_addr[i],
-                'ip_version'            : '6',
-                'bfd_registration'      : '1',
-                'bfd_registration_mode' : 'single_hop'
-                }
-        route_var['prefix'] = data.tg1_vrf2_router_v6_prefix_list[i]
-        
-        bgp_v6_vrf2 = tgapi.tg_bgp_config(tg = tg,
-            handle    = h1_2['ipv6_handle'],
-            conf_var  = conf_var,
-            #route_var = route_var,
-            ctrl_var  = ctrl_start)
-
-         # Configuring the BGP router in vrf_bfd_scale
-        conf_var = {'mode'                 : 'enable',
-                    'active_connect_enable' : '1',
-                    'enable_4_byte_as'      : '1',
-                    'local_as'              : data.tg1_vrf_bgp_as,
-                    'remote_as'             : data.dut1_vrf_bgp_as,
-                    'remote_ip_addr'        : data.dut1_bfdv4_start_ip_addr[i],
-                    'bfd_registration'      : '1',
-                    'bfd_registration_mode' : 'single_hop'
-                    }
- 
-        bgp_v4_vrf_bfd = tgapi.tg_bgp_config(tg = tg,
-            handle    = h1_3['ipv4_handle'],
-            conf_var  = conf_var,
-            #route_var = route_var,
-            ctrl_var  = ctrl_start)
-
-        conf_var = {'mode'                 : 'enable',
-                'active_connect_enable' : '1',
-                'enable_4_byte_as'      : '1',
-                'local_as'              : data.tg1_vrf_bgp_as,
-                'remote_as'             : data.dut1_vrf_bgp_as,
-                'remote_ipv6_addr'      : data.dut1_bfdv6_start_ip_addr[i],
-                'ip_version'            : '6',
-                'bfd_registration'      : '1',
-                'bfd_registration_mode' : 'single_hop'
-                }
-        route_var['prefix'] = "5001::1"
-        bgp_v6_vrf_bfd = tgapi.tg_bgp_config(tg = tg,
-            handle    = h1_3['ipv6_handle'],
-            conf_var  = conf_var,
-            #route_var = route_var,
-            ctrl_var  = ctrl_start)
-
-        #save bgp handle 
-        bgp_v4_handle_list.insert(0,bgp_v4_vrf1)
-        bgp_v4_handle_list.insert(1,bgp_v4_vrf2)
-        bgp_v4_handle_list.insert(2,bgp_v4_vrf_bfd)
-        bgp_v6_handle_list.insert(0,bgp_v6_vrf1)
-        bgp_v6_handle_list.insert(1,bgp_v6_vrf2)
-        bgp_v6_handle_list.insert(2,bgp_v6_vrf_bfd)
-
-        st.log("create ipv4 bfd for each vrf")
-        for j in range(3):
-            bfd_v4_handle = tg.tg_emulation_bfd_config(handle = intf_handle_list[j]['ipv4_handle'],
-                min_rx_interval                = data.dut_bfd_timer,
-                mode                           = "create",
-                detect_multiplier              = "3",
-                tx_interval                    = data.dut_bfd_timer,
-                interface_active               = "1",
-                router_active                  = "1",
-                ip_version                     = "4",
-                aggregate_bfd_session          = "1")
-            bfd_v4_handle_list.insert(j, bfd_v4_handle)
- 
-        st.log("create ipv6 bfd for each vrf")
-        for j in range(3):
-            bfd_v6_handle = tg.tg_emulation_bfd_config(handle = intf_handle_list[j]['ipv6_handle'],
-                min_rx_interval                = data.dut_bfd_timer,
-                mode                           = "create",
-                detect_multiplier              = "3",
-                tx_interval                    = data.dut_bfd_timer,
-                interface_active               = "1",
-                router_active                  = "1",
-                ip_version                     = "6",
-                aggregate_bfd_session          = "1")
-            bfd_v6_handle_list.insert(j, bfd_v6_handle)
-        #save handle per port
-        tg1_p_handle['intf'] = intf_handle_list
-        tg1_p_handle['bgp_v4'] = bgp_v4_handle_list
-        tg1_p_handle['bgp_v6'] = bgp_v6_handle_list
-        tg1_p_handle['bfd_v4'] = bfd_v4_handle_list
-        tg1_p_handle['bfd_v6'] = bfd_v6_handle_list
-        #save handle per dut
-        #data.tg1_handle.insert(i, tg1_p_handle)
-        data.tg1_handle[i]  = copy.deepcopy(tg1_p_handle)
     
 def tg1_bgp_router_add():
 
@@ -536,260 +464,6 @@ def tg3_bgp_router_add():
 
         data.tg3_handle[port_i]['route'] = copy.deepcopy(tg3_port_vrf_route_list)
 
-def tg2_base_config():
-    tg2_p_handle = dict()
-    #init DUT2====TG
-    for i in range(2):
-        intf_handle_list = [0,0,0]
-        bgp_v4_handle_list = [0,0,0]
-        bgp_v6_handle_list = [0,0,0]
-        bfd_v4_handle_list = [0,0,0]
-        bfd_v6_handle_list = [0,0,0]
-        tg = data.tg_list[i+4]
-        tg_ph = data.tg_ph_list[i+4]
-
-        # create 3 devicegroup per ixia port: 1.vrf503; 2.vrf504; 3.vrf_bfd_scale
-        h1_1=tg.tg_interface_config(port_handle=tg_ph, mode='config', intf_ip_addr=data.tg2_vrf1_ip_addr[i], 
-                                gateway=data.dut2_vrf1_ip_addr[i], vlan='1', vlan_id=data.dut1_vrf1_id[i],
-                                ipv6_intf_addr=data.tg2_vrf1_ipv6_addr[i],ipv6_gateway=data.dut2_vrf1_ipv6_addr[i],ipv6_gateway_step='0::0',
-                                intf_ip_addr_step='0.0.0.1', ipv6_intf_addr_step = '::1', arp_send_req='1')
-        intf_handle_list[0] = h1_1
-
-        h1_2=tg.tg_interface_config(port_handle=tg_ph, mode='config', intf_ip_addr=data.tg2_vrf2_ip_addr[i], 
-                                gateway=data.dut2_vrf2_ip_addr[i], vlan='1', vlan_id=data.dut1_vrf2_id[i], 
-                                ipv6_intf_addr=data.tg2_vrf2_ipv6_addr[i],ipv6_gateway=data.dut2_vrf2_ipv6_addr[i],ipv6_gateway_step='0::0',
-                                intf_ip_addr_step='0.0.0.1', ipv6_intf_addr_step = '::1', arp_send_req='1')
-        intf_handle_list[1] = h1_2
-
-        h1_3=tg.tg_interface_config(port_handle=tg_ph, mode='config', intf_ip_addr=data.tg2_bfdv4_start_ip_addr[i], 
-                                gateway=data.dut2_bfdv4_start_ip_addr[i], gateway_step="0.0.0.0",vlan='1', vlan_id='600', 
-                                ipv6_intf_addr=data.tg2_bfdv6_start_ip_addr[i],ipv6_gateway=data.dut2_bfdv6_start_ip_addr[i],ipv6_gateway_step='0::0',
-                                intf_ip_addr_step='0.0.0.1', ipv6_intf_addr_step = '::1', arp_send_req='1', device_group_multiplier='98')
-        intf_handle_list[2] = h1_3
-
-        # Configuring the BGP router in vrf1
-        conf_var = {'mode'                 : 'enable',
-                    'active_connect_enable' : '1',
-                    'enable_4_byte_as'      : '1',
-                    'local_as'              : data.tg2_vrf_bgp_as,
-                    'remote_as'             : data.dut2_vrf_bgp_as,
-                    'remote_ip_addr'        : data.dut2_vrf1_ip_addr[i],
-                    'bfd_registration'      : '1',
-                    'bfd_registration_mode' : 'single_hop'
-                    }
-        route_var = {'mode':'add', 
-                    'num_routes': data.tg2_router_count, 
-                    'prefix': data.tg2_vrf1_router_prefix, 
-                    'as_path':'as_seq:1'
-                    }
-        ctrl_start = { 'mode' : 'start'}
-        ctrl_stop = { 'mode' : 'stop'}
-
-        bgp_v4_vrf1 = tgapi.tg_bgp_config(tg = tg,
-            handle    = h1_1['ipv4_handle'],
-            conf_var  = conf_var,
-            #route_var = route_var,
-            ctrl_var  = ctrl_start)
-        
-        conf_var = {'mode'                 : 'enable',
-                'active_connect_enable' : '1',
-                'enable_4_byte_as'      : '1',
-                'local_as'              : data.tg2_vrf_bgp_as,
-                'remote_as'             : data.dut2_vrf_bgp_as,
-                'remote_ipv6_addr'      : data.dut2_vrf1_ipv6_addr[i],
-                'ip_version'            : '6',
-                'bfd_registration'      : '1',
-                'bfd_registration_mode' : 'single_hop'
-                }
-        bgp_v6_vrf1 = tgapi.tg_bgp_config(tg = tg,
-            handle    = h1_1['ipv6_handle'],
-            conf_var  = conf_var,
-            #route_var = route_var,
-            ctrl_var  = ctrl_start)
-
-         # Configuring the BGP router in vrf2
-        conf_var = {'mode'                 : 'enable',
-                    'active_connect_enable' : '1',
-                    'enable_4_byte_as'      : '1',
-                    'local_as'              : data.tg2_vrf_bgp_as,
-                    'remote_as'             : data.dut2_vrf_bgp_as,
-                    'remote_ip_addr'        : data.dut2_vrf2_ip_addr[i],
-                    'bfd_registration'      : '1',
-                    'bfd_registration_mode' : 'single_hop'
-                    }
-
-        bgp_v4_vrf2 = tgapi.tg_bgp_config(tg = tg,
-            handle    = h1_2['ipv4_handle'],
-            conf_var  = conf_var,
-            #route_var = route_var,
-            ctrl_var  = ctrl_start)
-
-        conf_var = {'mode'                 : 'enable',
-                'active_connect_enable' : '1',
-                'enable_4_byte_as'      : '1',
-                'local_as'              : data.tg2_vrf_bgp_as,
-                'remote_as'             : data.dut2_vrf_bgp_as,
-                'remote_ipv6_addr'      : data.dut2_vrf2_ipv6_addr[i],
-                'ip_version'            : '6',
-                'bfd_registration'      : '1',
-                'bfd_registration_mode' : 'single_hop'
-                }
-        bgp_v6_vrf2 = tgapi.tg_bgp_config(tg = tg,
-            handle    = h1_2['ipv6_handle'],
-            conf_var  = conf_var,
-            #route_var = route_var,
-            ctrl_var  = ctrl_start)
-
-         # Configuring the BGP router in vrf_bfd_scale
-        conf_var = {'mode'                 : 'enable',
-                    'active_connect_enable' : '1',
-                    'enable_4_byte_as'      : '1',
-                    'local_as'              : data.tg2_vrf_bgp_as,
-                    'remote_as'             : data.dut2_vrf_bgp_as,
-                    'remote_ip_addr'        : data.dut2_bfdv4_start_ip_addr[i],
-                    'bfd_registration'      : '1',
-                    'bfd_registration_mode' : 'single_hop'
-                    }
-        route_var = {'mode':'add', 
-                    'num_routes': "10000", 
-                    'prefix': "210.0.0.0", 
-                    'as_path':'as_seq:1'
-                    }
-        bgp_v4_vrf_bfd = tgapi.tg_bgp_config(tg = tg,
-            handle    = h1_3['ipv4_handle'],
-            conf_var  = conf_var,
-            #route_var = route_var,
-            ctrl_var  = ctrl_start)
-
-        route_var['prefix'] = "4001::1"
-        conf_var = {'mode'                 : 'enable',
-                'active_connect_enable' : '1',
-                'enable_4_byte_as'      : '1',
-                'local_as'              : data.tg2_vrf_bgp_as,
-                'remote_as'             : data.dut2_vrf_bgp_as,
-                'remote_ipv6_addr'      : data.dut2_bfdv6_start_ip_addr[i],
-                'ip_version'            : '6',
-                'bfd_registration'      : '1',
-                'bfd_registration_mode' : 'single_hop'
-                }
-        bgp_v6_vrf_bfd = tgapi.tg_bgp_config(tg = tg,
-            handle    = h1_3['ipv6_handle'],
-            conf_var  = conf_var,
-            #route_var = route_var,
-            ctrl_var  = ctrl_start)
-
-        #save bgp handle 
-        bgp_v4_handle_list[0] = bgp_v4_vrf1
-        bgp_v4_handle_list[1] = bgp_v4_vrf2
-        bgp_v4_handle_list[2] = bgp_v4_vrf_bfd
-        bgp_v6_handle_list[0] = bgp_v6_vrf1
-        bgp_v6_handle_list[1] = bgp_v6_vrf2
-        bgp_v6_handle_list[2] = bgp_v6_vrf_bfd
-
-        st.log("create ipv4 bfd for each vrf")
-        for j in range(3):
-            bfd_v4_handle = tg.tg_emulation_bfd_config(handle = intf_handle_list[j]['ipv4_handle'],
-                min_rx_interval                = data.dut_bfd_timer,
-                mode                           = "create",
-                detect_multiplier              = "3",
-                tx_interval                    = data.dut_bfd_timer,
-                interface_active               = "1",
-                router_active                  = "1",
-                ip_version                     = "4",
-                aggregate_bfd_session          = "1")
-            bfd_v4_handle_list[j] = bfd_v4_handle
-
-        st.log("create ipv6 bfd for each vrf")
-        for j in range(3):
-            bfd_v6_handle = tg.tg_emulation_bfd_config(handle = intf_handle_list[j]['ipv6_handle'],
-                min_rx_interval                = data.dut_bfd_timer,
-                mode                           = "create",
-                detect_multiplier              = "3",
-                tx_interval                    = data.dut_bfd_timer,
-                interface_active               = "1",
-                router_active                  = "1",
-                ip_version                     = "6",
-                aggregate_bfd_session          = "1")
-            bfd_v6_handle_list[j] = bfd_v6_handle
-
-        #save handle per port
-        tg2_p_handle['intf'] = intf_handle_list
-        tg2_p_handle['bgp_v4'] = bgp_v4_handle_list
-        tg2_p_handle['bgp_v6'] = bgp_v6_handle_list
-        tg2_p_handle['bfd_v4'] = bfd_v4_handle_list
-        tg2_p_handle['bfd_v6'] = bfd_v6_handle_list
-        #save handle per dut
-        #data.tg1_handle.insert(i, tg1_p_handle)
-        data.tg2_handle[i]  = copy.deepcopy(tg2_p_handle)
-
-def tg3_base_config():
-    tg3_p_handle = dict()
-    #init dut3====TG
-    for i in range(1):
-        intf_handle_list = [0,0]
-        bgp_v4_handle_list = [0,0]
-        bgp_v6_handle_list = [0,0]
-        tg = data.tg_list[i+6]
-        tg_ph = data.tg_ph_list[i+6]
-
-        # create 3 devicegroup per ixia port: 1.vrf503; 2.vrf504; 3.vrf_bfd_scale
-        h1_1=tg.tg_interface_config(port_handle=tg_ph, mode='config', intf_ip_addr=data.tg3_vrf1_ip_addr[i], 
-                                gateway=data.dut3_vrf1_ip_addr[i], vlan='1', vlan_id=data.dut3_vrf1_id[i], arp_send_req='1')
-        intf_handle_list[0] = h1_1
-
-        h1_2=tg.tg_interface_config(port_handle=tg_ph, mode='config', intf_ip_addr=data.tg3_vrf2_ip_addr[i], 
-                                gateway=data.dut3_vrf2_ip_addr[i], vlan='1', vlan_id=data.dut3_vrf2_id[i], arp_send_req='1')
-        intf_handle_list[1] = h1_2
-
-        # Configuring the BGP router in vrf1
-        conf_var = {'mode'                 : 'enable',
-                    'active_connect_enable' : '1',
-                    'enable_4_byte_as'      : '1',
-                    'local_as'              : data.tg3_vrf_bgp_as,
-                    'remote_as'             : data.dut3_vrf_bgp_as,
-                    'remote_ip_addr'        : data.dut3_vrf1_ip_addr[i],
-                    'bfd_registration'      : '1',
-                    'bfd_registration_mode' : 'single_hop'
-                    }
-        route_var = {'mode':'add', 
-                    'num_routes': data.tg3_router_count, 
-                    'prefix': data.tg3_vrf1_router_prefix, 
-                    'as_path':'as_seq:1'
-                    }
-        ctrl_start = { 'mode' : 'start'}
-        ctrl_stop = { 'mode' : 'stop'}
-
-        bgp_v4_vrf1 = tgapi.tg_bgp_config(tg = tg,
-            handle    = h1_1['ipv4_handle'],
-            conf_var  = conf_var,
-            #route_var = route_var,
-            ctrl_var  = ctrl_start)
-
-         # Configuring the BGP router in vrf2
-        conf_var = {'mode'                 : 'enable',
-                    'active_connect_enable' : '1',
-                    'enable_4_byte_as'      : '1',
-                    'local_as'              : data.tg3_vrf_bgp_as,
-                    'remote_as'             : data.dut3_vrf_bgp_as,
-                    'remote_ip_addr'        : data.dut3_vrf2_ip_addr[i],
-                    'bfd_registration'      : '1',
-                    'bfd_registration_mode' : 'single_hop'
-                    }
-        bgp_v4_vrf2 = tgapi.tg_bgp_config(tg = tg,
-            handle    = h1_2['ipv4_handle'],
-            conf_var  = conf_var,
-            #route_var = route_var,
-            ctrl_var  = ctrl_start)
-        #save bgp handle 
-        bgp_v4_handle_list[0] = bgp_v4_vrf1
-        bgp_v4_handle_list[1] = bgp_v4_vrf2
-
-        #save handle per port
-        tg3_p_handle['intf'] = intf_handle_list
-        tg3_p_handle['bgp_v4'] = bgp_v4_handle_list
-
-        #save handle per dut
-        data.tg3_handle[i]  = copy.deepcopy(tg3_p_handle)
 
 def vrfs_traffic_add():
     data.my_dut_list = st.get_dut_names()
@@ -883,64 +557,16 @@ def vrfs_traffic_add():
                     transmit_mode='continuous', length_mode='fixed',frame_size='1500', rate_percent=data.traffic_rate_precent)
     data.streams['port7_to_port4_vrf_502'] = stream['stream_id']
 
-def vrfs_traffic_v6_add():
-    data.my_dut_list = st.get_dut_names()
-    dut1 = data.my_dut_list[0]
-    dut2 = data.my_dut_list[1]
-    result = 0
-
-    # port 1(TG1_1)<===>port 5(TG2_1) vrf503
-    vrf_id = 0
-    src_handle = data.tg1_handle[0]['route_v6'][vrf_id]
-    tg = data.tg_list[0]
-    tg_ph = data.tg_ph_list[0]
-    tg_ph_2 = data.tg_ph_list[4]
-    dst_handle_list = [data.tg2_handle[0]['route_v6'][vrf_id]['handle'], data.tg2_handle[1]['route_v6'][vrf_id]['handle']]
-    stream = tg.tg_traffic_config(port_handle=tg_ph, port_handle2=tg_ph_2, emulation_src_handle=src_handle['handle'],
-                emulation_dst_handle=dst_handle_list, circuit_endpoint_type='ipv6',mode='create',
-                transmit_mode='continuous', length_mode='fixed',frame_size='1500', rate_percent=data.traffic_rate_precent)
-    data.streams['port1_to_port5_vrf_503_v6'] = stream['stream_id']
-
-    tg = data.tg_list[4]
-    vrf_id = 0
-    src_handle = data.tg2_handle[0]['route_v6'][vrf_id]
-    dst_handle_list = [data.tg1_handle[0]['route_v6'][vrf_id]['handle'], data.tg1_handle[1]['route_v6'][vrf_id]['handle']]
-    stream = tg.tg_traffic_config(port_handle=tg_ph_2, port_handle2=tg_ph, emulation_src_handle=src_handle['handle'],
-                    emulation_dst_handle=dst_handle_list, circuit_endpoint_type='ipv6',mode='create',
-                    transmit_mode='continuous', length_mode='fixed',frame_size='1500', rate_percent=data.traffic_rate_precent)
-    data.streams['port5_to_port1_vrf_503_v6'] = stream['stream_id']
-
-
-    # port 2(TG1_2)<===>port 6(TG2_2) vrf504
-    vrf_id = 1
-    src_handle = data.tg1_handle[1]['route_v6'][vrf_id]
-    dst_handle_list = [data.tg2_handle[0]['route_v6'][vrf_id]['handle'], data.tg2_handle[1]['route_v6'][vrf_id]['handle']]
-    tg = data.tg_list[1]
-    tg_ph = data.tg_ph_list[1]
-    tg_ph_2 = data.tg_ph_list[5]
-    stream = tg.tg_traffic_config(port_handle=tg_ph, port_handle2=tg_ph_2, emulation_src_handle=src_handle['handle'],
-                emulation_dst_handle=dst_handle_list, circuit_endpoint_type='ipv6',mode='create',
-                transmit_mode='continuous', length_mode='fixed',frame_size='1500', rate_percent=data.traffic_rate_precent)
-    data.streams['port2_to_port6_vrf_504_v6'] = stream['stream_id']
-
-    tg = data.tg_list[5]
-    vrf_id = 1
-    src_handle = data.tg2_handle[1]['route_v6'][vrf_id]
-    dst_handle_list = [data.tg1_handle[0]['route_v6'][vrf_id]['handle'], data.tg1_handle[1]['route_v6'][vrf_id]['handle']]
-    stream = tg.tg_traffic_config(port_handle=tg_ph_2, port_handle2=tg_ph, emulation_src_handle=src_handle['handle'],
-                    emulation_dst_handle=dst_handle_list, circuit_endpoint_type='ipv6',mode='create',
-                    transmit_mode='continuous', length_mode='fixed',frame_size='1500', rate_percent=data.traffic_rate_precent)
-    data.streams['port6_to_port2_vrf_504_v6'] = stream['stream_id']
-
 
 def l3_base_unconfig():
 
     data.my_dut_list = st.get_dut_names()
     dut1 = data.my_dut_list[0]
+    dut2 = data.my_dut_list[1]
 
     st.log("remove l3 base config.")
-    #ipfeature.clear_ip_configuration(st.get_dut_names())
-    #vapi.clear_vlan_configuration(st.get_dut_names())
+    ipfeature.clear_ip_configuration(st.get_dut_names())
+    vapi.clear_vlan_configuration(st.get_dut_names())
     #command = "show arp"
     #st.show(dut1, command)
 

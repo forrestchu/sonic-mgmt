@@ -3,8 +3,10 @@ import pytest
 import sys
 import json
 import netaddr
+import time,datetime
 from collections import OrderedDict
 from utilities import parallel
+import apis.routing.bgp as bgpfeature
 
 from spytest import st, tgapi, SpyTestDict
 from spytest.utils import filter_and_select
@@ -52,6 +54,8 @@ from esr_vars import data
 
 #data = SpyTestDict()
 
+data.srv6 = {}
+
 def add_bmp_config_background(dut):
     st.log("config global bmp")
     st.config(dut, "cli -c 'configure terminal' -c 'bmp' -c 'bmp target bmp01' -c 'bmp connect 192.0.0.250 port 5555 min-retry 500 max-retry 2000'")
@@ -59,6 +63,54 @@ def add_bmp_config_background(dut):
     st.config(dut, "cli -c 'configure terminal' -c 'bmp' -c 'bmp target bmp01' -c 'bmp monitor ipv6 unicast adj-in pre-policy'")
     st.config(dut, "cli -c 'configure terminal' -c 'bmp' -c 'bmp target bmp01' -c 'bmp monitor ipv4 unicast adj-in post-policy '")
     st.config(dut, "cli -c 'configure terminal' -c 'bmp' -c 'bmp target bmp01' -c 'bmp monitor ipv6 unicast adj-in post-policy '")
+
+def check_bcmcmd_route_count(dut, loopCnt, ipType, defcount, expcount):
+    flag = 0
+    iter = 1
+    while iter <= loopCnt:
+        if ipType == "ipv4":
+            curr_count = asicapi.get_ipv4_route_count(dut)
+        elif ipType == "ipv6":
+            curr_count = asicapi.get_ipv6_route_count(dut)
+
+        route_cnt = int(curr_count) - int(defcount)
+
+        st.log("Learnt route count after iteration {} : {}".format(iter,route_cnt))
+
+        if int(route_cnt) == int(expcount):
+            flag = 1
+            break
+        iter = iter+1
+        time.sleep(1)
+
+    if flag:
+        return True
+    else:
+        return False
+
+def verify_bgp_route_count(dut,family='ipv4',shell="sonic",**kwargs):
+    if family.lower() == 'ipv4':
+        output = bgpfeature.show_bgp_ipv4_summary(dut)
+    if family.lower() == 'ipv6':
+        output = bgpfeature.show_bgp_ipv6_summary(dut)
+    st.debug(output)
+    if 'neighbor' in kwargs and 'state' in kwargs:
+        match = {'neighbor': kwargs['neighbor']}
+        try:
+            entries = filter_and_select(output, None, match)[0]
+        except Exception:
+            st.log("ERROR 1")
+        if entries['state']:
+            if kwargs['state'] == 'Established':
+                if entries['state'].isdigit():
+                    return entries['state']
+                else:
+                    return 0
+            else:
+                return 0
+        else:
+            return 0
+    return 0
 
 def verify_ping(src_obj,port_handle,dev_handle,dst_ip,ping_count=5,exp_count=5):
     ping_count,exp_count = int(ping_count),int(exp_count)
@@ -189,9 +241,7 @@ def egress_dut_ixia_config():
                 'enable_4_byte_as'      : '1',
                 'local_as'              : 999,
                 'remote_as'             : 100,
-                'remote_ip_addr'        : '100.1.0.1',
-                'bfd_registration'      : '1',
-                'bfd_registration_mode' : 'single_hop'
+                'remote_ip_addr'        : '100.1.0.1'
                 }
 
     ctrl_start = { 'mode' : 'start'}
@@ -211,9 +261,7 @@ def egress_dut_ixia_config():
                 'enable_4_byte_as'      : '1',
                 'local_as'              : 998,
                 'remote_as'             : 100,
-                'remote_ip_addr'        : '100.2.0.1',
-                'bfd_registration'      : '1',
-                'bfd_registration_mode' : 'single_hop'
+                'remote_ip_addr'        : '100.2.0.1'
                 }
 
     ctrl_start = { 'mode' : 'start'}
@@ -227,6 +275,13 @@ def egress_dut_ixia_config():
 
     st.log("tg_bgp_config result {}".format(tg_dut2_eth110_bgp_v4_vrf))
 
+    data.srv6['tg_dut2_eth109']=tg_dut2_eth109
+    data.srv6['tg_dut2_eth110']=tg_dut2_eth110
+    data.srv6['tg_ph_dut2_eth109']=tg_ph_dut2_eth109
+    data.srv6['tg_ph_dut2_eth110']=tg_ph_dut2_eth110
+    data.srv6['bgpv4_handle_dut2_eth109']=tg_result1['ipv4_handle']
+    data.srv6['bgpv4_handle_dut2_eth110']=tg_result2['ipv4_handle']
+
 def ingress_dut_ixia_config():
     tg_dut1_eth109, tg_ph_dut1_eth109 = tgapi.get_handle_byname("T1D1P1") # ixia - 179 Eth109
     tg_dut1_eth110, tg_ph_dut1_eth110 = tgapi.get_handle_byname("T1D1P2") # ixia - 179 Eth110
@@ -234,6 +289,8 @@ def ingress_dut_ixia_config():
     tg_result1 = tg_dut1_eth109.tg_interface_config(port_handle=tg_ph_dut1_eth109, mode='config', 
         intf_ip_addr='101.1.0.2', 
         gateway='101.1.0.1',
+        ipv6_intf_addr='2000:0:1:1:0:0:0:2', 
+        ipv6_gateway='2000:0:1:1:0:0:0:1',
         arp_send_req='1')
     
     st.log("Topology - Port ip Unconfig tg api result = {}".format(tg_result1))
@@ -241,6 +298,8 @@ def ingress_dut_ixia_config():
     tg_result2 = tg_dut1_eth110.tg_interface_config(port_handle=tg_ph_dut1_eth110, mode='config', 
         intf_ip_addr='101.2.0.2', 
         gateway='101.2.0.1',
+        ipv6_intf_addr='2000:0:0:1:0:0:0:2', 
+        ipv6_gateway='2000:0:0:1:0:0:0:1',
         arp_send_req='1')
     
     st.log("Topology - Port ip Unconfig tg api result = {}".format(tg_result2))
@@ -251,15 +310,22 @@ def ingress_dut_ixia_config():
                 'enable_4_byte_as'      : '1',
                 'local_as'              : 999,
                 'remote_as'             : 100,
-                'remote_ip_addr'        : '101.1.0.1',
-                'bfd_registration'      : '1',
-                'bfd_registration_mode' : 'single_hop'
+                'remote_ip_addr'        : '101.1.0.1'
                 }
-    route_var = {'mode':'add', 
-                'num_routes': '10', 
-                'prefix': '201.1.0.0', 
-                'as_path':'as_seq:1'
-                }
+    route_var = [{'mode':'add', 
+                'ip_version':'6', 
+                'num_routes':'100', 
+                'prefix':'3400:1::', 
+                'as_path':'as_seq:1', 
+                'ipv6_prefix_length': 128
+                }, 
+                {'mode':'add', 
+                'ip_version':'6', 
+                'num_routes':'100', 
+                'prefix':'3300:1::', 
+                'as_path':'as_seq:1', 
+                'ipv6_prefix_length': 64
+                }]
     ctrl_start = { 'mode' : 'start'}
     ctrl_stop = { 'mode' : 'stop'}
 
@@ -277,12 +343,10 @@ def ingress_dut_ixia_config():
                 'enable_4_byte_as'      : '1',
                 'local_as'              : 998,
                 'remote_as'             : 100,
-                'remote_ip_addr'        : '101.2.0.1',
-                'bfd_registration'      : '1',
-                'bfd_registration_mode' : 'single_hop'
+                'remote_ip_addr'        : '101.2.0.1'
                 }
     route_var = {'mode':'add', 
-                'num_routes': '10', 
+                'num_routes': '100', 
                 'prefix': '202.1.0.0', 
                 'as_path':'as_seq:1'
                 }
@@ -296,6 +360,18 @@ def ingress_dut_ixia_config():
         ctrl_var  = ctrl_start)
 
     st.log("tg_bgp_config result {}".format(tg_dut1_eth110_bgp_v4_vrf))
+
+    data.srv6['tg_dut1_eth109']=tg_dut1_eth109
+    data.srv6['tg_dut1_eth110']=tg_dut1_eth110
+    data.srv6['tg_ph_dut1_eth109']=tg_ph_dut1_eth109
+    data.srv6['tg_ph_dut1_eth110']=tg_ph_dut1_eth110
+    data.srv6['tg_dut1_eth109_result1']=tg_result1
+    data.srv6['tg_dut1_eth110_result1']=tg_result2
+    data.srv6['bgpv4_handle_dut1_eth109']=tg_result1['ipv4_handle']
+    data.srv6['bgpv4_handle_dut1_eth110']=tg_result2['ipv4_handle']
+    data.srv6['tg_dut1_eth109_bgp_v4_vrf']=tg_dut1_eth109_bgp_v4_vrf
+    data.srv6['tg_dut1_eth110_bgp_v4_vrf']=tg_dut1_eth110_bgp_v4_vrf
+
 
 @pytest.fixture(scope="module", autouse=True)
 def esr_srvpn_module_hooks(request):
@@ -647,7 +723,8 @@ def test_base_config_srvpn_locator_01():
     st.config(dut1, 'vtysh -c "config t" -c "vrf {}" -c "ip route 192.100.1.0/24 blackhole"'.format(vrf))
     st.config(dut1, 'vtysh -c "config t" -c "router bgp {} vrf {}" -c "address-family ipv4 unicast" -c "network 192.100.1.0/24"'.format(bgp_as, vrf))
 
-    records = st.show(dut1, "show bgp ipv4 vpn", type="alicli")
+    cmd = "cli -c 'no page' -c 'show bgp ipv4 vpn'"
+    records = st.show(dut1, cmd)
 
     expected_vpn = {
         'ip_address':'192.100.1.0/24',
@@ -716,7 +793,9 @@ def test_base_config_srvpn_locator_01():
 
     st.config(dut1, 'cli -c "config t" -c "router bgp {} vrf {}" -c "no srv6-locator"'.format(vrf_name, bgp_as))
 
-    records = st.show(dut1, "show bgp ipv4 vpn", type='alicli')
+    # records = st.show(dut1, "show bgp ipv4 vpn", type='alicli')
+    cmd = "cli -c 'no page' -c 'show bgp ipv4 vpn'"
+    records = st.show(dut1, cmd)
 
     expected_vpn = {
         'ip_address':'192.100.1.0/24',
@@ -774,7 +853,10 @@ def test_base_config_srvpn_locator_01():
     locator_name = 'lsid1'
     st.config(dut1, 'cli -c "config t" -c "router bgp {} vrf {}" -c "srv6-locator {}"'.format(bgp_as, vrf_name, locator_name))
     st.wait(10)
-    records = st.show(dut1, "show bgp ipv4 vpn", type='alicli')
+    # records = st.show(dut1, "show bgp ipv4 vpn", type='alicli')
+    cmd = "cli -c 'no page' -c 'show bgp ipv4 vpn'"
+    records = st.show(dut1, cmd)
+
     expected_vpn = {
         'ip_address':'192.100.1.0/24',
         'sid':'fd00:201:201:fff1:11::',
@@ -803,7 +885,10 @@ def test_base_config_srvpn_locator_01():
         st.report_fail("step 8 test_base_config_srvpn_locator_01_failed")
 
 # check  remote router 
-    records = st.show(dut2, "show bgp ipv4 vpn", type='alicli')
+    # records = st.show(dut2, "show bgp ipv4 vpn", type='alicli')
+    cmd = "cli -c 'no page' -c 'show bgp ipv4 vpn'"
+    records = st.show(dut1, cmd)
+
 # OSPREY-MC-B09-13-178.EU6# show bgp ipv4 vpn
 # BGP table version is 1, local router ID is 1.1.1.178, vrf id 0
 # Default local pref 100, local AS 100
@@ -825,7 +910,7 @@ def test_base_config_srvpn_locator_01():
         'label':'3',
         'status_code':'*>i',
         'rd':'2:2',
-        'un':'2000::179'
+        'un':'0.0.0.0'
     }
 
     if not records or len(records)==0:
@@ -846,20 +931,172 @@ def test_base_config_srvpn_locator_01():
         st.log(records)
         st.report_fail("step 8 remote test_base_config_srvpn_locator_01_failed")
 
-# OSPREY-MC-B09-13-178.EU6# show bgp ipv4 vpn 192.100.1.0
-# BGP routing table entry for 2:2:192.100.1.0/24, version 1
-# not allocated
-# Paths: (1 available, best #1)
-#   Not advertised to any peer
-#   Local
-#     0.0.0.0 from 2000::179 (1.1.1.179)
-#       Origin IGP, metric 0, localpref 100, valid, internal, best (First path received)
-#       Extended Community: RT:3:3
-#       Remote label: 3
-#       Remote SID: fd00:201:201:fff1:11::
-#       Last update: Mon Nov  7 09:12:54 2022
-# OSPREY-MC-B09-13-178.EU6# 
-
     st.report_pass("test_case_passed")
 
 
+## 2k locator , base traffic and route learning
+@pytest.mark.community
+@pytest.mark.community_pass
+def test_base_config_srvpn_2kl_traffic_and_route_02():
+    # data.srv6['tg_dut2_eth109']=tg_dut2_eth109
+    # data.srv6['tg_dut2_eth110']=tg_dut2_eth110
+    # data.srv6['tg_ph_dut2_eth109']=tg_ph_dut2_eth109
+    # data.srv6['tg_ph_dut2_eth110']=tg_ph_dut2_eth110
+    # data.srv6['bgpv4_handle_dut2_eth109']=tg_result1['ipv4_handle']
+    # data.srv6['bgpv4_handle_dut2_eth110']=tg_result2['ipv4_handle']
+    # data.srv6['tg_dut1_eth109']=tg_dut1_eth109
+    # data.srv6['tg_dut1_eth110']=tg_dut1_eth110
+    # data.srv6['tg_ph_dut1_eth109']=tg_ph_dut1_eth109
+    # data.srv6['tg_ph_dut1_eth110']=tg_ph_dut1_eth110
+    # data.srv6['bgpv4_handle_dut1_eth109']=tg_result1['ipv4_handle']
+    # data.srv6['bgpv4_handle_dut1_eth110']=tg_result2['ipv4_handle']
+
+    data.my_dut_list = st.get_dut_names()
+    dut1 = data.my_dut_list[0] #179
+    dut2 = data.my_dut_list[1] #178
+    st.banner("test_base_config_srvpn_2kl_traffic_and_route_02 begin")
+
+    # 179 load 2k locator config
+    curr_path = os.getcwd()
+    json_file_dut = curr_path+"/routing/SRv6/2k_locators.json"
+    st.apply_files(dut1, [json_file_dut])
+    reboot.config_save_reboot(dut1)
+    st.banner("2k locators Loaded completed")
+    
+
+    def_v4_route_count_d1 = asicapi.get_ipv4_route_count(dut1)
+    def_v6_route_count_d1 = asicapi.get_ipv6_route_count(dut1)
+    def_v4_route_count_d2 = asicapi.get_ipv4_route_count(dut2)
+    def_v6_route_count_d2 = asicapi.get_ipv6_route_count(dut2)
+
+    # check redis db , check route 
+
+    # Time taken for route installation
+    # Taking the start time timestamp
+    tg1 = data.srv6['tg_dut1_eth109']
+    tg2 = data.srv6['tg_dut1_eth110']
+    ingress_bgp_rtr1 = data.srv6['tg_dut1_eth109_bgp_v4_vrf']
+    ingress_bgp_rtr2 = data.srv6['tg_dut1_eth110_bgp_v4_vrf']
+
+    # st.banner("Time taken for intsalling {} v4 routes ".format('50w') +str(time_in_secs.seconds))
+    # st.banner("Measuring time taken for route withdraw of {} ipv4 routes on HWSKU {}".format(data.test_bgp_route_count,hwsku_under_test))
+
+
+    start_time = datetime.datetime.now()
+
+    # Starting the BGP router on TG.
+
+    # Withdraw the routes.
+    ctrl1=tg1.tg_bgp_routes_control(handle=ingress_bgp_rtr1['conf']['handle'], route_handle=ingress_bgp_rtr1['route'][0]['handle'], mode='withdraw')
+    st.log("TR_CTRL: "+str(ctrl1))
+
+    # config ixia route and check route learning performance
+    if not check_bcmcmd_route_count(dut1, 100, "ipv4", def_v4_route_count_d1, 0):
+        #st.report_fail("route_table_not_cleared_by_withdraw_from_tg")
+        st.log("route_table_not_cleared_by_withdraw_from_tg")
+
+    # config ixia route and check route learning performance
+    if not check_bcmcmd_route_count(dut2, 100, "ipv4", def_v4_route_count_d2, 0):
+        #st.report_fail("route_table_not_cleared_by_withdraw_from_tg")
+        st.log("route_table_not_cleared_by_withdraw_from_tg")
+
+    count = verify_bgp_route_count(dut1, family='ipv4', neighbor=data.neigh_ip_addr, state='Established')
+    st.log("Route count: "+str(count))
+    if int(count) != 0:
+        st.report_fail("route_table_not_cleared_by_withdraw_from_tg")
+  
+    end_time = datetime.datetime.now()
+
+    st.log("Start Time: {}".format(start_time))
+    st.log("End Time: {}".format(end_time))
+    time_in_secs = end_time - start_time
+
+     
+    # traffic test
+    tr1=tg1.tg_traffic_config(port_handle=data.srv6['tg_ph_dut1_eth109'], emulation_src_handle=data.srv6['tg_dut1_eth109_result1']['handle'],
+                emulation_dst_handle=ingress_bgp_rtr1['route'][0]['handle'], circuit_endpoint_type='ipv4',
+                mode='create', transmit_mode='continuous', length_mode='fixed',
+                rate_pps=data.traffic_rate_pps, enable_stream_only_gen='0')
+
+    # Starting the TG traffic after clearing the DUT counters
+    papi.clear_interface_counters(dut1)
+    tg1.tg_traffic_control(action="run",handle=tr1['stream_id'])    
+
+
+## 100 vrf test
+@pytest.mark.community
+@pytest.mark.community_pass
+def test_base_config_srvpn_multi_vrf_03():
+    
+    # ixia config 100 subinterface 
+    
+    data.my_dut_list = st.get_dut_names()
+    dut1 = data.my_dut_list[0] #179
+    dut2 = data.my_dut_list[1] #178
+    st.banner("test_base_config_srvpn_2kl_traffic_and_route_02 begin")
+
+    # 179 load 2k locator config
+    curr_path = os.getcwd()
+    json_file_dut = curr_path+"/routing/SRv6/2k_locators.json"
+    st.apply_files(dut1, [json_file_dut])
+    reboot.config_save_reboot(dut1)
+    st.banner("2k locators Loaded completed")
+    
+
+    def_v4_route_count_d1 = asicapi.get_ipv4_route_count(dut1)
+    def_v6_route_count_d1 = asicapi.get_ipv6_route_count(dut1)
+    def_v4_route_count_d2 = asicapi.get_ipv4_route_count(dut2)
+    def_v6_route_count_d2 = asicapi.get_ipv6_route_count(dut2)
+
+    # check redis db , check route 
+
+    # Time taken for route installation
+    # Taking the start time timestamp
+    tg1 = data.srv6['tg_dut1_eth109']
+    tg2 = data.srv6['tg_dut1_eth110']
+    ingress_bgp_rtr1 = data.srv6['tg_dut1_eth109_bgp_v4_vrf']
+    ingress_bgp_rtr2 = data.srv6['tg_dut1_eth110_bgp_v4_vrf']
+
+    # st.banner("Time taken for intsalling {} v4 routes ".format('50w') +str(time_in_secs.seconds))
+    # st.banner("Measuring time taken for route withdraw of {} ipv4 routes on HWSKU {}".format(data.test_bgp_route_count,hwsku_under_test))
+
+
+    start_time = datetime.datetime.now()
+
+    # Starting the BGP router on TG.
+
+    # Withdraw the routes.
+    ctrl1=tg1.tg_bgp_routes_control(handle=ingress_bgp_rtr1['conf']['handle'], route_handle=ingress_bgp_rtr1['route'][0]['handle'], mode='withdraw')
+    st.log("TR_CTRL: "+str(ctrl1))
+
+    # config ixia route and check route learning performance
+    if not check_bcmcmd_route_count(dut1, 100, "ipv4", def_v4_route_count_d1, 0):
+        #st.report_fail("route_table_not_cleared_by_withdraw_from_tg")
+        st.log("route_table_not_cleared_by_withdraw_from_tg")
+
+    # config ixia route and check route learning performance
+    if not check_bcmcmd_route_count(dut2, 100, "ipv4", def_v4_route_count_d2, 0):
+        #st.report_fail("route_table_not_cleared_by_withdraw_from_tg")
+        st.log("route_table_not_cleared_by_withdraw_from_tg")
+
+    count = verify_bgp_route_count(dut1, family='ipv4', neighbor=data.neigh_ip_addr, state='Established')
+    st.log("Route count: "+str(count))
+    if int(count) != 0:
+        st.report_fail("route_table_not_cleared_by_withdraw_from_tg")
+  
+    end_time = datetime.datetime.now()
+
+    st.log("Start Time: {}".format(start_time))
+    st.log("End Time: {}".format(end_time))
+    time_in_secs = end_time - start_time
+
+     
+    # traffic test
+    tr1=tg1.tg_traffic_config(port_handle=data.srv6['tg_ph_dut1_eth109'], emulation_src_handle=data.srv6['tg_dut1_eth109_result1']['handle'],
+                emulation_dst_handle=ingress_bgp_rtr1['route'][0]['handle'], circuit_endpoint_type='ipv4',
+                mode='create', transmit_mode='continuous', length_mode='fixed',
+                rate_pps=data.traffic_rate_pps, enable_stream_only_gen='0')
+
+    # Starting the TG traffic after clearing the DUT counters
+    papi.clear_interface_counters(dut1)
+    tg1.tg_traffic_control(action="run",handle=tr1['stream_id'])    

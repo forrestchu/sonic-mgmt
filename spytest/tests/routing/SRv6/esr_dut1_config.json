@@ -1,16 +1,34 @@
 {
     "BGP_NEIGHBOR": {
+        "101.1.0.2|global|PUBLIC-TC11": {
+            "asn": "999"
+        }, 
+        "101.1.0.2|ipv4|PUBLIC-TC11": {
+            "activate": "true"
+        }, 
+        "101.1.0.2|ipv6|PUBLIC-TC11": {
+            "activate": "true"
+        }, 
+        "101.2.0.2|global|PUBLIC-TC11": {
+            "asn": "998"
+        }, 
+        "101.2.0.2|ipv4|PUBLIC-TC11": {
+            "activate": "true"
+        }, 
+        "101.2.0.2|ipv6|PUBLIC-TC11": {
+            "activate": "true"
+        }, 
         "2000::178|global": {
             "asn": "100", 
             "extnh": "true", 
             "update_source": "2000::179"
-        },
+        }, 
         "2000::178|ipv4_vpn": {
             "activate": "true"
         }, 
         "2033::178|global": {
             "asn": "100"
-        }, 
+        },                                                     
         "2033::178|ipv6": {
             "activate": "true"
         }, 
@@ -22,9 +40,9 @@
         }
     }, 
     "BGP_NETWORK": {
-        "2000::179/128|ipv6": {},
-        "fd00:201:207a:fff0:10::/80|ipv6": {},
-        "fd00:201:207a:fff0:20::/80|ipv6": {}
+        "2000::179/128|ipv6": {}, 
+        "fd00:201:201:fff1:11::/80|ipv6": {}, 
+        "fd00:201:201:fff1:1::/80|ipv6": {}
     }, 
     "BGP_PARAMETERS": {
         "100|global": {
@@ -32,6 +50,9 @@
         }, 
         "100|global|PUBLIC-TC11": {
             "bgp_router_id": "2.2.2.179",
+            "srv6_locator": "lsid1"
+        }, 
+        "100|global|Vrf1": {                                   
             "srv6_locator": "lsid1"
         }, 
         "100|ipv4|PUBLIC-TC11": {
@@ -51,6 +72,28 @@
         }
     }, 
     "INTERFACE": {
+        "Ethernet109": {
+            "vrf_name": "PUBLIC-TC11"
+        }, 
+        "Ethernet109|101.1.0.1/24": {                          
+            "family": "IPv4", 
+            "scope": "global"
+        }, 
+        "Ethernet109|2000:0:1:1:0:0:0:1/64": {
+            "family": "IPv6", 
+            "scope": "global"
+        }, 
+        "Ethernet110": {
+            "vrf_name": "PUBLIC-TC11"
+        }, 
+        "Ethernet110|101.2.0.1/24": {
+            "family": "IPv4", 
+            "scope": "global"
+        }, 
+        "Ethernet110|2000:0:0:1:0:0:0:1/64": {
+            "family": "IPv6", 
+            "scope": "global"
+        }, 
         "Ethernet16|2001::179/64": {
             "family": "IPv6", 
             "scope": "global"
@@ -388,10 +431,22 @@
             "admin_status": "up", 
             "alias": "Ethernet64"
         }, 
-        "Ethernet65": {
+        "Ethernet65_1": {
             "admin_status": "up", 
-            "alias": "Ethernet65"
-        },
+            "alias": "Ethernet65_1"
+        }, 
+        "Ethernet65_2": {
+            "admin_status": "up", 
+            "alias": "Ethernet65_2"
+        }, 
+        "Ethernet65_3": {                                      
+            "admin_status": "up", 
+            "alias": "Ethernet65_3"
+        }, 
+        "Ethernet65_4": {
+            "admin_status": "up", 
+            "alias": "Ethernet65_4"
+        }, 
         "Ethernet7": {
             "admin_status": "up", 
             "alias": "Ethernet7"

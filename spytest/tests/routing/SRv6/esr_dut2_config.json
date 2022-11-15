@@ -1,5 +1,17 @@
 {
     "BGP_NEIGHBOR": {
+        "100.1.0.2|global|PUBLIC-TC11": {
+            "asn": "999"
+        }, 
+        "100.1.0.2|ipv4|PUBLIC-TC11": {
+            "activate": "true"
+        }, 
+        "100.2.0.2|global|PUBLIC-TC11": {
+            "asn": "998"
+        }, 
+        "100.2.0.2|ipv4|PUBLIC-TC11": {
+            "activate": "true"
+        }, 
         "2000::179|global": {
             "asn": "100", 
             "extnh": "true", 
@@ -28,6 +40,9 @@
         "100|global": {
             "bgp_router_id": "1.1.1.178"
         }, 
+        "100|global|PUBLIC-TC11": {
+            "bgp_router_id": "2.2.2.178"
+        }, 
         "100|ipv4|PUBLIC-TC11": {
             "import_vpn": "true", 
             "rd": "2:2", 
@@ -45,6 +60,20 @@
         }
     }, 
     "INTERFACE": {
+        "Ethernet109": {
+            "vrf_name": "PUBLIC-TC11"
+        }, 
+        "Ethernet109|100.1.0.1/24": {
+            "family": "IPv4", 
+            "scope": "global"
+        }, 
+        "Ethernet110": {
+            "vrf_name": "PUBLIC-TC11"
+        }, 
+        "Ethernet110|100.2.0.1/24": {                          
+            "family": "IPv4", 
+            "scope": "global"
+        }, 
         "Ethernet16|2001::178/64": {
             "family": "IPv6", 
             "scope": "global"
@@ -371,10 +400,22 @@
             "admin_status": "up", 
             "alias": "Ethernet64"
         }, 
-        "Ethernet65": {
+        "Ethernet65_1": {
             "admin_status": "up", 
-            "alias": "Ethernet65"
-        },
+            "alias": "Ethernet65_1"
+        }, 
+        "Ethernet65_2": {
+            "admin_status": "up", 
+            "alias": "Ethernet65_2"
+        }, 
+        "Ethernet65_3": {                                      
+            "admin_status": "up", 
+            "alias": "Ethernet65_3"
+        }, 
+        "Ethernet65_4": {
+            "admin_status": "up", 
+            "alias": "Ethernet65_4"
+        }, 
         "Ethernet7": {
             "admin_status": "up", 
             "alias": "Ethernet7"

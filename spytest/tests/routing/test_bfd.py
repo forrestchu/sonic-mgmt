@@ -393,9 +393,9 @@ def test_bfd_ipv4_attr_set():
         st.report_fail("bfd non-work", dut1_ip_addr, dut1)
 
     if 'eSR' == os.getenv('SPYTEST_PROJECT'):
-        st.log("bfd status check ok, set dut bfd params: multiplier=5, rx_intv=200, tx_intv=200")
+        st.log("bfd status check ok, set dut bfd params: multiplier=3, rx_intv=50, tx_intv=50")
         bfdapi.configure_bfd(dut1, local_asn=data.as_num, neighbor_ip=neigh_ip_addr, 
-                            config="yes",vrf_name=data.vrf, cli_type='alicli', multiplier=5, rx_intv=200, tx_intv=200)
+                            config="yes",vrf_name=data.vrf, cli_type='alicli', multiplier=3, rx_intv=50, tx_intv=50)
 
         st.wait(5)
 
@@ -409,18 +409,13 @@ def test_bfd_ipv4_attr_set():
         command = redis.build(dut1, redis.APPL_DB, "hgetall '{}' ".format(seq_key))
         output = st.show(dut1, command)
 
-        match_list = [{"donor_intf": '120000'}, {"donor_intf": '200000'}]
+        match_list = [{"donor_intf": '100000'}, {"donor_intf": '100000'}]
         for match in match_list:
             entries = filter_and_select(output, None, match)
             if not entries:
                 st.log("{} is not match".format(match))
                 st.report_fail("bfd status error", dut1_ip_addr, dut1)
-        
-        # next same as mc case
-        st.log("bfd status check ok, set dut bfd params: multiplier=5, rx_intv=50, tx_intv=50")
-        bfdapi.configure_bfd(dut1, local_asn=data.as_num, neighbor_ip=neigh_ip_addr, 
-                            config="yes",vrf_name=data.vrf, cli_type='alicli', multiplier=5, rx_intv=50, tx_intv=50)
-        st.wait(5)
+
     else:
         st.log("bfd status check ok, set dut bfd params: multiplier=5, rx_intv=50, tx_intv=50")
         bfdapi.configure_bfd(dut1, local_asn=data.as_num, neighbor_ip=neigh_ip_addr, 
@@ -473,13 +468,42 @@ def test_bfd_ipv4_attr_set():
                             status='up', cli_type='alicli', vrf_name=data.vrf):
         st.report_fail("bfd status error", dut1_ip_addr, dut1)
 
-    bfdapi.configure_bfd(dut1, local_asn=data.as_num, neighbor_ip=neigh_ip_addr, 
-                        config="yes",vrf_name=data.vrf, cli_type='alicli', multiplier=3, rx_intv=int(data.dut_bfd_timer), tx_intv=int(data.dut_bfd_timer))
-    st.wait(5)
+    if 'eSR' == os.getenv('SPYTEST_PROJECT'):
+        # TG BFD params change
+        tg1.tg_emulation_bfd_config(handle = data.bfd_v4_rtr1['bfd_v4_interface_handle'],
+                control_plane_independent      = "0",
+                enable_demand_mode             = "0",
+                flap_tx_interval               = "0",
+                min_rx_interval                = "100",
+                mode                           = "modify",
+                detect_multiplier              = "3",
+                poll_interval                  = "0",
+                tx_interval                    = "100",
+                ip_diff_serv                   = "0",
+                interface_active               = "1",
+                router_active                  = "1",
+                session_count                  = "0",
+                ip_version                     = "4",
+                aggregate_bfd_session          = "1")
+        tg1.tg_emulation_bfd_control(handle = data.bfd_v4_rtr1['handle'], mode = "restart")
+        st.wait(20)
 
-    if not bfdapi.verify_bfd_peer(dut1, peer=neigh_ip_addr, local_addr=dut1_ip_addr, rx_interval=[[data.dut_bfd_timer,'50']], 
-                            status='up', cli_type='alicli', vrf_name=data.vrf):
-        st.report_fail("bfd status error", dut1_ip_addr, dut1)
+        bfdapi.configure_bfd(dut1, local_asn=data.as_num, neighbor_ip=neigh_ip_addr, 
+                            config="yes",vrf_name=data.vrf, cli_type='alicli', multiplier=3, rx_intv=int(data.dut_bfd_timer), tx_intv=int(data.dut_bfd_timer))
+        st.wait(5)
+
+        if not bfdapi.verify_bfd_peer(dut1, peer=neigh_ip_addr, local_addr=dut1_ip_addr, rx_interval=[[data.dut_bfd_timer,'100']], 
+                                status='up', cli_type='alicli', vrf_name=data.vrf):
+            st.report_fail("bfd status error", dut1_ip_addr, dut1)
+
+    else:
+        bfdapi.configure_bfd(dut1, local_asn=data.as_num, neighbor_ip=neigh_ip_addr, 
+                            config="yes",vrf_name=data.vrf, cli_type='alicli', multiplier=3, rx_intv=int(data.dut_bfd_timer), tx_intv=int(data.dut_bfd_timer))
+        st.wait(5)
+
+        if not bfdapi.verify_bfd_peer(dut1, peer=neigh_ip_addr, local_addr=dut1_ip_addr, rx_interval=[[data.dut_bfd_timer,'50']], 
+                                status='up', cli_type='alicli', vrf_name=data.vrf):
+            st.report_fail("bfd status error", dut1_ip_addr, dut1)
 
     st.report_pass("test_case_passed")
 
@@ -506,13 +530,20 @@ def test_bfd_ipv6_base():
         st.report_fail("bfd counter err", formatted_dut1_ipv6_addr, dut1)
 
     # stop ixia to check bfd status
+    st.log("stop ixia bfdv6 peer")
     tg1.tg_emulation_bfd_control(handle = data.bfd_v6_rtr1['bfd_v6_interface_handle'], mode = "stop")
     st.wait(5)
-    if not bfdapi.verify_bfd_peer(dut1, peer=neigh_ipv6_addr, local_addr=formatted_dut1_ipv6_addr,  vrf_name=data.vrf, 
-                                rx_interval=[[data.dut_bfd_timer,data.tg_bfd_timer]], status='down', cli_type='alicli'):
-        st.report_fail("bfd status error", formatted_dut1_ipv6_addr, dut1)
+    if 'eSR' == os.getenv('SPYTEST_PROJECT'):
+        if not bfdapi.verify_bfd_peer(dut1, peer=neigh_ipv6_addr, local_addr=formatted_dut1_ipv6_addr,  vrf_name=data.vrf, 
+                                    rx_interval=[[data.dut_bfd_timer, '1000']], status='down', cli_type='alicli'):
+            st.report_fail("bfd status error", formatted_dut1_ipv6_addr, dut1)
+    else:
+        if not bfdapi.verify_bfd_peer(dut1, peer=neigh_ipv6_addr, local_addr=formatted_dut1_ipv6_addr,  vrf_name=data.vrf, 
+                                    rx_interval=[[data.dut_bfd_timer,data.tg_bfd_timer]], status='down', cli_type='alicli'):
+            st.report_fail("bfd status error", formatted_dut1_ipv6_addr, dut1)
 
     #restart ixia bfd
+    st.log("start ixia bfdv6 peer")
     tg1.tg_emulation_bfd_control(handle = data.bfd_v6_rtr1['bfd_v6_interface_handle'], mode = "start")
     st.wait(10) # wait hw-bfd work
     if not bfdapi.verify_bfd_peer(dut1, peer=neigh_ipv6_addr, local_addr=formatted_dut1_ipv6_addr, vrf_name=data.vrf, 
@@ -622,31 +653,59 @@ def test_bfd_ipv6_attr_set():
                                 rx_interval=[[data.dut_bfd_timer,data.tg_bfd_timer]], status='up', cli_type='alicli'):
         st.report_fail("bfd non-work", dut1_ipv6_addr, dut1)
 
-    st.log("bfd status check ok, set dut bfd params: multiplier=5, rx_intv=50, tx_intv=50")
-    bfdapi.configure_bfd(dut1, local_asn=data.as_num, neighbor_ip=neigh_ipv6_addr, 
-                        config="yes",vrf_name=data.vrf, cli_type='alicli', multiplier=5, rx_intv=new_interval, tx_intv=new_interval)
-    st.wait(10)
-    #skip multiplier check
-    if not bfdapi.verify_bfd_peer(dut1, peer=neigh_ipv6_addr, local_addr=dut1_ipv6_addr, rx_interval=[['50',data.tg_bfd_timer]], 
-                            status='up', cli_type='alicli', vrf_name=data.vrf):
-        st.report_fail("bfd status error", dut1_ipv6_addr, dut1)
-    
-    key = "BFD_PEER:{}*".format(neigh_ipv6_addr)
-    command = redis.build(dut1, redis.APPL_DB, "keys '{}' ".format(key))
-    output = st.show(dut1, command)
-    if output[0]:
-        seq_key = output[0]['name']
-    else:
-        seq_key = ''
-    command = redis.build(dut1, redis.APPL_DB, "hgetall '{}' ".format(seq_key))
-    output = st.show(dut1, command)
+    if 'eSR' == os.getenv('SPYTEST_PROJECT'):
+        st.log("bfd status check ok, set dut bfd params: multiplier=3, rx_intv=50, tx_intv=50")
+        bfdapi.configure_bfd(dut1, local_asn=data.as_num, neighbor_ip=neigh_ipv6_addr, 
+                            config="yes",vrf_name=data.vrf, cli_type='alicli', multiplier=3, rx_intv=new_interval, tx_intv=new_interval)
+        st.wait(10)
+        
+        key = "BFD_PEER:{}*".format(neigh_ipv6_addr)
+        command = redis.build(dut1, redis.APPL_DB, "keys '{}' ".format(key))
+        output = st.show(dut1, command)
+        if output[0]:
+            seq_key = output[0]['name']
+        else:
+            seq_key = ''
+        command = redis.build(dut1, redis.APPL_DB, "hgetall '{}' ".format(seq_key))
+        output = st.show(dut1, command)
+        match_list = [{"donor_intf": '100000'}, {"donor_intf": '100000'}]
+        for match in match_list:
+            entries = filter_and_select(output, None, match)
+            if not entries:
+                st.log("{} is not match".format(match))
+                st.report_fail("bfd status error", dut1_ipv6_addr, dut1)
 
-    match_list = [{"donor_intf": '50000'}, {"donor_intf": '60000'}]
-    for match in match_list:
-        entries = filter_and_select(output, None, match)
-        if not entries:
-            st.log("{} is not match".format(match))
-            st.report_fail("bfd status error", dut1_ip_addr, dut1)
+        #skip multiplier check
+        if not bfdapi.verify_bfd_peer(dut1, peer=neigh_ipv6_addr, local_addr=dut1_ipv6_addr, rx_interval=[['50',data.tg_bfd_timer]], 
+                                status='up', cli_type='alicli', vrf_name=data.vrf):
+            st.report_fail("bfd status error", dut1_ipv6_addr, dut1)
+
+    else:
+        st.log("bfd status check ok, set dut bfd params: multiplier=5, rx_intv=50, tx_intv=50")
+        bfdapi.configure_bfd(dut1, local_asn=data.as_num, neighbor_ip=neigh_ipv6_addr, 
+                            config="yes",vrf_name=data.vrf, cli_type='alicli', multiplier=5, rx_intv=new_interval, tx_intv=new_interval)
+        st.wait(10)
+        
+        key = "BFD_PEER:{}*".format(neigh_ipv6_addr)
+        command = redis.build(dut1, redis.APPL_DB, "keys '{}' ".format(key))
+        output = st.show(dut1, command)
+        if output[0]:
+            seq_key = output[0]['name']
+        else:
+            seq_key = ''
+        command = redis.build(dut1, redis.APPL_DB, "hgetall '{}' ".format(seq_key))
+        output = st.show(dut1, command)
+        match_list = [{"donor_intf": '50000'}, {"donor_intf": '60000'}]
+        for match in match_list:
+            entries = filter_and_select(output, None, match)
+            if not entries:
+                st.log("{} is not match".format(match))
+                st.report_fail("bfd status error", dut1_ipv6_addr, dut1)
+
+        #skip multiplier check
+        if not bfdapi.verify_bfd_peer(dut1, peer=neigh_ipv6_addr, local_addr=dut1_ipv6_addr, rx_interval=[['50',data.tg_bfd_timer]], 
+                                status='up', cli_type='alicli', vrf_name=data.vrf):
+            st.report_fail("bfd status error", dut1_ipv6_addr, dut1)       
 
     output = bfdapi.get_bfd_peer_counters(dut1, peer=neigh_ipv6_addr, local_addr=dut1_ipv6_addr, cli_type='alicli', vrf_name=data.vrf)
     tx_counter1 = output[0]['cntrlpktout']
@@ -682,11 +741,39 @@ def test_bfd_ipv6_attr_set():
                             status='up', cli_type='alicli', vrf_name=data.vrf, retry_count= 3, delay= 3):
         st.report_fail("bfd status error", dut1_ipv6_addr, dut1)
 
-    bfdapi.configure_bfd(dut1, local_asn=data.as_num, neighbor_ip=neigh_ipv6_addr, 
-                        config="yes",vrf_name=data.vrf, cli_type='alicli', multiplier=3, rx_intv=int(data.dut_bfd_timer), tx_intv=int(data.dut_bfd_timer))
-    st.wait(5)
-    if not retry_api(bfdapi.verify_bfd_peer, dut1, peer=neigh_ipv6_addr, local_addr=dut1_ipv6_addr, rx_interval=[[data.dut_bfd_timer,'50']], 
-                            status='up', cli_type='alicli', vrf_name=data.vrf, retry_count= 3, delay= 3):
-        st.report_fail("bfd status error", dut1_ipv6_addr, dut1)
+    if 'eSR' == os.getenv('SPYTEST_PROJECT'):
+        # TG BFD params change
+        tg1.tg_emulation_bfd_config(handle = data.bfd_v4_rtr1['bfd_v4_interface_handle'],
+                control_plane_independent      = "0",
+                enable_demand_mode             = "0",
+                flap_tx_interval               = "0",
+                min_rx_interval                = "100",
+                mode                           = "modify",
+                detect_multiplier              = "3",
+                poll_interval                  = "0",
+                tx_interval                    = "100",
+                ip_diff_serv                   = "0",
+                interface_active               = "1",
+                router_active                  = "1",
+                session_count                  = "0",
+                ip_version                     = "4",
+                aggregate_bfd_session          = "1")
+        tg1.tg_emulation_bfd_control(handle = data.bfd_v4_rtr1['handle'], mode = "restart")
+        st.wait(20)
+
+        bfdapi.configure_bfd(dut1, local_asn=data.as_num, neighbor_ip=neigh_ipv6_addr, 
+                            config="yes",vrf_name=data.vrf, cli_type='alicli', multiplier=3, rx_intv=int(data.dut_bfd_timer), tx_intv=int(data.dut_bfd_timer))
+        st.wait(5)
+        if not retry_api(bfdapi.verify_bfd_peer, dut1, peer=neigh_ipv6_addr, local_addr=dut1_ipv6_addr, rx_interval=[[data.dut_bfd_timer,'50']], 
+                                status='up', cli_type='alicli', vrf_name=data.vrf, retry_count= 3, delay= 3):
+            st.report_fail("bfd status error", dut1_ipv6_addr, dut1)
+
+    else:
+        bfdapi.configure_bfd(dut1, local_asn=data.as_num, neighbor_ip=neigh_ipv6_addr, 
+                            config="yes",vrf_name=data.vrf, cli_type='alicli', multiplier=3, rx_intv=int(data.dut_bfd_timer), tx_intv=int(data.dut_bfd_timer))
+        st.wait(5)
+        if not retry_api(bfdapi.verify_bfd_peer, dut1, peer=neigh_ipv6_addr, local_addr=dut1_ipv6_addr, rx_interval=[[data.dut_bfd_timer,'50']], 
+                                status='up', cli_type='alicli', vrf_name=data.vrf, retry_count= 3, delay= 3):
+            st.report_fail("bfd status error", dut1_ipv6_addr, dut1)
 
     st.report_pass("test_case_passed")

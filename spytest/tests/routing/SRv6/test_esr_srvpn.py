@@ -1013,10 +1013,13 @@ def test_base_config_srvpn_2kl_traffic_and_route_02():
 
      
     # traffic test
-    tr1=tg1.tg_traffic_config(port_handle=data.srv6['tg_ph_dut1_eth109'], emulation_src_handle=data.srv6['tg_dut1_eth109_result1']['handle'],
-                emulation_dst_handle=ingress_bgp_rtr1['route'][0]['handle'], circuit_endpoint_type='ipv4',
-                mode='create', transmit_mode='continuous', length_mode='fixed',
-                rate_pps=data.traffic_rate_pps, enable_stream_only_gen='0')
+    tr1 = tg1.tg_traffic_config(port_handle=data.srv6['tg_ph_dut2_eth109'],
+        emulation_src_handle=data.srv6['interface_dut2_eth109']['handle'],
+        emulation_dst_handle=ingress_bgp_rtr2['route'][0]['handle'],
+        circuit_endpoint_type='ipv4',mode='create',
+        transmit_mode='continuous', length_mode='fixed',
+        rate_percent=data.traffic_rate_precent,
+        enable_stream_only_gen='0')
 
     # Starting the TG traffic after clearing the DUT counters
     papi.clear_interface_counters(dut1)

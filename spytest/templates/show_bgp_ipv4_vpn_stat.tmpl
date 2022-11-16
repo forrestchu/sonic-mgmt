@@ -1,0 +1,7 @@
+Value Filldown TOTALADV (\d+)
+Value Filldown TOTALPREFIX (\d+)
+
+Start
+  ^\s*BGP IPv4 VPN RIB statistics\s*$$
+  ^\s*Total Advertisements\s*${TOTALADV}\s*$$
+  ^\s*Total Prefixes\s*${TOTALPREFIX}\s*$$ -> Record

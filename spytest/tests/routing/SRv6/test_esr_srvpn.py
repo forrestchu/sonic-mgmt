@@ -23,7 +23,7 @@ import apis.routing.bgp as bgp_api
 import apis.routing.arp as arp_obj
 import apis.routing.bfd as bfdapi
 import apis.routing.ip_bgp as ip_bgp
-from esr_lib import cli_show_json, json_cmp, configdb_checkpoint, configdb_checkarray, appdb_checkpoint, configdb_onefield_checkpoint,appdb_onefield_checkpoint
+from esr_lib import cli_show_json, json_cmp, configdb_checkpoint, configdb_checkarray, appdb_checkpoint, configdb_onefield_checkpoint,appdb_onefield_checkpoint,check_vrf_route_nums, get_random_array, check_vpn_route_nums
 import esr_lib as loc_lib
 from esr_vars import * #all the variables used for vrf testcase
 from esr_vars import data
@@ -1040,66 +1040,61 @@ def test_base_config_srvpn_multi_vrf_03():
 
     # 179 load 2k locator config
     curr_path = os.getcwd()
-    json_file_dut = curr_path+"/routing/SRv6/2k_locators.json"
-    st.apply_files(dut1, [json_file_dut])
-    reboot.config_save_reboot(dut1)
-    st.banner("2k locators Loaded completed")
+
+    json_file_dut1_multi_vrf = curr_path+"/routing/SRv6/dut1_multi_vrf_full.json"
+    st.apply_files(dut1, [json_file_dut1_multi_vrf])
+
+    json_file_dut2_multi_vrf = curr_path+"/routing/SRv6/dut2_multi_vrf_full.json"
+    st.apply_files(dut1, [json_file_dut2_multi_vrf])
     
+    st.wait(10)
+    
+    reboot.config_reload_reboot(dut1, "/etc/spytest/SRv6/dut1_multi_vrf_full.json")
+    reboot.config_reload_reboot(dut2, "/etc/spytest/SRv6/dut2_multi_vrf_full.json")
 
-    def_v4_route_count_d1 = asicapi.get_ipv4_route_count(dut1)
-    def_v6_route_count_d1 = asicapi.get_ipv6_route_count(dut1)
-    def_v4_route_count_d2 = asicapi.get_ipv4_route_count(dut2)
-    def_v6_route_count_d2 = asicapi.get_ipv6_route_count(dut2)
-
-    # check redis db , check route 
-
-    # Time taken for route installation
-    # Taking the start time timestamp
-    tg1 = data.srv6['tg_dut1_eth109']
-    tg2 = data.srv6['tg_dut1_eth110']
-    ingress_bgp_rtr1 = data.srv6['tg_dut1_eth109_bgp_v4_vrf']
-    ingress_bgp_rtr2 = data.srv6['tg_dut1_eth110_bgp_v4_vrf']
-
-    # st.banner("Time taken for intsalling {} v4 routes ".format('50w') +str(time_in_secs.seconds))
-    # st.banner("Measuring time taken for route withdraw of {} ipv4 routes on HWSKU {}".format(data.test_bgp_route_count,hwsku_under_test))
-
-
-    start_time = datetime.datetime.now()
-
-    # Starting the BGP router on TG.
-
-    # Withdraw the routes.
-    ctrl1=tg1.tg_bgp_routes_control(handle=ingress_bgp_rtr1['conf']['handle'], route_handle=ingress_bgp_rtr1['route'][0]['handle'], mode='withdraw')
-    st.log("TR_CTRL: "+str(ctrl1))
-
-    # config ixia route and check route learning performance
-    if not check_bcmcmd_route_count(dut1, 100, "ipv4", def_v4_route_count_d1, 0):
-        #st.report_fail("route_table_not_cleared_by_withdraw_from_tg")
-        st.log("route_table_not_cleared_by_withdraw_from_tg")
-
-    # config ixia route and check route learning performance
-    if not check_bcmcmd_route_count(dut2, 100, "ipv4", def_v4_route_count_d2, 0):
-        #st.report_fail("route_table_not_cleared_by_withdraw_from_tg")
-        st.log("route_table_not_cleared_by_withdraw_from_tg")
-
-    count = verify_bgp_route_count(dut1, family='ipv4', neighbor=data.neigh_ip_addr, state='Established')
-    st.log("Route count: "+str(count))
-    if int(count) != 0:
-        st.report_fail("route_table_not_cleared_by_withdraw_from_tg")
-  
-    end_time = datetime.datetime.now()
-
-    st.log("Start Time: {}".format(start_time))
-    st.log("End Time: {}".format(end_time))
-    time_in_secs = end_time - start_time
-
+    st.banner("multi vrf config loaded completed")
      
-    # traffic test
-    tr1=tg1.tg_traffic_config(port_handle=data.srv6['tg_ph_dut1_eth109'], emulation_src_handle=data.srv6['tg_dut1_eth109_result1']['handle'],
-                emulation_dst_handle=ingress_bgp_rtr1['route'][0]['handle'], circuit_endpoint_type='ipv4',
-                mode='create', transmit_mode='continuous', length_mode='fixed',
-                rate_pps=data.traffic_rate_pps, enable_stream_only_gen='0')
+    # load ixia config
+    # TODO
 
-    # Starting the TG traffic after clearing the DUT counters
-    papi.clear_interface_counters(dut1)
-    tg1.tg_traffic_control(action="run",handle=tr1['stream_id'])    
+    # check vpn route learn 50w
+    ret = check_vpn_route_nums(dut2, 500000, 0)
+    if not ret:
+        st.report_fail("check_vpn_route_nums test_base_config_srvpn_multi_vrf_03")
+        
+    # check vrf vpn route 
+    # one vrf learn 5000 ， default learn 500000w
+    # random check 10 vrf
+    def get_check_vrf_list():
+        vrf_array = []
+        ra = get_random_array(0, 99, 10)
+        for idx in ra:
+            vrf_array.append(data.mysid_opcode.keys()[idx])
+        return vrf_array
+        
+    vrf_array = get_check_vrf_list()
+    
+    for chcek_vrf in vrf_array:
+        ret = check_vrf_route_nums(dut2, chcek_vrf, 5000, 1)
+        if not ret:
+            st.report_fail("check_vrf_route_nums {} test_base_config_srvpn_multi_vrf_03".format(chcek_vrf))
+
+    # check traffic
+
+
+    # change vrf import rt 
+
+
+    # check vrf route learn
+
+    # check vrf traffic 
+
+
+    # ecmp check
+
+    # ecmp stability test
+
+    # modify ingress srv6 locator  
+     
+    st.report_fail("test_base_config_srvpn_multi_vrf_03")
+

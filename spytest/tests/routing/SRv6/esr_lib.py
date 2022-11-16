@@ -1,8 +1,11 @@
 import os
 import copy
+from pickle import TRUE
 import pytest
 import json
 import difflib
+import string
+import random
 from collections import OrderedDict
 from utilities import parallel
 
@@ -490,3 +493,52 @@ def appdb_onefield_checkpoint(dut, key, checkfield, checkval, expect = True, che
 
     if expect is not check:
         st.report_fail("{} app DB has no right {} config".format(checkpoint, checkfield))
+
+
+## check vrf leran route nums
+# show ip route vrf VRFNAME summary
+# compare: 1 more than or equal , 0 equal, -1 less than
+def check_vrf_route_nums(dut, vrfname, expected_num, compare):
+    cmd = "show ip route vrf {} summary".format(vrfname)
+    result = st.show(dut, cmd, type='alicli')
+    st.log(result)
+
+    if result is not None:
+        totals = result[-1]
+        if totals.isdigit():
+            totals_num = string.atoi(totals)
+            if totals_num >= expected_num and compare==1:
+                return True
+            elif totals_num == expected_num and compare==0:
+                return True
+            elif totals_num < expected_num and compare==-1:
+                return True
+            else:
+                st.log("totals fib num is {} , expected is {}".format(totals_num, expected_num))
+                return False
+
+def check_vpn_route_nums(dut, expected_num, compare):
+    cmd = "show bgp ipv4 vpn statistics"
+    result = st.show(dut, cmd, type='alicli')
+    st.log(result)
+
+    if result is not None:
+        totals = result[0][0]
+        if totals.isdigit():
+            totals_num = string.atoi(totals)
+            if totals_num >= expected_num and compare==1:
+                return True
+            elif totals_num == expected_num and compare==0:
+                return True
+            elif totals_num < expected_num and compare==-1:
+                return True
+            else:
+                st.log("totals adv route num is {} , expected is {}".format(totals_num, expected_num))
+                return False
+
+def get_random_array(start, end, num):
+    ra = []
+    for i in range(num):
+        x = random.randint(start, end)
+        ra.append(x)
+    return ra

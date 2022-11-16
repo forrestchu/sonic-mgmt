@@ -102,6 +102,7 @@ show_bgp_neighbor.tmpl, .*,  sonic, show ip bgp.*neighbor.*
 show_ip_bgp.tmpl, .*, sonic, show ip bgp
 show_ip_bgp.tmpl, .*, sonic, show bgp ipv4 unicast
 show_bgp_ipv6.tmpl, .*, sonic, show bgp ipv6 unicast
+show_bgp_ipv4_vpn_stat.tmpl, .*, sonic, show bgp ipv4 vpn statistics
 show_bgp_ip_vpn.tmpl, .*, sonic, cli .* 'show bgp ipv4 vpn'
 show_ip_bgp.tmpl, .*, sonic, show bgp ipv4
 show_bgp_ipv6.tmpl, .*, sonic, show bgp ipv6

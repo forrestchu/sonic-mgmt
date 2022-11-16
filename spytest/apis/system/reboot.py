@@ -174,6 +174,25 @@ def config_save_reboot(dut, cli_type=''):
     #config_save(dut, shell='vtysh')
     st.reboot(dut)
 
+def config_reload_file(dut, file):
+    """
+    To perform config reload.
+    :param dut: single or list of duts
+    :return:
+    """
+    st.log("Performing config reload")
+    reload_cmd = "config reload -y {}".format(file)
+    dut_li = list(dut) if isinstance(dut, list) else [dut]
+    [retvals, exceps] = utils.exec_foreach(True, dut_li, st.config, reload_cmd, type="alicli")
+    st.debug([retvals, exceps])
+    return True
+
+def config_reload_reboot(dut, file):
+    #cli_type = st.get_ui_type(dut, cli_type=cli_type)
+    config_reload_file(dut, file)
+    #config_save(dut, shell='vtysh')
+    st.reboot(dut)
+
 def dut_reboot(dut, method='normal',cli_type=''):
     cli_type = st.get_ui_type(dut, cli_type=cli_type)
 

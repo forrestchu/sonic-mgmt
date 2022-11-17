@@ -599,9 +599,35 @@
         },
         "100.2.49.2|ipv4|VPN36":{
             "activate":"true"
+        },
+        "2000::179|global": {
+            "asn": "100", 
+            "extnh": "true", 
+            "update_source": "2000::178"
+        }, 
+        "2000::179|ipv4_vpn": {
+            "activate": "true"
+        }, 
+        "2033::179|global": {
+            "asn": "100"
+        },                                                     
+        "2033::179|ipv6": {
+            "activate": "true"
+        }, 
+        "2044::179|global": {
+            "asn": "100"
+        }, 
+        "2044::179|ipv6": {
+            "activate": "true"
         }
     },
+    "BGP_NETWORK": {
+        "2000::178/128|ipv6": {}
+    }, 
     "BGP_PARAMETERS":{
+        "100|global": {
+            "bgp_router_id": "1.1.1.178"
+        }, 
         "100|global|Vrf1":{
             "bgp_router_id":"3.3.3.1"
         },
@@ -1401,26 +1427,6 @@
             "import_vpn":"true",
             "rt_import":"1:100",
             "rd":"2:2"
-        },
-        "2000::179|global": {
-            "asn": "100", 
-            "extnh": "true", 
-            "update_source": "2000::178"
-        }, 
-        "2000::179|ipv4_vpn": {
-            "activate": "true"
-        }, 
-        "2033::179|global": {
-            "asn": "100"
-        },                                                     
-        "2033::179|ipv6": {
-            "activate": "true"
-        }, 
-        "2044::179|global": {
-            "asn": "100"
-        }, 
-        "2044::179|ipv6": {
-            "activate": "true"
         }
     },
     "DEVICE_METADATA": {
@@ -1839,6 +1845,16 @@
             "alias": "Ethernet99"
         }
     },
+    "INTERFACE": {
+        "Ethernet33|2033::178/64": {
+            "family": "IPv6", 
+            "scope": "global"
+        }, 
+        "Ethernet44|2044::178/64": {
+            "family": "IPv6", 
+            "scope": "global"
+        }
+    }, 
     "SUB_INTERFACE":{
         "Eth109.100|100.1.0.1/24":{
             "family":"IPv4",

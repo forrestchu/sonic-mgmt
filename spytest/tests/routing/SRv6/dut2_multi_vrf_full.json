@@ -2659,6 +2659,14 @@
             "vrf_name":"VPN36"
         }
     },
+    "SWITCH": {
+        "FDB": {
+            "fdb_aging_time": "1800", 
+            "fdb_broadcast_miss_packet_action": "forward", 
+            "fdb_multicast_miss_packet_action": "forward", 
+            "fdb_unicast_miss_packet_action": "forward"
+        }
+    }, 
     "VRF": {
         "Vrf1": {},
         "Vrf2": {}

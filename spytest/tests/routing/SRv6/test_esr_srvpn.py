@@ -1047,8 +1047,8 @@ def test_base_config_srvpn_multi_vrf_03():
     st.apply_files(dut1, [json_file_dut1_multi_vrf])
 
     json_file_dut2_multi_vrf = curr_path+"/routing/SRv6/dut2_multi_vrf_full.json"
-    st.apply_files(dut1, [json_file_dut2_multi_vrf])
-
+    st.apply_files(dut2, [json_file_dut2_multi_vrf])
+    
     st.wait(10)
 
     reboot.config_reload_reboot(dut1, "/etc/spytest/SRv6/dut1_multi_vrf_full.json")

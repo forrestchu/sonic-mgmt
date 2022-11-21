@@ -182,9 +182,7 @@ def config_reload_file(dut, file):
     """
     st.log("Performing config reload")
     reload_cmd = "config reload -y {}".format(file)
-    dut_li = list(dut) if isinstance(dut, list) else [dut]
-    [retvals, exceps] = utils.exec_foreach(True, dut_li, st.config, reload_cmd, type="alicli")
-    st.debug([retvals, exceps])
+    st.config(dut, reload_cmd)
     return True
 
 def config_reload_reboot(dut, file):

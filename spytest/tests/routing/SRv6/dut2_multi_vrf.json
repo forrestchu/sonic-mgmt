@@ -1403,6 +1403,16 @@
             "rd":"2:2"
         }
     },
+    "INTERFACE": {
+        "Ethernet33|2033::178/64": {
+            "family": "IPv6", 
+            "scope": "global"
+        }, 
+        "Ethernet44|2044::178/64": {
+            "family": "IPv6", 
+            "scope": "global"
+        }
+    }, 
     "SUB_INTERFACE":{
         "Eth109.100|100.1.0.1/24":{
             "family":"IPv4",

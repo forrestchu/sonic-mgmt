@@ -1057,6 +1057,9 @@ def test_base_config_srvpn_multi_vrf_03():
     # load ixia config
     # TODO
 
+    # wait 20 sec for vrf bgp established
+    st.wait(20)
+
     # check vpn route learn 50w
     ret = check_vpn_route_nums(dut2, 500000, 0)
     if not ret:
@@ -1082,7 +1085,9 @@ def test_base_config_srvpn_multi_vrf_03():
     # check traffic
 
 
-    # change vrf import rt 
+    # change vrf import rt
+    rtlist = "1:10 1:20 1:30 1:40 1:50"
+    cmd = "cli -c 'configure terminal' -c 'router bgp 100 vrf ACTN-TC47' -c 'address-family ipv4 unicast' -c 'route-target vpn import {}'".format(rtlist)
 
 
     # check vrf route learn

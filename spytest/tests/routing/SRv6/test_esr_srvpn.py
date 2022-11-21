@@ -1060,13 +1060,13 @@ def test_base_config_srvpn_multi_vrf_03():
     # wait 20 sec for vrf bgp established
     st.wait(20)
 
-    # check vpn route learn 50w
+    # step1 check vpn route learn 50w
     ret = check_vpn_route_nums(dut2, 500000, 0)
     if not ret:
-        st.report_fail("check_vpn_route_nums test_base_config_srvpn_multi_vrf_03")
+        st.report_fail("step1 check_vpn_route_nums test_base_config_srvpn_multi_vrf_03")
         
     # check vrf vpn route 
-    # one vrf learn 5000 ， default learn 500000w
+    # one vrf learn 5000 default learn 500000w
     # random check 10 vrf
     def get_check_vrf_list():
         vrf_array = []
@@ -1080,26 +1080,67 @@ def test_base_config_srvpn_multi_vrf_03():
     for chcek_vrf in vrf_array:
         ret = check_vrf_route_nums(dut2, chcek_vrf, 5000, 1)
         if not ret:
-            st.report_fail("check_vrf_route_nums {} test_base_config_srvpn_multi_vrf_03".format(chcek_vrf))
+            st.report_fail("step1 check_vrf_route_nums {} 5000 test_base_config_srvpn_multi_vrf_03".format(chcek_vrf))
 
     # check traffic
+    #TODO
 
-
-    # change vrf import rt
-    rtlist = "1:10 1:20 1:30 1:40 1:50"
+    # step2: change vrf import rt withsame service-SID
+    to_check_vrf = 'ACTN-TC47'
+    rtlist = "1:10 1:30 1:50 1:70 1:90"
     cmd = "cli -c 'configure terminal' -c 'router bgp 100 vrf ACTN-TC47' -c 'address-family ipv4 unicast' -c 'route-target vpn import {}'".format(rtlist)
-
+    st.config(dut2, cmd)
+    st.wait(10)
 
     # check vrf route learn
+    ret = check_vrf_route_nums(dut2, to_check_vrf, 25000, 1)
+    if not ret:
+        st.report_fail("step2 check_vrf_route_nums {} 5*5000 test_base_config_srvpn_multi_vrf_03".format(to_check_vrf))
 
     # check vrf traffic 
+    #TODO
 
 
-    # ecmp check
+    # step3: change vrf import rt
+    # different service-SID
+    # 1:30 1:70 change service-SID
+    # 1:30 101|ipv4|SX-XIAN-CM-TC30
+    # 1:70 101|ipv4|VPN6
+    cmd = "cli -c 'configure terminal' -c 'router bgp 101 vrf SX-XIAN-CM-TC30' -c 'no srv6-locator lsid1'"
+    st.config(dut1, cmd)
+    cmd = "cli -c 'configure terminal' -c 'router bgp 101 vrf SX-XIAN-CM-TC30' -c 'srv6-locator lsid2'"
+    st.config(dut1, cmd)
+    cmd = "cli -c 'configure terminal' -c 'router bgp 101 vrf VPN6' -c 'no srv6-locator lsid1'"
+    st.config(dut1, cmd)
+    cmd = "cli -c 'configure terminal' -c 'router bgp 101 vrf VPN6' -c 'srv6-locator lsid3'"
+    st.config(dut1, cmd)
+
+     #check vpn route learn 50w
+    ret = check_vpn_route_nums(dut2, 500000, 0)
+    if not ret:
+        st.report_fail("step3 check_vpn_route_nums test_base_config_srvpn_multi_vrf_03")
+        
+
+    # check vrf route learn
+    ret = check_vrf_route_nums(dut2, to_check_vrf, 25000, 1)
+    if not ret:
+        st.report_fail("step3 check_vrf_route_nums {} 5*5000 test_base_config_srvpn_multi_vrf_03".format(to_check_vrf))
+        
+    # check vrf traffic 
+    #TODO
+
+
+    # step4: ecmp check
+
+    
 
     # ecmp stability test
 
-    # modify ingress srv6 locator  
+    # ixia port oscillation
+    
+
+    # modify ingress srv6 locator 
+
      
     st.report_fail("test_base_config_srvpn_multi_vrf_03")
 

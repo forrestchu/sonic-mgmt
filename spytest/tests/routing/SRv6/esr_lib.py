@@ -498,13 +498,24 @@ def appdb_onefield_checkpoint(dut, key, checkfield, checkval, expect = True, che
 ## check vrf leran route nums
 # show ip route vrf VRFNAME summary
 # compare: 1 more than or equal , 0 equal, -1 less than
+
+# show ip route vrf SX-XIAN-CM-TC29 summary
+# Route Source         Routes               FIB  (vrf Vrf10050)
+# connected            1                    1                    
+# static               1                    1                    
+# ------
+# Totals               2                    2                    
+# Totals - Dataplane   N/A                  2                    
+ 
+# [{u'fib_ibgp': '', u'total': '2', u'fib_static': '1', u'fib_ebgp': '', u'ibgp': '', u'ebgp': '', 
+# u'vrf': 'Vrf10050', u'fib_connected': '1', u'static': '1', u'fib_ospf': '', u'connected': '1', u'ospf': '', u'fib_total': '2'}]
 def check_vrf_route_nums(dut, vrfname, expected_num, compare):
     cmd = "show ip route vrf {} summary".format(vrfname)
     result = st.show(dut, cmd, type='alicli')
     st.log(result)
 
     if result is not None:
-        totals = result[-1]
+        totals = result[0]['fib_total']
         if totals.isdigit():
             totals_num = string.atoi(totals)
             if totals_num >= expected_num and compare==1:
@@ -523,7 +534,7 @@ def check_vpn_route_nums(dut, expected_num, compare):
     st.log(result)
 
     if result is not None:
-        totals = result[0][0]
+        totals = result[0]['totaladv']
         if totals.isdigit():
             totals_num = string.atoi(totals)
             if totals_num >= expected_num and compare==1:

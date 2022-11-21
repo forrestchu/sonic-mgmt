@@ -28,7 +28,7 @@ import esr_lib as loc_lib
 from esr_vars import * #all the variables used for vrf testcase
 from esr_vars import data
 from ixia_vars import *
-from ixia_helpers import *
+from ixia_lib import *
 #
 #            +-------------------+                 +-------------------+
 # TG1_1====  |                    |                |                    |
@@ -1057,8 +1057,8 @@ def test_base_config_srvpn_multi_vrf_03():
     st.banner("multi vrf config loaded completed")
 
     # load ixia config
-    ixia_load_config(IXIA_CONFIG_FILE)
-
+    ixia_controller.load_config(IXIA_CONFIG_FILE)
+    ixia_controller.start_all_protocols()
     # wait 20 sec for vrf bgp established
     st.wait(20)
 
@@ -1085,12 +1085,12 @@ def test_base_config_srvpn_multi_vrf_03():
             st.report_fail("step1 check_vrf_route_nums {} 5000 test_base_config_srvpn_multi_vrf_03".format(chcek_vrf))
 
     # check traffic
-    traffic_item = ixia_get_traffic_item()
-    ret = ixia_start_traffic_item(traffic_item)
+    traffic_item = ixia_controller.get_traffic_items()
+    ret = ixia_controller.start_stateless_traffic(traffic_item)
     if not ret:
         st.report_fail("ixia_start_traffic_item failed")
 
-    ret = ixia_check_port_rx_frame(PORT_NAME_1, 5000)
+    ret = ixia_controller.check_port_rx_frame(PORT_NAME_1, 5000)
     if not ret:
         st.report_fail("ixia_check_port_rx_frame failed")
     # wait until traffic end

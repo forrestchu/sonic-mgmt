@@ -116,7 +116,7 @@ class IxiaController():
 
     def get_traffic_items(self):
         traffic_items = self.ixnetwork.Traffic.TrafficItem.find()
-        return traffic_items
+        return traffic_items[0]
 
 
     def get_bgp_ipv4_peer(self):
@@ -129,7 +129,26 @@ class IxiaController():
     def stop_stateless_traffic(self, traffic_item):
         traffic_item.StopStatelessTraffic()
 
+    def start_all_protocols(self):
+        self.ixnetwork.StartAllProtocols()
 
+    def stop_all_protocols(self):
+        self.ixnetwork.StopAllProtocols()
+
+
+
+    # CHECK FUNCTIONS
+    def check_port_rx_frame(self, port_name, rx_count):
+        port_stats = self.get_port_statistics(port_name)
+        if port_stats is None:
+            return False
+
+        if port_stats['Valid Frames Rx.'] == rx_count:
+            return True
+        return False
+
+
+ixia_controller = IxiaController()
 
 # ixia_controller.load_config(IXIA_CONFIG_FILE)
 # ixia_controller.get_port_statistics()

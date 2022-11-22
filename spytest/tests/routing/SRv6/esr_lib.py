@@ -1,12 +1,10 @@
 import os
 import copy
-from pickle import TRUE
 import pytest
 import json
 import difflib
 import string
 import random
-from collections import OrderedDict
 from utilities import parallel
 
 from spytest import st, tgapi, SpyTestDict
@@ -527,6 +525,7 @@ def check_vrf_route_nums(dut, vrfname, expected_num, compare):
             else:
                 st.log("totals fib num is {} , expected is {}".format(totals_num, expected_num))
                 return False
+    return False
 
 def check_vpn_route_nums(dut, expected_num, compare):
     cmd = "show bgp ipv4 vpn statistics"
@@ -546,6 +545,7 @@ def check_vpn_route_nums(dut, expected_num, compare):
             else:
                 st.log("totals adv route num is {} , expected is {}".format(totals_num, expected_num))
                 return False
+    return False
 
 def get_random_array(start, end, num):
     ra = []
@@ -554,3 +554,18 @@ def get_random_array(start, end, num):
         ra.append(x)
     st.log(ra)
     return ra
+
+def check_bgp_vrf_ipv4_uni_sid(dut, vrf, prefix, expected_sid):
+    cmd = "show bgp vrf {} ipv4 unicast {}".format(vrf, prefix)
+    result = st.show(dut, cmd, type='alicli')
+    st.log(result)
+
+    if result is not None and len(result) > 0:
+        sid = result[0]['sid']
+        if sid == expected_sid:
+            st.log("sid check right {}".format(sid))
+            return True
+        else:
+            st.log("sid is {} , expected_sid is {}".format(sid, expected_sid))
+            return False
+    return False

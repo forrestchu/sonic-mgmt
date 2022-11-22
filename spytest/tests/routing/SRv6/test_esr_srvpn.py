@@ -23,7 +23,7 @@ import apis.routing.bgp as bgp_api
 import apis.routing.arp as arp_obj
 import apis.routing.bfd as bfdapi
 import apis.routing.ip_bgp as ip_bgp
-from esr_lib import cli_show_json, json_cmp, configdb_checkpoint, configdb_checkarray, appdb_checkpoint, configdb_onefield_checkpoint,appdb_onefield_checkpoint,check_vrf_route_nums, get_random_array, check_vpn_route_nums
+from esr_lib import cli_show_json, json_cmp, configdb_checkpoint, configdb_checkarray, appdb_checkpoint, configdb_onefield_checkpoint,appdb_onefield_checkpoint,check_vrf_route_nums, get_random_array, check_vpn_route_nums, check_bgp_vrf_ipv4_uni_sid
 import esr_lib as loc_lib
 from esr_vars import * #all the variables used for vrf testcase
 from esr_vars import data
@@ -1074,10 +1074,10 @@ def test_base_config_srvpn_2kl_route_learn_02():
     if not finish_v6_ingress:
         st.report_fail("dut2 v6 learn 5w route slower than 5 min")
 
-    st.log("dut2 v4 learn 50w time cost "+str(end_timev4_egress - start_time))
-    st.log("dut2 v6 learn 5w time cost "+str(end_timev6_egress - start_time))
-    st.log("dut1 v4 learn 50w time cost "+str(end_timev4_ingress - start_time))
-    st.log("dut1 v6 learn 5w time cost "+str(end_timev6_ingress - start_time))
+    st.log("dut2 v4 learn 50w time cost "+str(get_time_diff(str_start_time, end_timev4_egress)))
+    st.log("dut2 v6 learn 5w time cost "+str(get_time_diff(str_start_time, end_timev6_egress)))
+    st.log("dut1 v4 learn 50w time cost "+str(get_time_diff(str_start_time, end_timev4_ingress)))
+    st.log("dut1 v6 learn 5w time cost "+str(get_time_diff(str_start_time, end_timev4_ingress)))
     st.report_pass("test_case_passed")
 
 ## 100 vrf test
@@ -1092,7 +1092,7 @@ def test_base_config_srvpn_multi_vrf_03():
     dut2 = data.my_dut_list[1] #178
     st.banner("test_base_config_srvpn_multi_vrf_03 begin")
 
-    # load_2ksubif_100vrf()
+    load_2ksubif_100vrf()
 
     # load ixia config
     ixia_controller.load_config(IXIA_CONFIG_FILE)
@@ -1151,6 +1151,21 @@ def test_base_config_srvpn_multi_vrf_03():
     if not ret:
         st.report_fail("step2 check_vrf_route_nums {} 5*5000 test_base_config_srvpn_multi_vrf_03".format(to_check_vrf))
 
+    # check vrf ipv4 uni route and sid
+    to_check_prefix_sid = {
+        '202.10.0.1':'fd00:201:201:fff1:10::',
+        '202.30.0.1':'fd00:201:201:fff1:30::',
+        '202.50.0.1':'fd00:201:201:fff1:50::',
+        '201.20.0.1':'fd00:201:201:fff2:6::',
+        '201.40.0.1':'fd00:201:201:fff2:26::'
+    }
+
+    for (k, v) in to_check_prefix_sid.items():
+        ret = check_bgp_vrf_ipv4_uni_sid(dut2, to_check_vrf, k, v)
+        if not ret:
+            st.report_fail("step2 check_bgp_vrf_ipv4_uni_sid failed ")
+   
+
     # check vrf traffic
     ret = add_traffic_item_for_specific_vrf()
     if not ret:
@@ -1197,6 +1212,20 @@ def test_base_config_srvpn_multi_vrf_03():
     ret = check_vrf_route_nums(dut2, to_check_vrf, 25000, 1)
     if not ret:
         st.report_fail("step3 check_vrf_route_nums {} 5*5000 test_base_config_srvpn_multi_vrf_03".format(to_check_vrf))
+
+    # check vrf ipv4 uni route and sid
+    to_check_prefix_sid = {
+        '202.10.0.1':'fd00:201:201:fff1:10::',
+        '202.30.0.1':'fd00:201:202:fff1:30::',
+        '202.50.0.1':'fd00:201:201:fff1:50::',
+        '201.20.0.1':'fd00:201:203:fff2:6::',
+        '201.40.0.1':'fd00:201:201:fff2:26::'
+    }
+
+    for (k, v) in to_check_prefix_sid.items():
+        ret = check_bgp_vrf_ipv4_uni_sid(dut2, to_check_vrf, k, v)
+        if not ret:
+            st.report_fail("step3 check_bgp_vrf_ipv4_uni_sid failed ")  
 
     # check vrf traffic
     traffic_item = ixia_controller.get_traffic_item(SPECIFIC_VRF_TRAFFIC_NAME)

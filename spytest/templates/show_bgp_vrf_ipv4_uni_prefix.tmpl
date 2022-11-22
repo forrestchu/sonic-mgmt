@@ -1,0 +1,30 @@
+Value PREFIX (\w+.\w+.\w+.\w+/\w+)
+Value AVAILABLE (\d+)
+Value BEST (\d+)
+Value VRF (\S+)
+Value SOURCE (\w+.\w+.\w+.\w+)
+Value RD (\d+:\d+)
+Value IMPORTFROM (\w+.\w+.\w+.\w+/\w+)
+Value AS (\d+)
+Value NEXTHOP (^([0-9a-fA-F]{1,4}:){7,7}([0-9a-fA-F]{1,4}|:)|([0-9a-fA-F]{1,4}:){1,6}(:[0-9a-fA-F]{1,4}|:)|([0-9a-fA-F]{1,4}:){1,5}((:[0-9a-fA-F]{1,4}){1,2}|:)|([0-9a-fA-F]{1,4}:){1,4}((:[0-9a-fA-F]{1,4}){1,3}|:)|([0-9a-fA-F]{1,4}:){1,3}((:[0-9a-fA-F]{1,4}){1,4}|:)|([0-9a-fA-F]{1,4}:){1,2}((:[0-9a-fA-F]{1,4}){1,5}|:)|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6}|:)|:((:[0-9a-fA-F]{1,4}){1,7}|:))
+Value RT (\d+:\d+)
+Value SID (^([0-9a-fA-F]{1,4}:){7,7}([0-9a-fA-F]{1,4}|:)|([0-9a-fA-F]{1,4}:){1,6}(:[0-9a-fA-F]{1,4}|:)|([0-9a-fA-F]{1,4}:){1,5}((:[0-9a-fA-F]{1,4}){1,2}|:)|([0-9a-fA-F]{1,4}:){1,4}((:[0-9a-fA-F]{1,4}){1,3}|:)|([0-9a-fA-F]{1,4}:){1,3}((:[0-9a-fA-F]{1,4}){1,4}|:)|([0-9a-fA-F]{1,4}:){1,2}((:[0-9a-fA-F]{1,4}){1,5}|:)|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6}|:)|:((:[0-9a-fA-F]{1,4}){1,7}|:))
+Value BYTESENT (\d+)
+Value BYTEQ (\d+)
+Value BYTEQKERNEL (\d+)
+Value ROUTEMONITORING (Route Monitoring.*policy)
+
+Start
+  ^\s*BGP routing table entry for ${PREFIX}, version\s\d+\s*$$
+  ^\s*Paths:\s\(${AVAILABLE}\savailable,\sbest\s#${BEST},\s+vrf\s+${VRF}\)\s*$$
+  ^\s*Advertised to.*
+  ^\s*${SOURCE}\s*$$
+  ^\s*Imported from ${RD}:${IMPORTFROM}\s*$$
+  ^\s*${AS}\s*$$
+  ^\s*${NEXTHOP}\sfrom.*
+  ^\s*Origin.*
+  ^\s*Extended Community: RT:${RT}\s*$$
+  ^\s*Remote label:\s+\d+\s*$$
+  ^\s*Remote SID:\s+${SID}\s*$$ -> Record
+
+EOF

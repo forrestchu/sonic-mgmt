@@ -552,4 +552,5 @@ def get_random_array(start, end, num):
     for i in range(num):
         x = random.randint(start, end)
         ra.append(x)
+    st.log(ra)
     return ra

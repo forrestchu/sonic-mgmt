@@ -1038,7 +1038,7 @@ def test_base_config_srvpn_multi_vrf_03():
     data.my_dut_list = st.get_dut_names()
     dut1 = data.my_dut_list[0] #179
     dut2 = data.my_dut_list[1] #178
-    st.banner("test_base_config_srvpn_2kl_traffic_and_route_02 begin")
+    st.banner("test_base_config_srvpn_multi_vrf_03 begin")
 
     # 179 load 2k locator config
     curr_path = os.getcwd()
@@ -1074,7 +1074,7 @@ def test_base_config_srvpn_multi_vrf_03():
         vrf_array = []
         ra = get_random_array(0, 99, 10)
         for idx in ra:
-            vrf_array.append(data.mysid_opcode.keys()[idx])
+            vrf_array.append(data.vrf_list[idx])
         return vrf_array
 
     vrf_array = get_check_vrf_list()
@@ -1100,8 +1100,6 @@ def test_base_config_srvpn_multi_vrf_03():
     to_check_vrf = 'ACTN-TC47'
     rtlist = "1:10 1:30 1:50 1:70 1:90"
 
-    # change vrf import rt
-    rtlist = "1:10 1:20 1:30 1:40 1:50"
     cmd = "cli -c 'configure terminal' -c 'router bgp 100 vrf ACTN-TC47' -c 'address-family ipv4 unicast' -c 'route-target vpn import {}'".format(rtlist)
     st.config(dut2, cmd)
     st.wait(10)
@@ -1128,7 +1126,8 @@ def test_base_config_srvpn_multi_vrf_03():
     st.config(dut1, cmd)
     cmd = "cli -c 'configure terminal' -c 'router bgp 101 vrf VPN6' -c 'srv6-locator lsid3'"
     st.config(dut1, cmd)
-
+    
+    st.wait(10)
      #check vpn route learn 50w
     ret = check_vpn_route_nums(dut2, 500000, 0)
     if not ret:

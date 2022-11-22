@@ -189,7 +189,7 @@ def config_reload_reboot(dut, file):
     #cli_type = st.get_ui_type(dut, cli_type=cli_type)
     config_reload_file(dut, file)
     #config_save(dut, shell='vtysh')
-    st.reboot(dut)
+    config_save_reboot(dut)
 
 def dut_reboot(dut, method='normal',cli_type=''):
     cli_type = st.get_ui_type(dut, cli_type=cli_type)

@@ -58,6 +58,41 @@ from ixia_lib import *
 
 data.srv6 = {}
 
+
+def add_traffic_item_for_specific_vrf():
+    traffic_item = ixia_controller.add_traffic_item(SPECIFIC_VRF_TRAFFIC_NAME)
+
+    # generate 5 endpoint for endpoint
+    endpoint_range = [
+        #
+        [ DEVICE_1_IPV4, "10", DEVICE_3_IPV4_PREFIX_POOL, "10" ],
+        [ DEVICE_1_IPV4, "30", DEVICE_3_IPV4_PREFIX_POOL, "30" ],
+        [ DEVICE_1_IPV4, "50", DEVICE_3_IPV4_PREFIX_POOL, "50" ],
+        [ DEVICE_1_IPV4, "70", DEVICE_4_IPV4_PREFIX_POOL, "70" ],
+        [ DEVICE_1_IPV4, "90", DEVICE_4_IPV4_PREFIX_POOL, "90" ],
+    ]
+
+    for item in endpoint_range:
+        scalable_sources = [
+            {"arg1": item[0], "arg2": "1", "arg3": "1", "arg4": item[1], "arg5": "1"},
+        ]
+        scalable_destionations = [
+            {"arg1": item[2], "arg2": "1", "arg3": "1", "arg4": item[3], "arg5": "1"},
+        ]
+        endpoint_set = traffic_item.EndpointSet.add(
+            ScalableSources=scalable_sources, ScalableDestinations=scalable_destionations
+        )
+
+    with BatchAdd(ixia_controller.ixnetwork):
+        config_element = traffic_item.ConfigElement.add()
+        config_element.FrameRate.Type = "percentLineRate"
+        config_element.FrameRate.Rate = 1
+        config_element.TransmissionControl.Type = "fixedFrameCount"
+        config_element.TransmissionControl.FrameCount = 10000
+
+    return True
+
+
 def add_bmp_config_background(dut):
     st.log("config global bmp")
     st.config(dut, "cli -c 'configure terminal' -c 'bmp' -c 'bmp target bmp01' -c 'bmp connect 192.0.0.250 port 5555 min-retry 500 max-retry 2000'")
@@ -379,15 +414,15 @@ def ingress_dut_ixia_config():
 def esr_srvpn_module_hooks(request):
     #add things at the start of this module
 
-    global vars
-    vars = st.ensure_min_topology("D1D2:4","D1T1:6","D2T1:2")
-    (data.tg_list, data.tg_ph_list) = get_handles()
-    for i in range(6):
-        data.tg_list[i].tg_traffic_control(action='reset',port_handle=data.tg_ph_list[i])
+    # global vars
+    # vars = st.ensure_min_topology("D1D2:4","D1T1:6","D2T1:2")
+    # (data.tg_list, data.tg_ph_list) = get_handles()
+    # for i in range(6):
+    #     data.tg_list[i].tg_traffic_control(action='reset',port_handle=data.tg_ph_list[i])
 
-    duts_base_config()
-    egress_dut_ixia_config()
-    ingress_dut_ixia_config()
+    # duts_base_config()
+    # egress_dut_ixia_config()
+    # ingress_dut_ixia_config()
     # tg1_base_config()
     # tg2_base_config()
     # tg3_base_config()
@@ -948,7 +983,7 @@ def load_2ksubif_100vrf():
 
     json_file_dut2_multi_vrf = curr_path+"/routing/SRv6/dut2_multi_vrf_full.json"
     st.apply_files(dut2, [json_file_dut2_multi_vrf])
-    
+
     st.wait(10)
 
     reboot.config_reload_reboot(dut1, "/etc/spytest/SRv6/dut1_multi_vrf_full.json")
@@ -975,11 +1010,7 @@ def test_base_config_srvpn_2kl_route_learn_02():
     # wait 20 sec for vrf bgp established
     st.wait(20)
 
-    start_time = datetime.datetime.now()   
-
     # check redis db , check route
-    
-    end_time = datetime.datetime.now()
     finish_v4_egress = False
     finish_v6_egress = False
     finish_v4_ingress = False
@@ -991,7 +1022,7 @@ def test_base_config_srvpn_2kl_route_learn_02():
     end_timev4_egress = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
     end_timev6_egress = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
     str_end_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-    
+
     def get_time_diff(start, end):
         start_sec = time.mktime(time.strptime(start, "%Y-%m-%d %X"))
         end_sec = time.mktime(time.strptime(end, "%Y-%m-%d %X"))
@@ -1030,7 +1061,7 @@ def test_base_config_srvpn_2kl_route_learn_02():
         st.wait(1)
         str_end_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 
-    
+
     if not finish_v4_egress:
         st.report_fail("dut2 v4 learn 50w route slower than 5 min")
 
@@ -1061,7 +1092,7 @@ def test_base_config_srvpn_multi_vrf_03():
     dut2 = data.my_dut_list[1] #178
     st.banner("test_base_config_srvpn_multi_vrf_03 begin")
 
-    load_2ksubif_100vrf()
+    # load_2ksubif_100vrf()
 
     # load ixia config
     ixia_controller.load_config(IXIA_CONFIG_FILE)
@@ -1093,16 +1124,19 @@ def test_base_config_srvpn_multi_vrf_03():
             st.report_fail("step1 check_vrf_route_nums {} 5000 test_base_config_srvpn_multi_vrf_03".format(chcek_vrf))
 
     # check traffic
-    traffic_item = ixia_controller.get_traffic_items()
-    ret = ixia_controller.start_stateless_traffic(traffic_item)
-    if not ret:
-        st.report_fail("ixia_start_traffic_item failed")
+    traffic_item = ixia_controller.get_traffic_item(VRF_TRAFFIC_NAME)
+    if not traffic_item:
+        st.report_fail("Can't find traffic item {}".format(VRF_TRAFFIC_NAME))
 
-    ret = ixia_controller.check_port_rx_frame(PORT_NAME_1, 5000)
+    ret = ixia_controller.start_stateless_traffic(VRF_TRAFFIC_NAME)
     if not ret:
-        st.report_fail("ixia_check_port_rx_frame failed")
+        st.report_fail("Start traffic item {} failed".format(VRF_TRAFFIC_NAME))
+
     # wait until traffic end
     st.wait(10)
+    ret = ixia_controller.check_traffic_item_rx_frame(VRF_TRAFFIC_NAME, 80000)
+    if not ret:
+        st.report_fail("Check traffic item {} rx frame failed".format(VRF_TRAFFIC_NAME))
 
     # step2: change vrf import rt withsame service-SID
     to_check_vrf = 'ACTN-TC47'
@@ -1118,7 +1152,24 @@ def test_base_config_srvpn_multi_vrf_03():
         st.report_fail("step2 check_vrf_route_nums {} 5*5000 test_base_config_srvpn_multi_vrf_03".format(to_check_vrf))
 
     # check vrf traffic
-    #TODO
+    ret = add_traffic_item_for_specific_vrf()
+    if not ret:
+        st.report_fail("Faild to add traffic item for specific vrf")
+
+    # check traffic
+    traffic_item = ixia_controller.get_traffic_item(SPECIFIC_VRF_TRAFFIC_NAME)
+    if not traffic_item:
+        st.report_fail("Can't find traffic item {}".format(SPECIFIC_VRF_TRAFFIC_NAME))
+
+    ret = ixia_controller.start_stateless_traffic(SPECIFIC_VRF_TRAFFIC_NAME)
+    if not ret:
+        st.report_fail("Start traffic item {} failed".format(SPECIFIC_VRF_TRAFFIC_NAME))
+
+    # wait until traffic end
+    st.wait(10)
+    ret = ixia_controller.check_traffic_item_rx_frame(SPECIFIC_VRF_TRAFFIC_NAME, 10000 * 5)
+    if not ret:
+        st.report_fail("Check traffic item {} rx frame failed".format(SPECIFIC_VRF_TRAFFIC_NAME))
 
 
     # step3: change vrf import rt
@@ -1134,7 +1185,7 @@ def test_base_config_srvpn_multi_vrf_03():
     st.config(dut1, cmd)
     cmd = "cli -c 'configure terminal' -c 'router bgp 101 vrf VPN6' -c 'srv6-locator lsid3'"
     st.config(dut1, cmd)
-    
+
     st.wait(10)
      #check vpn route learn 50w
     ret = check_vpn_route_nums(dut2, 500000, 0)
@@ -1148,7 +1199,19 @@ def test_base_config_srvpn_multi_vrf_03():
         st.report_fail("step3 check_vrf_route_nums {} 5*5000 test_base_config_srvpn_multi_vrf_03".format(to_check_vrf))
 
     # check vrf traffic
-    #TODO
+    traffic_item = ixia_controller.get_traffic_item(SPECIFIC_VRF_TRAFFIC_NAME)
+    if not traffic_item:
+        st.report_fail("Can't find traffic item {}".format(SPECIFIC_VRF_TRAFFIC_NAME))
+
+    ret = ixia_controller.start_stateless_traffic(SPECIFIC_VRF_TRAFFIC_NAME)
+    if not ret:
+        st.report_fail("Start traffic item {} failed".format(SPECIFIC_VRF_TRAFFIC_NAME))
+
+    # wait until traffic end
+    st.wait(10)
+    ret = ixia_controller.check_traffic_item_rx_frame(SPECIFIC_VRF_TRAFFIC_NAME, 10000 * 5)
+    if not ret:
+        st.report_fail("Check traffic item {} rx frame failed".format(SPECIFIC_VRF_TRAFFIC_NAME))
 
 
     # step4: ecmp check

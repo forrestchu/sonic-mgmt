@@ -1,5 +1,6 @@
 from ixnetwork_restpy import SessionAssistant
 from ixnetwork_restpy import Files
+from ixnetwork_restpy.assistants.batch.batchadd import BatchAdd
 import os
 import json
 import time
@@ -22,7 +23,11 @@ class IxiaController():
 
         self.ixnetwork = self.session_assistant.Ixnetwork
 
+    def new_config(self):
+        self.ixnetwork.NewConfig()
+
     def load_config(self, file_name):
+        self.ixnetwork.NewConfig()
         file_path = os.path.join(
             os.path.dirname(os.path.realpath(__file__)), file_name
         )
@@ -30,11 +35,43 @@ class IxiaController():
         self.ixnetwork.LoadConfig(Files(file_path, local_file=True))
 
 
-    def get_traffic_item_statistics(self):
+    def get_traffic_item_statistics(self, traffic_item_name):
+        '''
+        ====== Traffic Item Statictics ======
+        Row:0  View:Traffic Item Statistics  Sampled:2022-11-22 09:34:13.106614 UTC
+            Traffic Item: Traffic-Vrf
+            Tx Frames: 80000
+            Rx Frames: 60510
+            Frames Delta: 19490
+            Loss %: 24.363
+            Tx Frame Rate: 0.000
+            Rx Frame Rate: 0.000
+            Tx L1 Rate (bps): 0.000
+            Rx L1 Rate (bps): 0.000
+            Rx Bytes: 4235700
+            Tx Rate (Bps): 0.000
+            Rx Rate (Bps): 0.000
+            Tx Rate (bps): 0.000
+            Rx Rate (bps): 0.000
+            Tx Rate (Kbps): 0.000
+            Rx Rate (Kbps): 0.000
+            Tx Rate (Mbps): 0.000
+            Rx Rate (Mbps): 0.000
+            Store-Forward Avg Latency (ns): 5383
+            Store-Forward Min Latency (ns): 5219
+            Store-Forward Max Latency (ns): 6003
+            First TimeStamp: 00:00:00.363
+            Last TimeStamp: 00:00:00.366
+        '''
         caption = "Traffic Item Statistics"
         view = self.session_assistant.StatViewAssistant(caption)
-        print("====== Traffic Item Statictics ======")
-        print(view)
+        view.ClearRowFilters()
+        rows = view.Rows
+        for row in rows:
+            if row['Traffic Item'] == traffic_item_name:
+                return row
+
+        return None
 
     def get_port_statistics(self, port_name):
         '''
@@ -97,43 +134,54 @@ class IxiaController():
 
         return None
 
-
     def get_topology_status(self):
         topology = self.ixnetwork.GetTopologyStatus()
-        print(json.dumps(topology, indent=4))
-
+        return topology
 
     def add_traffic_item(self, name, traffic_type="ipv4", traffic_item_type="l2L3"):
         traffic_item = self.ixnetwork.Traffic.TrafficItem.add(
             Name=name, TrafficType=traffic_type, TrafficItemType=traffic_item_type)
 
-        traffic_config = traffic_item.ConfigElement.find()
-        traffic_config.FrameRate.update(Type='percentLineRate', Rate='100')
-        traffic_config.TransmissionControl.update(Type='continuous')
+        return traffic_item
 
-        return True
+    def get_all_traffic_items(self):
+        return self.ixnetwork.Traffic.TrafficItem.find()
 
+    def get_traffic_item(self, traffic_item_name):
+        traffic_items = self.get_all_traffic_items()
+        for traffic_item in traffic_items:
+            if traffic_item.Name == traffic_item_name:
+                return traffic_item
 
-    def get_traffic_items(self):
-        traffic_items = self.ixnetwork.Traffic.TrafficItem.find()
-        return traffic_items[0]
-
+        return None
 
     def get_bgp_ipv4_peer(self):
         bgp_ipv4_peer = self.ixnetwork.Globals.find().Topology.find().BgpIpv4Peer.find()
         print(bgp_ipv4_peer)
 
-    def start_stateless_traffic(self, traffic_item):
-        traffic_item.StartStatelessTraffic()
+    def start_stateless_traffic(self, traffic_item_name):
+        traffic_item = self.get_traffic_item(traffic_item_name)
+        if not traffic_item:
+            return False
 
-    def stop_stateless_traffic(self, traffic_item):
+        self.ixnetwork.Traffic.find().Apply()
+        traffic_item.StartStatelessTraffic()
+        return True
+
+    def stop_stateless_traffic(self, traffic_item_name):
+        traffic_item = self.get_traffic_item(traffic_item_name)
+        if not traffic_item:
+            return False
         traffic_item.StopStatelessTraffic()
+        return True
 
     def start_all_protocols(self):
         self.ixnetwork.StartAllProtocols()
+        return True
 
     def stop_all_protocols(self):
         self.ixnetwork.StopAllProtocols()
+        return True
 
 
 
@@ -147,15 +195,12 @@ class IxiaController():
             return True
         return False
 
+    def check_traffic_item_rx_frame(self, traffic_item_name, rx_count):
+        traffic_item_stats = self.get_traffic_item_statistics(traffic_item_name)
+        if traffic_item_stats is None:
+            return False
+        if traffic_item_stats['Rx Frames'] == rx_count:
+            return True
+        return False
 
 ixia_controller = IxiaController()
-
-# ixia_controller.load_config(IXIA_CONFIG_FILE)
-# ixia_controller.get_port_statistics()
-# ixia_controller.get_traffic_item_statistics()
-# ixia_controller.get_traffic_item()
-
-# ixia_controller.get_topology_status()
-
-# ixia_controller.get_bgp_ipv4_peer()
-

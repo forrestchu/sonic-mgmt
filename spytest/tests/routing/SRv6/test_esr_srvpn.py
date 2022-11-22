@@ -28,7 +28,7 @@ import esr_lib as loc_lib
 from esr_vars import * #all the variables used for vrf testcase
 from esr_vars import data
 from ixia_vars import *
-from ixia_lib import *
+from ixia_helper import *
 #
 #            +-------------------+                 +-------------------+
 # TG1_1====  |                    |                |                    |
@@ -57,41 +57,6 @@ from ixia_lib import *
 #data = SpyTestDict()
 
 data.srv6 = {}
-
-
-def add_traffic_item_for_specific_vrf():
-    traffic_item = ixia_controller.add_traffic_item(SPECIFIC_VRF_TRAFFIC_NAME)
-
-    # generate 5 endpoint for endpoint
-    endpoint_range = [
-        #
-        [ DEVICE_1_IPV4, "10", DEVICE_3_IPV4_PREFIX_POOL, "10" ],
-        [ DEVICE_1_IPV4, "30", DEVICE_3_IPV4_PREFIX_POOL, "30" ],
-        [ DEVICE_1_IPV4, "50", DEVICE_3_IPV4_PREFIX_POOL, "50" ],
-        [ DEVICE_1_IPV4, "70", DEVICE_4_IPV4_PREFIX_POOL, "70" ],
-        [ DEVICE_1_IPV4, "90", DEVICE_4_IPV4_PREFIX_POOL, "90" ],
-    ]
-
-    for item in endpoint_range:
-        scalable_sources = [
-            {"arg1": item[0], "arg2": "1", "arg3": "1", "arg4": item[1], "arg5": "1"},
-        ]
-        scalable_destionations = [
-            {"arg1": item[2], "arg2": "1", "arg3": "1", "arg4": item[3], "arg5": "1"},
-        ]
-        endpoint_set = traffic_item.EndpointSet.add(
-            ScalableSources=scalable_sources, ScalableDestinations=scalable_destionations
-        )
-
-    with BatchAdd(ixia_controller.ixnetwork):
-        config_element = traffic_item.ConfigElement.add()
-        config_element.FrameRate.Type = "percentLineRate"
-        config_element.FrameRate.Rate = 1
-        config_element.TransmissionControl.Type = "fixedFrameCount"
-        config_element.TransmissionControl.FrameCount = 10000
-
-    return True
-
 
 def add_bmp_config_background(dut):
     st.log("config global bmp")
@@ -1004,11 +969,8 @@ def test_base_config_srvpn_2kl_route_learn_02():
     load_2ksubif_100vrf()
 
     # load ixia config
-    ixia_controller.load_config(IXIA_CONFIG_FILE)
-    st.wait(10)
-    ixia_controller.start_all_protocols()
-    # wait 20 sec for vrf bgp established
-    st.wait(20)
+    ixia_load_config(IXIA_CONFIG_FILE)
+    ixia_start_all_protocols()
 
     # check redis db , check route
     finish_v4_egress = False
@@ -1092,14 +1054,11 @@ def test_base_config_srvpn_multi_vrf_03():
     dut2 = data.my_dut_list[1] #178
     st.banner("test_base_config_srvpn_multi_vrf_03 begin")
 
-    load_2ksubif_100vrf()
+    # load_2ksubif_100vrf()
 
     # load ixia config
-    ixia_controller.load_config(IXIA_CONFIG_FILE)
-    st.wait(10)
-    ixia_controller.start_all_protocols()
-    # wait 20 sec for vrf bgp established
-    st.wait(20)
+    ixia_load_config(IXIA_CONFIG_FILE)
+    ixia_start_all_protocols()
 
     # step1 check vpn route learn 50w
     ret = check_vpn_route_nums(dut2, 500000, 0)
@@ -1124,17 +1083,7 @@ def test_base_config_srvpn_multi_vrf_03():
             st.report_fail("step1 check_vrf_route_nums {} 5000 test_base_config_srvpn_multi_vrf_03".format(chcek_vrf))
 
     # check traffic
-    traffic_item = ixia_controller.get_traffic_item(VRF_TRAFFIC_NAME)
-    if not traffic_item:
-        st.report_fail("Can't find traffic item {}".format(VRF_TRAFFIC_NAME))
-
-    ret = ixia_controller.start_stateless_traffic(VRF_TRAFFIC_NAME)
-    if not ret:
-        st.report_fail("Start traffic item {} failed".format(VRF_TRAFFIC_NAME))
-
-    # wait until traffic end
-    st.wait(10)
-    ret = ixia_controller.check_traffic_item_rx_frame(VRF_TRAFFIC_NAME, 80000)
+    ret = ixia_check_traffic(VRF_TRAFFIC_NAME, key="Rx frame", value=80000)
     if not ret:
         st.report_fail("Check traffic item {} rx frame failed".format(VRF_TRAFFIC_NAME))
 
@@ -1164,25 +1113,15 @@ def test_base_config_srvpn_multi_vrf_03():
         ret = check_bgp_vrf_ipv4_uni_sid(dut2, to_check_vrf, k, v)
         if not ret:
             st.report_fail("step2 check_bgp_vrf_ipv4_uni_sid failed ")
-   
+
 
     # check vrf traffic
-    ret = add_traffic_item_for_specific_vrf()
+    ret = ixia_add_traffic_item_for_specific_vrf()
     if not ret:
         st.report_fail("Faild to add traffic item for specific vrf")
 
     # check traffic
-    traffic_item = ixia_controller.get_traffic_item(SPECIFIC_VRF_TRAFFIC_NAME)
-    if not traffic_item:
-        st.report_fail("Can't find traffic item {}".format(SPECIFIC_VRF_TRAFFIC_NAME))
-
-    ret = ixia_controller.start_stateless_traffic(SPECIFIC_VRF_TRAFFIC_NAME)
-    if not ret:
-        st.report_fail("Start traffic item {} failed".format(SPECIFIC_VRF_TRAFFIC_NAME))
-
-    # wait until traffic end
-    st.wait(10)
-    ret = ixia_controller.check_traffic_item_rx_frame(SPECIFIC_VRF_TRAFFIC_NAME, 10000 * 5)
+    ret = ixia_check_traffic(SPECIFIC_VRF_TRAFFIC_NAME, key="Rx frame", value=50000)
     if not ret:
         st.report_fail("Check traffic item {} rx frame failed".format(SPECIFIC_VRF_TRAFFIC_NAME))
 
@@ -1225,20 +1164,10 @@ def test_base_config_srvpn_multi_vrf_03():
     for (k, v) in to_check_prefix_sid.items():
         ret = check_bgp_vrf_ipv4_uni_sid(dut2, to_check_vrf, k, v)
         if not ret:
-            st.report_fail("step3 check_bgp_vrf_ipv4_uni_sid failed ")  
+            st.report_fail("step3 check_bgp_vrf_ipv4_uni_sid failed ")
 
     # check vrf traffic
-    traffic_item = ixia_controller.get_traffic_item(SPECIFIC_VRF_TRAFFIC_NAME)
-    if not traffic_item:
-        st.report_fail("Can't find traffic item {}".format(SPECIFIC_VRF_TRAFFIC_NAME))
-
-    ret = ixia_controller.start_stateless_traffic(SPECIFIC_VRF_TRAFFIC_NAME)
-    if not ret:
-        st.report_fail("Start traffic item {} failed".format(SPECIFIC_VRF_TRAFFIC_NAME))
-
-    # wait until traffic end
-    st.wait(10)
-    ret = ixia_controller.check_traffic_item_rx_frame(SPECIFIC_VRF_TRAFFIC_NAME, 10000 * 5)
+    ret = ixia_check_traffic(SPECIFIC_VRF_TRAFFIC_NAME, key='Rx frame', value=50000)
     if not ret:
         st.report_fail("Check traffic item {} rx frame failed".format(SPECIFIC_VRF_TRAFFIC_NAME))
 

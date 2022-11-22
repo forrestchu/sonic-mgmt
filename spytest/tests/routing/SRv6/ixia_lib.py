@@ -6,17 +6,12 @@ import json
 import time
 
 
-IXIA_HOST = "10.97.244.219"
-IXIA_PORT = 12020
-
-IXIA_CONFIG_FILE = "esr_multi_vrf.ixncfg"
-
 class IxiaController():
 
-    def __init__(self):
+    def __init__(self, host, port):
         self.session_assistant = SessionAssistant(
-            IpAddress=IXIA_HOST,
-            RestPort=IXIA_PORT,
+            IpAddress=host,
+            RestPort=port,
             LogLevel=SessionAssistant.LOGLEVEL_INFO,
             # ClearConfig=True,
         )
@@ -27,7 +22,6 @@ class IxiaController():
         self.ixnetwork.NewConfig()
 
     def load_config(self, file_name):
-        self.ixnetwork.NewConfig()
         file_path = os.path.join(
             os.path.dirname(os.path.realpath(__file__)), file_name
         )
@@ -159,12 +153,15 @@ class IxiaController():
         bgp_ipv4_peer = self.ixnetwork.Globals.find().Topology.find().BgpIpv4Peer.find()
         print(bgp_ipv4_peer)
 
+    def traffic_apply(self):
+        self.ixnetwork.Traffic.find().Apply()
+        return True
+
     def start_stateless_traffic(self, traffic_item_name):
         traffic_item = self.get_traffic_item(traffic_item_name)
         if not traffic_item:
             return False
 
-        self.ixnetwork.Traffic.find().Apply()
         traffic_item.StartStatelessTraffic()
         return True
 
@@ -185,22 +182,5 @@ class IxiaController():
 
 
 
-    # CHECK FUNCTIONS
-    def check_port_rx_frame(self, port_name, rx_count):
-        port_stats = self.get_port_statistics(port_name)
-        if port_stats is None:
-            return False
 
-        if port_stats['Valid Frames Rx.'] == rx_count:
-            return True
-        return False
-
-    def check_traffic_item_rx_frame(self, traffic_item_name, rx_count):
-        traffic_item_stats = self.get_traffic_item_statistics(traffic_item_name)
-        if traffic_item_stats is None:
-            return False
-        if traffic_item_stats['Rx Frames'] == rx_count:
-            return True
-        return False
-
-ixia_controller = IxiaController()
+# ixia_controller = IxiaController()

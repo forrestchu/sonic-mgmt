@@ -936,111 +936,11 @@ def test_base_config_srvpn_locator_01():
     st.report_pass("test_case_passed")
 
 
-## 2k locator , base traffic and route learning
-@pytest.mark.community
-@pytest.mark.community_pass
-def test_base_config_srvpn_2kl_traffic_and_route_02():
-    # data.srv6['tg_dut2_eth109']=tg_dut2_eth109
-    # data.srv6['tg_dut2_eth110']=tg_dut2_eth110
-    # data.srv6['tg_ph_dut2_eth109']=tg_ph_dut2_eth109
-    # data.srv6['tg_ph_dut2_eth110']=tg_ph_dut2_eth110
-    # data.srv6['bgpv4_handle_dut2_eth109']=tg_result1['ipv4_handle']
-    # data.srv6['bgpv4_handle_dut2_eth110']=tg_result2['ipv4_handle']
-    # data.srv6['tg_dut1_eth109']=tg_dut1_eth109
-    # data.srv6['tg_dut1_eth110']=tg_dut1_eth110
-    # data.srv6['tg_ph_dut1_eth109']=tg_ph_dut1_eth109
-    # data.srv6['tg_ph_dut1_eth110']=tg_ph_dut1_eth110
-    # data.srv6['bgpv4_handle_dut1_eth109']=tg_result1['ipv4_handle']
-    # data.srv6['bgpv4_handle_dut1_eth110']=tg_result2['ipv4_handle']
-
+def load_2ksubif_100vrf():
     data.my_dut_list = st.get_dut_names()
     dut1 = data.my_dut_list[0] #179
     dut2 = data.my_dut_list[1] #178
-    st.banner("test_base_config_srvpn_2kl_traffic_and_route_02 begin")
 
-    # 179 load 2k locator config
-    curr_path = os.getcwd()
-    json_file_dut = curr_path+"/routing/SRv6/2k_locators.json"
-    st.apply_files(dut1, [json_file_dut])
-    reboot.config_save_reboot(dut1)
-    st.banner("2k locators Loaded completed")
-
-
-    def_v4_route_count_d1 = asicapi.get_ipv4_route_count(dut1)
-    def_v6_route_count_d1 = asicapi.get_ipv6_route_count(dut1)
-    def_v4_route_count_d2 = asicapi.get_ipv4_route_count(dut2)
-    def_v6_route_count_d2 = asicapi.get_ipv6_route_count(dut2)
-
-    # check redis db , check route
-
-    # Time taken for route installation
-    # Taking the start time timestamp
-    tg1 = data.srv6['tg_dut1_eth109']
-    tg2 = data.srv6['tg_dut1_eth110']
-    ingress_bgp_rtr1 = data.srv6['tg_dut1_eth109_bgp_v4_vrf']
-    ingress_bgp_rtr2 = data.srv6['tg_dut1_eth110_bgp_v4_vrf']
-
-    # st.banner("Time taken for intsalling {} v4 routes ".format('50w') +str(time_in_secs.seconds))
-    # st.banner("Measuring time taken for route withdraw of {} ipv4 routes on HWSKU {}".format(data.test_bgp_route_count,hwsku_under_test))
-
-
-    start_time = datetime.datetime.now()
-
-    # Starting the BGP router on TG.
-
-    # Withdraw the routes.
-    ctrl1=tg1.tg_bgp_routes_control(handle=ingress_bgp_rtr1['conf']['handle'], route_handle=ingress_bgp_rtr1['route'][0]['handle'], mode='withdraw')
-    st.log("TR_CTRL: "+str(ctrl1))
-
-    # config ixia route and check route learning performance
-    if not check_bcmcmd_route_count(dut1, 100, "ipv4", def_v4_route_count_d1, 0):
-        #st.report_fail("route_table_not_cleared_by_withdraw_from_tg")
-        st.log("route_table_not_cleared_by_withdraw_from_tg")
-
-    # config ixia route and check route learning performance
-    if not check_bcmcmd_route_count(dut2, 100, "ipv4", def_v4_route_count_d2, 0):
-        #st.report_fail("route_table_not_cleared_by_withdraw_from_tg")
-        st.log("route_table_not_cleared_by_withdraw_from_tg")
-
-    count = verify_bgp_route_count(dut1, family='ipv4', neighbor=data.neigh_ip_addr, state='Established')
-    st.log("Route count: "+str(count))
-    if int(count) != 0:
-        st.report_fail("route_table_not_cleared_by_withdraw_from_tg")
-
-    end_time = datetime.datetime.now()
-
-    st.log("Start Time: {}".format(start_time))
-    st.log("End Time: {}".format(end_time))
-    time_in_secs = end_time - start_time
-
-
-    # traffic test
-    tr1 = tg1.tg_traffic_config(port_handle=data.srv6['tg_ph_dut2_eth109'],
-        emulation_src_handle=data.srv6['interface_dut2_eth109']['handle'],
-        emulation_dst_handle=ingress_bgp_rtr2['route'][0]['handle'],
-        circuit_endpoint_type='ipv4',mode='create',
-        transmit_mode='continuous', length_mode='fixed',
-        rate_percent=data.traffic_rate_precent,
-        enable_stream_only_gen='0')
-
-    # Starting the TG traffic after clearing the DUT counters
-    papi.clear_interface_counters(dut1)
-    tg1.tg_traffic_control(action="run",handle=tr1['stream_id'])
-
-
-## 100 vrf test
-@pytest.mark.community
-@pytest.mark.community_pass
-def test_base_config_srvpn_multi_vrf_03():
-
-    # ixia config 100 subinterface
-
-    data.my_dut_list = st.get_dut_names()
-    dut1 = data.my_dut_list[0] #179
-    dut2 = data.my_dut_list[1] #178
-    st.banner("test_base_config_srvpn_multi_vrf_03 begin")
-
-    # 179 load 2k locator config
     curr_path = os.getcwd()
 
     json_file_dut1_multi_vrf = curr_path+"/routing/SRv6/dut1_multi_vrf_full.json"
@@ -1056,8 +956,116 @@ def test_base_config_srvpn_multi_vrf_03():
 
     st.banner("multi vrf config loaded completed")
 
+## 2k locator , base traffic and route learning
+@pytest.mark.community
+@pytest.mark.community_pass
+def test_base_config_srvpn_2kl_route_learn_02():
+    data.my_dut_list = st.get_dut_names()
+    dut1 = data.my_dut_list[0] #179
+    dut2 = data.my_dut_list[1] #178
+    st.banner("test_base_config_srvpn_2kl_traffic_and_route_02 begin")
+
+    # load full config
+    load_2ksubif_100vrf()
+
     # load ixia config
     ixia_controller.load_config(IXIA_CONFIG_FILE)
+    st.wait(10)
+    ixia_controller.start_all_protocols()
+    # wait 20 sec for vrf bgp established
+    st.wait(20)
+
+    start_time = datetime.datetime.now()   
+
+    # check redis db , check route
+    
+    end_time = datetime.datetime.now()
+    finish_v4_egress = False
+    finish_v6_egress = False
+    finish_v4_ingress = False
+    finish_v6_ingress = False
+
+    str_start_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+    end_timev4_ingress = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+    end_timev6_ingress = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+    end_timev4_egress = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+    end_timev6_egress = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+    str_end_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+    
+    def get_time_diff(start, end):
+        start_sec = time.mktime(time.strptime(start, "%Y-%m-%d %X"))
+        end_sec = time.mktime(time.strptime(end, "%Y-%m-%d %X"))
+        return end_sec-start_sec
+
+    # 5 min check route count
+    while get_time_diff(str_start_time, str_end_time) < (5*60):
+        # egress
+        def_v4_route_count_d2 = asicapi.get_ipv4_route_count(dut2)
+        if int(def_v4_route_count_d2) >= 500000 and not finish_v4_egress:
+            end_timev4_egress = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+            finish_v4_egress = True
+            st.log("dut2 v4 learn 50w time cost "+str(get_time_diff(str_start_time, end_timev4_egress)))
+
+        def_v6_route_count_d2 = asicapi.get_ipv6_route_count(dut2)
+        if int(def_v6_route_count_d2) >= 50000 and not finish_v6_egress:
+            end_timev6_egress = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+            finish_v6_egress = True
+            st.log("dut2 v6 learn 5w time cost "+str(get_time_diff(str_start_time, end_timev6_egress)))
+        # ingress
+        def_v4_route_count_d1 = asicapi.get_ipv4_route_count(dut1)
+        if int(def_v4_route_count_d1) >= 500000 and not finish_v4_ingress:
+            end_timev4_ingress = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+            finish_v4_ingress = True
+            st.log("dut1 v4 learn 50w time cost "+str(get_time_diff(str_start_time, end_timev4_ingress)))
+
+        def_v6_route_count_d1 = asicapi.get_ipv6_route_count(dut1)
+        if int(def_v6_route_count_d1) >= 50000 and not finish_v6_ingress:
+            end_timev6_ingress = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+            finish_v6_ingress = True
+            st.log("dut1 v6 learn 5w time cost "+str(get_time_diff(str_start_time, end_timev6_ingress)))
+
+        if finish_v4_egress and finish_v6_egress and finish_v4_ingress and finish_v6_ingress:
+            break
+
+        st.wait(1)
+        str_end_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+
+    
+    if not finish_v4_egress:
+        st.report_fail("dut2 v4 learn 50w route slower than 5 min")
+
+    if not finish_v6_egress:
+        st.report_fail("dut2 v6 learn 5w route slower than 5 min")
+
+    if not finish_v4_ingress:
+        st.report_fail("dut2 v6 learn 5w route slower than 5 min")
+
+    if not finish_v6_ingress:
+        st.report_fail("dut2 v6 learn 5w route slower than 5 min")
+
+    st.log("dut2 v4 learn 50w time cost "+str(end_timev4_egress - start_time))
+    st.log("dut2 v6 learn 5w time cost "+str(end_timev6_egress - start_time))
+    st.log("dut1 v4 learn 50w time cost "+str(end_timev4_ingress - start_time))
+    st.log("dut1 v6 learn 5w time cost "+str(end_timev6_ingress - start_time))
+    st.report_pass("test_case_passed")
+
+## 100 vrf test
+@pytest.mark.community
+@pytest.mark.community_pass
+def test_base_config_srvpn_multi_vrf_03():
+
+    # ixia config 100 subinterface
+
+    data.my_dut_list = st.get_dut_names()
+    dut1 = data.my_dut_list[0] #179
+    dut2 = data.my_dut_list[1] #178
+    st.banner("test_base_config_srvpn_multi_vrf_03 begin")
+
+    load_2ksubif_100vrf()
+
+    # load ixia config
+    ixia_controller.load_config(IXIA_CONFIG_FILE)
+    st.wait(10)
     ixia_controller.start_all_protocols()
     # wait 20 sec for vrf bgp established
     st.wait(20)

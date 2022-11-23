@@ -492,6 +492,17 @@ def appdb_onefield_checkpoint(dut, key, checkfield, checkval, expect = True, che
     if expect is not check:
         st.report_fail("{} app DB has no right {} config".format(checkpoint, checkfield))
 
+def appdb_get_onefield(dut, key, field):
+    command = redis.build(dut, redis.APPL_DB, 'hget "{}" "{}"'.format(key, field))
+    output = st.show(dut, command, skip_tmpl=True)
+    if output is '':
+        return None
+
+    output = output.strip('"')
+    last_pos = output.rfind('"')
+    output = output[:last_pos]
+    st.log(output)
+    return output
 
 ## check vrf leran route nums
 # show ip route vrf VRFNAME summary

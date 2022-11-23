@@ -23,7 +23,7 @@ import apis.routing.bgp as bgp_api
 import apis.routing.arp as arp_obj
 import apis.routing.bfd as bfdapi
 import apis.routing.ip_bgp as ip_bgp
-from esr_lib import cli_show_json, json_cmp, configdb_checkpoint, configdb_checkarray, appdb_checkpoint, configdb_onefield_checkpoint,appdb_onefield_checkpoint,check_vrf_route_nums, get_random_array, check_vpn_route_nums, check_bgp_vrf_ipv4_uni_sid
+from esr_lib import cli_show_json, json_cmp, configdb_checkpoint, configdb_checkarray, appdb_checkpoint, configdb_onefield_checkpoint,appdb_onefield_checkpoint,check_vrf_route_nums, get_random_array, check_vpn_route_nums, check_bgp_vrf_ipv4_uni_sid,appdb_get_onefield
 import esr_lib as loc_lib
 from esr_vars import * #all the variables used for vrf testcase
 from esr_vars import data
@@ -219,190 +219,12 @@ def get_dut_ip():
     data.dut1_all_ip_addr = copy.deepcopy(output1)
     data.dut2_all_ip_addr = copy.deepcopy(output2)
 
-def egress_dut_ixia_config():
-    tg_dut2_eth109, tg_ph_dut2_eth109 = tgapi.get_handle_byname("T1D2P1") # ixia - 178 Eth109
-    tg_dut2_eth110, tg_ph_dut2_eth110 = tgapi.get_handle_byname("T1D2P2") # ixia - 178 Eth110
-
-    tg_result1 = tg_dut2_eth109.tg_interface_config(port_handle=tg_ph_dut2_eth109, mode='config',
-        intf_ip_addr='100.1.0.2',
-        gateway='100.1.0.1',
-        arp_send_req='1')
-
-    st.log("Topology - Port ip Unconfig tg api result = {}".format(tg_result1))
-
-    tg_result2 = tg_dut2_eth110.tg_interface_config(port_handle=tg_ph_dut2_eth110, mode='config',
-        intf_ip_addr='100.2.0.2',
-        gateway='100.2.0.1',
-        arp_send_req='1')
-
-    st.log("Topology - Port ip Unconfig tg api result = {}".format(tg_result2))
-
-    # Configuring the BGP router in vrf
-    conf_var = {'mode'                 : 'enable',
-                'active_connect_enable' : '1',
-                'enable_4_byte_as'      : '1',
-                'local_as'              : 999,
-                'remote_as'             : 100,
-                'remote_ip_addr'        : '100.1.0.1'
-                }
-
-    ctrl_start = { 'mode' : 'start'}
-    ctrl_stop = { 'mode' : 'stop'}
-
-    tg_dut2_eth109_bgp_v4_vrf = tgapi.tg_bgp_config(tg = tg_dut2_eth109,
-        handle    = tg_result1['ipv4_handle'],
-        conf_var  = conf_var,
-        #route_var = route_var,
-        ctrl_var  = ctrl_start)
-
-    st.log("tg_bgp_config result {}".format(tg_dut2_eth109_bgp_v4_vrf))
-
-    # Configuring the BGP router in vrf
-    conf_var = {'mode'                 : 'enable',
-                'active_connect_enable' : '1',
-                'enable_4_byte_as'      : '1',
-                'local_as'              : 998,
-                'remote_as'             : 100,
-                'remote_ip_addr'        : '100.2.0.1'
-                }
-
-    ctrl_start = { 'mode' : 'start'}
-    ctrl_stop = { 'mode' : 'stop'}
-
-    tg_dut2_eth110_bgp_v4_vrf = tgapi.tg_bgp_config(tg = tg_dut2_eth110,
-        handle    = tg_result2['ipv4_handle'],
-        conf_var  = conf_var,
-        #route_var = route_var,
-        ctrl_var  = ctrl_start)
-
-    st.log("tg_bgp_config result {}".format(tg_dut2_eth110_bgp_v4_vrf))
-
-    data.srv6['tg_dut2_eth109']=tg_dut2_eth109
-    data.srv6['tg_dut2_eth110']=tg_dut2_eth110
-    data.srv6['tg_ph_dut2_eth109']=tg_ph_dut2_eth109
-    data.srv6['tg_ph_dut2_eth110']=tg_ph_dut2_eth110
-    data.srv6['bgpv4_handle_dut2_eth109']=tg_result1['ipv4_handle']
-    data.srv6['bgpv4_handle_dut2_eth110']=tg_result2['ipv4_handle']
-
-def ingress_dut_ixia_config():
-    tg_dut1_eth109, tg_ph_dut1_eth109 = tgapi.get_handle_byname("T1D1P1") # ixia - 179 Eth109
-    tg_dut1_eth110, tg_ph_dut1_eth110 = tgapi.get_handle_byname("T1D1P2") # ixia - 179 Eth110
-
-    tg_result1 = tg_dut1_eth109.tg_interface_config(port_handle=tg_ph_dut1_eth109, mode='config',
-        intf_ip_addr='101.1.0.2',
-        gateway='101.1.0.1',
-        ipv6_intf_addr='2000:0:1:1:0:0:0:2',
-        ipv6_gateway='2000:0:1:1:0:0:0:1',
-        arp_send_req='1')
-
-    st.log("Topology - Port ip Unconfig tg api result = {}".format(tg_result1))
-
-    tg_result2 = tg_dut1_eth110.tg_interface_config(port_handle=tg_ph_dut1_eth110, mode='config',
-        intf_ip_addr='101.2.0.2',
-        gateway='101.2.0.1',
-        ipv6_intf_addr='2000:0:0:1:0:0:0:2',
-        ipv6_gateway='2000:0:0:1:0:0:0:1',
-        arp_send_req='1')
-
-    st.log("Topology - Port ip Unconfig tg api result = {}".format(tg_result2))
-
-    # Configuring the BGP router in vrf
-    conf_var = {'mode'                 : 'enable',
-                'active_connect_enable' : '1',
-                'enable_4_byte_as'      : '1',
-                'local_as'              : 999,
-                'remote_as'             : 100,
-                'remote_ip_addr'        : '101.1.0.1'
-                }
-    route_var = [{'mode':'add',
-                'ip_version':'6',
-                'num_routes':'100',
-                'prefix':'3400:1::',
-                'as_path':'as_seq:1',
-                'ipv6_prefix_length': 128
-                },
-                {'mode':'add',
-                'ip_version':'6',
-                'num_routes':'100',
-                'prefix':'3300:1::',
-                'as_path':'as_seq:1',
-                'ipv6_prefix_length': 64
-                }]
-    ctrl_start = { 'mode' : 'start'}
-    ctrl_stop = { 'mode' : 'stop'}
-
-    tg_dut1_eth109_bgp_v4_vrf = tgapi.tg_bgp_config(tg = tg_dut1_eth109,
-        handle    = tg_result1['ipv4_handle'],
-        conf_var  = conf_var,
-        route_var = route_var,
-        ctrl_var  = ctrl_start)
-
-    st.log("tg_bgp_config result {}".format(tg_dut1_eth109_bgp_v4_vrf))
-
-    # Configuring the BGP router in vrf
-    conf_var = {'mode'                 : 'enable',
-                'active_connect_enable' : '1',
-                'enable_4_byte_as'      : '1',
-                'local_as'              : 998,
-                'remote_as'             : 100,
-                'remote_ip_addr'        : '101.2.0.1'
-                }
-    route_var = {'mode':'add',
-                'num_routes': '100',
-                'prefix': '202.1.0.0',
-                'as_path':'as_seq:1'
-                }
-    ctrl_start = { 'mode' : 'start'}
-    ctrl_stop = { 'mode' : 'stop'}
-
-    tg_dut1_eth110_bgp_v4_vrf = tgapi.tg_bgp_config(tg = tg_dut1_eth110,
-        handle    = tg_result2['ipv4_handle'],
-        conf_var  = conf_var,
-        route_var = route_var,
-        ctrl_var  = ctrl_start)
-
-    st.log("tg_bgp_config result {}".format(tg_dut1_eth110_bgp_v4_vrf))
-
-    data.srv6['tg_dut1_eth109']=tg_dut1_eth109
-    data.srv6['tg_dut1_eth110']=tg_dut1_eth110
-    data.srv6['tg_ph_dut1_eth109']=tg_ph_dut1_eth109
-    data.srv6['tg_ph_dut1_eth110']=tg_ph_dut1_eth110
-    data.srv6['tg_dut1_eth109_result1']=tg_result1
-    data.srv6['tg_dut1_eth110_result1']=tg_result2
-    data.srv6['bgpv4_handle_dut1_eth109']=tg_result1['ipv4_handle']
-    data.srv6['bgpv4_handle_dut1_eth110']=tg_result2['ipv4_handle']
-    data.srv6['tg_dut1_eth109_bgp_v4_vrf']=tg_dut1_eth109_bgp_v4_vrf
-    data.srv6['tg_dut1_eth110_bgp_v4_vrf']=tg_dut1_eth110_bgp_v4_vrf
-
-
 @pytest.fixture(scope="module", autouse=True)
 def esr_srvpn_module_hooks(request):
     #add things at the start of this module
-
-    # global vars
-    # vars = st.ensure_min_topology("D1D2:4","D1T1:6","D2T1:2")
-    # (data.tg_list, data.tg_ph_list) = get_handles()
-    # for i in range(6):
-    #     data.tg_list[i].tg_traffic_control(action='reset',port_handle=data.tg_ph_list[i])
-
-    # duts_base_config()
-    # egress_dut_ixia_config()
-    # ingress_dut_ixia_config()
-    # tg1_base_config()
-    # tg2_base_config()
-    # tg3_base_config()
-    # data.tg_list[0].tg_test_control(action='stop_all_protocols')
-    # st.wait(20)
-    # tg1_bgp_router_add()
-    # tg2_bgp_router_add()
-    # tg3_bgp_router_add()
-    # data.tg_list[0].tg_test_control(action='start_all_protocols')
-    # st.wait(150)
-    # vrfs_traffic_add()
-    # vrfs_traffic_v6_add()
-    # get_dut_ip()
+    # add bmp
     yield
-    # l3_base_unconfig()
+    # del bmp log
 
 @pytest.fixture(scope="function", autouse=True)
 def esr_srvpn_func_hooks(request):
@@ -431,209 +253,6 @@ def duts_base_config():
     st.apply_files(dut2, [json_file_dut2])
 
     reboot.config_save_reboot(data.my_dut_list)
-    #dict1 = {'command': "copy run start", 'type':'alicli','skip_error_check':True}
-    #dict2 = {'command': "copy run start", 'type':'alicli','skip_error_check':True}
-    #parallel.exec_parallel(True, [dut1, dut2], st.config, [dict1, dict2])
-
-    #dict1 = {}
-    #parallel.exec_parallel(True, [dut1, dut2], arp_api.show_arp, [dict1, dict1])
-    #parallel.exec_parallel(True, [dut1, dut2], st.reboot, [dict1, dict1])
-
-def tg1_bgp_router_add():
-
-    #init DUT1====TG
-    tg1_port_vrf_route_list=[0,0,0]
-    tg1_port_vrf_route_v6_list=[0,0,0]
-    for port_i in range(4):
-        tg = data.tg_list[port_i]
-        tg_ph = data.tg_ph_list[port_i]
-        port_handle = data.tg1_handle[port_i]
-
-        #create vrf1 route
-        vrf_id = 0
-        route1 = tg.tg_emulation_bgp_route_config(handle=port_handle['bgp_v4'][vrf_id]['conf']['handle'], mode='add',
-                                    num_routes=data.tg1_vrf1_router_count_list[port_i],
-                                    prefix=data.tg1_vrf1_router_prefix_list[port_i],
-                                    prefix_from=data.tg1_router_prefix_length, as_path='as_seq:1', active='1')
-        tg1_port_vrf_route_list[0] = route1
-
-        route1_v6 = tg.tg_emulation_bgp_route_config(handle=port_handle['bgp_v6'][vrf_id]['conf']['handle'], mode='add',
-                                    num_routes=data.tg1_vrf1_router_v6_count_list[port_i],
-                                    prefix=data.tg1_vrf1_router_v6_prefix_list[port_i],
-                                    prefix_from=data.tg1_router_v6_prefix_length, as_path='as_seq:1', active='1', ip_version='6')
-        tg1_port_vrf_route_v6_list[0] = route1_v6
-
-        #create vrf2 route
-        vrf_id = 1
-        route2 = tg.tg_emulation_bgp_route_config(handle=port_handle['bgp_v4'][vrf_id]['conf']['handle'], mode='add',
-                                    num_routes=data.tg1_vrf2_router_count_list[port_i],
-                                    prefix=data.tg1_vrf2_router_prefix_list[port_i],
-                                    prefix_from=data.tg1_router_prefix_length, as_path='as_seq:1', active='1')
-        tg1_port_vrf_route_list[1] = route2
-
-        route2_v6 = tg.tg_emulation_bgp_route_config(handle=port_handle['bgp_v6'][vrf_id]['conf']['handle'], mode='add',
-                                    num_routes=data.tg1_vrf2_router_v6_count_list[port_i],
-                                    prefix=data.tg1_vrf2_router_v6_prefix_list[port_i],
-                                    prefix_from=data.tg1_router_v6_prefix_length, as_path='as_seq:1', active='1', ip_version='6')
-        tg1_port_vrf_route_v6_list[1] = route2_v6
-        data.tg1_handle[port_i]['route'] = copy.deepcopy(tg1_port_vrf_route_list)
-        data.tg1_handle[port_i]['route_v6'] = copy.deepcopy(tg1_port_vrf_route_v6_list)
-
-
-def tg2_bgp_router_add():
-
-    tg2_port_vrf_route_list=[0,0,0]
-    tg2_port_vrf_route_v6_list=[0,0,0]
-    for port_i in range(2):
-        tg = data.tg_list[port_i+4]
-        tg_ph = data.tg_ph_list[port_i+4]
-        port_handle = data.tg2_handle[port_i]
-
-        #create vrf1 route
-        vrf_id = 0
-        route1 = tg.tg_emulation_bgp_route_config(handle=port_handle['bgp_v4'][vrf_id]['conf']['handle'], mode='add',
-                                    num_routes=data.tg2_router_count,prefix=data.tg2_vrf1_router_prefix,
-                                    prefix_from=data.tg2_router_prefix_length, as_path='as_seq:1', active='1')
-        tg2_port_vrf_route_list[0] = route1
-
-        route1_v6 = tg.tg_emulation_bgp_route_config(handle=port_handle['bgp_v6'][vrf_id]['conf']['handle'], mode='add',
-                                    num_routes=data.tg2_router_count,
-                                    prefix=data.tg2_vrf1_router_v6_prefix,
-                                    prefix_from=data.tg2_router_v6_prefix_length, as_path='as_seq:1', active='1', ip_version='6')
-        tg2_port_vrf_route_v6_list[0] = route1_v6
-
-        #create vrf2 route
-        vrf_id = 1
-        route2 = tg.tg_emulation_bgp_route_config(handle=port_handle['bgp_v4'][vrf_id]['conf']['handle'], mode='add',
-                                    num_routes=data.tg2_router_count,prefix=data.tg2_vrf2_router_prefix,
-                                    prefix_from=data.tg2_router_prefix_length, as_path='as_seq:1', active='1')
-        tg2_port_vrf_route_list[1] = route2
-
-        route2_v6 = tg.tg_emulation_bgp_route_config(handle=port_handle['bgp_v6'][vrf_id]['conf']['handle'], mode='add',
-                                    num_routes=data.tg2_router_count,
-                                    prefix=data.tg2_vrf1_router_v6_prefix,
-                                    prefix_from=data.tg2_router_v6_prefix_length, as_path='as_seq:1', active='1', ip_version='6')
-        tg2_port_vrf_route_v6_list[1] = route2_v6
-
-        data.tg2_handle[port_i]['route'] = copy.deepcopy(tg2_port_vrf_route_list)
-        data.tg2_handle[port_i]['route_v6'] = copy.deepcopy(tg2_port_vrf_route_v6_list)
-
-def tg3_bgp_router_add():
-
-    tg3_port_vrf_route_list=[0,0,0]
-    for port_i in range(1):
-        tg = data.tg_list[port_i+6]
-        tg_ph = data.tg_ph_list[port_i+6]
-        port_handle = data.tg3_handle[port_i]
-
-        #create vrf1 route
-        vrf_id = 0
-        route1 = tg.tg_emulation_bgp_route_config(handle=port_handle['bgp_v4'][vrf_id]['conf']['handle'], mode='add',
-                                    num_routes=data.tg3_router_count,prefix=data.tg3_vrf1_router_prefix,
-                                    prefix_from=data.tg3_router_prefix_length, as_path='as_seq:1', active='1')
-        tg3_port_vrf_route_list[0] = route1
-
-        #create vrf2 route
-        vrf_id = 1
-        route2 = tg.tg_emulation_bgp_route_config(handle=port_handle['bgp_v4'][vrf_id]['conf']['handle'], mode='add',
-                                    num_routes=data.tg3_router_count,prefix=data.tg3_vrf2_router_prefix,
-                                    prefix_from=data.tg3_router_prefix_length, as_path='as_seq:1', active='1')
-        tg3_port_vrf_route_list[1] = route2
-
-        data.tg3_handle[port_i]['route'] = copy.deepcopy(tg3_port_vrf_route_list)
-
-
-def vrfs_traffic_add():
-    data.my_dut_list = st.get_dut_names()
-    dut1 = data.my_dut_list[0]
-    dut2 = data.my_dut_list[1]
-    result = 0
-
-    # port 1(TG1_1)<===>port 5(TG2_1) vrf503
-    vrf_id = 0
-    src_handle = data.tg1_handle[0]['route'][vrf_id]
-    tg = data.tg_list[0]
-    tg_ph = data.tg_ph_list[0]
-    tg_ph_2 = data.tg_ph_list[4]
-    dst_handle_list = [data.tg2_handle[0]['route'][vrf_id]['handle'], data.tg2_handle[1]['route'][vrf_id]['handle']]
-    stream = tg.tg_traffic_config(port_handle=tg_ph, port_handle2=tg_ph_2, emulation_src_handle=src_handle['handle'],
-                emulation_dst_handle=dst_handle_list, circuit_endpoint_type='ipv4',mode='create',
-                transmit_mode='continuous', length_mode='fixed',frame_size='1500', rate_percent=data.traffic_rate_precent)
-    data.streams['port1_to_port5_vrf_503'] = stream['stream_id']
-
-    tg = data.tg_list[4]
-    vrf_id = 0
-    src_handle = data.tg2_handle[0]['route'][vrf_id]
-    dst_handle_list = [data.tg1_handle[0]['route'][vrf_id]['handle'], data.tg1_handle[1]['route'][vrf_id]['handle']]
-    stream = tg.tg_traffic_config(port_handle=tg_ph_2, port_handle2=tg_ph, emulation_src_handle=src_handle['handle'],
-                    emulation_dst_handle=dst_handle_list, circuit_endpoint_type='ipv4',mode='create',
-                    transmit_mode='continuous', length_mode='fixed',frame_size='1500', rate_percent=data.traffic_rate_precent)
-    data.streams['port5_to_port1_vrf_503'] = stream['stream_id']
-
-
-     # port 2(TG1_2)<===>port 6(TG2_2) vrf504
-    vrf_id = 1
-    src_handle = data.tg1_handle[1]['route'][vrf_id]
-    dst_handle_list = [data.tg2_handle[0]['route'][vrf_id]['handle'], data.tg2_handle[1]['route'][vrf_id]['handle']]
-    tg = data.tg_list[1]
-    tg_ph = data.tg_ph_list[1]
-    tg_ph_2 = data.tg_ph_list[5]
-    stream = tg.tg_traffic_config(port_handle=tg_ph, port_handle2=tg_ph_2, emulation_src_handle=src_handle['handle'],
-                emulation_dst_handle=dst_handle_list, circuit_endpoint_type='ipv4',mode='create',
-                transmit_mode='continuous', length_mode='fixed',frame_size='1500', rate_percent=data.traffic_rate_precent)
-    data.streams['port2_to_port6_vrf_504'] = stream['stream_id']
-
-    tg = data.tg_list[5]
-    vrf_id = 1
-    src_handle = data.tg2_handle[1]['route'][vrf_id]
-    dst_handle_list = [data.tg1_handle[0]['route'][vrf_id]['handle'], data.tg1_handle[1]['route'][vrf_id]['handle']]
-    stream = tg.tg_traffic_config(port_handle=tg_ph_2, port_handle2=tg_ph, emulation_src_handle=src_handle['handle'],
-                    emulation_dst_handle=dst_handle_list, circuit_endpoint_type='ipv4',mode='create',
-                    transmit_mode='continuous', length_mode='fixed',frame_size='1500', rate_percent=data.traffic_rate_precent)
-    data.streams['port6_to_port2_vrf_504'] = stream['stream_id']
-
-
-    #TG1_3 <====> TG 3_1 vrf 501
-    vrf_id = 0
-    src_handle = data.tg1_handle[2]['route'][vrf_id]
-    dst_handle = data.tg3_handle[0]['route'][vrf_id]
-    tg = data.tg_list[2]
-    tg_ph = data.tg_ph_list[2]
-    tg_ph_2 = data.tg_ph_list[6]
-    stream = tg.tg_traffic_config(port_handle=tg_ph, port_handle2=tg_ph_2, emulation_src_handle=src_handle['handle'],
-                emulation_dst_handle=dst_handle['handle'], circuit_endpoint_type='ipv4',mode='create',
-                transmit_mode='continuous', length_mode='fixed',frame_size='1500', rate_percent=data.traffic_rate_precent)
-    data.streams['port3_to_port7_vrf_501'] = stream['stream_id']
-
-    tg = data.tg_list[5]
-    vrf_id = 0
-    src_handle = data.tg3_handle[0]['route'][vrf_id]
-    dst_handle_list = [data.tg1_handle[2]['route'][vrf_id]['handle'], data.tg1_handle[3]['route'][vrf_id]['handle']]
-    stream = tg.tg_traffic_config(port_handle=tg_ph_2, port_handle2=tg_ph, emulation_src_handle=src_handle['handle'],
-                    emulation_dst_handle=dst_handle_list, circuit_endpoint_type='ipv4',mode='create',
-                    transmit_mode='continuous', length_mode='fixed',frame_size='1500', rate_percent=data.traffic_rate_precent)
-    data.streams['port7_to_port3_vrf_501'] = stream['stream_id']
-
-    #TG1_4 <====> TG 3_1 vrf 502
-    vrf_id = 1
-    src_handle = data.tg1_handle[3]['route'][vrf_id]
-    dst_handle = data.tg3_handle[0]['route'][vrf_id]
-    tg = data.tg_list[3]
-    tg_ph = data.tg_ph_list[3]
-    tg_ph_2 = data.tg_ph_list[6]
-    stream = tg.tg_traffic_config(port_handle=tg_ph, port_handle2=tg_ph_2, emulation_src_handle=src_handle['handle'],
-                emulation_dst_handle=dst_handle['handle'], circuit_endpoint_type='ipv4',mode='create',
-                transmit_mode='continuous', length_mode='fixed',frame_size='1500', rate_percent=data.traffic_rate_precent)
-    data.streams['port4_to_port7_vrf_502'] = stream['stream_id']
-
-    tg = data.tg_list[5]
-    vrf_id = 1
-    src_handle = data.tg3_handle[0]['route'][vrf_id]
-    dst_handle_list = [data.tg1_handle[2]['route'][vrf_id]['handle'], data.tg1_handle[3]['route'][vrf_id]['handle']]
-    stream = tg.tg_traffic_config(port_handle=tg_ph_2, port_handle2=tg_ph, emulation_src_handle=src_handle['handle'],
-                    emulation_dst_handle=dst_handle_list, circuit_endpoint_type='ipv4',mode='create',
-                    transmit_mode='continuous', length_mode='fixed',frame_size='1500', rate_percent=data.traffic_rate_precent)
-    data.streams['port7_to_port4_vrf_502'] = stream['stream_id']
 
 
 def l3_base_unconfig():
@@ -654,9 +273,9 @@ def test_base_config_srvpn_locator_01():
     data.my_dut_list = st.get_dut_names()
     dut1 = data.my_dut_list[0]
     dut2 = data.my_dut_list[1]
-    # tg = data.tg_list[0]
-    # tg_ph = data.tg_ph_list[0]
-    # tg_ph_2 = data.tg_ph_list[4]
+    
+    duts_base_config()
+
     result = 0
 
     st.banner("test_base_config_srvpn_locator_01 begin")
@@ -936,23 +555,23 @@ def test_base_config_srvpn_locator_01():
     st.report_pass("test_case_passed")
 
 
-def load_2ksubif_100vrf():
+def load_2ksubif_100vrf(filesuffix='multi_vrf_full'):
     data.my_dut_list = st.get_dut_names()
     dut1 = data.my_dut_list[0] #179
     dut2 = data.my_dut_list[1] #178
 
     curr_path = os.getcwd()
 
-    json_file_dut1_multi_vrf = curr_path+"/routing/SRv6/dut1_multi_vrf_full.json"
+    json_file_dut1_multi_vrf = curr_path+"/routing/SRv6/dut1_"+filesuffix+".json"
     st.apply_files(dut1, [json_file_dut1_multi_vrf])
 
-    json_file_dut2_multi_vrf = curr_path+"/routing/SRv6/dut2_multi_vrf_full.json"
+    json_file_dut2_multi_vrf = curr_path+"/routing/SRv6/dut2_"+filesuffix+".json"
     st.apply_files(dut2, [json_file_dut2_multi_vrf])
 
     st.wait(10)
 
-    reboot.config_reload_reboot(dut1, "/etc/spytest/SRv6/dut1_multi_vrf_full.json")
-    reboot.config_reload_reboot(dut2, "/etc/spytest/SRv6/dut2_multi_vrf_full.json")
+    reboot.config_reload_reboot(dut1, "/etc/spytest/SRv6/dut1_"+filesuffix+".json")
+    reboot.config_reload_reboot(dut2, "/etc/spytest/SRv6/dut2_"+filesuffix+".json")
 
     st.banner("multi vrf config loaded completed")
 
@@ -1054,7 +673,7 @@ def test_base_config_srvpn_multi_vrf_03():
     dut2 = data.my_dut_list[1] #178
     st.banner("test_base_config_srvpn_multi_vrf_03 begin")
 
-    # load_2ksubif_100vrf()
+    load_2ksubif_100vrf()
 
     # load ixia config
     ixia_load_config(IXIA_CONFIG_FILE)
@@ -1171,18 +790,108 @@ def test_base_config_srvpn_multi_vrf_03():
     if not ret:
         st.report_fail("Check traffic item {} rx frame failed".format(SPECIFIC_VRF_TRAFFIC_NAME))
 
+    st.report_pass("test_case_passed")
 
-    # step4: ecmp check
+## ecmp test
+@pytest.mark.community
+@pytest.mark.community_pass
+def test_srvpn_ecmp_04():
+
+    data.my_dut_list = st.get_dut_names()
+    dut1 = data.my_dut_list[0] #179
+    dut2 = data.my_dut_list[1] #178
+    st.banner("test_srvpn_ecmp_04 begin")
+
+    load_2ksubif_100vrf("multi_vrf_ecmp")
+
+    # load ixia config
+    ixia_load_config(IXIA_CONFIG_FILE)
+    ixia_start_all_protocols()
+    
+    # ecmp ingress vrf
+    # PRIVATE-TC10  PUBLIC-TC20  ACTN-TC60
+
+    # step1: change vrf import rt withsame service-SID
+    to_check_vrf = 'PUBLIC-TC20'
+    rtlist = "1:10 1:20 1:60"
+
+    # check vrf route learn
+    ret = check_vrf_route_nums(dut2, to_check_vrf, 10000, 1)
+    if not ret:
+        st.report_fail("step1 check_vrf_route_nums {} 10000 test_srvpn_ecmp_04".format(to_check_vrf))
+
+    # check vrf ipv4 uni route and sid
+    to_check_prefix_sid = {
+        '200.10.0.1':'fd00:201:201:fff1:10::'
+    }
+
+    for (k, v) in to_check_prefix_sid.items():
+        ret = check_bgp_vrf_ipv4_uni_sid(dut2, to_check_vrf, k, v)
+        if not ret:
+            st.report_fail("step1 check_bgp_vrf_ipv4_uni_sid failed ")
+
+    # check route appdb
+    vrf_name = st.show(dut1, "vrfnametodevname {}".format(to_check_vrf), skip_tmpl=True, max_time=500, type="vtysh")
+    last_pos = vrf_name.rfind('\n')
+    vrf_name = vrf_name[:last_pos]
+
+    key = 'ROUTE_TABLE:' + vrf_name + ':200.10.0.1/32'
+    checkpoint_msg = "step1 route appdb check failed"
+    appdb_onefield_checkpoint(dut2, key, "nexthop", "2000::179,2000::179,2000::179", expect = True, checkpoint = checkpoint_msg)
+    appdb_onefield_checkpoint(dut2, key, "ifname", "unknown,unknown,unknown", expect = True, checkpoint = checkpoint_msg)
+    # appdb_onefield_checkpoint(dut2, key, "vpn_sid", "fd00:201:201:fff1:20::,fd00:201:202:fff1:10::,fd00:201:201:fff1:60::", expect = True, checkpoint = checkpoint_msg)
+    appdb_onefield_checkpoint(dut2, key, "seg_src", "2000::178,2000::178,2000::178", expect = True, checkpoint = checkpoint_msg)
+    
+    vpnsid_val = appdb_get_onefield(dut2, key, "vpn_sid")
+    if vpnsid_val is None:
+        st.report_fail(checkpoint_msg)
+
+    vpnsid_ecmp_list = vpnsid_val.splt(",")
+    for sid in ["fd00:201:201:fff1:20::", "fd00:201:202:fff1:10::", "fd00:201:201:fff1:60::"]:
+        if sid not in vpnsid_ecmp_list:
+            st.report_fail("step1 route appdb check failed , sid = {}".format(sid))
+
+    # check vrf traffic
+    ret = ixia_add_traffic_item_for_specific_vrf()
+    if not ret:
+        st.report_fail("Faild to add traffic item for specific vrf")
+
+    # check traffic
+    ret = ixia_check_traffic(SPECIFIC_VRF_TRAFFIC_NAME, key="Rx frame", value=50000)
+    if not ret:
+        st.report_fail("Check traffic item {} rx frame failed".format(SPECIFIC_VRF_TRAFFIC_NAME))
 
 
+    # step2:  ixia port or route oscillation then check traffic and route
 
-    # ecmp stability test
+    #oscillation
+    # TODO
 
-    # ixia port oscillation
+    st.wait(10)
 
+    # check vrf route learn
+    ret = check_vrf_route_nums(dut2, to_check_vrf, 10000, 1)
+    if not ret:
+        st.report_fail("step2 check_vrf_route_nums {} 10000 test_srvpn_ecmp_04".format(to_check_vrf))
 
-    # modify ingress srv6 locator
+    # check vrf ipv4 uni route and sid
+    to_check_prefix_sid = {
+        '200.10.0.1':'fd00:201:201:fff1:10::'
+    }
 
+    for (k, v) in to_check_prefix_sid.items():
+        ret = check_bgp_vrf_ipv4_uni_sid(dut2, to_check_vrf, k, v)
+        if not ret:
+            st.report_fail("step2 check_bgp_vrf_ipv4_uni_sid failed ")
 
-    st.report_fail("test_base_config_srvpn_multi_vrf_03")
+    # check vrf traffic
+    ret = ixia_add_traffic_item_for_specific_vrf()
+    if not ret:
+        st.report_fail("Faild to add traffic item for specific vrf")
 
+    # check traffic
+    ret = ixia_check_traffic(SPECIFIC_VRF_TRAFFIC_NAME, key="Rx frame", value=50000)
+    if not ret:
+        st.report_fail("Check traffic item {} rx frame failed".format(SPECIFIC_VRF_TRAFFIC_NAME))
+
+    st.report_pass("test_case_passed")

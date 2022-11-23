@@ -123,7 +123,7 @@ class TestBGPCommon:
         TG_D1 = topo.tg_dut_list_name[0]
         tg_ob = topo['T1{}P1_tg_obj'.format(TG_D1)]
         dut_rt_int_mac = basic_obj.get_ifconfig_ether(topo.dut_list[0] , bgplib.data.D1T1P1)
- 
+
         data.streams = {}
         stream = tg_ob.tg_traffic_config(port_handle=topo['T1{}P1_ipv6_tg_ph'.format(TG_D1)],
                                        mode='create', length_mode='fixed', frame_size=128,
@@ -143,7 +143,7 @@ class TestBGPCommon:
                                        mac_src='00:0a:01:01:23:01', \
                                        mac_dst=dut_rt_int_mac, ip_src_addr="193.2.1.2",
                                        ip_dst_addr="193.2.1.1", ip_ttl="255",
-                                       l4_protocol='tcp', tcp_src_port=179, tcp_dst_port=6000, 
+                                       l4_protocol='tcp', tcp_src_port=179, tcp_dst_port=6000,
                                        tcp_dst_port_mode='incr', tcp_dst_port_count=10)
         st.log('Stream output:{}'.format(stream))
         data.streams['BGP'] = stream['stream_id']
@@ -1806,7 +1806,7 @@ class TestBGPIPvxRouteAdvertisementFilter:
                           config='yes',
                           neighbor=self.local_topo['dut1_addr_ipv6'],
                           config_type_list=["default_originate"], routeMap='UseGlobal',cli_type=bgp_cli_type)
-
+        st.wait(10)
         output = bgpapi.fetch_ip_bgp_route(self.local_topo['dut1'], family='ipv6',
                                            match={'next_hop': self.local_topo['dut2_addr_ipv6']},
                                            select=['network', 'as_path'])

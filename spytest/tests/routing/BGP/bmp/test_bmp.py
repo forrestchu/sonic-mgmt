@@ -54,6 +54,13 @@ def bmp_module_hooks(request):
     yield
 
     l3_base_unconfig()
+    BMP_INS.bmp_server_data_read('openbmp.parsed.base_attribute')
+    BMP_INS.bmp_server_data_read('openbmp.bmp_raw')
+    BMP_INS.bmp_server_data_read('openbmp.parsed.collector')
+    BMP_INS.bmp_server_data_read('openbmp.parsed.peer')
+    BMP_INS.bmp_server_data_read('openbmp.parsed.router')
+    BMP_INS.bmp_server_data_read('openbmp.parsed.unicast_prefix')
+
 
 def l3_base_config():
     data.my_dut_list = st.get_dut_names()

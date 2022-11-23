@@ -5,7 +5,7 @@ import json
 
 from spytest import st, tgapi, SpyTestDict
 from spytest.utils import filter_and_select
-from apis.common import redis   
+from apis.common import redis
 
 import apis.routing.ip as ipfeature
 import apis.system.port as papi
@@ -331,9 +331,9 @@ def check_route_table_alarm(dut, type='IPV4'):
         if not entries:
             st.log("{} is not match".format(match))
             return False
-    
+
     return True
-    
+
 @pytest.mark.test_ft_l3_performance_enhancements_v4_route_intstall_withdraw
 def test_ft_l3_performance_enhancements_v4_route_intstall_withdraw(fixture_v4):
     ################# Author Details ################
@@ -589,7 +589,7 @@ def test_ft_l3_performance_enhancements_v6_route_intstall_withdraw(fixture_v6):
     if data.includeTraffic:
         # Stopping the TG traffic
         tg.tg_traffic_control(action='stop', handle=tr2['stream_id'])
-    
+
     if not check_route_table_alarm(dut, type='IPV6'):
         st.report_fail("route_table_not_alarm")
     st.report_pass("test_case_passed")
@@ -666,9 +666,17 @@ def test_ft_l3_performance_enhancements_v4_bgp_link_flap_convergence_time(fixtur
         st.report_fail("route_table_not_updated_by_advertise_from_tg")
 
     # Verify the total route count
-    count = verify_bgp_route_count(dut, family='ipv4', neighbor=data.neigh_ip_addr, state='Established')
-    st.log("Route count: "+str(count))
-    if int(count) != int(data.test_bgp_route_count):
+    retry_times = 50
+    i = 0
+    while i < retry_times:
+        count = verify_bgp_route_count(dut, family='ipv4', neighbor=data.neigh_ip_addr, state='Established')
+        st.log("iteration {} Route count: {}".format(i, str(count)))
+        if int(count) == int(data.test_bgp_route_count):
+            break
+        i += 1
+        st.wait(1)
+
+    if i == retry_times:
         st.report_fail("route_table_not_updated_by_advertise_from_tg")
 
     # Taking the end time timestamp

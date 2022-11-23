@@ -60,7 +60,7 @@ data.host2_vlan="101"
 data.vlan1_ip="10.10.10.2"
 data.vlan2_ip="10.10.11.3"
 data_tg_ip="10.10.10.1"
-data.vrf_name = ["MC-Aliyun-vrf-long-name-test-abcdefg-101", 
+data.vrf_name = ["MC-Aliyun-vrf-long-name-test-abcdefg-101",
                 "MC-Aliyun-vrf-long-name-test-abcdefg-102",
                 "MC-Aliyun-vrf-long-name-test-abcdefg-103"]
 
@@ -185,8 +185,8 @@ def create_v4_route(route_count):
 
     #bgpfeature.create_bgp_router(dut, data.as_num, '')
     #bgpfeature.create_bgp_neighbor(dut, data.as_num, data.ip4_addr[0], data.remote_as_num)
-    bgpfeature.config_bgp(dut = dut, router_id = '192.0.0.176', local_as=data.as_num, 
-                    neighbor=data.ip4_addr[0], remote_as=data.remote_as_num, vrf_name=data.vrf_name[2], 
+    bgpfeature.config_bgp(dut = dut, router_id = '192.0.0.176', local_as=data.as_num,
+                    neighbor=data.ip4_addr[0], remote_as=data.remote_as_num, vrf_name=data.vrf_name[2],
                     config_type_list =["neighbor", "activate"], config='yes', cli_type = "alicli")
 
     tg_handler = tgapi.get_handles_byname("T1D1P1", "T1D2P1")
@@ -304,8 +304,8 @@ def create_v6_route(route_count):
 
     #bgpfeature.create_bgp_router(dut, data.as_num, '')
     #bgpfeature.create_bgp_neighbor(dut, data.as_num, data.ip6_addr[0], data.remote_as_num, family="ipv6")
-    bgpfeature.config_bgp(dut = dut, router_id = '192.0.0.176', local_as=data.as_num, 
-                    neighbor=data.ip6_addr[0], remote_as=data.remote_as_num, vrf_name=data.vrf_name[2], 
+    bgpfeature.config_bgp(dut = dut, router_id = '192.0.0.176', local_as=data.as_num,
+                    neighbor=data.ip6_addr[0], remote_as=data.remote_as_num, vrf_name=data.vrf_name[2],
                     config_type_list =["neighbor", "activate"], config='yes', cli_type = "alicli")
     create_bgp_neighbor_route_map_config(dut, data.as_num, data.ip6_addr[0], data.routemap)
 
@@ -558,6 +558,7 @@ def test_ft_ip_static_route_traffic_forward():
     st.log("TRAFCONF: " + str(tr1))
     res = tg.tg_traffic_control(action='run', stream_handle=tr1['stream_id'])
     st.log("TR_CTRL: " + str(res))
+    st.wait(10)
     tg.tg_traffic_control(action='stop', stream_handle=tr1['stream_id'])
     st.log("Checking the stats and verifying the traffic flow")
     traffic_details = {

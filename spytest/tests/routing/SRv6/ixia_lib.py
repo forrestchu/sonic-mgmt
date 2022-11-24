@@ -180,7 +180,64 @@ class IxiaController():
         self.ixnetwork.StopAllProtocols()
         return True
 
+    def get_bgp_ip_route_property(self):
+        self.ixnetwork.Topology.find().DeviceGroup.find().NetworkGroup.find().BgpIPRouteProperty.find()
+
+    def get_topology(self, topology_name):
+        res =  self.ixnetwork.Topology.find()
+        for item in res:
+            if item.Name == topology_name:
+                return item
+
+        return None
+
+    def get_device_group(self, topology_name, device_group_name):
+        topology = self.get_topology(topology_name)
+        if not topology:
+            return None
+
+        device_groups = topology.DeviceGroup.find()
+        for item in device_groups:
+            if item.Name == device_group_name:
+                return item
+        return None
+
+    def get_network_group(self, topology_name, device_group_name, network_group_name):
+        device_group = self.get_device_group(topology_name, device_group_name)
+        if not device_group:
+            return None
+
+        network_groups = device_group.NetworkGroup.find()
+        for item in network_groups:
+            if item.Name == network_group_name:
+                return item
+        return None
+
+    def get_bgp_ip_route_property(self, topology_name, device_group_name, netwrk_group_name, birp_name):
+        network_group = self.get_network_group(topology_name, device_group_name, netwrk_group_name)
+        if not network_group:
+            return None
+
+        birps = network_group.BgpIPRouteProperty.find()
+        for item in birps:
+            if item.Name == birp_name:
+                return item
+        return None
 
 
 
-# ixia_controller = IxiaController()
+# IXIA_HOST = "10.97.244.219"
+# IXIA_PORT = 12020
+
+# IXIA_CONFIG_FILE = "esr_multi_vrf.ixncfg"
+
+# TOPOLOGY_4 = "Topology 4"
+# DEVICE_GROUP_4 = "Device Group 4"
+# NETWORK_GROUP_2 = "Network Group 2"
+
+# ixia_controller = IxiaController(IXIA_HOST, IXIA_PORT)
+# a = ixia_controller.get_network_group(TOPOLOGY_4, DEVICE_GROUP_4, NETWORK_GROUP_2)
+
+# print(a)
+# a = a.BgpIPRouteProperty.find()
+

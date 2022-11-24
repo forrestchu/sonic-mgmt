@@ -21,5 +21,6 @@ DEVICE_2_IPV4            ="/api/v1/sessions/1/ixnetwork/topology/2/deviceGroup/1
 DEVICE_3_IPV4_PREFIX_POOL="/api/v1/sessions/1/ixnetwork/topology/3/deviceGroup/1/networkGroup/1/ipv4PrefixPools/1" # 1/1/21
 DEVICE_4_IPV4_PREFIX_POOL="/api/v1/sessions/1/ixnetwork/topology/4/deviceGroup/1/networkGroup/1/ipv4PrefixPools/1" # 1/1/22
 
+# Traffic items
 VRF_TRAFFIC_NAME = "Traffic-Vrf"
 SPECIFIC_VRF_TRAFFIC_NAME = "Specific-Vrf_traffic"

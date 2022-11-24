@@ -123,8 +123,8 @@ def test_macsec_full_config():
     # Reboot DUT1 and Check if the macsec was restored
 
     reboot.config_save_reboot(vars.D1)
-    st.log("Wait another 120s for MACSec to initialize...")
-    st.wait(120)
+    st.log("Wait another 200s for MACSec to initialize...")
+    st.wait(200)
 
     # check wpa_supplicant
     st.wait(3)

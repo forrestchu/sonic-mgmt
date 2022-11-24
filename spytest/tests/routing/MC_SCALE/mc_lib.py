@@ -26,6 +26,7 @@ def precheck_bgp_isolate(dut):
 
     cmd = "cli -c 'no page' -c 'show isolated_precheck'"
     output = st.show(dut, cmd)
+    st.log(output)
     if len(output) == 0:
         st.error("Show OUTPUT is Empty")
         st.report_fail("bgp isolate precheck failed")

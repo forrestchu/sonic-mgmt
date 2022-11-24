@@ -61,6 +61,8 @@ def ixia_check_traffic_item_rx_frame(traffic_item_name, rx_count):
     traffic_item_stats = ixia_controller.get_traffic_item_statistics(traffic_item_name)
     if traffic_item_stats is None:
         return False
+    st.log("Get traffic item statistics {}".format(traffic_item_name))
+    st.log(traffic_item_stats)
 
     tmp_rx_count = traffic_item_stats['Rx Frames']
     st.log("Get traffic item {} Rx Frames count {},  expect count {}".format(traffic_item_name, tmp_rx_count, rx_count))

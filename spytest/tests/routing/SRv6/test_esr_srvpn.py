@@ -261,7 +261,7 @@ def l3_base_unconfig():
 @pytest.mark.community
 @pytest.mark.community_pass
 def test_base_config_srvpn_locator_01():
-    
+
     duts_base_config()
 
     result = 0
@@ -778,9 +778,9 @@ def test_srvpn_ecmp_04():
     load_2ksubif_100vrf("multi_vrf_ecmp")
 
     # load ixia config
-    ixia_load_config(IXIA_CONFIG_FILE)
+    ixia_load_config(ESR_MULTI_VRF_ECMP_CONFIG)
     ixia_start_all_protocols()
-    
+
     # ecmp ingress vrf
     # PRIVATE-TC10  PUBLIC-TC20  ACTN-TC60
 
@@ -814,7 +814,7 @@ def test_srvpn_ecmp_04():
     appdb_onefield_checkpoint(dut2, key, "ifname", "unknown,unknown,unknown", expect = True, checkpoint = checkpoint_msg)
     # appdb_onefield_checkpoint(dut2, key, "vpn_sid", "fd00:201:201:fff1:20::,fd00:201:202:fff1:10::,fd00:201:201:fff1:60::", expect = True, checkpoint = checkpoint_msg)
     appdb_onefield_checkpoint(dut2, key, "seg_src", "2000::178,2000::178,2000::178", expect = True, checkpoint = checkpoint_msg)
-    
+
     vpnsid_val = appdb_get_onefield(dut2, key, "vpn_sid")
     if vpnsid_val is None:
         st.report_fail(checkpoint_msg)
@@ -836,9 +836,12 @@ def test_srvpn_ecmp_04():
 
 
     # step2:  ixia port or route oscillation then check traffic and route
+    ixia_stop_all_protocols()
+    ret = ixia_config_bgp_flapping()
+    if not ret:
+        st.report_fail("Config bgp flapping failed")
 
-    #oscillation
-    # TODO
+    ixia_start_all_protocols()
 
     st.wait(10)
 
@@ -856,11 +859,6 @@ def test_srvpn_ecmp_04():
         ret = check_bgp_vrf_ipv4_uni_sid(dut2, to_check_vrf, k, v)
         if not ret:
             st.report_fail("step2 check_bgp_vrf_ipv4_uni_sid failed ")
-
-    # check vrf traffic
-    ret = ixia_add_traffic_item_for_specific_vrf()
-    if not ret:
-        st.report_fail("Faild to add traffic item for specific vrf")
 
     # check traffic
     ret = ixia_check_traffic(SPECIFIC_VRF_TRAFFIC_NAME, key="Rx frame", value=50000)

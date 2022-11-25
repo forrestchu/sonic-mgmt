@@ -180,9 +180,6 @@ class IxiaController():
         self.ixnetwork.StopAllProtocols()
         return True
 
-    def get_bgp_ip_route_property(self):
-        self.ixnetwork.Topology.find().DeviceGroup.find().NetworkGroup.find().BgpIPRouteProperty.find()
-
     def get_topology(self, topology_name):
         res =  self.ixnetwork.Topology.find()
         for item in res:
@@ -213,16 +210,42 @@ class IxiaController():
                 return item
         return None
 
-    def get_bgp_ip_route_property(self, topology_name, device_group_name, netwrk_group_name, birp_name):
-        network_group = self.get_network_group(topology_name, device_group_name, netwrk_group_name)
+    def get_ipv4_prefix_pool(self, topology_name, device_group_name, network_group_name, ipv4_prefix_pool_name):
+        network_group = self.get_network_group(topology_name, device_group_name, network_group_name)
         if not network_group:
             return None
 
-        birps = network_group.BgpIPRouteProperty.find()
+        ipv4_prefix_pools = network_group.Ipv4PrefixPools.find()
+        for item in ipv4_prefix_pools:
+            if item.Name == ipv4_prefix_pool_name:
+                return item
+        return None
+
+    def get_bgp_ip_route_property(self, topology_name, device_group_name, network_group_name, ipv4_prefix_pool_name, birp_name):
+        ipv4_prefix_pool = self.get_ipv4_prefix_pool(topology_name, device_group_name, network_group_name, ipv4_prefix_pool_name)
+        if not ipv4_prefix_pool:
+            return None
+
+        birps = ipv4_prefix_pool.BgpIPRouteProperty.find()
         for item in birps:
             if item.Name == birp_name:
                 return item
         return None
+
+
+    def enable_bgp_ip_route_flapping(self, birp, enable_list, uptime=1, downtime=1, delay=1, partial_flap='true',
+                                        flap_from_route_index=1, flap_to_route_index=1):
+        birp.EnableFlapping.ValueList(enable_list)
+        birp.Uptime.Single(uptime)
+        birp.Downtime.Single(downtime)
+        birp.Delay.Single(delay)
+        birp.PartialFlap.Single(partial_flap)
+        birp.FlapFromRouteIndex.Single(flap_from_route_index)
+        birp.FlapFromRouteIndex.Single(flap_to_route_index)
+
+    def disable_bgp_ip_route_flapping(self, birp):
+        birp.EnableFlapping.Single('false')
+
 
 
 
@@ -231,13 +254,6 @@ class IxiaController():
 
 # IXIA_CONFIG_FILE = "esr_multi_vrf.ixncfg"
 
-# TOPOLOGY_4 = "Topology 4"
-# DEVICE_GROUP_4 = "Device Group 4"
-# NETWORK_GROUP_2 = "Network Group 2"
-
 # ixia_controller = IxiaController(IXIA_HOST, IXIA_PORT)
-# a = ixia_controller.get_network_group(TOPOLOGY_4, DEVICE_GROUP_4, NETWORK_GROUP_2)
 
-# print(a)
-# a = a.BgpIPRouteProperty.find()
 

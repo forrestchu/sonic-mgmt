@@ -52,7 +52,7 @@ def kafka_consumer():
         print ("partition: %d, offset: %d" % (topic_partition.partition, offset))
 
     for msg in consumer:
-        print ("topic:%s, partition:%d, offset:%d: key=%s value=%s" % (msg.topic, msg.partition, msg.offset, msg.key, msg.value))
+        # print ("topic:%s, partition:%d, offset:%d: key=%s value=%s" % (msg.topic, msg.partition, msg.offset, msg.key, msg.value))
         
         topic = msg.topic
         value = msg.value.decode("utf-8")

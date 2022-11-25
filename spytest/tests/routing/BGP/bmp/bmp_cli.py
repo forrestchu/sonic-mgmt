@@ -192,7 +192,7 @@ class BMP_INS():
             line = f.readline()
             while line:
                 msg = {}
-                st.log("topic: {}, data:{}".format(topic, line))
+                # st.log("topic: {}, data:{}".format(topic, line))
                 if line.startswith('action'):
                     items = line.split(" -- ")
                     for it in items:
@@ -204,11 +204,11 @@ class BMP_INS():
                         elif len(kv) == 1:
                             msg[kv[0]] = ""
 
-                    st.log("topic: {}, processed msg:{}".format(topic, msg))
+                    # st.log("topic: {}, processed msg:{}".format(topic, msg))
                     msg_list.append(msg)
                 line = f.readline()
 
-        st.log(msg_list)
+        # st.log(msg_list)
         return msg_list
     
     @staticmethod

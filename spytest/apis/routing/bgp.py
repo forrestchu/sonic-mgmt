@@ -3731,6 +3731,8 @@ def config_bgp(dut, **kwargs):
             elif type1 == 'weight':
                 my_cmd += 'address-family {} unicast\n'.format(addr_family)
                 my_cmd += '{} neighbor {} weight {}\n'.format(config_cmd, neighbor, weight)
+            elif type1 == 'no_network_check':
+                my_cmd += 'no bgp network import-check\n'
             elif type1 == 'removeBGP':
                 st.log("Removing the bgp config from the device")
             else:

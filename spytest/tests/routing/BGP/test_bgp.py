@@ -12,6 +12,7 @@ import apis.system.reboot as reboot
 import BGP.bgplib as bgplib
 
 import utilities.common as utils
+import os
 
 
 pkts_per_burst = 2000
@@ -1801,11 +1802,18 @@ class TestBGPIPvxRouteAdvertisementFilter:
             st.log("route learnt")
         else:
             st.log("route not learnt")
+        
+        if 'eSR' == os.getenv('SPYTEST_PROJECT'):
+            bgpapi.config_bgp(dut=self.local_topo['dut2'], local_as=self.local_topo['dut2_as'], addr_family='ipv6',
+                            config='yes',
+                            neighbor=self.local_topo['dut1_addr_ipv6'],
+                            config_type_list=["default_originate", "no_network_check"], routeMap='UseGlobal',cli_type=bgp_cli_type)
+        else:
+            bgpapi.config_bgp(dut=self.local_topo['dut2'], local_as=self.local_topo['dut2_as'], addr_family='ipv6',
+                            config='yes',
+                            neighbor=self.local_topo['dut1_addr_ipv6'],
+                            config_type_list=["default_originate"], routeMap='UseGlobal',cli_type=bgp_cli_type)
 
-        bgpapi.config_bgp(dut=self.local_topo['dut2'], local_as=self.local_topo['dut2_as'], addr_family='ipv6',
-                          config='yes',
-                          neighbor=self.local_topo['dut1_addr_ipv6'],
-                          config_type_list=["default_originate"], routeMap='UseGlobal',cli_type=bgp_cli_type)
         st.wait(10)
         output = bgpapi.fetch_ip_bgp_route(self.local_topo['dut1'], family='ipv6',
                                            match={'next_hop': self.local_topo['dut2_addr_ipv6']},

@@ -604,21 +604,31 @@
             "asn": "100", 
             "extnh": "true", 
             "update_source": "2000::178"
+        },
+        "3000::179|global": {
+            "asn": "100", 
+            "extnh": "true", 
+            "update_source": "2000::178"
         }, 
         "2000::179|ipv4_vpn": {
+            "activate": "true"
+        }, 
+        "3000::179|ipv4_vpn": {
             "activate": "true"
         }, 
         "2033::179|global": {
             "asn": "100"
         },                                                     
         "2033::179|ipv6": {
-            "activate": "true"
+            "activate": "true",
+            "route_map_in": "SRVPN-33"
         }, 
         "2044::179|global": {
             "asn": "100"
         }, 
         "2044::179|ipv6": {
-            "activate": "true"
+            "activate": "true",
+            "route_map_in": "SRVPN-44"
         }
     },
     "BGP_NETWORK": {
@@ -938,7 +948,9 @@
         "100|ipv4|PUBLIC-TC20":{
             "import_vpn":"true",
             "rt_import":"1:10 1:20 1:60",
-            "rd":"2:2"
+            "rd":"2:2",
+            "bgp_maximum_paths": "8", 
+            "bgp_maximum_paths_ibgp": "8"
         },
         "100|global|VPN6":{
             "bgp_router_id":"3.3.3.70"
@@ -1440,13 +1452,30 @@
         }
     }, 
     "LOOPBACK_INTERFACE": {
-        "Loopback1|2000::178/128": {}
+        "Loopback1|2000::178/128": {},
+        "Loopback2|3000::178/128": {}
     }, 
     "MGMT_INTERFACE": {
         "eth0|192.0.0.178/24": {
             "gwaddr": "192.0.0.248"
         }
+    },
+    "IPV6_PREFIX_LIST": {
+        "U2|seq|5": {                                          
+            "permit": "2000::179/128"
+        }, 
+        "U3|seq|5": {
+            "permit": "3000::179/128"
+        }
     }, 
+    "ROUTE_MAP": {
+        "SRVPN-33|permit|10": {                                
+            "match_ipv6_address_prefix_list": "U2"
+        }, 
+        "SRVPN-44|permit|10": {
+            "match_ipv6_address_prefix_list": "U3"
+        }
+    },
     "PORT": {
         "Ethernet1": {
             "admin_status": "up", 

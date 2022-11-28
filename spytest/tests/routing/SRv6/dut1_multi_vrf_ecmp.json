@@ -604,8 +604,16 @@
             "asn": "100", 
             "extnh": "true", 
             "update_source": "2000::179"
+        },
+        "3000::178|global": {
+            "asn": "100", 
+            "extnh": "true", 
+            "update_source": "3000::179"
         }, 
         "2000::178|ipv4_vpn": {
+            "activate": "true"
+        }, 
+        "3000::178|ipv4_vpn": {
             "activate": "true"
         }, 
         "2033::178|global": {
@@ -1541,7 +1549,8 @@
         }
     },
     "LOOPBACK_INTERFACE": {
-        "Loopback1|2000::179/128": {}
+        "Loopback1|2000::179/128": {},
+        "Loopback2|3000::179/128": {}
     }, 
     "MGMT_INTERFACE": {
         "eth0|192.0.0.179/24": {

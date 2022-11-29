@@ -533,14 +533,10 @@ def test_bfd_ipv6_base():
     st.log("stop ixia bfdv6 peer")
     tg1.tg_emulation_bfd_control(handle = data.bfd_v6_rtr1['bfd_v6_interface_handle'], mode = "stop")
     st.wait(5)
-    if 'eSR' == os.getenv('SPYTEST_PROJECT'):
-        if not bfdapi.verify_bfd_peer(dut1, peer=neigh_ipv6_addr, local_addr=formatted_dut1_ipv6_addr,  vrf_name=data.vrf, 
-                                    rx_interval=[[data.dut_bfd_timer, '1000']], status='down', cli_type='alicli'):
-            st.report_fail("bfd status error", formatted_dut1_ipv6_addr, dut1)
-    else:
-        if not bfdapi.verify_bfd_peer(dut1, peer=neigh_ipv6_addr, local_addr=formatted_dut1_ipv6_addr,  vrf_name=data.vrf, 
-                                    rx_interval=[[data.dut_bfd_timer,data.tg_bfd_timer]], status='down', cli_type='alicli'):
-            st.report_fail("bfd status error", formatted_dut1_ipv6_addr, dut1)
+
+    if not bfdapi.verify_bfd_peer(dut1, peer=neigh_ipv6_addr, local_addr=formatted_dut1_ipv6_addr,  vrf_name=data.vrf, 
+                                rx_interval=[[data.dut_bfd_timer,data.tg_bfd_timer]], status='down', cli_type='alicli'):
+        st.report_fail("bfd status error", formatted_dut1_ipv6_addr, dut1)
 
     #restart ixia bfd
     st.log("start ixia bfdv6 peer")

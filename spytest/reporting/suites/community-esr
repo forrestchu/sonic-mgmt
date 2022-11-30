@@ -40,6 +40,6 @@
 +args:--load-config-method force-reboot
 +args:--get-tech-support none
 +args:--fetch-core-files none
-#+args:--build-url http://10.97.244.220/dailybuild/AliNOS-rel-v5.2/latest/sonic-cisco.bin
-#+args:--load-image installer
++args:--build-url http://10.97.244.220/dailybuild/AliNOS-rel-v5.2/latest/sonic-cisco.bin
++args:--load-image installer
 +args:--tc-max-timeout 1200

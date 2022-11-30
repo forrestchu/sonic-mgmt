@@ -567,16 +567,17 @@ def get_random_array(start, end, num):
     return ra
 
 def check_bgp_vrf_ipv4_uni_sid(dut, vrf, prefix, expected_sid):
-    cmd = "show bgp vrf {} ipv4 unicast {}".format(vrf, prefix)
-    result = st.show(dut, cmd, type='alicli')
+    cmd = "cli -c 'no page' -c 'show bgp vrf {} ipv4 unicast {}'".format(vrf, prefix)
+    result = st.show(dut, cmd)
     st.log(result)
 
     if result is not None and len(result) > 0:
-        sid = result[0]['sid']
-        if sid == expected_sid:
-            st.log("sid check right {}".format(sid))
-            return True
-        else:
-            st.log("sid is {} , expected_sid is {}".format(sid, expected_sid))
-            return False
+        for e in result:
+            sid = e['sid']
+            if sid == expected_sid:
+                st.log("sid check right {}".format(sid))
+                return True
+            else:
+                st.log("sid is {} , expected_sid is {}".format(sid, expected_sid))
+                # return False
     return False

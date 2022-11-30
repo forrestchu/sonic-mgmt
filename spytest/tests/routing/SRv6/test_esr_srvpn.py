@@ -795,7 +795,8 @@ def test_srvpn_ecmp_04():
 
     # check vrf ipv4 uni route and sid
     to_check_prefix_sid = {
-        '200.10.0.1':'fd00:201:201:fff1:10::'
+        '200.10.0.1':'fd00:201:202:fff1:10::',
+        '200.10.0.2':'fd00:201:203:fff1:60::'
     }
 
     for (k, v) in to_check_prefix_sid.items():
@@ -852,7 +853,8 @@ def test_srvpn_ecmp_04():
 
     # check vrf ipv4 uni route and sid
     to_check_prefix_sid = {
-        '200.10.0.1':'fd00:201:201:fff1:10::'
+        '200.10.0.1':'fd00:201:202:fff1:10::',
+        '200.10.0.2':'fd00:201:203:fff1:60::'
     }
 
     for (k, v) in to_check_prefix_sid.items():

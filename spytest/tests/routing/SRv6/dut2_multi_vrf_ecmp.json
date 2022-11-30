@@ -608,7 +608,7 @@
         "3000::179|global": {
             "asn": "100", 
             "extnh": "true", 
-            "update_source": "2000::178"
+            "update_source": "3000::178"
         }, 
         "2000::179|ipv4_vpn": {
             "activate": "true"
@@ -632,7 +632,8 @@
         }
     },
     "BGP_NETWORK": {
-        "2000::178/128|ipv6": {}
+        "2000::178/128|ipv6": {},
+        "3000::178/128|ipv6": {}
     }, 
     "BGP_PARAMETERS":{
         "100|global": {
@@ -947,7 +948,7 @@
         },
         "100|ipv4|PUBLIC-TC20":{
             "import_vpn":"true",
-            "rt_import":"1:10 1:20 1:60",
+            "rt_import":"1:10 1:60",
             "rd":"2:2",
             "bgp_maximum_paths": "8", 
             "bgp_maximum_paths_ibgp": "8"

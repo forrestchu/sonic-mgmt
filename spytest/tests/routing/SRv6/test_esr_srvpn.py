@@ -777,7 +777,7 @@ def test_base_config_srvpn_multi_vrf_03():
 def test_srvpn_ecmp_04():
     st.banner("test_srvpn_ecmp_04 begin")
 
-    # load_2ksubif_100vrf("multi_vrf_ecmp")
+    load_2ksubif_100vrf("multi_vrf_ecmp")
 
     # load ixia config
     ixia_load_config(ESR_ECMP_CONFIG)

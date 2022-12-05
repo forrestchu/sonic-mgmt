@@ -1,11 +1,27 @@
+import os
+import gc
 
 from spytest import st, tgapi, SpyTestDict
 from ixia_vars import *
 from ixia_lib import IxiaController
 from ixnetwork_restpy.assistants.batch.batchadd import BatchAdd
 
-ixia_controller = IxiaController(IXIA_HOST, IXIA_PORT)
 
+ixia_controller = None
+
+def ixia_controller_init():
+    global ixia_controller
+    st.log("Ixia controller init start")
+    ixia_controller = IxiaController(IXIA_HOST, IXIA_PORT)
+    st.log("Ixia controller init completed")
+
+
+def ixia_controller_deinit():
+    global ixia_controller
+    st.log("Ixia controller deinit start")
+    ixia_controller = None
+    gc.collect()
+    st.log("Ixia controller deinit completed")
 
 def ixia_add_traffic_item_for_specific_vrf():
     traffic_item = ixia_controller.add_traffic_item(SPECIFIC_VRF_TRAFFIC_NAME)
@@ -36,9 +52,10 @@ def ixia_add_traffic_item_for_specific_vrf():
     with BatchAdd(ixia_controller.ixnetwork):
         config_element = traffic_item.ConfigElement.add()
         config_element.FrameRate.Type = "percentLineRate"
-        config_element.FrameRate.Rate = 1
+        config_element.FrameRate.Rate = 50
         config_element.TransmissionControl.Type = "fixedFrameCount"
         config_element.TransmissionControl.FrameCount = 10000
+        config_element.FrameSize.FixedSize = 64
 
     st.log("Add IXIA traffic item {} config element completed.".format(SPECIFIC_VRF_TRAFFIC_NAME))
     return True
@@ -62,11 +79,12 @@ def ixia_check_traffic_item_rx_frame(traffic_item_name, rx_count):
     if traffic_item_stats is None:
         return False
     st.log("Get traffic item statistics {}".format(traffic_item_name))
+    st.log("\n")
     st.log(traffic_item_stats)
 
     tmp_rx_count = traffic_item_stats['Rx Frames']
     st.log("Get traffic item {} Rx Frames count {},  expect count {}".format(traffic_item_name, tmp_rx_count, rx_count))
-    if tmp_rx_count == rx_count:
+    if int(tmp_rx_count) == int(rx_count):
         return True
     return False
 
@@ -99,10 +117,12 @@ def ixia_stop_all_protocols():
     return True
 
 
-def ixia_check_traffic(traffic_item_name, key="Rx frame", value=0):
+def ixia_check_traffic(traffic_item_name, key="Rx frame", value="0"):
+    st.wait(10)
     st.log("Get traffic item {}".format(traffic_item_name))
     st.log("Apply traffic item {}".format(traffic_item_name))
     ixia_controller.traffic_apply()
+    st.wait(10)
     st.log("Start traffic item {}".format(traffic_item_name))
     ret = ixia_controller.start_stateless_traffic(traffic_item_name)
     if not ret:
@@ -110,7 +130,11 @@ def ixia_check_traffic(traffic_item_name, key="Rx frame", value=0):
         return False
     # wait until traffic end
     st.log("Wait traffic item completed...{}".format(traffic_item_name))
-    st.wait(10)
+    st.wait(20)
+    ret = ixia_controller.stop_stateless_traffic(traffic_item_name)
+    if not ret:
+        st.error("Start traffic item {} failed".format(traffic_item_name))
+        return False
 
     if key == "Rx frame":
         return ixia_check_traffic_item_rx_frame(traffic_item_name, value)

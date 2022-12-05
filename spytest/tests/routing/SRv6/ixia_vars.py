@@ -2,8 +2,9 @@
 IXIA_HOST = "10.97.244.219"
 IXIA_PORT = 12020
 
-IXIA_CONFIG_FILE = "esr_multi_vrf.ixncfg"
+ESR_MULTI_VRF_CONFIG = "esr_multi_vrf.ixncfg"
 ESR_MULTI_VRF_ECMP_CONFIG = "esr_multi_vrf_ecmp.ixncfg"
+ESR_ECMP_CONFIG = "esr_ecmp_04.ixncfg"
 
 # IXIA_PORT connected to 179
 PORT_NAME_1 = "1/1/15"
@@ -37,6 +38,6 @@ BGP_IP_ROUTE_PROPERTY_2 = "BGP IP Route Range 2"
 # Traffic items
 VRF_TRAFFIC_NAME = "Traffic-Vrf"
 SPECIFIC_VRF_TRAFFIC_NAME = "Specific-Vrf_traffic"
-
+ECMP_TRAFFIC_NAME = "Traffic-ecmp"
 
 

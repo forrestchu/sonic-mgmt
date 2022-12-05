@@ -249,11 +249,3 @@ class IxiaController():
 
 
 
-# IXIA_HOST = "10.97.244.219"
-# IXIA_PORT = 12020
-
-# IXIA_CONFIG_FILE = "esr_multi_vrf.ixncfg"
-
-# ixia_controller = IxiaController(IXIA_HOST, IXIA_PORT)
-
-

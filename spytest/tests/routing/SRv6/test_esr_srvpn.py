@@ -231,6 +231,7 @@ def esr_srvpn_module_hooks(request):
 @pytest.fixture(scope="function", autouse=True)
 def esr_srvpn_func_hooks(request):
     # add things at the start every test case
+    ixia_controller_init()
     yield
     # if st.get_func_name(request) == 'test_bgp_fast_isolate_and_recover':
     #     if not loc_lib.check_bgp_isolate(dut1, 'no-isolate'):
@@ -239,6 +240,7 @@ def esr_srvpn_func_hooks(request):
     # else:
     #     st.show(dut1,"show vrf")
     #     st.show(dut2,"show vrf")
+    ixia_controller_deinit()
 
 def duts_base_config():
     curr_path = os.getcwd()
@@ -569,7 +571,7 @@ def test_base_config_srvpn_2kl_route_learn_02():
     load_2ksubif_100vrf()
 
     # load ixia config
-    ixia_load_config(IXIA_CONFIG_FILE)
+    ixia_load_config(ESR_MULTI_VRF_CONFIG)
     ixia_start_all_protocols()
 
     # check redis db , check route
@@ -653,7 +655,7 @@ def test_base_config_srvpn_multi_vrf_03():
     load_2ksubif_100vrf()
 
     # load ixia config
-    ixia_load_config(IXIA_CONFIG_FILE)
+    ixia_load_config(ESR_MULTI_VRF_CONFIG)
     ixia_start_all_protocols()
 
     # step1 check vpn route learn 50w
@@ -775,10 +777,10 @@ def test_base_config_srvpn_multi_vrf_03():
 def test_srvpn_ecmp_04():
     st.banner("test_srvpn_ecmp_04 begin")
 
-    load_2ksubif_100vrf("multi_vrf_ecmp")
+    # load_2ksubif_100vrf("multi_vrf_ecmp")
 
     # load ixia config
-    ixia_load_config(ESR_MULTI_VRF_ECMP_CONFIG)
+    ixia_load_config(ESR_ECMP_CONFIG)
     ixia_start_all_protocols()
 
     # ecmp ingress vrf
@@ -788,7 +790,7 @@ def test_srvpn_ecmp_04():
     to_check_vrf = 'PUBLIC-TC20'
     rtlist = "1:10 1:20 1:60"
 
-    # check vrf route learn
+    # # check vrf route learn
     ret = check_vrf_route_nums(dut2, to_check_vrf, 10000, 1)
     if not ret:
         st.report_fail("step1 check_vrf_route_nums {} 10000 test_srvpn_ecmp_04".format(to_check_vrf))
@@ -826,16 +828,11 @@ def test_srvpn_ecmp_04():
         if sid not in vpnsid_ecmp_list:
             st.log("step1 route appdb check failed , sid = {}".format(sid))
 
-    # check vrf traffic
-    ret = ixia_add_traffic_item_for_specific_vrf()
-    if not ret:
-        st.report_fail("Faild to add traffic item for specific vrf")
 
     # check traffic
-    ret = ixia_check_traffic(SPECIFIC_VRF_TRAFFIC_NAME, key="Rx frame", value=50000)
+    ret = ixia_check_traffic(ECMP_TRAFFIC_NAME, key="Rx frame", value=20000)
     if not ret:
         st.report_fail("Check traffic item {} rx frame failed".format(SPECIFIC_VRF_TRAFFIC_NAME))
-
 
     # step2:  ixia port or route oscillation then check traffic and route
     ixia_stop_all_protocols()
@@ -864,7 +861,7 @@ def test_srvpn_ecmp_04():
             st.report_fail("step2 check_bgp_vrf_ipv4_uni_sid failed ")
 
     # check traffic
-    ret = ixia_check_traffic(SPECIFIC_VRF_TRAFFIC_NAME, key="Rx frame", value=50000)
+    ret = ixia_check_traffic(ECMP_TRAFFIC_NAME, key="Rx frame", value=20000)
     if not ret:
         st.report_fail("Check traffic item {} rx frame failed".format(SPECIFIC_VRF_TRAFFIC_NAME))
 

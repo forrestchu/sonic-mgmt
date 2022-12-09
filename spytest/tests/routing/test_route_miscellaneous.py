@@ -4,6 +4,7 @@
 import pytest
 import time
 import json
+import os
 
 from spytest import st, tgapi, SpyTestDict
 
@@ -153,19 +154,22 @@ def test_ip_route_and_fib_with_large_routes():
     route_var = {'mode':'add', 'num_routes':data.route_count, 'prefix':'121.1.1.0', 'as_path':'as_seq:1'}
     ctrl_start = {'mode':'start'}
     bgp_rtr = tgapi.tg_bgp_config(tg=tg, handle=h1, conf_var=conf_var, route_var = route_var, ctrl_var=ctrl_start)
-    time.sleep(10)
+    if 'eSR' == os.getenv('SPYTEST_PROJECT'):
+        time.sleep(40)
+    else:
+        time.sleep(10)
 
     command = 'show ip route | grep -c pending'
     output = st.show(dut1, command, type="alicli", skip_error_check=True, skip_tmpl=True)
     output = output.split('\n')[0]
     if int(output) < data.route_count - data.dut_max_fib:
-        st.report_fail("test_case_passed, pending route num is {}, expected {}", output, data.route_count - data.dut_max_fib)
+        st.report_fail("test_case_passed, pending route num is " + output + ", expected " + str(data.route_count - data.dut_max_fib))
 
     command = 'show ip fib | grep -c pending'
     output = st.show(dut1, command, type="alicli", skip_error_check=True, skip_tmpl=True)
     output = output.split('\n')[0]
     if int(output) < data.route_count - data.dut_max_fib:
-        st.report_fail("test_case_passed, pending route num is " + output + ", expected " + str(data.route_count - data.dut_max_fib))
+        st.report_fail("test_case_passed, pending fib num is " + output + ", expected " + str(data.route_count - data.dut_max_fib))
 
     command = 'show ip route summary | grep ebgp | awk \'{print $NF}\''
     output = st.show(dut1, command, type="alicli", skip_error_check=True, skip_tmpl=True)

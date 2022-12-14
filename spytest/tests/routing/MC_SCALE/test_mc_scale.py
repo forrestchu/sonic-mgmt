@@ -877,7 +877,7 @@ def vrfs_traffic_add():
     dst_handle_list = [data.tg1_handle[2]['route'][vrf_id]['handle'], data.tg1_handle[3]['route'][vrf_id]['handle']]
     stream = tg.tg_traffic_config(port_handle=tg_ph_2, port_handle2=tg_ph, emulation_src_handle=src_handle['handle'],
                     emulation_dst_handle=dst_handle_list, circuit_endpoint_type='ipv4',mode='create',
-                    transmit_mode='continuous', length_mode='fixed',frame_size='1500', rate_percent=data.traffic_rate_precent)
+                    transmit_mode='continuous', length_mode='fixed',frame_size='1500', rate_percent=data.ruijie_traffic_rate_precent)
     data.streams['port7_to_port4_vrf_502'] = stream['stream_id']
 
 def vrfs_traffic_v6_add():

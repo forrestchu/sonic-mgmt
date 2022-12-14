@@ -93,6 +93,7 @@ data.tg2_v6_start_ip_addr = ["109:1::2","110:2::2"]
 data.dut_bfd_timer = "100"
 data.tg_bfd_timer = "100"
 data.traffic_rate_precent = "99.9"
+data.ruijie_traffic_rate_precent = "80.0"
 data.tg_list = []
 data.tg_ph_list = []
 data.tg1_handle = [0,0,0,0]

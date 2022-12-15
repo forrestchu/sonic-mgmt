@@ -5620,8 +5620,12 @@
         }
     }, 
     "BGP_NETWORK": {
-        "11.161.62.179/32|ipv4|long-vrf-503": {}, 
-        "11.161.62.179/32|ipv4|long-vrf-504": {}
+        "11.161.62.179/32|ipv4|long-vrf-503": {
+            "type": "non-connected"
+        }, 
+        "11.161.62.179/32|ipv4|long-vrf-504": {
+            "type": "non-connected"
+        }
     }, 
     "BGP_PARAMETERS": {
         "4200015155|global": {

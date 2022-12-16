@@ -1280,7 +1280,8 @@ def test_subintf_501_502_traffic():
     st.wait(30)
 
     st.banner("step2.1: check dut<-->ixia ecmp member")
-    if not check_dut_intf_tx_traffic_counters(dut1,data.ecmp_501_502_dut_tg_portlist,dut1_tg_ecmp_member_Gbps):
+    RJ_RATE = 0.8
+    if not check_dut_intf_tx_traffic_counters(dut1,data.ecmp_501_502_dut_tg_portlist, RJ_RATE * dut1_tg_ecmp_member_Gbps):
         st.log("dut1 dut-to-ixia ecmp members rate check failed")
         result=1
     
@@ -1761,7 +1762,7 @@ def test_bgp_fast_isolate_and_recover():
     st.wait(90)
     for vrf in data.dut_traffic_vrf_name.keys():
         name = data.dut_traffic_vrf_name[vrf]
-        if not retry_api(ip_bgp.check_bgp_session, dut=dut2,nbr_list=all_route[name]['neighbor'], state_list=all_route[name]['isolate_state'], vrf_name=name, retry_count= 3, delay= 10):
+        if not retry_api(ip_bgp.check_bgp_session, dut=dut2,nbr_list=all_route[name]['neighbor'], state_list=all_route[name]['isolate_state'], vrf_name=name, retry_count= 5, delay= 10):
             st.report_fail("bgp isolate failed")
 
     st.wait(30)

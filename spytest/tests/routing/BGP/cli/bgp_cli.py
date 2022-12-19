@@ -38,7 +38,8 @@ class BGP_CLI():
         comm_lst = BGP_COMMUNITY_LIST_CONFIG.format(name, type, num)
         command = "{} -c '{}' -c 'no {}'".format(ALICLI_VIEW, CONFIG_VIEW, comm_lst)
         st.config(self.dut, command)
-        self.community_list.remove(comm_lst)
+        if (comm_lst in  self.community_list):
+            self.community_list.remove(comm_lst)
 
     def flush_bgp_community_list(self):
         st.log("Flush bgp community-list")

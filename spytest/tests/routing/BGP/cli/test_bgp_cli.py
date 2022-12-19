@@ -478,17 +478,26 @@ def test_cli_bgp_community_list_normal():
 
     st.log("config cli:  normal cases")
     ###add case data
-    item = [["50","deny","50:51","deny@"],["60","permit","60:61","permit@"],["150","deny","50:51 51:52","deny@"],["250","permit","50:51 51:52 52:53","permit@"],
-            ["50","permit","51:52","permit@"],["60","deny","61:62 63:64","deny@"],["150","permit","51:52","permit@"],["250","deny","50:51 51:52 52:53","deny@"]]
+    if 'eSR' == os.getenv('SPYTEST_PROJECT'):
+        item = [["50","deny","50:51","deny"],["60","permit","60:61","permit"],["150","deny","50:51 51:52","deny"],["250","permit","50:51 51:52 52:53","permit"],
+                ["50","permit","51:52","permit"],["60","deny","61:62 63:64","deny"],["150","permit","51:52","permit"],["250","deny","50:51 51:52 52:53","deny"]]
+    else:
+        item = [["50","deny","50:51","deny@"],["60","permit","60:61","permit@"],["150","deny","50:51 51:52","deny@"],["250","permit","50:51 51:52 52:53","permit@"],
+                ["50","permit","51:52","permit@"],["60","deny","61:62 63:64","deny@"],["150","permit","51:52","permit@"],["250","deny","50:51 51:52 52:53","deny@"]]
 
     ##1: add-check-del
     for i in range(len(item)):
         ### config cli ###
         bgpcli_obj.config_bgp_community_list(item[i][0], item[i][1], item[i][2])
         
-        ### check config db ###
-        peerkey = "COMMUNITY_LIST|{}".format(item[i][0])
-        configdb_checkpoint(dut, peerkey, item[i][3], item[i][2], True, 'check1-1')
+        if 'eSR' == os.getenv('SPYTEST_PROJECT'):
+            ### check config db ###
+            peerkey = "COMMUNITY_LIST|{}|seq|{}".format(item[i][0], 10)
+            configdb_checkpoint(dut, peerkey, item[i][3], item[i][2], True, 'check1-1')
+        else:
+            ### check config db ###
+            peerkey = "COMMUNITY_LIST|{}".format(item[i][0])
+            configdb_checkpoint(dut, peerkey, item[i][3], item[i][2], True, 'check1-1')
 
         ### check frr running-config ##
         output = st.show(dut, "show running-config bgpd", type='vtysh')
@@ -503,7 +512,12 @@ def test_cli_bgp_community_list_normal():
         if result == False:
             st.report_fail("check1-2: frr check failed: {} {} {}".format(item[i][0], item[i][1], item[i][2]))
         
-        bgpcli_obj.del_config_bgp_community_list(item[i][0], item[i][1], item[i][2])
+        if 'eSR' == os.getenv('SPYTEST_PROJECT'):
+            bgpcli_obj.del_config_bgp_community_list(item[i][0], "", "")
+        else:
+            bgpcli_obj.del_config_bgp_community_list(item[i][0], item[i][1], item[i][2])
+    
+    st.log("Step1 Finish")
 
     ##2: add all - check all - del all
     for i in range(len(item)):
@@ -511,9 +525,12 @@ def test_cli_bgp_community_list_normal():
         bgpcli_obj.config_bgp_community_list(item[i][0], item[i][1], item[i][2])
     for i in range(len(item)):
         ### check config db ###
-        peerkey = "COMMUNITY_LIST|{}".format(item[i][0])
-        configdb_checkpoint(dut, peerkey, item[i][3], item[i][2], True, 'check2-1')
-
+        if 'eSR' == os.getenv('SPYTEST_PROJECT'):
+            peerkey = "COMMUNITY_LIST|{}|seq|{}".format(item[i][0], 10 if i < 4 else 20)
+            configdb_checkpoint(dut, peerkey, item[i][3], item[i][2], True, 'check2-1')
+        else:
+            peerkey = "COMMUNITY_LIST|{}".format(item[i][0])
+            configdb_checkpoint(dut, peerkey, item[i][3], item[i][2], True, 'check2-1')
         ### check frr running-config ##
         output = st.show(dut, "show running-config bgpd", type='vtysh')
         st.log(output)
@@ -526,21 +543,36 @@ def test_cli_bgp_community_list_normal():
         
         if result == False:
             st.report_fail("check2-2: frr check failed: {} {} {}".format(item[i][0], item[i][1], item[i][2]))
-        
-    bgpcli_obj.flush_bgp_community_list()
+    if 'eSR' == os.getenv('SPYTEST_PROJECT'):
+        # flush 
+        for i in ["50", "60", "150", "250"]:
+            bgpcli_obj.del_config_bgp_community_list(i, "", "")
+    else:
+        bgpcli_obj.flush_bgp_community_list()
+    
+    st.log("Step2 Finish")
 
     ##3: add all - del all - check all 
     for i in range(len(item)):
         ### config cli ###
         bgpcli_obj.config_bgp_community_list(item[i][0], item[i][1], item[i][2])
     
-    bgpcli_obj.flush_bgp_community_list()
+    if 'eSR' == os.getenv('SPYTEST_PROJECT'):
+        # flush 
+        for i in ["50", "60", "150", "250"]:
+            bgpcli_obj.del_config_bgp_community_list(i, "", "")
+    else:
+        bgpcli_obj.flush_bgp_community_list()
 
     for i in range(len(item)):
         ### check config db ###
-        peerkey = "COMMUNITY_LIST|{}".format(item[i][0])
-        configdb_checkpoint(dut, peerkey, item[i][3], item[i][2], False, 'check3-1')
-
+        if 'eSR' == os.getenv('SPYTEST_PROJECT'):
+            peerkey = "COMMUNITY_LIST|{}|seq|{}".format(item[i][0], 10 if i < 4 else 20)
+            configdb_checkpoint(dut, peerkey, item[i][3], item[i][2], False, 'check3-1')
+        else:
+            peerkey = "COMMUNITY_LIST|{}".format(item[i][0])
+            configdb_checkpoint(dut, peerkey, item[i][3], item[i][2], False, 'check3-1')
+        
         ### check frr running-config ##
         output = st.show(dut, "show running-config bgpd", type='vtysh')
         st.log(output)
@@ -565,19 +597,30 @@ def test_cli_bgp_community_list_standard():
 
     st.log("config cli:  standard cases")
     ###add case data
-    item = [["standard list1","deny","50:51","deny@"],["standard list2","permit","60:61","permit@"],["standard name1","deny","50:51 51:52","deny@"],
-            ["standard name2","permit","50:51 51:52 52:53","permit@"],["standard list1","permit","51:52","permit@"],["standard list2","deny","61:62 63:64","deny@"],
-            ["standard name1","permit","51:52","permit@"],["standard name2","deny","50:51 51:52 52:53","deny@"],
-            ["standard 999","permit","51:52","permit@"],["standard 23453","deny","50:51 51:52 52:53","deny@"]]
-
+    if 'eSR' == os.getenv('SPYTEST_PROJECT'):
+        item = [["standard list1","deny","50:51","deny"],["standard list2","permit","60:61","permit"],["standard name1","deny","50:51 51:52","deny"],
+                ["standard name2","permit","50:51 51:52 52:53","permit"],["standard list1","permit","51:52","permit"],["standard list2","deny","61:62 63:64","deny"],
+                ["standard name1","permit","51:52","permit"],["standard name2","deny","50:51 51:52 52:53","deny"],
+                ["standard 999","permit","51:52","permit"],["standard 23453","deny","50:51 51:52 52:53","deny"]]
+    else:
+        item = [["standard list1","deny","50:51","deny@"],["standard list2","permit","60:61","permit@"],["standard name1","deny","50:51 51:52","deny@"],
+                ["standard name2","permit","50:51 51:52 52:53","permit@"],["standard list1","permit","51:52","permit@"],["standard list2","deny","61:62 63:64","deny@"],
+                ["standard name1","permit","51:52","permit@"],["standard name2","deny","50:51 51:52 52:53","deny@"],
+                ["standard 999","permit","51:52","permit@"],["standard 23453","deny","50:51 51:52 52:53","deny@"]]
     ##1: add-check-del
     for i in range(len(item)):
         ### config cli ###
         bgpcli_obj.config_bgp_community_list(item[i][0], item[i][1], item[i][2])
         
         ### check config db ###
-        peerkey = "COMMUNITY_LIST|{}|{}".format(item[i][0].split()[0], item[i][0].split()[1])
-        configdb_checkpoint(dut, peerkey, item[i][3], item[i][2], True, 'check1-1')
+        if 'eSR' == os.getenv('SPYTEST_PROJECT'):
+            ### check config db ###
+            peerkey = "COMMUNITY_LIST|standard|{}|seq|{}".format(item[i][0].split()[1], 10)
+            configdb_checkpoint(dut, peerkey, item[i][3], item[i][2], True, 'check1-1')
+        else:
+            ### check config db ###
+            peerkey = "COMMUNITY_LIST|{}|{}".format(item[i][0].split()[0], item[i][0].split()[1])
+            configdb_checkpoint(dut, peerkey, item[i][3], item[i][2], True, 'check1-1')
 
         ### check frr running-config ##
         output = st.show(dut, "show running-config bgpd", type='vtysh')
@@ -592,7 +635,12 @@ def test_cli_bgp_community_list_standard():
         if result == False:
             st.report_fail("check1-2: frr check failed: {} {} {}".format(item[i][0], item[i][1], item[i][2]))
         
-        bgpcli_obj.del_config_bgp_community_list(item[i][0], item[i][1], item[i][2])
+        if 'eSR' == os.getenv('SPYTEST_PROJECT'):
+            bgpcli_obj.del_config_bgp_community_list(item[i][0], "", "")
+        else:
+            bgpcli_obj.del_config_bgp_community_list(item[i][0], item[i][1], item[i][2])
+    
+    st.log("Step1 Finish")
 
     ##2: add all - check all - del all
     for i in range(len(item)):
@@ -600,8 +648,12 @@ def test_cli_bgp_community_list_standard():
         bgpcli_obj.config_bgp_community_list(item[i][0], item[i][1], item[i][2])
     for i in range(len(item)):
         ### check config db ###
-        peerkey = "COMMUNITY_LIST|{}|{}".format(item[i][0].split()[0], item[i][0].split()[1])
-        configdb_checkpoint(dut, peerkey, item[i][3], item[i][2], True, 'check2-1')
+        if 'eSR' == os.getenv('SPYTEST_PROJECT'):
+            peerkey = "COMMUNITY_LIST|standard|{}|seq|{}".format(item[i][0].split()[1], 10 if (i < 4 or item[i][0] == "standard 999" or item[i][0]=="standard 23453") else 20)
+            configdb_checkpoint(dut, peerkey, item[i][3], item[i][2], True, 'check2-1')
+        else:
+            peerkey = "COMMUNITY_LIST|{}|{}".format(item[i][0].split()[0], item[i][0].split()[1])
+            configdb_checkpoint(dut, peerkey, item[i][3], item[i][2], True, 'check2-1')
 
         ### check frr running-config ##
         output = st.show(dut, "show running-config bgpd", type='vtysh')
@@ -615,20 +667,37 @@ def test_cli_bgp_community_list_standard():
         
         if result == False:
             st.report_fail("check2-2: frr check failed: {} {} {}".format(item[i][0], item[i][1], item[i][2]))
-        
-    bgpcli_obj.flush_bgp_community_list()
+    
+    if 'eSR' == os.getenv('SPYTEST_PROJECT'):
+        # flush 
+        for i in ["standard list1", "standard list2", "standard name1", "standard name2", "standard 999", "standard 23453"]:
+            bgpcli_obj.del_config_bgp_community_list(i, "", "")
+    else:
+        bgpcli_obj.flush_bgp_community_list()
+    
+    st.log("Step2 Finish")
 
     ##3: add all - del all - check all 
     for i in range(len(item)):
         ### config cli ###
         bgpcli_obj.config_bgp_community_list(item[i][0], item[i][1], item[i][2])
     
-    bgpcli_obj.flush_bgp_community_list()
+    if 'eSR' == os.getenv('SPYTEST_PROJECT'):
+        # flush 
+        for i in ["standard list1", "standard list2", "standard name1", "standard name2", "standard 999", "standard 23453"]:
+            bgpcli_obj.del_config_bgp_community_list(i, "", "")
+    else:
+        bgpcli_obj.flush_bgp_community_list()
 
     for i in range(len(item)):
         ### check config db ###
-        peerkey = "COMMUNITY_LIST|{}|{}".format(item[i][0].split()[0], item[i][0].split()[1])
-        configdb_checkpoint(dut, peerkey, item[i][3], item[i][2], False, 'check3-1')
+
+        if 'eSR' == os.getenv('SPYTEST_PROJECT'):
+            peerkey = "COMMUNITY_LIST|standard|{}|seq|{}".format(item[i][0].split()[1], 10 if (i < 4 or item[i][0] == "standard 999" or item[i][0]=="standard 23453") else 20)
+            configdb_checkpoint(dut, peerkey, item[i][3], item[i][2], False, 'check3-1')
+        else:
+            peerkey = "COMMUNITY_LIST|{}|{}".format(item[i][0].split()[0], item[i][0].split()[1])
+            configdb_checkpoint(dut, peerkey, item[i][3], item[i][2], False, 'check3-1')
 
         ### check frr running-config ##
         output = st.show(dut, "show running-config bgpd", type='vtysh')
@@ -654,19 +723,30 @@ def test_cli_bgp_community_list_expanded():
 
     st.log("config cli:  expanded cases")
     ###add case data
-    item = [["expanded list1","deny","50:51","deny@"],["expanded list2","permit","60:61","permit@"],["expanded name1","deny","50:51 51:52","deny@"],
-            ["expanded name2","permit","50:51 51:52 52:53","permit@"],["expanded list1","permit","51:52","permit@"],["expanded list2","deny","61:62 63:64","deny@"],
-            ["expanded name1","permit","51:52","permit@"],["expanded name2","deny","50:51 51:52 52:53","deny@"],
-            ["expanded 999","permit","51:52","permit@"],["expanded 23453","deny","50:51 51:52 52:53","deny@"]]
+    if 'eSR' == os.getenv('SPYTEST_PROJECT'):
+        item = [["expanded list1","deny","50:51","deny"],["expanded list2","permit","60:61","permit"],["expanded name1","deny","50:51 51:52","deny"],
+                ["expanded name2","permit","50:51 51:52 52:53","permit"],["expanded list1","permit","51:52","permit"],["expanded list2","deny","61:62 63:64","deny"],
+                ["expanded name1","permit","51:52","permit"],["expanded name2","deny","50:51 51:52 52:53","deny"],
+                ["expanded 999","permit","51:52","permit"],["expanded 23453","deny","50:51 51:52 52:53","deny"]]
+    else:
+        item = [["expanded list1","deny","50:51","deny@"],["expanded list2","permit","60:61","permit@"],["expanded name1","deny","50:51 51:52","deny@"],
+                ["expanded name2","permit","50:51 51:52 52:53","permit@"],["expanded list1","permit","51:52","permit@"],["expanded list2","deny","61:62 63:64","deny@"],
+                ["expanded name1","permit","51:52","permit@"],["expanded name2","deny","50:51 51:52 52:53","deny@"],
+                ["expanded 999","permit","51:52","permit@"],["expanded 23453","deny","50:51 51:52 52:53","deny@"]]
 
     ##1: add-check-del
     for i in range(len(item)):
         ### config cli ###
         bgpcli_obj.config_bgp_community_list(item[i][0], item[i][1], item[i][2])
-        
-        ### check config db ###
-        peerkey = "COMMUNITY_LIST|{}|{}".format(item[i][0].split()[0], item[i][0].split()[1])
-        configdb_checkpoint(dut, peerkey, item[i][3], item[i][2], True, 'check1-1')
+
+        if 'eSR' == os.getenv('SPYTEST_PROJECT'):
+            ### check config db ###
+            peerkey = "COMMUNITY_LIST|expanded|{}|seq|{}".format(item[i][0].split()[1], 10)
+            configdb_checkpoint(dut, peerkey, item[i][3], item[i][2], True, 'check1-1')
+        else:
+            ### check config db ###
+            peerkey = "COMMUNITY_LIST|{}|{}".format(item[i][0].split()[0], item[i][0].split()[1])
+            configdb_checkpoint(dut, peerkey, item[i][3], item[i][2], True, 'check1-1')
 
         ### check frr running-config ##
         output = st.show(dut, "show running-config bgpd", type='vtysh')
@@ -680,8 +760,13 @@ def test_cli_bgp_community_list_expanded():
         
         if result == False:
             st.report_fail("check1-2: frr check failed: {} {} {}".format(item[i][0], item[i][1], item[i][2]))
-        
-        bgpcli_obj.del_config_bgp_community_list(item[i][0], item[i][1], item[i][2])
+
+        if 'eSR' == os.getenv('SPYTEST_PROJECT'):
+            bgpcli_obj.del_config_bgp_community_list(item[i][0], "", "")
+        else:
+            bgpcli_obj.del_config_bgp_community_list(item[i][0], item[i][1], item[i][2])
+    
+    st.log("Step1 Finish")
 
     ##2: add all - check all - del all
     for i in range(len(item)):
@@ -689,8 +774,12 @@ def test_cli_bgp_community_list_expanded():
         bgpcli_obj.config_bgp_community_list(item[i][0], item[i][1], item[i][2])
     for i in range(len(item)):
         ### check config db ###
-        peerkey = "COMMUNITY_LIST|{}|{}".format(item[i][0].split()[0], item[i][0].split()[1])
-        configdb_checkpoint(dut, peerkey, item[i][3], item[i][2], True, 'check2-1')
+        if 'eSR' == os.getenv('SPYTEST_PROJECT'):
+            peerkey = "COMMUNITY_LIST|expanded|{}|seq|{}".format(item[i][0].split()[1], 10 if (i < 4 or item[i][0] == "expanded 999" or item[i][0]=="expanded 23453") else 20)
+            configdb_checkpoint(dut, peerkey, item[i][3], item[i][2], True, 'check2-1')
+        else:
+            peerkey = "COMMUNITY_LIST|{}|{}".format(item[i][0].split()[0], item[i][0].split()[1])
+            configdb_checkpoint(dut, peerkey, item[i][3], item[i][2], True, 'check2-1')
 
         ### check frr running-config ##
         output = st.show(dut, "show running-config bgpd", type='vtysh')
@@ -704,20 +793,36 @@ def test_cli_bgp_community_list_expanded():
         
         if result == False:
             st.report_fail("check2-2: frr check failed: {} {} {}".format(item[i][0], item[i][1], item[i][2]))
-        
-    bgpcli_obj.flush_bgp_community_list()
+
+    if 'eSR' == os.getenv('SPYTEST_PROJECT'):
+        # flush 
+        for i in ["expanded list1", "expanded list2", "expanded name1", "expanded name2", "expanded 999", "expanded 23453"]:
+            bgpcli_obj.del_config_bgp_community_list(i, "", "")
+    else:
+        bgpcli_obj.flush_bgp_community_list()
+    
+    st.log("Step2 Finish")        
 
     ##3: add all - del all - check all 
     for i in range(len(item)):
         ### config cli ###
         bgpcli_obj.config_bgp_community_list(item[i][0], item[i][1], item[i][2])
     
-    bgpcli_obj.flush_bgp_community_list()
+    if 'eSR' == os.getenv('SPYTEST_PROJECT'):
+        # flush 
+        for i in ["expanded list1", "expanded list2", "expanded name1", "expanded name2", "expanded 999", "expanded 23453"]:
+            bgpcli_obj.del_config_bgp_community_list(i, "", "")
+    else:
+        bgpcli_obj.flush_bgp_community_list()
 
     for i in range(len(item)):
         ### check config db ###
-        peerkey = "COMMUNITY_LIST|{}|{}".format(item[i][0].split()[0], item[i][0].split()[1])
-        configdb_checkpoint(dut, peerkey, item[i][3], item[i][2], False, 'check3-1')
+        if 'eSR' == os.getenv('SPYTEST_PROJECT'):
+            peerkey = "COMMUNITY_LIST|expanded|{}|seq|{}".format(item[i][0].split()[1], 10 if (i < 4 or item[i][0] == "standard 999" or item[i][0]=="standard 23453") else 20)
+            configdb_checkpoint(dut, peerkey, item[i][3], item[i][2], False, 'check3-1')
+        else:
+            peerkey = "COMMUNITY_LIST|{}|{}".format(item[i][0].split()[0], item[i][0].split()[1])
+            configdb_checkpoint(dut, peerkey, item[i][3], item[i][2], False, 'check3-1')
 
         ### check frr running-config ##
         output = st.show(dut, "show running-config bgpd", type='vtysh')

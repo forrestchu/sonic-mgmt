@@ -226,6 +226,8 @@ def esr_srvpn_module_hooks(request):
     #add things at the start of this module
     # add bmp
     yield
+    ixia_stop_all_protocols()
+    tgapi.set_reconnect_tgen(True)
     # del bmp log
 
 @pytest.fixture(scope="function", autouse=True)

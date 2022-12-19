@@ -1178,7 +1178,7 @@ class TGIxia(TGBase):
 
     def get_ixnetwork_status(self,**kwargs):
         ix_server = kwargs.get('ix_server',None)
-        ix_rest_port = kwargs.get('ix_port','8006')
+        ix_rest_port = kwargs.get('ix_port','12020')
         retries = int(kwargs.get('retries','1'))
         ret_dict = dict()
         ret_dict['status'] = '0'
@@ -1189,7 +1189,9 @@ class TGIxia(TGBase):
         while ret_dict['status'] == '0' and retries > 0:
             try:
                 rest_cmd = 'http://' + ix_server.split(':')[0] + ':' + ix_rest_port + '/api/v1/sessions'
+                logger.info(rest_cmd)
                 response = requests.get(rest_cmd,verify=False, allow_redirects=True,  timeout=30)
+                logger.info(response)
                 if response.status_code == 200:
                     ret_dict['status'] = '1'
                     resp_dict = json.loads(response.content)
@@ -1208,7 +1210,7 @@ class TGIxia(TGBase):
 
             except requests.ConnectionError as conn_error:
                 retries -= 1
-                logger.info('Either Connection Manager is not running or REST port 8006 is not enabled')
+                logger.info('Either Connection Manager is not running or REST port 12020 is not enabled')
                 logger.info('Error: {}'.format(conn_error))
 
             except Exception as conn_error:

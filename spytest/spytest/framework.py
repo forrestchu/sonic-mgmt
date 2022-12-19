@@ -3371,6 +3371,19 @@ class WorkArea(object):
         dir = dir or _get_logs_path()[1]
         return tempfile.mkstemp(dir=dir)[1]
 
+    def set_reconnect_tgen(self, reconnect=True):
+        self.tgen_reconnect = reconnect
+
+    def reconnect_tgen(self):
+        if self.tgen_reconnect:
+            self.warn("Reconnecting to TGen")
+            self._context._tgen_close()
+            time.sleep(5)
+            if not self._context._tgen_init():
+                self.error("Failed to reconnect to tgen")
+                os._exit(6)
+            self.warn("Reconnected to TGen")
+            self.tgen_reconnect = False
 
 def arg_validate_repeat():
     class ArgValidateRepeat(argparse.Action):

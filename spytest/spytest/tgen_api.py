@@ -116,3 +116,10 @@ def normalize_mtu(value):
     if not is_soft_tgen(): return value
     return get_min(value, 9000)
 
+def reconnect_tgen():
+    from spytest.framework import get_work_area
+    return get_work_area().reconnect_tgen()
+
+def set_reconnect_tgen(reconnect=True):
+    from spytest.framework import get_work_area
+    return get_work_area().set_reconnect_tgen(reconnect)

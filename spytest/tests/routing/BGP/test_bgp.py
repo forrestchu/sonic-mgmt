@@ -1804,10 +1804,14 @@ class TestBGPIPvxRouteAdvertisementFilter:
             st.log("route not learnt")
         
         if 'eSR' == os.getenv('SPYTEST_PROJECT'):
+            bgpapi.config_bgp(dut=self.local_topo['dut2'], local_as=self.local_topo['dut2_as'],
+                            config='yes',
+                            config_type_list=["no_network_check"],cli_type=bgp_cli_type)
+
             bgpapi.config_bgp(dut=self.local_topo['dut2'], local_as=self.local_topo['dut2_as'], addr_family='ipv6',
                             config='yes',
                             neighbor=self.local_topo['dut1_addr_ipv6'],
-                            config_type_list=["no_network_check", "default_originate"], routeMap='UseGlobal',cli_type=bgp_cli_type)
+                            config_type_list=["default_originate"], routeMap='UseGlobal',cli_type=bgp_cli_type)
         else:
             bgpapi.config_bgp(dut=self.local_topo['dut2'], local_as=self.local_topo['dut2_as'], addr_family='ipv6',
                             config='yes',

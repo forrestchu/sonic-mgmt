@@ -11,7 +11,6 @@ def remove_vlan_1(dut):
 def post_reboot(dut, is_upgrade=False):
     st.banner("Remove VLAN-1 post reboot", dut=dut)
     remove_vlan_1(dut)
-    tgapi.reconnect_tgen()
 
 def extend(dut):
     st.log("Extend base config if needed", dut=dut)

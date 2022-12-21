@@ -3372,6 +3372,7 @@ class WorkArea(object):
         return tempfile.mkstemp(dir=dir)[1]
 
     def set_reconnect_tgen(self, reconnect=True):
+        self.warn("Set Reconnect Flag")
         self.tgen_reconnect = reconnect
 
     def reconnect_tgen(self):
@@ -5499,6 +5500,7 @@ def fixture_setup(fixturedef, request):
         current_test.phase = "test_module_begin"
         set_current_result()
         hook_event(wa, "Module Hook:", fixturedef)
+        wa.reconnect_tgen()
         wa.instrument(None, "pre-user-module")
         current_module.name = fixturedef.baseid
         current_module.name = mid

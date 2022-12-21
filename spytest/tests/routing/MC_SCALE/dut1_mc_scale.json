@@ -380,35 +380,14 @@
                 "Eth60.215"
             ]
         }
-    }, 
-    "BGP_BMP": {
-        "openbmp|global|long-vrf-501": {
+    },
+    "GBMP": {
+        "openbmp|global|Default": {
             "bmp_monitor_ipv4_adjin_postpolicy": "true", 
             "bmp_monitor_ipv4_adjin_prepolicy": "true", 
             "bmp_monitor_ipv6_adjin_postpolicy": "true", 
             "bmp_monitor_ipv6_adjin_prepolicy": "true", 
-            "bmp_server_address": "192.0.0.250|5555|100|200"
-        }, 
-        "openbmp|global|long-vrf-502": {
-            "bmp_monitor_ipv4_adjin_postpolicy": "true", 
-            "bmp_monitor_ipv4_adjin_prepolicy": "true", 
-            "bmp_monitor_ipv6_adjin_postpolicy": "true", 
-            "bmp_monitor_ipv6_adjin_prepolicy": "true", 
-            "bmp_server_address": "192.0.0.250|5555|100|200"
-        }, 
-        "openbmp|global|long-vrf-503": {
-            "bmp_monitor_ipv4_adjin_postpolicy": "true", 
-            "bmp_monitor_ipv4_adjin_prepolicy": "true", 
-            "bmp_monitor_ipv6_adjin_postpolicy": "true", 
-            "bmp_monitor_ipv6_adjin_prepolicy": "true", 
-            "bmp_server_address": "192.0.0.250|5555|100|200"
-        }, 
-        "openbmp|global|long-vrf-504": {
-            "bmp_monitor_ipv4_adjin_postpolicy": "true", 
-            "bmp_monitor_ipv4_adjin_prepolicy": "true", 
-            "bmp_monitor_ipv6_adjin_postpolicy": "true", 
-            "bmp_monitor_ipv6_adjin_prepolicy": "true", 
-            "bmp_server_address": "192.0.0.250|5555|100|200"
+            "bmp_server_address": "192.0.0.250|5555|1000|100000"
         }
     }, 
     "BGP_ISOLATE": {

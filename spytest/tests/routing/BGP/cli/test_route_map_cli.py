@@ -82,7 +82,7 @@ def get_configdb_key_routemap(route_map):
     return "ROUTE_MAP|{}|{}|{}".format(s_list[1], s_list[2], s_list[3])
 
 def get_configdb_key_rm_delay_time():
-    return "ROUTE_MAP_DELAY|TIME"
+    return "BGP_GLOBAL_PARAMETERS|route_map_delay"
 
 def get_frr_key_routemap(route_map):
     return route_map

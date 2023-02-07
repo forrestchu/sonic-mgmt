@@ -23,6 +23,7 @@ if [ -n "$TERM" ]; then
 fi
 
 docker run --rm=true --privileged \
+           --net=host \
            -v $BUILD_DIR:/var/$USER/ \
            -v /var/spytest:/var/spytest \
            -w /var/$USER/ \

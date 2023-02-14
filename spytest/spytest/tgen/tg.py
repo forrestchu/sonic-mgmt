@@ -24,6 +24,8 @@ tg_scapy_pkg_loaded = False
 tg_version_list = dict()
 tgen_obj_dict = {}
 
+IXIA_PORT = 8021
+
 def tgen_profiling_start(msg, max_time=300):
     return workarea.profiling_start(msg, max_time)
 
@@ -1119,7 +1121,7 @@ class TGStc(TGBase):
 
 
 class TGIxia(TGBase):
-    def __init__(self, tg_type, tg_version, tg_ip=None, tg_port_list=None, ix_server=None, ix_port=8010):
+    def __init__(self, tg_type, tg_version, tg_ip=None, tg_port_list=None, ix_server=None, ix_port=IXIA_PORT):
         self.ix_server = ix_server
         self.ix_port = str(ix_port)
         self.topo_handle = {}
@@ -1178,7 +1180,7 @@ class TGIxia(TGBase):
 
     def get_ixnetwork_status(self,**kwargs):
         ix_server = kwargs.get('ix_server',None)
-        ix_rest_port = kwargs.get('ix_port','12020')
+        ix_rest_port = kwargs.get('ix_port','12031')
         retries = int(kwargs.get('retries','1'))
         ret_dict = dict()
         ret_dict['status'] = '0'
@@ -2026,7 +2028,7 @@ class TGIxia(TGBase):
 
 
 class TGScapy(TGBase):
-    def __init__(self, tg_type, tg_version, tg_ip=None, tg_port=8010, tg_port_list=None):
+    def __init__(self, tg_type, tg_version, tg_ip=None, tg_port=IXIA_PORT, tg_port_list=None):
         logger.info('TG Scapy Init')
         TGBase.__init__(self, tg_type, tg_version, tg_ip, tg_port_list)
         self.sc = ScapyClient(logger, tg_ip, tg_port, tg_port_list, self)
@@ -2202,7 +2204,7 @@ def load_tgen(tgen_dict):
             if not utils.ipcheck(ix_server):
                 logger.error("IxNetWork IP Address: {} is not reachable".format(ix_server))
                 return False
-            tg_ix_port = tgen_dict.get('ix_port', 8010)
+            tg_ix_port = tgen_dict.get('ix_port', IXIA_PORT)
             tg_ix_server = "{}:{}".format(ix_server, tg_ix_port)
             if not tg_ixia_pkg_loaded:
                 if not tg_ixia_load(tg_version, logger, tgen_get_logs_path()):
@@ -2241,7 +2243,7 @@ def load_tgen(tgen_dict):
             if not tg_scapy_load(tg_version, logger, tgen_get_logs_path()):
                 return False
             tg_scapy_pkg_loaded = True
-        tg_ix_port = tgen_dict.get('ix_port', 8010)
+        tg_ix_port = tgen_dict.get('ix_port', IXIA_PORT)
         tg_obj = TGScapy(tg_type, tg_version, tg_ip, tg_ix_port, tg_port_list)
 
     tgen_obj_dict[tgen_dict['name']] = tg_obj

@@ -13,42 +13,40 @@ configs:
     empty: {current: [], restore: []}
 
 devices:
-    MC-178:
+    MC-58:
         device_type: DevSonic
-        access: {protocol: ssh, ip: 192.0.0.178, port: 22}
+        access: {protocol: ssh, ip: 21.135.163.58, port: 22}
         rps: {model: None, ip: 2.3.4.5, outlet: 11, username: admin, password: admin}
         credentials: {username: root, password: QWxpTk9TLWRldgo=, altpassword: admin}
         properties: {config: default, build: default, services: default, params: def_dut, speed: default}
-    MC-179:
+    MC-59:
         device_type: DevSonic
-        access: {protocol: ssh, ip: 192.0.0.179, port: 22}
+        access: {protocol: ssh, ip: 21.135.163.59, port: 22}
         rps: {model: None, ip: 2.3.4.5, outlet: 10, username: admin, password: admin}
         credentials: {username: root, password: QWxpTk9TLWRldgo=, altpassword: admin}
         properties: {config: default, build: default, services: default, params: def_dut, speed: default}
     ixia-01:
         device_type: TGEN
-        properties: {type: ixia, version: 9.10, ip: 11.167.132.12, ix_server: 10.97.244.219, params: def_tg}
+        properties: {type: ixia, version: 9.10, ip: 21.135.163.53, ix_server: 10.137.91.199, params: def_tg}
 
 topology:
-    MC-178:
+    MC-58:
         interfaces:
-            Ethernet109: {EndDevice: ixia-01, EndPort: 1/15, params: def_tg_link}
-            Ethernet110: {EndDevice: ixia-01, EndPort: 1/16, params: def_tg_link}
-            Ethernet1:  {EndDevice: MC-179, EndPort: Ethernet1, params: def_link}
-            Ethernet12: {EndDevice: MC-179, EndPort: Ethernet12, params: def_link}
-            Ethernet13: {EndDevice: MC-179, EndPort: Ethernet13, params: def_link}
-            Ethernet16: {EndDevice: MC-179, EndPort: Ethernet16, params: def_link}
-    MC-179:
+            Ethernet1:  {EndDevice: MC-59, EndPort: Ethernet1, params: def_link}
+            Ethernet2: {EndDevice: MC-59, EndPort: Ethernet2, params: def_link}
+            Ethernet3: {EndDevice: MC-59, EndPort: Ethernet3, params: def_link}
+            Ethernet4: {EndDevice: MC-59, EndPort: Ethernet4, params: def_link}
+            Ethernet33: {EndDevice: ixia-01, EndPort: 1/37, params: def_tg_link}
+            Ethernet34: {EndDevice: ixia-01, EndPort: 1/38, params: def_tg_link}
+            Ethernet35: {EndDevice: ixia-01, EndPort: 1/39, params: def_tg_link}
+            Ethernet36: {EndDevice: ixia-01, EndPort: 1/40, params: def_tg_link}
+    MC-59:
         interfaces:
-            Ethernet109: {EndDevice: ixia-01, EndPort: 1/21, params: def_tg_link}
-            Ethernet110: {EndDevice: ixia-01, EndPort: 1/22, params: def_tg_link}
-            Ethernet111: {EndDevice: ixia-01, EndPort: 1/23, params: def_tg_link}
-            Ethernet112: {EndDevice: ixia-01, EndPort: 1/24, params: def_tg_link}
-            Ethernet1:  {EndDevice: MC-178, EndPort: Ethernet1, params: def_link}
-            Ethernet12: {EndDevice: MC-178, EndPort: Ethernet12, params: def_link}
-            Ethernet13: {EndDevice: MC-178, EndPort: Ethernet13, params: def_link}
-            Ethernet16: {EndDevice: MC-178, EndPort: Ethernet16, params: def_link}
-            Ethernet50: {EndDevice: ixia-01, EndPort: 1/19, params: def_tg_link}
-            Ethernet51: {EndDevice: ixia-01, EndPort: 1/20, params: def_tg_link}
+            Ethernet1:  {EndDevice: MC-58, EndPort: Ethernet1, params: def_link}
+            Ethernet2: {EndDevice: MC-58, EndPort: Ethernet2, params: def_link}
+            Ethernet3: {EndDevice: MC-58, EndPort: Ethernet3, params: def_link}
+            Ethernet4: {EndDevice: MC-58, EndPort: Ethernet4, params: def_link}
+            Ethernet33: {EndDevice: ixia-01, EndPort: 1/35, params: def_tg_link}
+            Ethernet34: {EndDevice: ixia-01, EndPort: 1/46, params: def_tg_link}
 
 

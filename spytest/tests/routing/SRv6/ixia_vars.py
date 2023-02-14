@@ -1,6 +1,6 @@
 
-IXIA_HOST = "10.97.244.219"
-IXIA_PORT = 12020
+IXIA_HOST = "10.137.91.199"
+IXIA_PORT = 12031
 
 ESR_MULTI_VRF_CONFIG = "esr_multi_vrf.ixncfg"
 ESR_MULTI_VRF_ECMP_CONFIG = "esr_multi_vrf_ecmp.ixncfg"

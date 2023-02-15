@@ -36,17 +36,17 @@ topology:
             Ethernet2: {EndDevice: MC-59, EndPort: Ethernet2, params: def_link}
             Ethernet3: {EndDevice: MC-59, EndPort: Ethernet3, params: def_link}
             Ethernet4: {EndDevice: MC-59, EndPort: Ethernet4, params: def_link}
-            Ethernet33: {EndDevice: ixia-01, EndPort: 1/37, params: def_tg_link}
-            Ethernet34: {EndDevice: ixia-01, EndPort: 1/38, params: def_tg_link}
-            Ethernet35: {EndDevice: ixia-01, EndPort: 1/39, params: def_tg_link}
-            Ethernet36: {EndDevice: ixia-01, EndPort: 1/40, params: def_tg_link}
+            Ethernet33: {EndDevice: ixia-01, EndPort: 1/33, params: def_tg_link}
+            Ethernet34: {EndDevice: ixia-01, EndPort: 1/34, params: def_tg_link}
+            Ethernet35: {EndDevice: ixia-01, EndPort: 1/35, params: def_tg_link}
+            Ethernet36: {EndDevice: ixia-01, EndPort: 1/36, params: def_tg_link}
     MC-59:
         interfaces:
             Ethernet1:  {EndDevice: MC-58, EndPort: Ethernet1, params: def_link}
             Ethernet2: {EndDevice: MC-58, EndPort: Ethernet2, params: def_link}
             Ethernet3: {EndDevice: MC-58, EndPort: Ethernet3, params: def_link}
             Ethernet4: {EndDevice: MC-58, EndPort: Ethernet4, params: def_link}
-            Ethernet33: {EndDevice: ixia-01, EndPort: 1/35, params: def_tg_link}
-            Ethernet34: {EndDevice: ixia-01, EndPort: 1/46, params: def_tg_link}
+            Ethernet33: {EndDevice: ixia-01, EndPort: 1/39, params: def_tg_link}
+            Ethernet34: {EndDevice: ixia-01, EndPort: 1/40, params: def_tg_link}
 
 

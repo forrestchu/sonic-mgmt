@@ -59,7 +59,7 @@ def sonic_installer_install2(dut, url, max_time=1800, skip_error_check=False, mi
             cmd = "sudo sonic_installer install {} -y".format(url)
         else:
             cmd = "sudo sonic_installer install --skip_migration {} -y".format(url)
-        pre_cmd = "route add default gw 192.0.0.248"
+        pre_cmd = "route add default gw 21.135.163.62"
         st.log("set default getway first")
         output = st.config(dut, pre_cmd, skip_error_check=True, max_time=10)
 

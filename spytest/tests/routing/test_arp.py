@@ -139,6 +139,21 @@ def test_ft_arp_entry_link_failure():
     st.log("Startup the routing interface link.")
     if not interface_obj.interface_operation(dut1, [vars.D1T1P1, vars.D1T1P2], "startup"):
         st.report_fail('interface_admin_startup_fail', [vars.D1T1P1, vars.D1T1P2])
+    
+    res = tgapi.verify_ping(src_obj=tg, port_handle=tg_handler["tg_ph_1"], dev_handle=h1['handle'],
+                     dst_ip=data.d1t1_ip_addr,ping_count='1', exp_count='1')
+    if res:
+        st.log("Ping succeeded.")
+    else:
+        st.warn("Ping failed.")
+
+    res = tgapi.verify_ping(src_obj=tg, port_handle=tg_handler["tg_ph_2"], dev_handle=h2['handle'],
+                     dst_ip=data.d1t2_ip_addr,ping_count='1', exp_count='1')
+    st.log("PING_RES: " + str(res))
+    if res:
+        st.log("Ping succeeded.")
+    else:
+        st.warn("Ping failed.")
 
     if tg.tg_type == 'stc':
         tg.tg_traffic_control(action='run', port_handle=[tg_handler["tg_ph_1"], tg_handler["tg_ph_2"]])

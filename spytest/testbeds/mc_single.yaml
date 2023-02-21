@@ -17,7 +17,7 @@ devices:
         device_type: DevSonic
         access: {protocol: ssh, ip: 21.135.163.58, port: 22}
         rps: {model: None, ip: 2.3.4.5, outlet: 10, username: admin, password: admin}
-        credentials: {username: root, password: QWxpTk9TLWRldgo=, altpassword: spytest}
+        credentials: {username: admin, password: admin, altpassword: spytest}
         properties: {config: default, build: default, services: default, params: def_dut, speed: default}
 
 topology:

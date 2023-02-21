@@ -4656,21 +4656,7 @@
         "timezone": {
             "zone": "Asia/Shanghai"
         }
-    }, 
-    "USER_METADATA": {
-        "aliops": {
-            "groups": "sudo,docker", 
-            "role": "ADMIN", 
-            "secret": "$1$EeL5tGlo$JzHvhxIlFvoVssyb2r6BQ1", 
-            "shell": "/usr/bin/cli"
-        }, 
-        "controller": {
-            "groups": "sudo,docker", 
-            "role": "ADMIN", 
-            "secret": "$1$910xGP.7$l0pdoL1iDFxFVJn3P6y5C/", 
-            "shell": "/usr/bin/cli"
-        }
-    }, 
+    },
     "VRF": {
         "Vrf1": {}
     }, 

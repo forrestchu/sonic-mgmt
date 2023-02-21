@@ -18,7 +18,7 @@ devices:
         device_type: DevSonic
         access: {protocol: ssh, ip: 192.0.0.178, port: 22}
         rps: {model: None, ip: 2.3.4.5, outlet: 11, username: admin, password: admin}
-        credentials: {username: root, password: admin, altpassword:  QWxpTk9TLWRldgo=}
+        credentials: {username: admin, password: admin, altpassword: admin}
         properties: {config: default, build: default, services: default, params: def_dut, speed: default}
 
     ixia-01:

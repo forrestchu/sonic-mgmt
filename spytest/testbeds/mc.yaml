@@ -15,18 +15,12 @@ configs:
 devices:
     MC-01:
         device_type: DevSonic
-        access: {protocol: ssh, ip: 192.0.0.171, port: 22}
+        access: {protocol: ssh, ip: 192.0.0.182, port: 22}
         rps: {model: None, ip: 2.3.4.5, outlet: 10, username: admin, password: admin}
-        credentials: {username: root, password: admin, altpassword: spytest}
+        credentials: {username: root, password: admin, altpassword: admin}
         properties: {config: default, build: default, services: default, params: def_dut, speed: default}
-    ixia-01:
-        device_type: TGEN
-        properties: {type: ixia, version: 9.10, ip: 11.167.132.12, ix_server: 10.97.244.219, params: def_tg}
+
 
 topology:
     MC-01:
         interfaces:
-            Ethernet1: {EndDevice: ixia-01, EndPort: 1/15, params: def_tg_link}
-            Ethernet2: {EndDevice: ixia-01, EndPort: 1/16, params: def_tg_link}
-
-

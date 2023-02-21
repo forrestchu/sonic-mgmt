@@ -440,7 +440,7 @@ def create_default_base_config():
 
     # remove all the unnecessary sections from init file
     print("remove all the unnecessary sections")
-    retain = ['DEVICE_METADATA', 'PORT', 'FLEX_COUNTER_TABLE', "MGMT_PORT", "SWITCH"]
+    retain = ['DEVICE_METADATA', 'PORT', 'FLEX_COUNTER_TABLE', "MGMT_PORT", "SWITCH", "USER_METADATA"]
     retain.extend(["BREAKOUT_CFG", "BREAKOUT_PORTS"])
     if os.getenv("SPYTEST_NTP_CONFIG_INIT", "0") != "0":
         retain.append("NTP_SERVER")

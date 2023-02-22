@@ -17,13 +17,13 @@ devices:
         device_type: DevSonic
         access: {protocol: ssh, ip: 21.135.163.58, port: 22}
         rps: {model: None, ip: 2.3.4.5, outlet: 11, username: admin, password: admin}
-        credentials: {username: admin, password: admin, altpassword: admin}
+        credentials: {username: admin, password: admin, altpassword: spytest}
         properties: {config: default, build: default, services: default, params: def_dut, speed: default}
     MC-59:
         device_type: DevSonic
         access: {protocol: ssh, ip: 21.135.163.59, port: 22}
         rps: {model: None, ip: 2.3.4.5, outlet: 10, username: admin, password: admin}
-        credentials: {username: admin, password: admin, altpassword: admin}
+        credentials: {username: admin, password: admin, altpassword: spytest}
         properties: {config: default, build: default, services: default, params: def_dut, speed: default}
     ixia-01:
         device_type: TGEN

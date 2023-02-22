@@ -66,11 +66,11 @@
         "localhost": {
             "asic": "cisco", 
             "docker_routing_config_mode": "separated", 
-            "hostname": "OSPREY-MC-B09-18-179.EU6", 
+            "hostname": "MC-58", 
             "port_form": "64x100G+32x200G+4x10G", 
             "type": "MetroCoreRouter"
         }
-    }, 
+    },
     "INTERFACE": {
         "Ethernet109": {
             "vrf_name": "PUBLIC-TC11"
@@ -130,10 +130,10 @@
         "Loopback1|2000::179/128": {}
     }, 
     "MGMT_INTERFACE": {
-        "eth0|192.0.0.179/24": {
-            "gwaddr": "192.0.0.248"
+        "eth0|21.135.163.58/26": {
+            "gwaddr": "21.135.163.62"
         }
-    }, 
+    },
     "PORT": {
         "Ethernet1": {
             "admin_status": "up", 
@@ -557,7 +557,15 @@
         "gnmi": {
             "port": "8080"
         }
-    }, 
+    },
+    "USER_METADATA": {
+        "admin": {                                             
+            "groups": "sudo,docker", 
+            "role": "ADMIN", 
+            "secret": "$1$WFtM/P.X$vXxpA7rUt1h7TL0WfcUuF/", 
+            "shell": "/bin/bash"
+        }
+    },
     "VRF": {
         "Vrf1": {}, 
         "Vrf2": {}

@@ -2217,6 +2217,14 @@
             "vrf_name":"VPN36"
         }
     },
+    "USER_METADATA": {
+        "admin": {                                             
+            "groups": "sudo,docker", 
+            "role": "ADMIN", 
+            "secret": "$1$WFtM/P.X$vXxpA7rUt1h7TL0WfcUuF/", 
+            "shell": "/bin/bash"
+        }
+    },
     "VRF": {
         "Vrf1": {},
         "Vrf2": {}

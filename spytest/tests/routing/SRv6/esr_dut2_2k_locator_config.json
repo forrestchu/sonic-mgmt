@@ -36,9 +36,8 @@
     "DEVICE_METADATA": {
         "localhost": {
             "asic": "cisco", 
-            "dmac": "B4:05:5D:84:D8:5A", 
             "docker_routing_config_mode": "separated", 
-            "hostname": "OSPREY-MC-B09-13-178.EU6", 
+            "hostname": "MC-59", 
             "port_form": "64x100G+32x200G+4x10G", 
             "type": "MetroCoreRouter"
         }
@@ -56,11 +55,11 @@
             "family": "IPv6", 
             "scope": "global"
         }, 
-        "Ethernet33|2033::178/64": {
+        "Ethernet3|2033::178/64": {
             "family": "IPv6", 
             "scope": "global"
         }, 
-        "Ethernet44|2044::178/64": {
+        "Ethernet4|2044::178/64": {
             "family": "IPv6", 
             "scope": "global"
         }
@@ -69,8 +68,8 @@
         "Loopback1|2000::178/128": {}
     }, 
     "MGMT_INTERFACE": {
-        "eth0|192.0.0.178/24": {
-            "gwaddr": "192.0.0.248"
+        "eth0|21.135.163.59/26": {
+            "gwaddr": "21.135.163.62"
         }
     }, 
     "PORT": {
@@ -164,8 +163,7 @@
         }, 
         "Ethernet18": {
             "admin_status": "up", 
-            "alias": "Ethernet18", 
-            "macsec": "gcm256"
+            "alias": "Ethernet18"
         }, 
         "Ethernet19": {
             "admin_status": "up", 
@@ -2670,7 +2668,15 @@
         "gnmi": {
             "port": "8080"
         }
-    }, 
+    },
+    "USER_METADATA": {
+        "admin": {                                             
+            "groups": "sudo,docker", 
+            "role": "ADMIN", 
+            "secret": "$1$WFtM/P.X$vXxpA7rUt1h7TL0WfcUuF/", 
+            "shell": "/bin/bash"
+        }
+    },
     "VRF": {
         "Vrf1": {},
         "Vrf2": {},

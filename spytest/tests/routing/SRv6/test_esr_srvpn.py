@@ -58,8 +58,8 @@ from ixia_helper import *
 
 data.srv6 = {}
 
-dut1 = 'MC-179'
-dut2 = 'MC-178'
+dut1 = 'MC-58'
+dut2 = 'MC-59'
 data.my_dut_list = [dut1, dut2]
 
 def add_bmp_config_background(dut):
@@ -683,7 +683,7 @@ def test_base_config_srvpn_multi_vrf_03():
             st.report_fail("step1 check_vrf_route_nums {} 5000 test_base_config_srvpn_multi_vrf_03".format(chcek_vrf))
 
     # check traffic
-    ret = ixia_check_traffic(VRF_TRAFFIC_NAME, key="Rx frame", value=80000)
+    ret = ixia_check_traffic(VRF_TRAFFIC_NAME, key="Rx frame", value=120000)
     if not ret:
         st.report_fail("Check traffic item {} rx frame failed".format(VRF_TRAFFIC_NAME))
 
@@ -702,9 +702,9 @@ def test_base_config_srvpn_multi_vrf_03():
 
     # check vrf ipv4 uni route and sid
     to_check_prefix_sid = {
-        '202.10.0.1':'fd00:201:201:fff1:10::',
-        '202.30.0.1':'fd00:201:201:fff1:30::',
-        '202.50.0.1':'fd00:201:201:fff1:50::',
+        '200.10.0.1':'fd00:201:201:fff1:10::',
+        '200.30.0.1':'fd00:201:201:fff1:30::',
+        '200.50.0.1':'fd00:201:201:fff1:50::',
         '201.20.0.1':'fd00:201:201:fff2:6::',
         '201.40.0.1':'fd00:201:201:fff2:26::'
     }
@@ -754,9 +754,9 @@ def test_base_config_srvpn_multi_vrf_03():
 
     # check vrf ipv4 uni route and sid
     to_check_prefix_sid = {
-        '202.10.0.1':'fd00:201:201:fff1:10::',
-        '202.30.0.1':'fd00:201:202:fff1:30::',
-        '202.50.0.1':'fd00:201:201:fff1:50::',
+        '200.10.0.1':'fd00:201:201:fff1:10::',
+        '200.30.0.1':'fd00:201:202:fff1:30::',
+        '200.50.0.1':'fd00:201:201:fff1:50::',
         '201.20.0.1':'fd00:201:203:fff2:6::',
         '201.40.0.1':'fd00:201:201:fff2:26::'
     }

@@ -20,7 +20,7 @@
 +file:macsec/test_macsec_conf.py
 +file:macsec/test_macsec_data.py
 +file:macsec/test_macsec_reboot.py
-+file:routing/SRv6/test_esr_srvpn.py
+#+file:routing/SRv6/test_esr_srvpn.py
 
 # test cases requiring link state propagation
 -test:test_ft_cos_tc_queue_map

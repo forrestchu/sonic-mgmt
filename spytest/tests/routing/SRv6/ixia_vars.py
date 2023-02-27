@@ -36,7 +36,7 @@ IPV4_PREFIX_POOL_2 = "Basic IPv4 Addresses 2"
 BGP_IP_ROUTE_PROPERTY_2 = "BGP IP Route Range 2"
 
 # Traffic items
-VRF_TRAFFIC_NAME = "Traffic-Vrf"
+VRF_TRAFFIC_NAME = "t-g1-1"
 SPECIFIC_VRF_TRAFFIC_NAME = "Specific-Vrf_traffic"
 ECMP_TRAFFIC_NAME = "Traffic-ecmp"
 

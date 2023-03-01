@@ -181,7 +181,7 @@ class BGP_CLI():
         output = st.show(self.dut, cmd, skip_tmpl=True)
         json_str = json.dumps(output).encode('utf-8')
         json_str = json_str.replace('end\\n','').replace('true','"true"').replace("\\n","").replace("\\","").strip('"')
-        json_str = re.sub(r"[A-Za-z]*@\S*#", '', json_str)
+        json_str = re.sub(r"[A-Za-z]*@\S*\$", '', json_str)
         output_json = json.loads(json_str)
         return output_json
 

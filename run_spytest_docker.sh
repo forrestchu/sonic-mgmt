@@ -10,7 +10,7 @@ docker inspect --type image $BUILD_IMAGE &> /dev/null
 if [ $? -ne 0 ]; then
     echo "Build docker image $BUILD_IMAGE"
     echo "Docker build file is $DOCKFILE"
-    docker build --force-rm --no-cache -t $BUILD_IMAGE -f $DOCKFILE $BUILD_DIR
+    docker build --network=host --force-rm --no-cache -t $BUILD_IMAGE -f $DOCKFILE $BUILD_DIR
     docker inspect --type image $BUILD_IMAGE &> /dev/null
     if [ $? -ne 0 ]; then
         echo "Build docker image $BUILD_IMAGE fail!"

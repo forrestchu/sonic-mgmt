@@ -31,7 +31,7 @@ apt-get install -y vim
 apt-get install -y snmp
 
 #BASE_URL="http://30.57.186.117/spytest"
-BASE_URL="http://21.135.167.180:8888/spytest"
+BASE_URL="http://10.97.244.220/spytest"
 
 cd /tmp
 # Download packages

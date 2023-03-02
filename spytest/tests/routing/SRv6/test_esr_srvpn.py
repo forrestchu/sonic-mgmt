@@ -264,6 +264,7 @@ def l3_base_unconfig():
 
 @pytest.mark.community
 @pytest.mark.community_pass
+@pytest.mark.run(order=-4)
 def test_base_config_srvpn_locator_01():
 
     duts_base_config()
@@ -566,6 +567,7 @@ def load_2ksubif_100vrf(filesuffix='multi_vrf_full'):
 ## 2k locator , base traffic and route learning
 @pytest.mark.community
 @pytest.mark.community_pass
+@pytest.mark.run(order=-3)
 def test_base_config_srvpn_2kl_route_learn_02():
     st.banner("test_base_config_srvpn_2kl_traffic_and_route_02 begin")
 
@@ -649,6 +651,7 @@ def test_base_config_srvpn_2kl_route_learn_02():
 ## 100 vrf test
 @pytest.mark.community
 @pytest.mark.community_pass
+@pytest.mark.run(order=-2)
 def test_base_config_srvpn_multi_vrf_03():
 
     # ixia config 100 subinterface
@@ -776,6 +779,7 @@ def test_base_config_srvpn_multi_vrf_03():
 ## ecmp test
 @pytest.mark.community
 @pytest.mark.community_pass
+@pytest.mark.run(order=-1)
 def test_srvpn_ecmp_04():
     st.banner("test_srvpn_ecmp_04 begin")
 

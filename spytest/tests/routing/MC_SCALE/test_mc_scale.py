@@ -943,6 +943,7 @@ def l3_base_unconfig():
 
 @pytest.mark.community
 @pytest.mark.community_pass
+@pytest.mark.run(order=-5)
 def test_subintf_503_504_traffic():
     data.my_dut_list = st.get_dut_names()
     dut1 = data.my_dut_list[0]
@@ -1163,6 +1164,7 @@ def test_subintf_503_504_traffic():
 
 @pytest.mark.community
 @pytest.mark.community_pass
+@pytest.mark.run(order=-6)
 def test_subintf_501_502_traffic():
     data.my_dut_list = st.get_dut_names()
     dut1 = data.my_dut_list[0]

@@ -205,7 +205,7 @@ def test_macsec_linkflap():
     st.log("Current Session TX AN {}".format(pre_connection[0]["tx_an"]))
 
     # Flap < 6 seconds
-    command = "ifconfig {} down && sleep {} && ifconfig {} up".format(vars.D1D2P1, MKA_TIMEOUT-2, vars.D1D2P1)
+    command = "sudo ifconfig {} down && sleep {} && sudo ifconfig {} up".format(vars.D1D2P1, MKA_TIMEOUT-2, vars.D1D2P1)
     st.config(vars.D1, command)
     st.wait(3)
     check_macsec(vars.D1, vars.D1D2P1, data.cipher_suite)
@@ -215,7 +215,7 @@ def test_macsec_linkflap():
         st.report_fail("The MKA session timeout")
 
     # Flap > 6 seconds
-    command = "ifconfig {} down && sleep {} && ifconfig {} up".format(vars.D1D2P1, MKA_TIMEOUT+1, vars.D1D2P1)
+    command = "sudo ifconfig {} down && sleep {} && sudo ifconfig {} up".format(vars.D1D2P1, MKA_TIMEOUT+1, vars.D1D2P1)
     st.config(vars.D1, command)
     st.wait(3)
     check_macsec(vars.D1, vars.D1D2P1, data.cipher_suite)

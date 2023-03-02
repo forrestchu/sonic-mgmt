@@ -72,6 +72,7 @@ def l3_performance_enhancements_module_hooks(request):
     # Get the default route count from DUT
     def_v4_route_count = asicapi.get_ipv4_route_count(dut)
     def_v6_route_count = asicapi.get_ipv6_route_count(dut)
+    st.log("default router count ipv4:{} ipv6:{}.".format(def_v4_route_count, def_v6_route_count))
 
     load_dut_crm_poll_timer_config(dut, timer='30')
 

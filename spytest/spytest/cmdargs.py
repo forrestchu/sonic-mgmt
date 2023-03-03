@@ -39,7 +39,7 @@ arg_defaults = {
   "--include-devices": None,
   "--run-progress-report": 0,
   "--env": [],
-  "--random-order": 1,
+  "--random-order": 0,
   "--repeat-test": ["", 1],
   "--rps-reboot": None,
   "--pde": False,

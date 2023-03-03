@@ -64,7 +64,7 @@ data.my_dut_list = [dut1, dut2]
 
 def add_bmp_config_background(dut):
     st.log("config global bmp")
-    st.config(dut, "cli -c 'configure terminal' -c 'bmp' -c 'bmp target bmp01' -c 'bmp connect 192.0.0.250 port 5555 min-retry 500 max-retry 2000'")
+    st.config(dut, "cli -c 'configure terminal' -c 'bmp' -c 'bmp target bmp01' -c 'bmp connect 21.135.167.180 port 5555 min-retry 500 max-retry 2000'")
     st.config(dut, "cli -c 'configure terminal' -c 'bmp' -c 'bmp target bmp01' -c 'bmp monitor ipv4 unicast adj-in pre-policy'")
     st.config(dut, "cli -c 'configure terminal' -c 'bmp' -c 'bmp target bmp01' -c 'bmp monitor ipv6 unicast adj-in pre-policy'")
     st.config(dut, "cli -c 'configure terminal' -c 'bmp' -c 'bmp target bmp01' -c 'bmp monitor ipv4 unicast adj-in post-policy '")

@@ -22,7 +22,7 @@ def kafka_consumer():
     }   
 
     consumer = KafkaConsumer(
-                            bootstrap_servers=['192.0.0.250:9092'],
+                            bootstrap_servers=['21.135.167.180:9092'],
                             auto_offset_reset='earliest', 
                             group_id='dev')
 

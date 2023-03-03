@@ -377,7 +377,7 @@
             "bmp_monitor_ipv4_adjin_prepolicy": "true", 
             "bmp_monitor_ipv6_adjin_postpolicy": "true", 
             "bmp_monitor_ipv6_adjin_prepolicy": "true", 
-            "bmp_server_address": "192.0.0.250|5555|1000|100000"
+            "bmp_server_address": "21.135.167.180|5555|1000|100000"
         }
     }, 
     "BGP_ISOLATE": {

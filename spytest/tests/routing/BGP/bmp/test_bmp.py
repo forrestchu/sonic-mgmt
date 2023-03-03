@@ -211,7 +211,7 @@ def test_bmp_global_case():
     dut2_mgmtip = st.get_mgmt_ip(dut2)
 
     st.log("config global bmp")
-    st.config(dut2, "cli -c 'configure terminal' -c 'bmp' -c 'bmp target bmp01' -c 'bmp connect 192.0.0.250 port 5555 min-retry 100 max-retry 200'")
+    st.config(dut2, "cli -c 'configure terminal' -c 'bmp' -c 'bmp target bmp01' -c 'bmp connect 21.135.167.180 port 5555 min-retry 100 max-retry 200'")
 
     st.config(dut2, "cli -c 'configure terminal' -c 'bmp' -c 'bmp target bmp01' -c 'bmp monitor ipv4 unicast adj-in pre-policy'")
 
@@ -274,7 +274,7 @@ def test_bmp_global_del_bgp_case():
     topic3 = 'openbmp.parsed.unicast_prefix'
 
     st.log("config global bmp")
-    st.config(dut2, "cli -c 'configure terminal' -c 'bmp' -c 'bmp target bmp02' -c 'bmp connect 192.0.0.250 port 5555 min-retry 100 max-retry 200'")
+    st.config(dut2, "cli -c 'configure terminal' -c 'bmp' -c 'bmp target bmp02' -c 'bmp connect 21.135.167.180 port 5555 min-retry 100 max-retry 200'")
 
     st.config(dut2, "cli -c 'configure terminal' -c 'bmp' -c 'bmp target bmp02' -c 'bmp monitor ipv4 unicast adj-in pre-policy'")
 
@@ -325,7 +325,7 @@ def test_bmp_bgp_case():
     dut2_mgmtip = st.get_mgmt_ip(dut2)
 
     st.log("config bgp bmp")
-    st.config(dut2, "cli -c 'configure terminal' -c 'router bgp 200' -c 'bmp target bmp03' -c 'bmp connect 192.0.0.250 port 5555 min-retry 100 max-retry 200'")
+    st.config(dut2, "cli -c 'configure terminal' -c 'router bgp 200' -c 'bmp target bmp03' -c 'bmp connect 21.135.167.180 port 5555 min-retry 100 max-retry 200'")
 
     st.config(dut2, "cli -c 'configure terminal' -c 'router bgp 200' -c 'bmp target bmp03' -c 'bmp monitor ipv4 unicast adj-in pre-policy'")
 

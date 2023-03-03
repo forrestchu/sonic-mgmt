@@ -1,4 +1,3 @@
-+file:qos/test_cos.py
 +file:sanity/test_sanity_l3.py
 +file:routing/test_arp.py
 +file:routing/test_route_miscellaneous.py
@@ -20,6 +19,7 @@
 +file:macsec/test_macsec_conf.py
 +file:macsec/test_macsec_data.py
 +file:macsec/test_macsec_reboot.py
++file:qos/test_cos.py
 +file:routing/SRv6/test_esr_srvpn.py
 
 # test cases requiring link state propagation

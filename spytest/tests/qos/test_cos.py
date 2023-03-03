@@ -136,7 +136,7 @@ def cos_module_hooks(request):
     data.streams['ipv6_hop_limit_255'] = stream['stream_id']
 
     # add other queues
-    stream = data.tg.tg_traffic_config(port_handle=data.tg_ph_1, mode='create', length_mode='fixed', frame_size=128,
+    stream = data.tg.tg_traffic_config(port_handle=data.tg_ph_2, mode='create', length_mode='fixed', frame_size=128,
                                     rate_pps=rate['BGP_KEEPALIVE'], l2_encap='ethernet_ii_vlan',
                                     transmit_mode='continuous', l3_protocol='ipv4',
                                     mac_src='00:0a:01:01:23:01', \
@@ -147,7 +147,7 @@ def cos_module_hooks(request):
     st.log('Stream output:{}'.format(stream))
     data.streams['BGP_KEEPALIVE'] = stream['stream_id']
 
-    stream = data.tg.tg_traffic_config(port_handle=data.tg_ph_1, mode='create', length_mode='fixed', frame_size=128,
+    stream = data.tg.tg_traffic_config(port_handle=data.tg_ph_2, mode='create', length_mode='fixed', frame_size=128,
                                     rate_pps=rate['BGP'], l2_encap='ethernet_ii_vlan',
                                     transmit_mode='continuous', l3_protocol='ipv4',
                                     mac_src='00:0a:01:01:23:01', \
@@ -157,7 +157,7 @@ def cos_module_hooks(request):
     st.log('Stream output:{}'.format(stream))
     data.streams['BGP'] = stream['stream_id']
 
-    stream = data.tg.tg_traffic_config(port_handle=data.tg_ph_1, mode='create', length_mode='fixed', frame_size=128,
+    stream = data.tg.tg_traffic_config(port_handle=data.tg_ph_2, mode='create', length_mode='fixed', frame_size=128,
                                     rate_pps=rate['BGPV6_KEEPALIVE'], l2_encap='ethernet_ii_vlan',
                                     transmit_mode='continuous', l3_protocol='ipv6',
                                     mac_src='00:0a:01:01:23:01', \
@@ -168,7 +168,7 @@ def cos_module_hooks(request):
     st.log('Stream output:{}'.format(stream))
     data.streams['BGPV6_KEEPALIVE'] = stream['stream_id']
 
-    stream = data.tg.tg_traffic_config(port_handle=data.tg_ph_1, mode='create', length_mode='fixed', frame_size=128,
+    stream = data.tg.tg_traffic_config(port_handle=data.tg_ph_2, mode='create', length_mode='fixed', frame_size=128,
                                     rate_pps=rate['BGPV6'], l2_encap='ethernet_ii_vlan',
                                     transmit_mode='continuous', l3_protocol='ipv6',
                                     mac_src='00:0a:01:01:23:01', \
@@ -178,14 +178,14 @@ def cos_module_hooks(request):
     st.log('Stream output:{}'.format(stream))
     data.streams['BGPV6'] = stream['stream_id']
 
-    stream = data.tg.tg_traffic_config(port_handle=data.tg_ph_1, mode='create', length_mode='fixed', frame_size=78,
+    stream = data.tg.tg_traffic_config(port_handle=data.tg_ph_2, mode='create', length_mode='fixed', frame_size=78,
                                     rate_pps=rate['ARP'], l2_encap='ethernet_ii_vlan',mac_dst='ff:ff:ff:ff:ff:ff',
                                     mac_src=data.src_arp_addr, transmit_mode='continuous',
                                     l3_protocol="arp", arp_operation="arpRequest")
     st.log('Stream output:{}'.format(stream))
     data.streams['ARP'] = stream['stream_id']
 
-    stream = data.tg.tg_traffic_config(port_handle=data.tg_ph_1, mode='create', length_mode='fixed', frame_size=128,
+    stream = data.tg.tg_traffic_config(port_handle=data.tg_ph_2, mode='create', length_mode='fixed', frame_size=128,
                                     rate_pps=rate['ND'], l2_encap='ethernet_ii_vlan',
                                     transmit_mode='continuous', l3_protocol='ipv6',
                                     mac_src='00:0a:01:01:23:01', \
@@ -241,21 +241,21 @@ def cos_module_hooks(request):
     st.log('Stream output:{}'.format(stream))
     data.streams['GRPC'] = stream['stream_id']
 
-    stream = data.tg.tg_traffic_config(port_handle=data.tg_ph_1, mode='create', length_mode='fixed', frame_size=78,
+    stream = data.tg.tg_traffic_config(port_handle=data.tg_ph_2, mode='create', length_mode='fixed', frame_size=78,
                                     rate_pps=rate['LLDP'], l2_encap='ethernet_ii_vlan',ethernet_value='88cc',
                                     transmit_mode='continuous',
                                     mac_src=data.src_mac, mac_dst='01:80:c2:00:00:00')
     st.log('Stream output:{}'.format(stream))
     data.streams['LLDP'] = stream['stream_id']
 
-    stream = data.tg.tg_traffic_config(port_handle=data.tg_ph_1, mode='create', length_mode='fixed', frame_size=78,
+    stream = data.tg.tg_traffic_config(port_handle=data.tg_ph_2, mode='create', length_mode='fixed', frame_size=78,
                                     rate_pps=rate['LACP'], l2_encap='ethernet_ii_vlan',ethernet_value='8809',
                                     transmit_mode='continuous',
                                     mac_src=data.src_mac, mac_dst='01:80:c2:00:00:00')
     st.log('Stream output:{}'.format(stream))
     data.streams['LACP'] = stream['stream_id']
 
-    stream = data.tg.tg_traffic_config(port_handle=data.tg_ph_1, mode='create', length_mode='fixed', frame_size=78,
+    stream = data.tg.tg_traffic_config(port_handle=data.tg_ph_2, mode='create', length_mode='fixed', frame_size=78,
                                     rate_pps=rate['DIRECT_SUBNET'], l2_encap='ethernet_ii_vlan',
                                     transmit_mode='continuous', l3_protocol='ipv4',
                                     mac_src='00:0a:01:01:23:01',
@@ -264,7 +264,7 @@ def cos_module_hooks(request):
     st.log('Stream output:{}'.format(stream))
     data.streams['DIRECT_SUBNET'] = stream['stream_id']
 
-    stream = data.tg.tg_traffic_config(port_handle=data.tg_ph_1, mode='create', length_mode='fixed', frame_size=78,
+    stream = data.tg.tg_traffic_config(port_handle=data.tg_ph_2, mode='create', length_mode='fixed', frame_size=78,
                                     rate_pps=rate['ICMP'], l2_encap='ethernet_ii_vlan',
                                     transmit_mode='continuous', l3_protocol='ipv4',
                                     mac_src='00:0a:01:01:23:01',
@@ -274,20 +274,20 @@ def cos_module_hooks(request):
     st.log('Stream output:{}'.format(stream))
     data.streams['ICMP'] = stream['stream_id']
 
-    stream = data.tg.tg_traffic_config(port_handle=data.tg_ph_1, mode='create', length_mode='fixed', frame_size=78,
+    stream = data.tg.tg_traffic_config(port_handle=data.tg_ph_2, mode='create', length_mode='fixed', frame_size=78,
                                     rate_pps=rate['UDLD'], l2_encap='ethernet_ii', transmit_mode='continuous',
                                     mac_src=data.src_mac, mac_dst='01:00:0c:cc:cc:cc')
     st.log('Stream output:{}'.format(stream))
     data.streams['UDLD'] = stream['stream_id']
 
-    stream = data.tg.tg_traffic_config(port_handle=data.tg_ph_1, mode='create', length_mode='fixed', frame_size=78,
+    stream = data.tg.tg_traffic_config(port_handle=data.tg_ph_2, mode='create', length_mode='fixed', frame_size=78,
                                     rate_pps=rate['EAPOL'], l2_encap='ethernet_ii_vlan',ethernet_value='888E',
                                     transmit_mode='continuous',
                                     mac_src=data.src_mac, mac_dst='01:80:c2:00:00:03')
     st.log('Stream output:{}'.format(stream))
     data.streams['EAPOL'] = stream['stream_id']
 
-    stream = data.tg.tg_traffic_config(port_handle=data.tg_ph_1, mode='create', length_mode='fixed', frame_size=128,
+    stream = data.tg.tg_traffic_config(port_handle=data.tg_ph_2, mode='create', length_mode='fixed', frame_size=128,
                                     rate_pps=rate['BFD'], l2_encap='ethernet_ii_vlan',
                                     transmit_mode='continuous', l3_protocol='ipv4',
                                     mac_src='00:0a:01:01:23:01',
@@ -296,7 +296,7 @@ def cos_module_hooks(request):
     st.log('Stream output:{}'.format(stream))
     data.streams['BFD'] = stream['stream_id']
 
-    stream = data.tg.tg_traffic_config(port_handle=data.tg_ph_1, mode='create', length_mode='fixed', frame_size=128,
+    stream = data.tg.tg_traffic_config(port_handle=data.tg_ph_2, mode='create', length_mode='fixed', frame_size=128,
                                     rate_pps=rate['BFDV6'], l2_encap='ethernet_ii_vlan',
                                     transmit_mode='continuous', l3_protocol='ipv6',
                                     mac_src='00:0a:01:01:23:01',
@@ -354,14 +354,20 @@ def cos_variables():
     data = SpyTestDict()
     data.ageout_time = 600
     data.ipv4_address = "10.10.10.1"
+    data.ipv4_address2 = "11.11.11.1"
     data.ipv4_address_tgen = "10.10.10.2"
+    data.ipv4_address2_tgen = "11.11.11.2"
     data.ipv6_address = "1001::1"
+    data.ipv6_address2 = "1002::1"
     data.ipv6_address_tgen = "1001::2"
+    data.ipv6_address2_tgen = "1002::2"
     data.subnet = 24
     data.ipv6_subnet = 64
     data.ipv6_source_address = "2001::1"
+    data.ipv6_source_address2 = "2002::1"
     data.rate_percent = 100
     data.ipv4_source_address = "20.20.20.1"
+    data.ipv4_source_address2 = "21.21.21.1"
     data.ip_protocol = 58
     data.l4_protocol = "icmp"
     data.ipv6_family = "ipv6"
@@ -387,15 +393,22 @@ def cos_variables():
 def configuring_ipv4_and_ipv6_address():
     st.log("About to add ipv6 address TGen connected interface")
     ip_obj.config_ip_addr_interface(vars.D1, vars.D1T1P1, data.ipv6_address, data.ipv6_subnet, family="ipv6")
+    ip_obj.config_ip_addr_interface(vars.D1, vars.D1T1P2, data.ipv6_address2, data.ipv6_subnet, family="ipv6")
     if not ip_obj.verify_interface_ip_address(vars.D1, vars.D1T1P1, "{}/{}".format(data.ipv6_address, data.ipv6_subnet),
                                               family="ipv6"):
         st.report_fail("ip_routing_int_create_fail", vars.D1T1P1)
+    if not ip_obj.verify_interface_ip_address(vars.D1, vars.D1T1P2, "{}/{}".format(data.ipv6_address2, data.ipv6_subnet),
+                                              family="ipv6"):
+        st.report_fail("ip_routing_int_create_fail", vars.D1T1P2)
     st.log("About to add ipv4 address TGen connected interface")
     ip_obj.config_ip_addr_interface(vars.D1, vars.D1T1P1, data.ipv4_address, data.subnet, family="ipv4")
     if not ip_obj.verify_interface_ip_address(vars.D1, vars.D1T1P1, "{}/{}".format(data.ipv4_address, data.subnet),
                                               family="ipv4"):
         st.report_fail("ip_routing_int_create_fail", vars.D1T1P1)
-
+    ip_obj.config_ip_addr_interface(vars.D1, vars.D1T1P2, data.ipv4_address2, data.subnet, family="ipv4")
+    if not ip_obj.verify_interface_ip_address(vars.D1, vars.D1T1P2, "{}/{}".format(data.ipv4_address2, data.subnet),
+                                              family="ipv4"):
+        st.report_fail("ip_routing_int_create_fail", vars.D1T1P2)
 
 def configuring_tc_to_queue_map():
     if not cos_obj.config_tc_to_queue_map(vars.D1, data.cos_name, {"4": "5"}):
@@ -508,6 +521,21 @@ def ping_ipv6_interface():
     if not arp_obj.show_ndp(vars.D1, data.ipv6_address_tgen):
         st.report_fail("ARP_entry_dynamic_entry_fail")
 
+    h2 = data.tg.tg_interface_config(port_handle=data.tg_ph_2, mode='config', ipv6_intf_addr=data.ipv6_address2_tgen, \
+                                     ipv6_prefix_length="64", ipv6_gateway=data.ipv6_address2,
+                                     src_mac_addr='00:0a:02:02:23:02', arp_send_req='1')
+    st.log("INTFCONF: " + str(h2))
+    # ping from tgen to DUT's TGen connected IPV6 interface
+    res = tgapi.verify_ping(src_obj=data.tg, port_handle=data.tg_ph_2, dev_handle=h2['handle'], dst_ip=data.ipv6_address, \
+                      ping_count='2', exp_count='2')
+    st.log("PING_RES: " + str(res))
+    if res:
+        st.log("Ping succeeded.")
+    else:
+        st.log("Ping failed.")
+    if not arp_obj.show_ndp(vars.D1, data.ipv6_address2_tgen):
+        st.report_fail("ARP_entry_dynamic_entry_fail")
+
 
 def ping_ipv4_interface():
     h1 = data.tg.tg_interface_config(port_handle=data.tg_ph_1, mode='config', intf_ip_addr=data.ipv4_address_tgen, \
@@ -524,6 +552,19 @@ def ping_ipv4_interface():
     if not arp_obj.show_arp(vars.D1, data.ipv4_address_tgen):
         st.report_fail("ARP_entry_dynamic_entry_fail")
 
+    h2 = data.tg.tg_interface_config(port_handle=data.tg_ph_2, mode='config', intf_ip_addr=data.ipv4_address2_tgen, \
+                                     gateway=data.ipv4_address2, src_mac_addr='00:00:24:44:14:08', arp_send_req='1')
+    st.log("INTFCONF: " + str(h2))
+    # Ping from tgen to DUT's TGen connected IPV4 interface.
+    res = tgapi.verify_ping(src_obj=data.tg, port_handle=data.tg_ph_2, dev_handle=h1['handle'], dst_ip=data.ipv4_address2, \
+                      ping_count='1', exp_count='1')
+    st.log("PING_RES: " + str(res))
+    if res:
+        st.log("Ping succeeded.")
+    else:
+        st.log("Ping failed.")
+    if not arp_obj.show_arp(vars.D1, data.ipv4_address2_tgen):
+        st.report_fail("ARP_entry_dynamic_entry_fail")
 
 def fdb_config():
     mac_obj.config_mac_agetime(vars.D1, data.ageout_time)

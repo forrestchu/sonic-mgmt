@@ -225,24 +225,12 @@ def get_dut_ip():
 def esr_srvpn_module_hooks(request):
     #add things at the start of this module
     # add bmp
-    yield
-    ixia_stop_all_protocols()
-    tgapi.set_reconnect_tgen(True)
-    # del bmp log
-
-@pytest.fixture(scope="function", autouse=True)
-def esr_srvpn_func_hooks(request):
-    # add things at the start every test case
     ixia_controller_init()
     yield
-    # if st.get_func_name(request) == 'test_bgp_fast_isolate_and_recover':
-    #     if not loc_lib.check_bgp_isolate(dut1, 'no-isolate'):
-    #         no_isolate_cmd = "no isolate fast"
-    #         st.config(dut1, no_isolate_cmd, type='alicli')
-    # else:
-    #     st.show(dut1,"show vrf")
-    #     st.show(dut2,"show vrf")
+    ixia_stop_all_protocols()
     ixia_controller_deinit()
+    tgapi.set_reconnect_tgen(True)
+    # del bmp log
 
 def duts_base_config():
     curr_path = os.getcwd()

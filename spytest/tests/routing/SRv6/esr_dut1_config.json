@@ -72,56 +72,11 @@
         }
     },
     "INTERFACE": {
-        "Ethernet109": {
-            "vrf_name": "PUBLIC-TC11"
-        }, 
-        "Ethernet109|101.1.0.1/24": {                          
-            "family": "IPv4", 
-            "scope": "global"
-        }, 
-        "Ethernet109|2000:0:1:1:0:0:0:1/64": {
+        "Ethernet3|2033::179/64": {
             "family": "IPv6", 
             "scope": "global"
         }, 
-        "Ethernet110": {
-            "vrf_name": "PUBLIC-TC11"
-        }, 
-        "Ethernet110|101.2.0.1/24": {
-            "family": "IPv4", 
-            "scope": "global"
-        }, 
-        "Ethernet110|2000:0:0:1:0:0:0:1/64": {
-            "family": "IPv6", 
-            "scope": "global"
-        }, 
-        "Ethernet16|2001::179/64": {
-            "family": "IPv6", 
-            "scope": "global"
-        }, 
-        "Ethernet1|10.2.2.2/24": {
-            "family": "IPv4", 
-            "scope": "global"
-        }, 
-        "Ethernet1|2100:0:2::2/64": {
-            "family": "IPv6", 
-            "scope": "global"
-        }, 
-        "Ethernet20": {
-            "vrf_name": "PUBLIC-TC11"
-        }, 
-        "Ethernet20|20.20.1.1/32": {
-            "family": "IPv4", 
-            "scope": "global"
-        }, 
-        "Ethernet20|3000::1/64": {
-            "family": "IPv6", 
-            "scope": "global"
-        }, 
-        "Ethernet33|2033::179/64": {
-            "family": "IPv6", 
-            "scope": "global"
-        }, 
-        "Ethernet44|2044::179/64": {
+        "Ethernet4|2044::179/64": {
             "family": "IPv6", 
             "scope": "global"
         }
@@ -553,11 +508,6 @@
             "fdb_unicast_miss_packet_action": "forward"
         }
     }, 
-    "TELEMETRY": {
-        "gnmi": {
-            "port": "8080"
-        }
-    },
     "USER_METADATA": {
         "admin": {                                             
             "groups": "sudo,docker", 

@@ -59,37 +59,11 @@
         }
     }, 
     "INTERFACE": {
-        "Ethernet109": {
-            "vrf_name": "PUBLIC-TC11"
-        }, 
-        "Ethernet109|100.1.0.1/24": {
-            "family": "IPv4", 
-            "scope": "global"
-        }, 
-        "Ethernet110": {
-            "vrf_name": "PUBLIC-TC11"
-        }, 
-        "Ethernet110|100.2.0.1/24": {                          
-            "family": "IPv4", 
-            "scope": "global"
-        }, 
-        "Ethernet16|2001::178/64": {
+        "Ethernet3|2033::178/64": {
             "family": "IPv6", 
             "scope": "global"
         }, 
-        "Ethernet1|10.2.2.1/24": {
-            "family": "IPv4", 
-            "scope": "global"
-        }, 
-        "Ethernet1|2100:0:2::1/64": {
-            "family": "IPv6", 
-            "scope": "global"
-        }, 
-        "Ethernet33|2033::178/64": {
-            "family": "IPv6", 
-            "scope": "global"
-        }, 
-        "Ethernet44|2044::178/64": {
+        "Ethernet4|2044::178/64": {
             "family": "IPv6", 
             "scope": "global"
         }
@@ -508,11 +482,6 @@
             "fdb_unicast_miss_packet_action": "forward"
         }
     }, 
-    "TELEMETRY": {
-        "gnmi": {
-            "port": "8080"
-        }
-    },
     "USER_METADATA": {
         "admin": {                                             
             "groups": "sudo,docker", 

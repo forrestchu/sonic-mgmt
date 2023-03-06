@@ -82,6 +82,10 @@ def l3_base_config():
     command = "show ndp"
     st.show(dut1, command)
 
+    default_route_cmd = "route add default gw 21.135.163.62"
+    st.log("set default getway")
+    st.config(dut1, default_route_cmd, skip_error_check=True, max_time=10)
+
     # dut2 config
 
     ip_addr2 = data.neigh_ip_addr
@@ -94,6 +98,9 @@ def l3_base_config():
  
     command = "show ndp"
     st.show(dut2, command)
+
+    st.log("set default getway")
+    st.config(dut2, default_route_cmd, skip_error_check=True, max_time=10)
 
     st.banner("init ipv4 part")
     #bgp_api.create_bgp_router(dut, data.as_num, '')

@@ -229,7 +229,7 @@ def esr_srvpn_module_hooks(request):
     yield
     ixia_stop_all_protocols()
     ixia_controller_deinit()
-    tgapi.set_reconnect_tgen(True)
+    # tgapi.set_reconnect_tgen(True)
     # del bmp log
 
 def duts_base_config():
@@ -323,7 +323,7 @@ def test_base_config_srvpn_locator_01():
     # step 4 : check  vpn router
     bgp_as = 100
     st.config(dut1, 'vtysh -c "config t" -c "vrf {}" -c "ip route 192.100.1.0/24 blackhole"'.format(vrf))
-    st.config(dut1, 'vtysh -c "config t" -c "router bgp {} vrf {}" -c "address-family ipv4 unicast" -c "network 192.100.1.0/24"'.format(bgp_as, vrf))
+    st.config(dut1, 'vtysh -c "config t" -c "router bgp {} vrf {}" -c "address-family ipv4 unicast" -c "redistribute 192.100.1.0/24"'.format(bgp_as, vrf))
 
     cmd = "cli -c 'no page' -c 'show bgp ipv4 vpn'"
     records = st.show(dut1, cmd)

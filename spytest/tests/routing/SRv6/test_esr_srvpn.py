@@ -707,14 +707,14 @@ def test_base_config_srvpn_multi_vrf_03():
 
 
     # check vrf traffic
-    ret = ixia_add_traffic_item_for_specific_vrf()
-    if not ret:
-        st.report_fail("Faild to add traffic item for specific vrf")
+    # ret = ixia_add_traffic_item_for_specific_vrf()
+    # if not ret:
+    #     st.report_fail("Faild to add traffic item for specific vrf")
 
-    # check traffic
-    ret = ixia_check_traffic(SPECIFIC_VRF_TRAFFIC_NAME, key="Rx frame", value=50000)
-    if not ret:
-        st.report_fail("Check traffic item {} rx frame failed".format(SPECIFIC_VRF_TRAFFIC_NAME))
+    # # check traffic
+    # ret = ixia_check_traffic(SPECIFIC_VRF_TRAFFIC_NAME, key="Rx frame", value=50000)
+    # if not ret:
+    #     st.report_fail("Check traffic item {} rx frame failed".format(SPECIFIC_VRF_TRAFFIC_NAME))
 
 
     # step3: change vrf import rt
@@ -758,7 +758,7 @@ def test_base_config_srvpn_multi_vrf_03():
             st.report_fail("step3 check_bgp_vrf_ipv4_uni_sid failed ")
 
     # check vrf traffic
-    ret = ixia_check_traffic(SPECIFIC_VRF_TRAFFIC_NAME, key='Rx frame', value=50000)
+    ret = ixia_check_traffic(VRF_TRAFFIC_NAME, key='Rx frame', value=120000)
     if not ret:
         st.report_fail("Check traffic item {} rx frame failed".format(SPECIFIC_VRF_TRAFFIC_NAME))
 

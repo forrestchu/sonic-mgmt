@@ -146,7 +146,7 @@ def ip_module_hooks(request):
 
 @pytest.fixture(scope="function", autouse=True)
 def ip_func_hooks(request):
-    if st.get_func_name(request) == "test_l3_v6_route_po_1":
+    if st.get_func_name(request) == "test_l3_v6_route_po_1" or st.get_func_name(request) == "test_ft_ip6_static_route_traffic_forward_blackhole":
         if not ipfeature.ping_poll(vars.D1, data.ip6_addr[7], family=data.af_ipv6, iter=5, count=1, interface=data.vrf_name[2]):
             st.log("ping_fail",data.ip6_addr[7])
         ipfeature.create_static_route(vars.D1, data.ip6_addr[7], data.static_ip6_rt, family=data.af_ipv6, vrf=data.vrf_name[2])
@@ -476,7 +476,10 @@ def test_ft_ip6_static_route_traffic_forward_blackhole():
     else:
         st.warn("Ping failed.")
 
-    tr1 = tg.tg_traffic_config(port_handle=tg_handler["tg_ph_1"], mode='create', transmit_mode='single_burst',
+    if not ipfeature.ping_poll(vars.D2, data.ip6_addr[9], family=data.af_ipv6, iter=5, count=1, interface=data.vrf_name[2]):
+        st.report_fail("ping_fail",data.ip6_addr[9])
+
+    tr1 = tg.tg_traffic_config(port_handle=tg_handler["tg_ph_1"], port_handle2=tg_handler["tg_ph_2"],mode='create', transmit_mode='single_burst',
                                pkts_per_burst=2000, \
                                length_mode='fixed', rate_pps=2000, l3_protocol='ipv6', mac_src=data.tg_mac1, \
                                mac_dst=dut_rt_int_mac1, ipv6_src_addr=data.ip6_addr[0],

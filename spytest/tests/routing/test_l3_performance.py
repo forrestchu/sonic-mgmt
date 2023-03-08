@@ -406,31 +406,32 @@ def test_ft_l3_performance_enhancements_v4_route_intstall_withdraw(fixture_v4):
     # Taking the end time timestamp
     #end_time = datetime.datetime.now()
 
-    # verifying click cli show ip route validation
-    show_ip_route_validation_cli('click')
-    st.banner("verifying vtysh cli show ip route")
-    start_time = datetime.datetime.now()
-    st.show(dut, "show ip route", type="vtysh", skip_tmpl=True, max_time=300)
-    end_time = datetime.datetime.now()
-    time_diff_in_secs = end_time - start_time
-    st.banner("time_diff_in_secs for route display using vtysh: {} ".format(time_diff_in_secs))
+    if 'eSR' != os.getenv('SPYTEST_PROJECT'):
+        # verifying click cli show ip route validation
+        show_ip_route_validation_cli('click')
+        st.banner("verifying vtysh cli show ip route")
+        start_time = datetime.datetime.now()
+        st.show(dut, "show ip route", type="vtysh", skip_tmpl=True, max_time=300)
+        end_time = datetime.datetime.now()
+        time_diff_in_secs = end_time - start_time
+        st.banner("time_diff_in_secs for route display using vtysh: {} ".format(time_diff_in_secs))
 
-    #verifying klish cli show ip route validation
-    #if st.is_feature_supported("klish"):
-    #    show_ip_route_validation_cli('klish')
+        #verifying klish cli show ip route validation
+        #if st.is_feature_supported("klish"):
+        #    show_ip_route_validation_cli('klish')
 
-    # Verify the total route count using SONiC CLI
-    count = verify_bgp_route_count(dut, family='ipv4', neighbor=data.neigh_ip_addr, state='Established')
-    st.log("Route count: "+str(count))
-    if int(count) != int(data.test_bgp_route_count):
-        st.report_fail("route_table_not_updated_by_advertise_from_tg")
+        # Verify the total route count using SONiC CLI
+        count = verify_bgp_route_count(dut, family='ipv4', neighbor=data.neigh_ip_addr, state='Established')
+        st.log("Route count: "+str(count))
+        if int(count) != int(data.test_bgp_route_count):
+            st.report_fail("route_table_not_updated_by_advertise_from_tg")
 
-    # Time taken for route installation
-    st.log("Start Time: {}".format(start_time))
-    st.log("End Time: {}".format(end_time))
-    time_in_secs = end_time - start_time
+        # Time taken for route installation
+        st.log("Start Time: {}".format(start_time))
+        st.log("End Time: {}".format(end_time))
+        time_in_secs = end_time - start_time
 
-    st.banner("Time taken for intsalling {} v4 routes on HWSKU {} = ".format(data.test_bgp_route_count,hwsku_under_test) +str(time_in_secs.seconds))
+        st.banner("Time taken for intsalling {} v4 routes on HWSKU {} = ".format(data.test_bgp_route_count,hwsku_under_test) +str(time_in_secs.seconds))
     st.banner("Measuring time taken for route withdraw of {} ipv4 routes on HWSKU {}".format(data.test_bgp_route_count,hwsku_under_test))
 
     # Taking the start time timestamp

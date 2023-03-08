@@ -672,6 +672,8 @@ def test_base_config_srvpn_multi_vrf_03():
         ret = check_vrf_route_nums(dut2, chcek_vrf, 5000, 1)
         if not ret:
             st.report_fail("step1 check_vrf_route_nums {} 5000 test_base_config_srvpn_multi_vrf_03".format(chcek_vrf))
+    
+    st.wait(30)
 
     # check traffic
     ret = ixia_check_traffic(VRF_TRAFFIC_NAME, key="Rx frame", value=120000)

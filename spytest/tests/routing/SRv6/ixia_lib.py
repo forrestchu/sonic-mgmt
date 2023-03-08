@@ -13,7 +13,9 @@ class IxiaController():
             IpAddress=host,
             RestPort=port,
             LogLevel=SessionAssistant.LOGLEVEL_INFO,
-            # ClearConfig=True,
+            UserName="qingyan.gw",
+            Password="ne558",
+            ClearConfig=True,
         )
 
         self.ixnetwork = self.session_assistant.Ixnetwork

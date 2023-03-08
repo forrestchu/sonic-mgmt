@@ -94,7 +94,7 @@ def ixia_load_config(config_file_name):
     st.log("load config {} begin".format(config_file_name))
     ixia_controller.load_config(config_file_name)
     # wait 10 sec for config load
-    st.wait(10)
+    st.wait(30)
     st.log("load config {} completed".format(config_file_name))
     return True
 
@@ -118,8 +118,6 @@ def ixia_stop_all_protocols():
 
 
 def ixia_check_traffic(traffic_item_name, key="Rx frame", value="0"):
-    port_map = ixia_controller.session_assistant.PortMapAssistant()
-    port_map.Connect(ForceOwnership=True)
     st.wait(10)
     st.log("Get traffic item {}".format(traffic_item_name))
     st.log("Apply traffic item {}".format(traffic_item_name))

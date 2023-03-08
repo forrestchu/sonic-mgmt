@@ -184,4 +184,26 @@ def ixia_config_bgp_flapping():
     return True
 
 
+def ixia_start_traffic(traffic_item_name):
+    st.wait(10)
+    st.log("Get traffic item {}".format(traffic_item_name))
+    st.log("Apply traffic item {}".format(traffic_item_name))
+    ixia_controller.traffic_apply()
+    st.wait(10)
+    st.log("Start traffic item {}".format(traffic_item_name))
+    ret = ixia_controller.start_stateless_traffic(traffic_item_name)
+    if not ret:
+        st.error("Start traffic item {} failed".format(traffic_item_name))
+        return False
+    st.wait(20)
+    return True
+
+
+def ixia_stop_traffic(traffic_item_name):
+    ret = ixia_controller.stop_stateless_traffic(traffic_item_name)
+    if not ret:
+        st.error("stop traffic item {} failed".format(traffic_item_name))
+        return False
+    st.wait(10)
+    return True
 

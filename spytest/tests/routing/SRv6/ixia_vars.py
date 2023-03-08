@@ -38,6 +38,6 @@ BGP_IP_ROUTE_PROPERTY_2 = "BGP IP Route Range 2"
 # Traffic items
 VRF_TRAFFIC_NAME = "t-g1-1"
 SPECIFIC_VRF_TRAFFIC_NAME = "Specific-Vrf_traffic"
-ECMP_TRAFFIC_NAME = "Traffic-ecmp"
+ECMP_TRAFFIC_NAME = "traffic_ecmp"
 
 

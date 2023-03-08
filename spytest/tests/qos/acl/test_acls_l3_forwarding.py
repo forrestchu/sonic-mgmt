@@ -159,6 +159,10 @@ def create_streams(tx_tg, rx_tg, rules, match, mac_src, mac_dst):
             for key, value in attributes.items():
                 params.update(acl_utils.get_args_l3(key, value, attributes, data.rate_pps, data.tg_type))
             tmp.update(params)
+            st.log("stream info")
+            st.log(rule)
+            st.log(tmp['port_handle'])
+            st.log(tmp['port_handle2'])
             stream = data.tgmap[tx_tg]['tg'].tg_traffic_config(**tmp)
             stream_id = stream['stream_id']
             s = {}

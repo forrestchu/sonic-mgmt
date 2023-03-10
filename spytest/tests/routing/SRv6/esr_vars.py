@@ -2,6 +2,10 @@ from spytest.dicts import SpyTestDict
 
 data = SpyTestDict()
 
+data.ecmp_dut1_portlist = ['Ethernet3', 'Ethernet4']
+data.ecmp_dut2_portlist = ['Ethernet3', 'Ethernet4']
+data.ecmp_member_Gbps = 58
+
 data.ecmp_503_504_dut1_dut2_portlist = ['Ethernet12', 'Ethernet16', 'Ethernet28', 'Ethernet32', 'Ethernet44', 'Ethernet60']
 data.ecmp_503_504_dut_tg_portlist = ['Ethernet109', 'Ethernet110']
 data.ecmp_501_502_dut1_dut2_portlist = ['Ethernet92', 'Ethernet96', 'Ethernet108']
@@ -17,7 +21,7 @@ data.dut1_vrf1_id = ["503", "503", "501", "501"]
 data.dut1_vrf2_ip_addr = ["12.109.106.2", "12.110.106.2", "12.111.102.2", "12.112.102.2"]
 data.dut1_vrf2_ipv6_addr = ["fd40:12:109:106::2", "fd40:12:110:106::2", "fd40:12:111:102::2", "fd40:12:112:102::2"]
 data.dut1_vrf2_id = ["504", "504", "502", "502"]
-data.dut_traffic_vrf_name = {"501": "long-vrf-501", "502": "long-vrf-502", 
+data.dut_traffic_vrf_name = {"501": "long-vrf-501", "502": "long-vrf-502",
                             "503": "long-vrf-503", "504": "long-vrf-504"}
 data.dut_tg_bfd_vrf_name = {"TG1_1":"long-vrf-TG-bfd1", "TG1_2":"long-vrf-TG-bfd2",
                             "TG1_3":"long-vrf-TG-bfd3", "TG1_4":"long-vrf-TG-bfd4"}
@@ -117,7 +121,7 @@ data.mysid_prefix = {
     "lsid13":"fd00:201:2013::",
     "lsid14":"fd00:201:2014::",
     "lsid15":"fd00:201:2015::",
-    "lsid16":"fd00:201:2016::"    
+    "lsid16":"fd00:201:2016::"
 }
 data.mysid_base_prefix_len = {"block_len":"32", "node_len":"16", "func_len":"32", "argu_len":"48"}
 data.mysid_opcode = {
@@ -248,7 +252,7 @@ data.mysid_opcode = {
     "ZJ-HANGZHOU-CU-ALIYUN-TC61":"::FFF2:61:0:0:0",
     "ZJ-HANGZHOU-CU-ALIYUN-TC62":"::FFF2:62:0:0:0",
     "ZJ-HANGZHOU-CU-ALIYUN-TC63":"::FFF2:63:0:0:0",
-    "ZJ-HANGZHOU-CU-ALIYUN-TC64":"::FFF2:64:0:0:0" 
+    "ZJ-HANGZHOU-CU-ALIYUN-TC64":"::FFF2:64:0:0:0"
 }
 
 data.vrf_list = [

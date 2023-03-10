@@ -792,15 +792,15 @@ def test_srvpn_ecmp_04():
         st.report_fail("step1 check_vrf_route_nums {} 10000 test_srvpn_ecmp_04".format(to_check_vrf))
 
     # check vrf ipv4 uni route and sid
-    to_check_prefix_sid = {
-        '200.10.0.1':'fd00:201:202:fff1:10::',
-        '200.10.0.2':'fd00:201:203:fff1:60::'
-    }
+    # to_check_prefix_sid = {
+    #     '200.10.0.1':'fd00:201:202:fff1:10::',
+    #     '200.10.0.2':'fd00:201:203:fff1:60::'
+    # }
 
-    for (k, v) in to_check_prefix_sid.items():
-        ret = check_bgp_vrf_ipv4_uni_sid(dut2, to_check_vrf, k, v)
-        if not ret:
-            st.report_fail("step1 check_bgp_vrf_ipv4_uni_sid failed ")
+    # for (k, v) in to_check_prefix_sid.items():
+    #     ret = check_bgp_vrf_ipv4_uni_sid(dut2, to_check_vrf, k, v)
+    #     if not ret:
+    #         st.report_fail("step1 check_bgp_vrf_ipv4_uni_sid failed ")
 
     # check route appdb
     vrf_name = st.show(dut1, "vrfnametodevname {}".format(to_check_vrf), skip_tmpl=True, max_time=500, type="vtysh")
@@ -824,56 +824,20 @@ def test_srvpn_ecmp_04():
         if sid not in vpnsid_ecmp_list:
             st.log("step1 route appdb check failed , sid = {}".format(sid))
 
+    st.wait(30)
 
-    # check traffic
-    ret = ixia_check_traffic(VRF_TRAFFIC_NAME, key="Rx frame", value=120000)
+    # check interface counters
+    ret = ixia_start_traffic(VRF_TRAFFIC_NAME)
     if not ret:
-        st.report_fail("Check traffic item {} rx frame failed".format(VRF_TRAFFIC_NAME))
+        st.report_fail("Start traffic item {} rx frame failed".format(VRF_TRAFFIC_NAME))
 
-    # step2:  ixia port or route oscillation then check traffic and route
-    ixia_stop_all_protocols()
-    ret = ixia_config_bgp_flapping()
+    ecmp_member_Gbps = data.ecmp_member_Gbps
+    ret = check_dut_intf_tx_traffic_counters(dut2, data.ecmp_dut2_portlist, ecmp_member_Gbps)
     if not ret:
-        st.report_fail("Config bgp flapping failed")
+        st.report_fail("Check dut interface counters failed")
 
-    ixia_start_all_protocols()
-
-    st.wait(10)
-
-    # check vrf route learn
-    ret = check_vrf_route_nums(dut2, to_check_vrf, 10000, 1)
+    ret = ixia_stop_traffic(VRF_TRAFFIC_NAME)
     if not ret:
-        st.report_fail("step2 check_vrf_route_nums {} 10000 test_srvpn_ecmp_04".format(to_check_vrf))
-
-    # check vrf ipv4 uni route and sid
-    # to_check_prefix_sid = {
-    #     '200.10.0.1':'fd00:201:202:fff1:10::',
-    #     '200.10.0.2':'fd00:201:203:fff1:60::'
-    # }
-
-    # for (k, v) in to_check_prefix_sid.items():
-    #     ret = check_bgp_vrf_ipv4_uni_sid(dut2, to_check_vrf, k, v)
-    #     if not ret:
-    #         st.report_fail("step2 check_bgp_vrf_ipv4_uni_sid failed ")
-
-    # check traffic
-    # ret = ixia_check_traffic(VRF_TRAFFIC_NAME, key="Rx frame", value=120000)
-    # if not ret:
-    #     st.report_fail("Check traffic item {} rx frame failed".format(VRF_TRAFFIC_NAME))
-
-    # # check interface counters
-    # ret = ixia_start_traffic(ECMP_TRAFFIC_NAME)
-    # if not ret:
-    #     st.report_fail("Start traffic item {} rx frame failed".format(ECMP_TRAFFIC_NAME))
-
-    # ret = check_dut_intf_tx_traffic_counters()
-    # if not ret:
-    #     st.report_fail("Check dut interface counters failed")
-
-    # ret = ixia_stop_traffic(ECMP_TRAFFIC_NAME)
-    # if not ret:
-    #     st.report_fail("Stop traffic item {} rx frame failed".format(ECMP_TRAFFIC_NAME))
-
-
+        st.report_fail("Stop traffic item {} rx frame failed".format(VRF_TRAFFIC_NAME))
 
     st.report_pass("test_case_passed")

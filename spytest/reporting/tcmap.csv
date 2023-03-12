@@ -2921,8 +2921,8 @@ Q200,Q200,Regression,ft_bgp_neigbor_cpu_attack_check,TestBGPRif.test_ft_bgp_neig
 Q200,Q200,VRF-Lite,VrfFun_cli_clear_cmd,test_VrfFun_cli_clear_cmd
 Q200,Q200,BFD,test_bfd_ipv4_base,test_bfd_ipv4_base
 Q200,Q200,BFD,test_bfd_ipv4_flap,test_bfd_ipv4_flap
-Q200,Q200,BFD,test_bfd_ipv4_attr_set,test_bfd_ipv4_flap
-Q200,Q200,BFD,test_bfd_ipv6_base,test_bfd_ipv4_flap
+Q200,Q200,BFD,test_bfd_ipv4_attr_set,test_bfd_ipv4_attr_set
+Q200,Q200,BFD,test_bfd_ipv6_base,test_bfd_ipv6_base
 Q200,Q200,BFD,test_bfd_ipv6_flap,test_bfd_ipv6_flap
 Q200,Q200,BFD,test_bfd_ipv6_attr_set,test_bfd_ipv6_attr_set
 Q200,Q200,BFD,test_read_all_bfd_counter,test_read_all_bfd_counter

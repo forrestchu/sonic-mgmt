@@ -450,14 +450,17 @@ def cos_counters_checking(value=None,loopCnt=3):
             else:
                 accept_ratio = 0.0
             actual_cir = accept_ratio*rate[value]
-            st.log("actual:{} expect:{}".format(actual_cir,expect_cir))
             if expect_cir <= 1000:
                 meter_max_threshold = 1.3
                 meter_min_threshold = 0.8
             else:
                 meter_max_threshold = 1.1
                 meter_min_threshold = 0.9
-            if actual_cir < (expect_cir*meter_max_threshold) and actual_cir > (expect_cir*meter_min_threshold):
+
+            expect_max = expect_cir*meter_max_threshold
+            expect_min = expect_cir*meter_min_threshold
+            st.log("actual:{} expect(min,avg,max):({},{},{})".format(actual_cir, expect_min, expect_cir, expect_max))
+            if actual_cir < expect_max and actual_cir > expect_min:
                 flag = 1
                 break
             else:

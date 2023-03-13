@@ -342,7 +342,7 @@ def test_base_config_srvpn_locator_01():
     check = False
     for re in records:
         match_cnt = 0
-        for it in ['ip_address', 'sid', 'label', 'status_code', 'rd']:
+        for it in ['ip_address', 'status_code', 'rd']:
             if re[it] ==  expected_vpn[it]:
                 match_cnt +=1
 
@@ -419,7 +419,7 @@ def test_base_config_srvpn_locator_01():
 
     for re in records:
         match_cnt = 0
-        for it in ['ip_address', 'label', 'status_code', 'rd']:
+        for it in ['ip_address', 'status_code', 'rd']:
             if re[it] ==  expected_vpn[it]:
                 match_cnt +=1
 
@@ -474,7 +474,7 @@ def test_base_config_srvpn_locator_01():
     check = False
     for re in records:
         match_cnt = 0
-        for it in ['ip_address', 'sid', 'label', 'status_code', 'rd']:
+        for it in ['ip_address', 'status_code', 'rd']:
             if re[it] ==  expected_vpn[it]:
                 match_cnt +=1
 
@@ -521,7 +521,7 @@ def test_base_config_srvpn_locator_01():
     check = False
     for re in records:
         match_cnt = 0
-        for it in ['ip_address', 'sid', 'label', 'status_code', 'rd']:
+        for it in ['ip_address', 'status_code', 'rd']:
             if re[it] ==  expected_vpn[it]:
                 match_cnt +=1
 

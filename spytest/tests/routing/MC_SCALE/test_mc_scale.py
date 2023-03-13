@@ -224,8 +224,8 @@ def mc_scale_func_hooks(request):
 
 def duts_base_config():
     data.my_dut_list = st.get_dut_names()
-    dut1 = data.my_dut_list[0]
-    dut2 = data.my_dut_list[1]
+    dut1 = 'MC-58'
+    dut2 = 'MC-59'
     curr_path = os.getcwd()
     json_file_dut1 = curr_path+"/routing/MC_SCALE/dut1_mc_scale.json"
     json_file_dut2 = curr_path+"/routing/MC_SCALE/dut2_mc_scale.json"

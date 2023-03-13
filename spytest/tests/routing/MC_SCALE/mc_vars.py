@@ -2,15 +2,15 @@ from spytest.dicts import SpyTestDict
 
 data = SpyTestDict()
 
-data.ecmp_503_504_dut1_dut2_portlist = ['Ethernet12', 'Ethernet16', 'Ethernet28', 'Ethernet32', 'Ethernet44', 'Ethernet60']
-data.ecmp_503_504_dut_tg_portlist = ['Ethernet109', 'Ethernet110']
-data.ecmp_501_502_dut1_dut2_portlist = ['Ethernet92', 'Ethernet96', 'Ethernet108']
-data.ecmp_501_502_dut_RJ_portlist = ['Ethernet8', 'Ethernet9', 'Ethernet10', 'Ethernet11']
-data.ecmp_501_502_dut_tg_portlist = ['Ethernet111', 'Ethernet112']
+data.ecmp_503_504_dut1_dut2_portlist = ['Ethernet2', 'Ethernet4', 'Ethernet50', 'Ethernet51', 'Ethernet52', 'Ethernet53']
+data.ecmp_503_504_dut_tg_portlist = ['Ethernet33', 'Ethernet34']
+data.ecmp_501_502_dut1_dut2_portlist = ['Ethernet54', 'Ethernet53']
+data.ecmp_501_502_dut_RJ_portlist = ['Ethernet5', 'Ethernet6', 'Ethernet21', 'Ethernet22']
+data.ecmp_501_502_dut_tg_portlist = ['Ethernet35', 'Ethernet36']
 data.dut_ecmp_scale_start_subintf = '201'
 data.dut_ecmp_scale_subintf_num = 13
 data.dut_isolate_group_num = 6
-data.dut_bfd_port_list = ['Ethernet13']
+data.dut_bfd_port_list = ['Ethernet3']
 data.dut1_vrf1_ip_addr = ["12.109.104.2", "12.110.104.2", "12.111.100.2", " 12.112.100.2"]
 data.dut1_vrf1_ipv6_addr = ["fd40:12:109:104::2", "fd40:12:110:104::2", "fd40:12:111:100::2", "fd40:12:112:100::2"]
 data.dut1_vrf1_id = ["503", "503", "501", "501"]
@@ -92,8 +92,9 @@ data.tg2_v6_start_ip_addr = ["109:1::2","110:2::2"]
 
 data.dut_bfd_timer = "100"
 data.tg_bfd_timer = "100"
-data.traffic_rate_precent = "99.9"
-data.ruijie_traffic_rate_precent = "80.0"
+# data.traffic_rate_precent = "99.9"
+data.traffic_rate_precent = "50"
+data.ruijie_traffic_rate_precent = "40.0"
 data.tg_list = []
 data.tg_ph_list = []
 data.tg1_handle = [0,0,0,0]

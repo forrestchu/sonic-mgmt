@@ -954,8 +954,9 @@ def test_subintf_503_504_traffic():
     result = 0
 
     bandwidth = 2*float(data.traffic_rate_precent)
-    ecmp_member_Gbps = int(bandwidth/len(data.ecmp_503_504_dut1_dut2_portlist))
-    ixia_ecmp_Gbps = int(bandwidth/len(data.ecmp_503_504_dut_tg_portlist))
+    ecmp_member_Gbps = int(bandwidth/len(data.ecmp_503_504_dut1_dut2_portlist))/2
+    ecmp_member_Mbps = ecmp_member_Gbps * 1000
+    ixia_ecmp_Gbps = int(bandwidth/len(data.ecmp_503_504_dut_tg_portlist))/2
     traffic_vrf_503_list = [data.streams['port5_to_port1_vrf_503'], data.streams['port1_to_port5_vrf_503']]
     traffic_vrf_504_list = [data.streams['port6_to_port2_vrf_504'], data.streams['port2_to_port6_vrf_504']]
     traffic_vrf_503_v6_list = [data.streams['port5_to_port1_vrf_503_v6'], data.streams['port1_to_port5_vrf_503_v6']]
@@ -966,11 +967,11 @@ def test_subintf_503_504_traffic():
     tg.tg_traffic_control(action='run', stream_handle=traffic_vrf_503_list)
 
     st.wait(10)
-    if not check_dut_intf_tx_traffic_counters(dut2,data.ecmp_503_504_dut1_dut2_portlist,ecmp_member_Gbps):
+    if not check_dut_intf_tx_traffic_counters(dut2,data.ecmp_503_504_dut1_dut2_portlist,ecmp_member_Mbps):
         st.log("dut2 dut-to-dut ecmp members rate check failed")
         result=1
 
-    if not check_dut_intf_tx_traffic_counters(dut1,data.ecmp_503_504_dut1_dut2_portlist,ecmp_member_Gbps):
+    if not check_dut_intf_tx_traffic_counters(dut1,data.ecmp_503_504_dut1_dut2_portlist,ecmp_member_Mbps):
         st.log("dut1 dut-to-dut ecmp members rate check failed")
         result=1
 
@@ -1009,11 +1010,11 @@ def test_subintf_503_504_traffic():
     tg.tg_traffic_control(action='run', stream_handle=traffic_vrf_503_v6_list)
 
     st.wait(10)
-    if not check_dut_intf_tx_traffic_counters(dut2,data.ecmp_503_504_dut1_dut2_portlist,ecmp_member_Gbps):
+    if not check_dut_intf_tx_traffic_counters(dut2,data.ecmp_503_504_dut1_dut2_portlist,ecmp_member_Mbps):
         st.log("dut2 dut-to-dut ecmp members rate check failed")
         result=1
 
-    if not check_dut_intf_tx_traffic_counters(dut1,data.ecmp_503_504_dut1_dut2_portlist,ecmp_member_Gbps):
+    if not check_dut_intf_tx_traffic_counters(dut1,data.ecmp_503_504_dut1_dut2_portlist,ecmp_member_Mbps):
         st.log("dut1 dut-to-dut ecmp members rate check failed")
         result=1
 

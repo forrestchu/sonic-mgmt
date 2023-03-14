@@ -1433,8 +1433,8 @@ def test_bfd_attr_set():
     # dut2 mod long-vrf-dut-bfd1 
     vrf = [data.dut_traffic_vrf_name["501"], data.dut_traffic_vrf_name["502"]]
     peer_group = ['RJ-MC-Aliyun-public', 'RJ-MC-Aliyun']
-    local_ip_list = ['11.8.100.1', '11.8.102.1']
-    remote_ip_list = ['11.8.100.2', '11.8.102.2']
+    local_ip_list = ['11.8.100.1', '11.8.102.1']  # to RJ interface
+    remote_ip_list = ['11.8.100.2', '11.8.102.2'] # RJ interface
     bfd_interval = ['200','100']
     for i in range(2):
         if not retry_api(bfdapi.verify_bfd_peer, dut2, peer=remote_ip_list[i], local_addr=local_ip_list[i], vrf_name=vrf[i], 
@@ -1739,6 +1739,9 @@ def test_bgp_fast_isolate_and_recover():
         output=bgp_api.show_bgp_ipv4_summary_vtysh(dut2,vrf=data.dut_traffic_vrf_name[vrf])
         for nbr in output:
             if nbr['asn'] == data.dut1_vrf_bgp_as:
+                # topo changes , some peer cannot Establish
+                if nbr['neighbor'] in ['11.108.102.2', '11.8.102.2', '11.9.102.2', '11.10.102.2', '11.11.102.2']:
+                    continue
                 vrf_neigh_list.append(nbr['neighbor'])
                 vrf_route_list.append(nbr['state'])
         for ip in data.dut1_all_ip_addr:

@@ -1177,7 +1177,7 @@ def test_subintf_501_502_traffic():
     dut1_ecmp_member_Gbps = 65
     dut2_ecmp_member_Gbps = 50
     bandwidth = 2*float(data.traffic_rate_precent)
-    dut1_dut2_ecmp_member_Gbps = int(bandwidth/len(data.ecmp_501_502_dut1_dut2_portlist))
+    dut1_dut2_ecmp_member_Gbps = int(bandwidth/len(data.ecmp_501_502_dut1_dut2_portlist))/2
     dut2_RJ_ecmp_member_Gbps = int(bandwidth/len(data.ecmp_501_502_dut_RJ_portlist))
     dut1_tg_ecmp_member_Gbps = int(bandwidth/len(data.ecmp_501_502_dut_tg_portlist))
     traffic_vrf_501_list = [data.streams['port7_to_port3_vrf_501'], data.streams['port3_to_port7_vrf_501']]

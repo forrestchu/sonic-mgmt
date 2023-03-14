@@ -231,7 +231,7 @@ def verify_acl_hit_counters(dut, table_name, acl_type="ip"):
     for rule in acl_rule_counters:
         if 'PermitAny' in rule['rulename']:
             continue
-        if not rule['packetscnt'] or int(rule['packetscnt']) == 0 or rule['packetscnt'] == 'N/A':
+        if not rule['packetscnt'] or int(rule['packetscnt']) == 0 or 'N/A' in rule['packetscnt']:
             return False
     return result
 

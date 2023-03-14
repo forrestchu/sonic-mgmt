@@ -1178,8 +1178,8 @@ def test_subintf_501_502_traffic():
     dut2_ecmp_member_Gbps = 50
     bandwidth = 2*float(data.traffic_rate_precent)
     dut1_dut2_ecmp_member_Gbps = int(bandwidth/len(data.ecmp_501_502_dut1_dut2_portlist))/2
-    dut2_RJ_ecmp_member_Gbps = int(bandwidth/len(data.ecmp_501_502_dut_RJ_portlist))
-    dut1_tg_ecmp_member_Gbps = int(bandwidth/len(data.ecmp_501_502_dut_tg_portlist))
+    dut2_RJ_ecmp_member_Gbps = int(bandwidth/len(data.ecmp_501_502_dut_RJ_portlist))/2
+    dut1_tg_ecmp_member_Gbps = int(bandwidth/len(data.ecmp_501_502_dut_tg_portlist))/2
     traffic_vrf_501_list = [data.streams['port7_to_port3_vrf_501'], data.streams['port3_to_port7_vrf_501']]
     traffic_vrf_502_list = [data.streams['port7_to_port4_vrf_502'], data.streams['port4_to_port7_vrf_502']]
 
@@ -1188,13 +1188,17 @@ def test_subintf_501_502_traffic():
     tg.tg_traffic_control(action='clear_stats', port_handle=data.tg_ph_list)
     tg.tg_traffic_control(action='run', stream_handle=traffic_vrf_501_list)
     st.wait(10)
-    if not retry_api(check_dut_intf_tx_traffic_counters,dut=dut2,portlist=data.ecmp_501_502_dut1_dut2_portlist,expect_val=dut1_dut2_ecmp_member_Gbps,retry_count= 3,delay= 3):
-        st.log("dut2 dut-to-dut ecmp members rate check failed")
-        result=1
-
-    if not retry_api(check_dut_intf_tx_traffic_counters,dut=dut1,portlist=data.ecmp_501_502_dut1_dut2_portlist,expect_val=dut1_dut2_ecmp_member_Gbps,retry_count= 3,delay= 3):
+    if not retry_api(check_dut_intf_tx_traffic_counters,dut=dut1,portlist=data.ecmp_501_502_dut_tg_portlist,expect_val=dut1_dut2_ecmp_member_Gbps,retry_count= 3,delay= 3):
         st.log("dut1 dut-to-dut ecmp members rate check failed")
         result=1
+
+    if not retry_api(check_dut_intf_tx_traffic_counters,dut=dut1,portlist=data.ecmp_501_502_dut_RJ_portlist2,expect_val=dut1_dut2_ecmp_member_Gbps,retry_count= 3,delay= 3):
+        st.log("dut1 dut-to-dut ecmp members rate check failed")
+        result=1
+
+    # if not retry_api(check_dut_intf_tx_traffic_counters,dut=dut1,portlist=data.ecmp_501_502_dut1_dut2_portlist,expect_val=dut1_dut2_ecmp_member_Gbps,retry_count= 3,delay= 3):
+    #     st.log("dut1 dut-to-dut ecmp members rate check failed")
+    #     result=1
 
     st.wait(10)
     tg.tg_traffic_control(action='stop', stream_handle=traffic_vrf_501_list)

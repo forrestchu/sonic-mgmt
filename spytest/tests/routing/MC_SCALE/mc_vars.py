@@ -7,6 +7,7 @@ data.ecmp_503_504_dut_tg_portlist = ['Ethernet33', 'Ethernet34']
 data.ecmp_501_502_dut1_dut2_portlist = ['Ethernet54', 'Ethernet53']
 data.ecmp_501_502_dut_RJ_portlist = ['Ethernet5', 'Ethernet6', 'Ethernet21', 'Ethernet22']
 data.ecmp_501_502_dut_tg_portlist = ['Ethernet35', 'Ethernet36']
+data.ecmp_501_502_dut_RJ_portlist2 = ['Ethernet5', 'Ethernet6']
 data.dut_ecmp_scale_start_subintf = '201'
 data.dut_ecmp_scale_subintf_num = 13
 data.dut_isolate_group_num = 6

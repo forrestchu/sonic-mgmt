@@ -199,7 +199,7 @@ def mc_scale_module_hooks(request):
     tg2_bgp_router_add()
     tg3_bgp_router_add()    
     data.tg_list[0].tg_test_control(action='start_all_protocols')
-    st.wait(150)
+    st.wait(120)
     vrfs_traffic_add()
     vrfs_traffic_v6_add()
     get_dut_ip()
@@ -1740,7 +1740,7 @@ def test_bgp_fast_isolate_and_recover():
         for nbr in output:
             if nbr['asn'] == data.dut1_vrf_bgp_as:
                 # topo changes , some peer cannot Establish
-                if nbr['neighbor'] in ['11.108.102.2', '11.8.102.2', '11.9.102.2', '11.10.102.2', '11.11.102.2']:
+                if nbr['neighbor'] in ['11.108.102.2', '11.10.102.2', '11.108.100.2', '11.10.100.2']:
                     continue
                 vrf_neigh_list.append(nbr['neighbor'])
                 vrf_route_list.append(nbr['state'])
@@ -1823,13 +1823,13 @@ def test_bgp_fast_isolate_and_recover():
     if not retry_api(loc_lib.check_bgp_isolate, dut=dut1, check_status='no-isolate', retry_count= 3, delay= 3):
         st.report_fail("bgp isolate recover failed")
     
-    st.wait(150)
+    st.wait(120)
     
     for vrf in data.dut_traffic_vrf_name.keys():
         name = data.dut_traffic_vrf_name[vrf]
         if not retry_api(ip_bgp.check_bgp_session, dut=dut2, nbr_list=all_route[name]['neighbor'], state_list=all_route[name]['state'], vrf_name=name, retry_count= 3, delay= 10):
             st.report_fail("bgp isolate recover failed")
-    st.wait(60)
+    st.wait(30)
 
     tg.tg_traffic_control(action='clear_stats', port_handle=data.tg_ph_list)
 

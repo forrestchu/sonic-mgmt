@@ -1430,7 +1430,8 @@ def test_bfd_attr_set():
 
         ixia_bfd_params_modify(bfd_handler = bfd_handler_list[i], ipver=ip_version[i], tx_interval=data.dut_bfd_timer, rx_interval=data.dut_bfd_timer)
 
-    # dut2 mod long-vrf-dut-bfd1 
+    # dut2 mod long-vrf-dut-bfd1
+    st.banner("check bfd to rj")
     vrf = [data.dut_traffic_vrf_name["501"], data.dut_traffic_vrf_name["502"]]
     peer_group = ['RJ-MC-Aliyun-public', 'RJ-MC-Aliyun']
     local_ip_list = ['11.8.100.1', '11.8.102.1']  # to RJ interface

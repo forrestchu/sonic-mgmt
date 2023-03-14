@@ -321,19 +321,20 @@ def test_base_config_srvpn_locator_01():
     appdb_onefield_checkpoint(dut1, key, "vrf", vrf_name, expect = True, checkpoint = checkpoint_msg)
 
     # step 4 : check  vpn router
+    check_filed = ['rdroute', 'sid', 'peerv6', 'secetced']
     bgp_as = 100
     st.config(dut1, 'vtysh -c "config t" -c "vrf {}" -c "ip route 192.100.1.0/24 blackhole"'.format(vrf))
     st.config(dut1, 'vtysh -c "config t" -c "router bgp {} vrf {}" -c "address-family ipv4 unicast" -c "redistribute static"'.format(bgp_as, vrf))
 
-    cmd = "cli -c 'no page' -c 'show bgp ipv4 vpn'"
+    cmd = "cli -c 'no page' -c 'show bgp ipv4 vpn 192.100.1.0/24'"
     records = st.show(dut1, cmd)
+    st.log(records)
 
     expected_vpn = {
-        'ip_address':'192.100.1.0/24',
+        'rdroute':'2:2:192.100.1.0/24',
         'sid':'fd00:201:201:fff1:11::',
-        'label':'3',
-        'status_code':'*>',
-        'rd':'2:2'
+        'peerv6':'2000::178',
+        'secetced':'1 available, best #1'
     }
 
     if not records or len(records)==0:
@@ -342,11 +343,13 @@ def test_base_config_srvpn_locator_01():
     check = False
     for re in records:
         match_cnt = 0
-        for it in ['ip_address', 'status_code', 'rd']:
+        st.log(re)
+        for it in check_filed:
+            st.log(re[it])
             if re[it] ==  expected_vpn[it]:
                 match_cnt +=1
 
-        if match_cnt == 5:
+        if match_cnt == len(check_filed):
             check = True
             break
 
@@ -396,42 +399,28 @@ def test_base_config_srvpn_locator_01():
     st.config(dut1, 'cli -c "config t" -c "router bgp {} vrf {}" -c "no srv6-locator"'.format(vrf_name, bgp_as))
 
     # records = st.show(dut1, "show bgp ipv4 vpn", type='alicli')
-    cmd = "cli -c 'no page' -c 'show bgp ipv4 vpn'"
+    cmd = "cli -c 'no page' -c 'show bgp ipv4 vpn 192.100.1.0/24'"
     records = st.show(dut1, cmd)
+    st.log(records)
 
-    expected_vpn = {
-        'ip_address':'192.100.1.0/24',
-        'label':'3',
-        'status_code':'*>',
-        'rd':'2:2'
-    }
+#  FCMD: cli -c 'no page' -c 'show bgp ipv4 vpn 192.100.1.0/24'
+#  BGP routing table entry for 2:2:192.100.1.0/24, version 3
+#  not allocated
+#  Paths: (1 available, best #1)
+#    Advertised to non peer-group peers:
+#    2000::178
+#    Local
+#      0.0.0.0 from 0.0.0.0 (1.1.1.179) vrf PUBLIC-TC11(117) announce-nh-self
+#        Origin incomplete, metric 0, weight 32768, valid, sourced, local, best (First path received)
+#        Extended Community: RT:3:3
+#        Originator: 1.1.1.179
+#        Remote label: 3
+#        Last update: Tue Mar 14 14:55:23 2023
 
     if not records or len(records)==0:
-        st.log ("step 7 test_base_config_srvpn_locator_01_failed")
+        st.log ("step 7 success")
+    else:
         st.report_fail("step 7 test_base_config_srvpn_locator_01_failed")
-
-
-    if 'sid' in records:
-        st.log ("step 7 test_base_config_srvpn_locator_01_failed")
-        st.report_fail("step 7 test_base_config_srvpn_locator_01_failed")
-
-    check = False
-
-    for re in records:
-        match_cnt = 0
-        for it in ['ip_address', 'status_code', 'rd']:
-            if re[it] ==  expected_vpn[it]:
-                match_cnt +=1
-
-        if match_cnt == 5:
-            check = True
-            break
-
-    if not check:
-        st.log(records)
-        # TODO
-        #st.report_fail("step 7 test_base_config_srvpn_locator_01_failed")
-        st.log ("step 7 test_base_config_srvpn_locator_01_failed")
 
 # OSPREY-MC-B09-18-179.EU6# show bgp ipv4 vpn
 # BGP table version is 1, local router ID is 1.1.1.179, vrf id 0
@@ -453,19 +442,23 @@ def test_base_config_srvpn_locator_01():
     # step 8 : recover srv6 config
     bgp_as = '100'
     locator_name = 'lsid1'
+    vrf_name = 'PUBLIC-TC11'
+    locator_cmd = "locator {} prefix {}/80 block-len 32 node-len 16 func-bits 32 argu-bits 48".format(locator_name, data.mysid_prefix[locator_name])
+    opc_cmd = 'cli -c "configure terminal" -c "segment-routing" -c "srv6" -c "locators" -c  "{}" -c "opcode {} end-dt46 vrf {}"'.format(locator_cmd, data.mysid_opcode[vrf_name], vrf_name)
+
+    st.config(dut1, opc_cmd)
     st.config(dut1, 'cli -c "config t" -c "router bgp {} vrf {}" -c "srv6-locator {}"'.format(bgp_as, vrf_name, locator_name))
     st.wait(10)
     # records = st.show(dut1, "show bgp ipv4 vpn", type='alicli')
-    cmd = "cli -c 'no page' -c 'show bgp ipv4 vpn'"
+    cmd = "cli -c 'no page' -c 'show bgp ipv4 vpn 192.100.1.0/24'"
     records = st.show(dut1, cmd)
+    st.log(records)
 
     expected_vpn = {
-        'ip_address':'192.100.1.0/24',
+        'rdroute':'2:2:192.100.1.0/24',
         'sid':'fd00:201:201:fff1:11::',
-        'label':'3',
-        'status_code':'*>',
-        'rd':'2:2',
-        'un':'0.0.0.0'
+        'peerv6':'2000::178',
+        'secetced':'1 available, best #1'
     }
 
     if not records or len(records)==0:
@@ -474,11 +467,11 @@ def test_base_config_srvpn_locator_01():
     check = False
     for re in records:
         match_cnt = 0
-        for it in ['ip_address', 'status_code', 'rd']:
+        for it in check_filed:
             if re[it] ==  expected_vpn[it]:
                 match_cnt +=1
 
-        if match_cnt == 5:
+        if match_cnt == len(check_filed):
             check = True
             break
 
@@ -488,8 +481,9 @@ def test_base_config_srvpn_locator_01():
 
 # check  remote router
     # records = st.show(dut2, "show bgp ipv4 vpn", type='alicli')
-    cmd = "cli -c 'no page' -c 'show bgp ipv4 vpn'"
+    cmd = "cli -c 'no page' -c 'show bgp ipv4 vpn 192.100.1.0/24'"
     records = st.show(dut1, cmd)
+    st.log(records)
 
 # OSPREY-MC-B09-13-178.EU6# show bgp ipv4 vpn
 # BGP table version is 1, local router ID is 1.1.1.178, vrf id 0
@@ -507,12 +501,10 @@ def test_base_config_srvpn_locator_01():
 
 # Displayed  1 routes and 1 total paths
     expected_vpn = {
-        'ip_address':'192.100.1.0/24',
+        'rdroute':'2:2:192.100.1.0/24',
         'sid':'fd00:201:201:fff1:11::',
-        'label':'3',
-        'status_code':'*>',
-        'rd':'2:2',
-        'un':'0.0.0.0'
+        'peerv6':'2000::178',
+        'secetced':'1 available, best #1'
     }
 
     if not records or len(records)==0:
@@ -521,11 +513,11 @@ def test_base_config_srvpn_locator_01():
     check = False
     for re in records:
         match_cnt = 0
-        for it in ['ip_address', 'status_code', 'rd']:
+        for it in check_filed:
             if re[it] ==  expected_vpn[it]:
                 match_cnt +=1
 
-        if match_cnt == 5:
+        if match_cnt == len(check_filed):
             check = True
             break
 

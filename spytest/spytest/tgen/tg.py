@@ -303,7 +303,7 @@ class TGBase(TGStubs):
                 break
             tgen_wait(tg_wait)
         if not skip_wait:
-            tgen_wait(2)
+            tgen_wait(10)
 
     def trgen_pre_proc(self, fname, **kwargs):
         if self.skip_traffic:
@@ -339,7 +339,7 @@ class TGBase(TGStubs):
                     han = re.search(r'.*deviceGroup:(\d)+',han).group(0)
                     logger.debug("Starting Destroy ... {}".format(han))
                     self.tg_test_control(handle=han, action='stop_protocol')
-                    tgen_wait(2)
+                    tgen_wait(10)
                     kwargs['topology_handle'] = han
                     kwargs.pop('handle','')
                     kwargs.pop('port_handle','')
@@ -464,7 +464,7 @@ class TGBase(TGStubs):
                 elif kwargs.get('mode') == 'config':
                     ret_ds = self.tg_interface_handle(ret_ds)
                     if self.tg_type == 'ixia':
-                        tgen_wait(2)
+                        tgen_wait(10)
                         self.tg_topology_test_control(action='apply_on_the_fly_changes', skip_wait=True)
                         logger.info('start the host.')
                         temp = ret_ds['handle'] if type(ret_ds['handle'])!=list else ret_ds['handle'][0]
@@ -1391,7 +1391,7 @@ class TGIxia(TGBase):
                     topo_han = res['topology_handle']
                     self.topo_handle[kwargs.get('port_handle')] = topo_han
                     logger.info(self.topo_handle)
-                    tgen_wait(2)
+                    tgen_wait(10)
                 mul=kwargs.get('count','1')
                 if 'vlan_id_count' in kwargs:
                     mul=kwargs.get('vlan_id_count','1')
@@ -1399,7 +1399,7 @@ class TGIxia(TGBase):
                     mul=kwargs.get('device_group_multiplier','1')
                 res=self.tg_topology_config(topology_handle=topo_han, device_group_multiplier=mul)
                 logger.info(res)
-                tgen_wait(2)
+                tgen_wait(10)
                 kwargs['protocol_handle'] = res['device_group_handle']
                 kwargs.pop('port_handle')
             if kwargs.get('enable_flow_control') != None:
@@ -1431,7 +1431,7 @@ class TGIxia(TGBase):
                 return kwargs
             logger.info('Disabling protocol before adding the route')
             self.tg_topology_test_control(handle=kwargs['handle'], stack='ethernet', action='stop_all_protocols',
-                                          tg_wait=5)
+                                          tg_wait=10)
             topo = re.search(r'.*topology:(\d)+', kwargs['handle']).group(0)
             logger.debug('Topology: {}'.format(topo))
             topo_index = list(self.topo_handle.values()).index(topo)
@@ -1455,11 +1455,11 @@ class TGIxia(TGBase):
             if not flag:
                 msg = "Failed to get port {} from the protocol info".format(tg_port)
                 self.fail(msg, "tgen_failed_api", msg)
-            tgen_wait(2)
+            tgen_wait(10)
 
         if fname == 'tg_emulation_bgp_control':
             logger.info('Applying changes for IXIA before starting BGP')
-            self.tg_topology_test_control(action='apply_on_the_fly_changes', tg_wait=2)
+            self.tg_topology_test_control(action='apply_on_the_fly_changes', tg_wait=10)
 
         if fname == 'tg_emulation_bgp_config':
             if kwargs.get('local_as') != None and kwargs.get('remote_as') != None:
@@ -1470,7 +1470,7 @@ class TGIxia(TGBase):
                 kwargs.pop('remote_as')
         if fname == 'tg_emulation_bfd_control':
             logger.info('Applying changes for IXIA before starting BFD')
-            self.tg_topology_test_control(action='apply_on_the_fly_changes', tg_wait=2)
+            self.tg_topology_test_control(action='apply_on_the_fly_changes', tg_wait=10)
 
         if fname == 'tg_emulation_igmp_config':
             kwargs['handle'] = kwargs['handle'][0] if type(kwargs['handle']) is list else kwargs['handle']

@@ -1811,7 +1811,7 @@ class TestBGPIPvxRouteAdvertisementFilter:
             bgpapi.config_bgp(dut=self.local_topo['dut2'], local_as=self.local_topo['dut2_as'], addr_family='ipv6',
                             config='yes',
                             neighbor=self.local_topo['dut1_addr_ipv6'],
-                            config_type_list=["default_originate"], routeMap='UseGlobal',cli_type=bgp_cli_type)
+                            config_type_list=["default_originate"],cli_type=bgp_cli_type)
         else:
             bgpapi.config_bgp(dut=self.local_topo['dut2'], local_as=self.local_topo['dut2_as'], addr_family='ipv6',
                             config='yes',

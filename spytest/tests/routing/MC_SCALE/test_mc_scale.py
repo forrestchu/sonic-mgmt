@@ -1356,12 +1356,21 @@ def test_read_all_bfd_counter():
         down_env1 = output1[i]['sessiondownev']
         down_env2 = output2[i]['sessiondownev']
         tx_pps = (int(tx_counter2) - int(tx_counter1))/sample_time
-        if tx_pps > 2*(1000/interval) or tx_pps < (1000/interval)/2:
-            st.log("current bfd session {} tx pps:{}".format(output1[i]['peeraddress'], tx_pps))
-            err_tx_session += 1
-        elif down_env1 != down_env2:
-            st.log("current bfd session {} down notfiy occur".format(output1[i]['peeraddress']))
-            err_status_session += 1
+        if output1[i]['peeraddress'] in ['11.18.100.1']:
+            rj_interval = 300
+            if tx_pps > 2*(1000/rj_interval) or tx_pps < (1000/rj_interval)/2:
+                st.log("current bfd session {} tx pps:{}".format(output1[i]['peeraddress'], tx_pps))
+                err_tx_session += 1
+            elif down_env1 != down_env2:
+                st.log("current bfd session {} down notfiy occur".format(output1[i]['peeraddress']))
+                err_status_session += 1                
+        else:
+            if tx_pps > 2*(1000/interval) or tx_pps < (1000/interval)/2:
+                st.log("current bfd session {} tx pps:{}".format(output1[i]['peeraddress'], tx_pps))
+                err_tx_session += 1
+            elif down_env1 != down_env2:
+                st.log("current bfd session {} down notfiy occur".format(output1[i]['peeraddress']))
+                err_status_session += 1
 
     if err_status_session > 0 or err_tx_session > 0:
         st.log("error bfd session, status err:{} tx err:{}".format(err_status_session, err_tx_session))

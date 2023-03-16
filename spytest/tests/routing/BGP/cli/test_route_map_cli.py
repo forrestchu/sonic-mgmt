@@ -133,7 +133,7 @@ def frr_config_checkpoint_onekey(obj, key, expect = True, checkpoint = ''):
     output = obj.show_frr_running_config_json()
     if key not in output:
         st.report_fail("{} frr config has no {} config".format(checkpoint, key))
-    
+
     if output[key] != "true":
         st.report_fail("{} frr config key {} not equal to true".format(checkpoint, key))
 
@@ -467,7 +467,7 @@ def test_cli_routemap_config_recovery():
     test_obj = data['rm_obj']
     dut = data['dut']
 
-    
+
     st.log("create route-map")
     route_map = test_obj.create_route_map(data['name'], data['permittion'], data['sequence'])
     key_configdb = get_configdb_key_routemap(route_map)
@@ -510,7 +510,7 @@ def test_cli_routemap_config_recovery():
     route_map1 = "route-map {} {} {}".format(data['name'], data['permittion'], data['sequence'])
     frr_config_checkpoint(test_obj, route_map1, "set metric {}".format(data['set_metric']), True, "check7")
     frr_config_checkpoint(test_obj, route_map1, "set weight {}".format(data['set_weight']), True, "check8")
-    frr_config_checkpoint(test_obj, route_map1, "match tag {}".format(data['match_tag']), True, "check9")    
+    frr_config_checkpoint(test_obj, route_map1, "match tag {}".format(data['match_tag']), True, "check9")
 
 
     route_map2 = "route-map {} {} {}".format(data['name2'], data['permittion'], data['sequence2'])
@@ -588,13 +588,13 @@ def test_cli_prefix_list_base_case():
     st.log("test_cli_prefix_list_base_case begin")
     test_obj = data['rm_obj']
     dut = data['dut']
-    
-    #  config ip prefix-list 
+
+    #  config ip prefix-list
     PREFIX_NAME = 'plv4'
     PREFIX_E1 = '1.1.1.1/32'
     PREFIX_E2 = '2.2.2.2/32'
     PREFIX_E3 = '3.3.3.3/32'
-    
+
     cmd = "cli -c 'config t' -c 'ip prefix-list {} permit {}'".format(PREFIX_NAME, PREFIX_E1)
     st.config(dut, cmd)
     st.wait(2)
@@ -607,7 +607,7 @@ def test_cli_prefix_list_base_case():
     st.config(dut, cmd)
     st.wait(2)
 
-    #  check ip prefix-list 
+    #  check ip prefix-list
     configdb_checkpoint(dut, "IP_PREFIX_LIST|{}|seq|10".format(PREFIX_NAME), "permit", PREFIX_E1, True, "check1")
     configdb_checkpoint(dut, "IP_PREFIX_LIST|{}|seq|20".format(PREFIX_NAME), "permit", PREFIX_E2, True, "check2")
     configdb_checkpoint(dut, "IP_PREFIX_LIST|{}|seq|30".format(PREFIX_NAME), "permit", PREFIX_E3, True, "check3")
@@ -617,12 +617,12 @@ def test_cli_prefix_list_base_case():
     frr_config_checkpoint_onekey(test_obj, "ip prefix-list {} seq 30 permit {}".format(PREFIX_NAME,PREFIX_E3), True, "check6")
 
 
-    #  config ipv6 prefix-list 
+    #  config ipv6 prefix-list
     PREFIX6_NAME = 'plv6'
     PREFIX6_E1 = '2000::1/128'
     PREFIX6_E2 = '2000::2/128'
     PREFIX6_E3 = '2000::3/128'
-    
+
     cmd = "cli -c 'config t' -c 'ipv6 prefix-list {} permit {}'".format(PREFIX6_NAME, PREFIX6_E1)
     st.config(dut, cmd)
     st.wait(2)
@@ -635,7 +635,7 @@ def test_cli_prefix_list_base_case():
     st.config(dut, cmd)
     st.wait(2)
 
-    #  check ip6 prefix-list 
+    #  check ip6 prefix-list
     configdb_checkpoint(dut, "IPV6_PREFIX_LIST|{}|seq|10".format(PREFIX6_NAME), "permit", PREFIX6_E1, True, "check7")
     configdb_checkpoint(dut, "IPV6_PREFIX_LIST|{}|seq|20".format(PREFIX6_NAME), "permit", PREFIX6_E2, True, "check8")
     configdb_checkpoint(dut, "IPV6_PREFIX_LIST|{}|seq|30".format(PREFIX6_NAME), "permit", PREFIX6_E3, True, "check9")
@@ -643,5 +643,217 @@ def test_cli_prefix_list_base_case():
     frr_config_checkpoint_onekey(test_obj, "ipv6 prefix-list {} seq 10 permit {}".format(PREFIX6_NAME,PREFIX6_E1), True, "check10")
     frr_config_checkpoint_onekey(test_obj, "ipv6 prefix-list {} seq 20 permit {}".format(PREFIX6_NAME,PREFIX6_E2), True, "check11")
     frr_config_checkpoint_onekey(test_obj, "ipv6 prefix-list {} seq 30 permit {}".format(PREFIX6_NAME,PREFIX6_E3), True, "check12")
+
+    st.report_pass("test_case_passed")
+
+
+@pytest.mark.routemap_cli
+def test_cli_routemap_set_extcommunity_bandwidth():
+    st.log("test_cli_routemap_set_extcommunity_bandwidth begin")
+    test_obj = data['rm_obj']
+    dut = data['dut']
+
+    # create route-map
+    st.log("create route-map")
+    route_map = test_obj.create_route_map(data['name'], data['permittion'], data['sequence'])
+    key_configdb = get_configdb_key_routemap(route_map)
+    key_frr = get_frr_key_routemap(route_map)
+
+    # case 1:
+    st.log("test sub case 1...")
+    test_obj.set_extcommunity_bandwidth(route_map, "600")
+    configdb_checkpoint(dut, key_configdb, "extcommunity_bandwidth", "600", True, "check1")
+    frr_config_checkpoint(test_obj, key_frr, "set extcommunity bandwidth {}".format("600"), True, "check2")
+
+    test_obj.no_set_extcommunity_bandwidth(route_map)
+    configdb_checkpoint(dut, key_configdb, "extcommunity_bandwidth", "null", True, "check3")
+    frr_config_checkpoint(test_obj, key_frr, "set extcommunity_bandwidth {}".format("600"), "null", "check4")
+
+    # case 2:
+    st.log("test sub case 2...")
+    test_obj.set_extcommunity_bandwidth_cumulative(route_map)
+    configdb_checkpoint(dut, key_configdb, "extcommunity_bandwidth", "cumulative", True, "check1")
+    frr_config_checkpoint(test_obj, key_frr, "set extcommunity bandwidth cumulative", True, "check2")
+
+    test_obj.no_set_extcommunity_bandwidth(route_map)
+    configdb_checkpoint(dut, key_configdb, "extcommunity_bandwidth", "null", True, "check3")
+    frr_config_checkpoint(test_obj, key_frr, "set extcommunity_bandwidth cumulative", "null", "check4")
+
+    # case 3:
+    st.log("test sub case 2...")
+    test_obj.set_extcommunity_bandwidth_cumulative_non_transitive(route_map)
+    configdb_checkpoint(dut, key_configdb, "extcommunity_bandwidth", "cumulative non-transitive", True, "check1")
+    frr_config_checkpoint(test_obj, key_frr, "set extcommunity bandwidth cumulative non-transitive", True, "check2")
+
+    test_obj.no_set_extcommunity_bandwidth(route_map)
+    configdb_checkpoint(dut, key_configdb, "extcommunity_bandwidth", "null", True, "check3")
+    frr_config_checkpoint(test_obj, key_frr, "set extcommunity_bandwidth cumulative non-transitive", "null", "check4")
+
+    # case 4:
+    test_obj.set_extcommunity_bandwidth_num_multipaths(route_map)
+    configdb_checkpoint(dut, key_configdb, "extcommunity_bandwidth", "num-multipaths", True, "check1")
+    frr_config_checkpoint(test_obj, key_frr, "set extcommunity bandwidth num-multipaths", True, "check2")
+
+    test_obj.no_set_extcommunity_bandwidth(route_map)
+    configdb_checkpoint(dut, key_configdb, "extcommunity_bandwidth", "null", True, "check3")
+    frr_config_checkpoint(test_obj, key_frr, "set extcommunity_bandwidth num-multipaths", "null", "check4")
+
+    # case 5:
+    test_obj.set_extcommunity_bandwidth_num_multipaths_non_transitive(route_map)
+    configdb_checkpoint(dut, key_configdb, "extcommunity_bandwidth", "num-multipaths non-transitive", True, "check1")
+    frr_config_checkpoint(test_obj, key_frr, "set extcommunity bandwidth num-multipaths non-transitive", True, "check2")
+
+    test_obj.no_set_extcommunity_bandwidth(route_map)
+    configdb_checkpoint(dut, key_configdb, "extcommunity_bandwidth", "null", True, "check3")
+    frr_config_checkpoint(test_obj, key_frr, "set extcommunity_bandwidth num-multipaths non-transitive", "null", "check4")
+
+    # delete route-map
+    st.log("delete route-map")
+    test_obj.delete_route_map(route_map)
+
+    st.report_pass("test_case_passed")
+
+
+@pytest.mark.routemap_cli
+def test_cli_routemap_set_extcommunity_color():
+    st.log("test_cli_routemap_set_extcommunity_color begin")
+    test_obj = data['rm_obj']
+    dut = data['dut']
+
+    # create route-map
+    st.log("create route-map")
+    route_map = test_obj.create_route_map(data['name'], data['permittion'], data['sequence'])
+    key_configdb = get_configdb_key_routemap(route_map)
+    key_frr = get_frr_key_routemap(route_map)
+
+    # case 1:
+    st.log("test sub case 1...")
+    test_obj.set_extcommunity_color(route_map, "3")
+    configdb_checkpoint(dut, key_configdb, "extcommunity_color", "3", True, "check1")
+    frr_config_checkpoint(test_obj, key_frr, "set extcommunity color {}".format("3"), True, "check2")
+
+    test_obj.no_set_extcommunity_color(route_map)
+    configdb_checkpoint(dut, key_configdb, "extcommunity_color", "null", True, "check3")
+    frr_config_checkpoint(test_obj, key_frr, "set extcommunity color {}".format("3"), "null", "check4")
+
+    # delete route-map
+    st.log("delete route-map")
+    test_obj.delete_route_map(route_map)
+
+    st.report_pass("test_case_passed")
+
+
+@pytest.mark.routemap_cli
+def test_cli_routemap_set_extcommunity_rt():
+    st.log("test_cli_routemap_set_extcommunity_rt begin")
+    test_obj = data['rm_obj']
+    dut = data['dut']
+
+    # create route-map
+    st.log("create route-map")
+    route_map = test_obj.create_route_map(data['name'], data['permittion'], data['sequence'])
+    key_configdb = get_configdb_key_routemap(route_map)
+    key_frr = get_frr_key_routemap(route_map)
+
+    # case 1:
+    st.log("test sub case 1...")
+    test_obj.set_extcommunity_rt(route_map, "11:11")
+    configdb_checkpoint(dut, key_configdb, "extcommunity_rt", "11:11", True, "check1")
+    frr_config_checkpoint(test_obj, key_frr, "set extcommunity rt {}".format("11:11"), True, "check2")
+
+    test_obj.no_set_extcommunity_rt(route_map)
+    configdb_checkpoint(dut, key_configdb, "extcommunity_rt", "null", True, "check3")
+    frr_config_checkpoint(test_obj, key_frr, "set extcommunity rt {}".format("11:11"), "null", "check4")
+
+    # delete route-map
+    st.log("delete route-map")
+    test_obj.delete_route_map(route_map)
+
+    st.report_pass("test_case_passed")
+
+
+@pytest.mark.routemap_cli
+def test_cli_routemap_set_extcommunity_soo():
+    st.log("test_cli_routemap_set_extcommunity_soo begin")
+    test_obj = data['rm_obj']
+    dut = data['dut']
+
+    # create route-map
+    st.log("create route-map")
+    route_map = test_obj.create_route_map(data['name'], data['permittion'], data['sequence'])
+    key_configdb = get_configdb_key_routemap(route_map)
+    key_frr = get_frr_key_routemap(route_map)
+
+    # case 1:
+    st.log("test sub case 1...")
+    test_obj.set_extcommunity_soo(route_map, "11:11")
+    configdb_checkpoint(dut, key_configdb, "extcommunity_soo", "11:11", True, "check1")
+    frr_config_checkpoint(test_obj, key_frr, "set extcommunity soo {}".format("11:11"), True, "check2")
+
+    test_obj.no_set_extcommunity_soo(route_map)
+    configdb_checkpoint(dut, key_configdb, "extcommunity_soo", "null", True, "check3")
+    frr_config_checkpoint(test_obj, key_frr, "set extcommunity soo {}".format("11:11"), "null", "check4")
+
+    # delete route-map
+    st.log("delete route-map")
+    test_obj.delete_route_map(route_map)
+
+    st.report_pass("test_case_passed")
+
+
+@pytest.mark.routemap_cli
+def test_cli_routemap_match_local_preference():
+    st.log("test_cli_routemap_match_local_preference begin")
+    test_obj = data['rm_obj']
+    dut = data['dut']
+
+    # create route-map
+    st.log("create route-map")
+    route_map = test_obj.create_route_map(data['name'], data['permittion'], data['sequence'])
+    key_configdb = get_configdb_key_routemap(route_map)
+    key_frr = get_frr_key_routemap(route_map)
+
+    # case 1:
+    st.log("test sub case 1...")
+    test_obj.match_local_preference(route_map, "100")
+    configdb_checkpoint(dut, key_configdb, "match_local_preference", "100", True, "check1")
+    frr_config_checkpoint(test_obj, key_frr, "match local-preference {}".format("100"), True, "check2")
+
+    test_obj.no_match_local_preference(route_map)
+    configdb_checkpoint(dut, key_configdb, "match_local_preference", "null", True, "check3")
+    frr_config_checkpoint(test_obj, key_frr, "match local-preference {}".format("100"), "null", "check4")
+
+    # delete route-map
+    st.log("delete route-map")
+    test_obj.delete_route_map(route_map)
+
+    st.report_pass("test_case_passed")
+
+
+@pytest.mark.routemap_cli
+def test_cli_routemap_match_extcommunity():
+    st.log("test_cli_routemap_match_extcommunity begin")
+    test_obj = data['rm_obj']
+    dut = data['dut']
+
+    # create route-map
+    st.log("create route-map")
+    route_map = test_obj.create_route_map(data['name'], data['permittion'], data['sequence'])
+    key_configdb = get_configdb_key_routemap(route_map)
+    key_frr = get_frr_key_routemap(route_map)
+
+    # case 1:
+    st.log("test sub case 1...")
+    test_obj.match_extcommunity(route_map, "aa")
+    configdb_checkpoint(dut, key_configdb, "match_extcommunity", "aa", True, "check1")
+    frr_config_checkpoint(test_obj, key_frr, "match extcommunity {}".format("aa"), True, "check2")
+
+    test_obj.no_match_extcommunity(route_map)
+    configdb_checkpoint(dut, key_configdb, "match_extcommunity", "null", True, "check3")
+    frr_config_checkpoint(test_obj, key_frr, "match extcommunity {}".format("aa"), "null", "check4")
+
+    # delete route-map
+    st.log("delete route-map")
+    test_obj.delete_route_map(route_map)
 
     st.report_pass("test_case_passed")

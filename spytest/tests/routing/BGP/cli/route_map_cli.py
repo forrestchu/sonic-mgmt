@@ -113,6 +113,90 @@ class ROUTE_MAP_CLI():
         st.config(self.dut, cmd)
         st.wait(CMD_INTERVAL)
 
+    def set_extcommunity_bandwidth(self, route_map, val):
+        st.log("Route-map set extcommunity bandwidth")
+        sub_cmd = "set extcommunity bandwidth {}".format(val)
+        cmd = "{} -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, route_map, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
+    def no_set_extcommunity_bandwidth(self, route_map):
+        st.log("Route-map no set extcommunity bandwidth")
+        sub_cmd = "no set extcommunity bandwidth"
+        cmd = "{} -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, route_map, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
+    def set_extcommunity_bandwidth_cumulative(self, route_map):
+        st.log("Route-map set extcommunity bandwidth cumulative")
+        sub_cmd = "set extcommunity bandwidth cumulative"
+        cmd = "{} -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, route_map, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
+    def set_extcommunity_bandwidth_cumulative_non_transitive(self, route_map):
+        st.log("Route-map set extcommunity bandwidth cumulative non-transitive")
+        sub_cmd = "set extcommunity bandwidth cumulative non-transitive"
+        cmd = "{} -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, route_map, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
+    def set_extcommunity_bandwidth_num_multipaths(self, route_map):
+        st.log("Route-map set extcommunity bandwidth num-multipaths")
+        sub_cmd = "set extcommunity bandwidth num-multipaths"
+        cmd = "{} -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, route_map, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
+    def set_extcommunity_bandwidth_num_multipaths_non_transitive(self, route_map):
+        st.log("Route-map set extcommunity num-multipaths non-transitive")
+        sub_cmd = "set extcommunity num-multipaths non-transitive"
+        cmd = "{} -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, route_map, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
+    def set_extcommunity_color(self, route_map, val):
+        st.log("Route-map set extcommunity color")
+        sub_cmd = "set extcommunity color {}".format(val)
+        cmd = "{} -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, route_map, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
+    def no_set_extcommunity_color(self, route_map):
+        st.log("Route-map no set extcommunity color")
+        sub_cmd = "no set extcommunity color"
+        cmd = "{} -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, route_map, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
+    def set_extcommunity_rt(self, route_map, val):
+        st.log("Route-map set extcommunity rt")
+        sub_cmd = "set extcommunity rt {}".format(val)
+        cmd = "{} -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, route_map, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
+    def no_set_extcommunity_rt(self, route_map):
+        st.log("Route-map no set extcommunity rt")
+        sub_cmd = "no set extcommunity rt"
+        cmd = "{} -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, route_map, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
+    def set_extcommunity_soo(self, route_map, val):
+        st.log("Route-map set extcommunity soo")
+        sub_cmd = "set extcommunity soo {}".format(val)
+        cmd = "{} -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, route_map, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
+    def no_set_extcommunity_soo(self, route_map):
+        st.log("Route-map no set extcommunity soo")
+        sub_cmd = "no set extcommunity soo"
+        cmd = "{} -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, route_map, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
     def match_tag(self, route_map, tag_val):
         st.log("Route-map match tag")
         sub_cmd = "match tag {}".format(tag_val)
@@ -144,6 +228,34 @@ class ROUTE_MAP_CLI():
     def no_match_source_protocol_val(self, route_map, source_protocol_val):
         st.log("Route-map match source_protocol")
         sub_cmd = "no match source-protocol {}".format(source_protocol_val)
+        cmd = "{} -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, route_map, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
+    def match_local_preference(self, route_map, val):
+        st.log("Route-map match local-preference")
+        sub_cmd = "match local-preference {}".format(val)
+        cmd = "{} -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, route_map, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
+    def no_match_local_preference(self, route_map):
+        st.log("Route-map no match local-preference")
+        sub_cmd = "no match local-preference"
+        cmd = "{} -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, route_map, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
+    def match_extcommunity(self, route_map, val):
+        st.log("Route-map match extcommunity")
+        sub_cmd = "match extcommunity {}".format(val)
+        cmd = "{} -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, route_map, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
+    def no_match_extcommunity(self, route_map):
+        st.log("Route-map match extcommunity")
+        sub_cmd = "no match extcommunity"
         cmd = "{} -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, route_map, sub_cmd)
         st.config(self.dut, cmd)
         st.wait(CMD_INTERVAL)

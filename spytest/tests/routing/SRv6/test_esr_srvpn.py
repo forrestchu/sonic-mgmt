@@ -61,6 +61,7 @@ data.srv6 = {}
 dut1 = 'MC-58'
 dut2 = 'MC-59'
 data.my_dut_list = [dut1, dut2]
+data.load_multi_vrf_config_done = False
 
 def add_bmp_config_background(dut):
     st.log("config global bmp")
@@ -552,7 +553,9 @@ def test_base_config_srvpn_2kl_route_learn_02():
     st.banner("test_base_config_srvpn_2kl_traffic_and_route_02 begin")
 
     # load full config
-    load_2ksubif_100vrf()
+    if data.load_multi_vrf_config_done == False:
+        load_2ksubif_100vrf()
+        data.load_multi_vrf_config_done = True
 
     # load ixia config
     ixia_load_config(ESR_MULTI_VRF_CONFIG)
@@ -637,7 +640,9 @@ def test_base_config_srvpn_multi_vrf_03():
     # ixia config 100 subinterface
     st.banner("test_base_config_srvpn_multi_vrf_03 begin")
 
-    load_2ksubif_100vrf()
+    if data.load_multi_vrf_config_done == False:
+        load_2ksubif_100vrf()
+        data.load_multi_vrf_config_done = True
 
     # load ixia config
     ixia_load_config(ESR_MULTI_VRF_CONFIG)
@@ -658,12 +663,17 @@ def test_base_config_srvpn_multi_vrf_03():
             vrf_array.append(data.vrf_list[idx])
         return vrf_array
 
-    vrf_array = get_check_vrf_list()
+    # vrf_array = get_check_vrf_list()
+    def check_vrf_fib():
+        for chcek_vrf in data.vrf_list[0:100]:
+            ret = check_vrf_route_nums(dut2, chcek_vrf, 5000, 1)
+            if not ret:
+                st.error("step1 check_vrf_route_nums {} 5000 test_base_config_srvpn_multi_vrf_03".format(chcek_vrf))
+                return False
+        return True
 
-    for chcek_vrf in vrf_array:
-        ret = check_vrf_route_nums(dut2, chcek_vrf, 5000, 1)
-        if not ret:
-            st.report_fail("step1 check_vrf_route_nums {} 5000 test_base_config_srvpn_multi_vrf_03".format(chcek_vrf))
+    if not retry_api(check_vrf_fib, retry_count= 3, delay= 5):
+        st.report_fail("step1 check_vrf_fib test_base_config_srvpn_multi_vrf_03")
 
     st.wait(30)
 

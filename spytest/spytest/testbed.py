@@ -1010,6 +1010,8 @@ class Testbed(object):
                         rv.ix_server = dinfo.properties.ix_server
                     if "ix_port" in dinfo.properties:
                         rv.ix_port = dinfo.properties.ix_port
+                    if "ix_rest_port" in dinfo.properties:
+                        rv.ix_rest_port = dinfo.properties.ix_rest_port
                     return rv
         return None
 

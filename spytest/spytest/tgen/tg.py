@@ -25,6 +25,7 @@ tg_version_list = dict()
 tgen_obj_dict = {}
 
 IXIA_PORT = 8021
+IXIA_REST_PORT = 12031
 
 def tgen_profiling_start(msg, max_time=300):
     return workarea.profiling_start(msg, max_time)
@@ -1121,9 +1122,10 @@ class TGStc(TGBase):
 
 
 class TGIxia(TGBase):
-    def __init__(self, tg_type, tg_version, tg_ip=None, tg_port_list=None, ix_server=None, ix_port=IXIA_PORT):
+    def __init__(self, tg_type, tg_version, tg_ip=None, tg_port_list=None, ix_server=None, ix_port=IXIA_PORT, tg_ix_rest_port=IXIA_REST_PORT):
         self.ix_server = ix_server
         self.ix_port = str(ix_port)
+        self.ix_rest_port = str(tg_ix_rest_port)
         self.topo_handle = {}
         self.traffic_config_handles = {}
         TGBase.__init__(self, tg_type, tg_version, tg_ip, tg_port_list)
@@ -1180,7 +1182,7 @@ class TGIxia(TGBase):
 
     def get_ixnetwork_status(self,**kwargs):
         ix_server = kwargs.get('ix_server',None)
-        ix_rest_port = kwargs.get('ix_port','12031')
+        ix_rest_port = self.ix_rest_port
         retries = int(kwargs.get('retries','1'))
         ret_dict = dict()
         ret_dict['status'] = '0'
@@ -2205,6 +2207,7 @@ def load_tgen(tgen_dict):
                 logger.error("IxNetWork IP Address: {} is not reachable".format(ix_server))
                 return False
             tg_ix_port = tgen_dict.get('ix_port', IXIA_PORT)
+            tg_ix_rest_port = tgen_dict.get('ix_rest_port', IXIA_REST_PORT)
             tg_ix_server = "{}:{}".format(ix_server, tg_ix_port)
             if not tg_ixia_pkg_loaded:
                 if not tg_ixia_load(tg_version, logger, tgen_get_logs_path()):
@@ -2234,7 +2237,7 @@ def load_tgen(tgen_dict):
                 all_func_name_list = inspect.getmembers(get_ixiangpf(), inspect.ismethod)
                 generate_tg_methods(tg_type, all_func_name_list)
                 tg_ixia_pkg_loaded = True
-            tg_obj = TGIxia(tg_type, tg_version, tg_ip, tg_port_list, tg_ix_server, tg_ix_port)
+            tg_obj = TGIxia(tg_type, tg_version, tg_ip, tg_port_list, tg_ix_server, tg_ix_port, tg_ix_rest_port)
             if tg_obj.tg_connected:
                 break
 

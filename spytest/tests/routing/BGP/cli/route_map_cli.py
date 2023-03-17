@@ -150,7 +150,7 @@ class ROUTE_MAP_CLI():
 
     def set_extcommunity_bandwidth_num_multipaths_non_transitive(self, route_map):
         st.log("Route-map set extcommunity num-multipaths non-transitive")
-        sub_cmd = "set extcommunity num-multipaths non-transitive"
+        sub_cmd = "set extcommunity bandwidth num-multipaths non-transitive"
         cmd = "{} -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, route_map, sub_cmd)
         st.config(self.dut, cmd)
         st.wait(CMD_INTERVAL)

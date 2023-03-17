@@ -667,7 +667,7 @@ def test_cli_routemap_set_extcommunity_bandwidth():
 
     test_obj.no_set_extcommunity_bandwidth(route_map)
     configdb_checkpoint(dut, key_configdb, "extcommunity_bandwidth", "null", True, "check3")
-    frr_config_checkpoint(test_obj, key_frr, "set extcommunity_bandwidth {}".format("600"), "null", "check4")
+    frr_config_checkpoint(test_obj, key_frr, "set extcommunity bandwidth {}".format("600"), "null", "check4")
 
     # case 2:
     st.log("test sub case 2...")
@@ -677,35 +677,37 @@ def test_cli_routemap_set_extcommunity_bandwidth():
 
     test_obj.no_set_extcommunity_bandwidth(route_map)
     configdb_checkpoint(dut, key_configdb, "extcommunity_bandwidth", "null", True, "check3")
-    frr_config_checkpoint(test_obj, key_frr, "set extcommunity_bandwidth cumulative", "null", "check4")
+    frr_config_checkpoint(test_obj, key_frr, "set extcommunity bandwidth cumulative", "null", "check4")
 
     # case 3:
-    st.log("test sub case 2...")
+    st.log("test sub case 3...")
     test_obj.set_extcommunity_bandwidth_cumulative_non_transitive(route_map)
     configdb_checkpoint(dut, key_configdb, "extcommunity_bandwidth", "cumulative non-transitive", True, "check1")
     frr_config_checkpoint(test_obj, key_frr, "set extcommunity bandwidth cumulative non-transitive", True, "check2")
 
     test_obj.no_set_extcommunity_bandwidth(route_map)
     configdb_checkpoint(dut, key_configdb, "extcommunity_bandwidth", "null", True, "check3")
-    frr_config_checkpoint(test_obj, key_frr, "set extcommunity_bandwidth cumulative non-transitive", "null", "check4")
+    frr_config_checkpoint(test_obj, key_frr, "set extcommunity bandwidth cumulative non-transitive", "null", "check4")
 
     # case 4:
+    st.log("test sub case 4...")
     test_obj.set_extcommunity_bandwidth_num_multipaths(route_map)
     configdb_checkpoint(dut, key_configdb, "extcommunity_bandwidth", "num-multipaths", True, "check1")
     frr_config_checkpoint(test_obj, key_frr, "set extcommunity bandwidth num-multipaths", True, "check2")
 
     test_obj.no_set_extcommunity_bandwidth(route_map)
     configdb_checkpoint(dut, key_configdb, "extcommunity_bandwidth", "null", True, "check3")
-    frr_config_checkpoint(test_obj, key_frr, "set extcommunity_bandwidth num-multipaths", "null", "check4")
+    frr_config_checkpoint(test_obj, key_frr, "set extcommunity bandwidth num-multipaths", "null", "check4")
 
     # case 5:
+    st.log("test sub case 5...")
     test_obj.set_extcommunity_bandwidth_num_multipaths_non_transitive(route_map)
     configdb_checkpoint(dut, key_configdb, "extcommunity_bandwidth", "num-multipaths non-transitive", True, "check1")
     frr_config_checkpoint(test_obj, key_frr, "set extcommunity bandwidth num-multipaths non-transitive", True, "check2")
 
     test_obj.no_set_extcommunity_bandwidth(route_map)
     configdb_checkpoint(dut, key_configdb, "extcommunity_bandwidth", "null", True, "check3")
-    frr_config_checkpoint(test_obj, key_frr, "set extcommunity_bandwidth num-multipaths non-transitive", "null", "check4")
+    frr_config_checkpoint(test_obj, key_frr, "set extcommunity bandwidth num-multipaths non-transitive", "null", "check4")
 
     # delete route-map
     st.log("delete route-map")

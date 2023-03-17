@@ -32,6 +32,12 @@
 -test:test_ft_lacp_graceful_restart_with_cold_boot
 -test:test_ft_lacp_graceful_restart_with_save_reload
 -test:test_ft_verify_interfaces_order
+-test:test_cli_routemap_set_extcommunity_bandwidth
+-test:test_cli_routemap_set_extcommunity_color
+-test:test_cli_routemap_set_extcommunity_rt
+-test:test_cli_routemap_set_extcommunity_soo
+-test:test_cli_routemap_match_local_preference
+-test:test_cli_routemap_match_extcommunity
 
 #+args:--skip-init-config
 #+args:--skip-load-config base

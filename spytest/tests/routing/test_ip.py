@@ -135,8 +135,8 @@ def ip_module_hooks(request):
     ipfeature.config_ip_addr_interface(vars.D2, vars.D2T1P2, data.ip6_addr[8], 96, family=data.af_ipv6)
 
     yield
-    ipfeature.clear_ip_configuration(st.get_dut_names(), cli_type="alicli")
-    ipfeature.clear_ip_configuration(st.get_dut_names(), 'ipv6', cli_type="alicli")
+    ipfeature.clear_ip_configuration(st.get_dut_names(), family='ipv4')
+    ipfeature.clear_ip_configuration(st.get_dut_names(), family='ipv6')
     vlan_obj.clear_vlan_configuration(st.get_dut_names())
     pc_obj.clear_portchannel_configuration(st.get_dut_names())
     ipfeature.delete_static_route(vars.D1, data.ip4_addr[7], data.static_ip_rt, shell=data.shell_vtysh,

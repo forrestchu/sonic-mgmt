@@ -171,8 +171,8 @@ def create_bgp_neighbor_route_map_config(dut, local_asn, neighbor_ip, routemap):
     rmap.add_permit_sequence('10')
     rmap.add_sequence_set_ipv6_next_hop_prefer_global('10')
     rmap.execute_command(dut)
-    bgpfeature.config_bgp(dut, addr_family='ipv6', local_as=local_asn, neighbor=neighbor_ip, routeMap=routemap, diRection='in', config = 'yes', config_type_list =["routeMap"])
-    bgpfeature.config_bgp(dut, addr_family='ipv6', local_as=local_asn, neighbor=neighbor_ip, routeMap=routemap, diRection='out', config = 'yes', config_type_list =["routeMap"])
+    bgpfeature.config_bgp(dut, vrf_name=data.vrf_name[2], addr_family='ipv6', local_as=local_asn, neighbor=neighbor_ip, routeMap=routemap, diRection='in', config = 'yes', config_type_list =["routeMap"])
+    bgpfeature.config_bgp(dut, vrf_name=data.vrf_name[2], addr_family='ipv6', local_as=local_asn, neighbor=neighbor_ip, routeMap=routemap, diRection='out', config = 'yes', config_type_list =["routeMap"])
     return
 
 def create_v4_route(route_count):
@@ -304,7 +304,7 @@ def create_v6_route(route_count):
 
     #bgpfeature.create_bgp_router(dut, data.as_num, '')
     #bgpfeature.create_bgp_neighbor(dut, data.as_num, data.ip6_addr[0], data.remote_as_num, family="ipv6")
-    bgpfeature.config_bgp(dut = dut, router_id = '192.0.0.176', local_as=data.as_num,
+    bgpfeature.config_bgp(dut = dut, router_id = '192.0.0.176', local_as=data.as_num, addr_family ='ipv6',
                     neighbor=data.ip6_addr[0], remote_as=data.remote_as_num, vrf_name=data.vrf_name[2],
                     config_type_list =["neighbor", "activate"], config='yes', cli_type = "alicli")
     create_bgp_neighbor_route_map_config(dut, data.as_num, data.ip6_addr[0], data.routemap)

@@ -1357,7 +1357,10 @@ def test_read_all_bfd_counter():
         down_env2 = output2[i]['sessiondownev']
         tx_pps = (int(tx_counter2) - int(tx_counter1))/sample_time
         if output1[i]['peeraddress'] in ['11.18.100.1']:
-            rj_interval = 300
+            if 'eSR' == os.getenv('SPYTEST_PROJECT'):
+                rj_interval = 300
+            else:
+                rj_interval = interval
             if tx_pps > 2*(1000/rj_interval) or tx_pps < (1000/rj_interval)/2:
                 st.log("current bfd session {} tx pps:{}".format(output1[i]['peeraddress'], tx_pps))
                 err_tx_session += 1

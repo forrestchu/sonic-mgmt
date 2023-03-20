@@ -38,6 +38,19 @@
 -test:test_cli_routemap_set_extcommunity_soo
 -test:test_cli_routemap_match_local_preference
 -test:test_cli_routemap_match_extcommunity
+-test:test_cli_bgp_distance
+-test:test_cli_bgp_redistribute_vrf
+-test:test_cli_bgp_advertise_track_route
+-test:test_cli_bgp_advertise_delay
+-test:test_cli_bgp_redistribute
+-test:test_cli_network_non_connected
+-test:test_cli_route_map_vpn
+-test:test_cli_bgp_route_map_delay
+-test:test_cli_bgp_bestpath_aspath
+-test:test_cli_bgp_extcommunity_list
+-test:test_cli_bgp_network_import_check
+-test:test_cli_bgp_reflector_client
+-test:test_cli_bgp_maximum_paths
 
 #+args:--skip-init-config
 #+args:--skip-load-config base

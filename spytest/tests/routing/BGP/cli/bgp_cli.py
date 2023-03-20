@@ -11,8 +11,13 @@ CONFIG_VIEW = "configure terminal"
 ROUTE_BGP_VIEW = "router bgp {}"
 BGP_RID_CONFIG = "bgp router-id {}"
 
+IPV4_UNICAST_VIEW = "address-family ipv4 unicast"
+IPV6_UNICAST_VIEW = "address-family ipv6 unicast"
+
 BGP_COMMUNITY_LIST_CONFIG = "bgp community-list {} {} {}"
 BGP_ASPATH_ACCESS_LIST_CONFIG = "bgp as-path access-list {} {} {}"
+
+CMD_INTERVAL = 2
 
 class BGP_CLI():
 
@@ -62,7 +67,7 @@ class BGP_CLI():
 
     def flush_bgp_aspath_access_lists(self):
         st.log("Flush bgp as-path access-list")
-        
+
         for it in self.aspath_access_list:
             cmd = "{} -c '{}' -c 'no {}'".format(ALICLI_VIEW, CONFIG_VIEW, it)
             st.config(self.dut, cmd)
@@ -116,7 +121,7 @@ class BGP_CLI():
             af_cmd = "{} {} {}".format('address-family', af_pro, af_mod)
             cmd = "{} -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, self.router_view, af_cmd)
             st.config(self.dut, cmd)
-        
+
         activate = properties.get('activate', None)
         if activate is not None:
             act_cmd = "{} neighbor {} activate".format('no' if activate=='false' else '', peer)
@@ -127,7 +132,7 @@ class BGP_CLI():
             else:
                 cmd = "{} -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, self.router_view, act_cmd)
             st.config(self.dut, cmd)
-        
+
         ## bgp af-ip view
         remove_private_as = properties.get('remove_private_as', None)
         if remove_private_as is not None:
@@ -152,7 +157,7 @@ class BGP_CLI():
             if af is not None:
                 cmd = "{} -c '{}' -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, self.router_view, af_cmd, t_cmd)
                 st.config(self.dut, cmd)
-        
+
         bfd = properties.get('bfd', None)
         detect_multiplier = properties.get('detect_multiplier', None)
         tx_timer = properties.get('tx_timer', None)
@@ -167,7 +172,7 @@ class BGP_CLI():
 
     def flush_neighbors(self):
         st.log("Flush BGP neighbors")
-        
+
         for it in self.peers_v4:
             cmd = "{} -c '{}' -c '{}' -c 'no {}'".format(ALICLI_VIEW, CONFIG_VIEW, self.router_view, it)
             st.config(self.dut, cmd)
@@ -193,3 +198,231 @@ class BGP_CLI():
         st.reboot(self.dut)
         st.wait(5)
         st.log("finish reboot")
+
+    def config_distance(self, af_view, distance):
+        sub_cmd = "distance bgp {}".format(distance)
+        cmd = "{} -c '{}' -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, self.router_view, af_view, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
+    def no_config_distance(self, af_view):
+        sub_cmd = "no distance bgp"
+        cmd = "{} -c '{}' -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, self.router_view, af_view, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
+    def config_neighbor_activate(self, af_view, neighbor):
+        sub_cmd = "neighbor {} activate".format(neighbor)
+        cmd = "{} -c '{}' -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, self.router_view, af_view, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
+    def no_config_neighbor_activate(self, af_view, neighbor):
+        sub_cmd = "no neighbor {} activate".format(neighbor)
+        cmd = "{} -c '{}' -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, self.router_view, af_view, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
+    def config_redistribute_vrf(self, af_view, local_vrf, redi_vrf, route_map=None):
+        if route_map:
+            sub_cmd = "redistribute vrf {} route-map {}".format(redi_vrf, route_map)
+        else:
+            sub_cmd = "redistribute vrf {}".format(redi_vrf)
+        cmd = "{} -c '{}' -c '{} vrf {}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, self.router_view, local_vrf, af_view, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
+    def no_config_redistribute_vrf(self, af_view, local_vrf, redi_vrf):
+        sub_cmd = "no redistribute vrf {}".format(redi_vrf)
+        cmd = "{} -c '{}' -c '{} vrf {}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, self.router_view, local_vrf, af_view, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
+    def config_bgp_neighbor_advertise_track_route(self, af_view, neighbor, route_map, ip):
+        sub_cmd = "neighbor {} advertise-map {} track {}".format(neighbor, route_map, ip)
+        cmd = "{} -c '{}' -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, self.router_view, af_view, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
+    def no_config_bgp_neighbor_advertise_track_route(self, af_view, neighbor, route_map, ip):
+        sub_cmd = "no neighbor {} advertise-map {} track {}".format(neighbor, route_map, ip)
+        cmd = "{} -c '{}' -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, self.router_view, af_view, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
+    def config_bgp_advertise_delay(self, val):
+        sub_cmd = "bgp advertise-delay {}".format(val)
+        cmd = "{} -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
+    def no_config_bgp_advertise_delay(self):
+        sub_cmd = "no bgp advertise-delay"
+        cmd = "{} -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
+    def config_network_non_connected(self, af_view, network, route_map=None):
+        if route_map:
+            sub_cmd = "network {} route-map {} non-connected".format(network, route_map)
+        else:
+            sub_cmd = "network {} non-connected".format(network)
+        cmd = "{} -c '{}' -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, self.router_view, af_view, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
+    def no_config_network_non_connected(self, af_view, network):
+        sub_cmd = "no network {}".format(network)
+        cmd = "{} -c '{}' -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, self.router_view, af_view, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
+    def config_route_map_vpn_import(self, af_view, route_map):
+        sub_cmd = "route-map vpn import {}".format(route_map)
+        cmd = "{} -c '{}' -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, self.router_view, af_view, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
+    def no_config_route_map_vpn_import(self, af_view, route_map):
+        sub_cmd = "no route-map vpn import {}".format(route_map)
+        cmd = "{} -c '{}' -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, self.router_view, af_view, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
+    def config_route_map_vpn_export(self, af_view, route_map):
+        sub_cmd = "route-map vpn export {}".format(route_map)
+        cmd = "{} -c '{}' -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, self.router_view, af_view, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
+    def no_config_route_map_vpn_export(self, af_view, route_map):
+        sub_cmd = "no route-map vpn export {}".format(route_map)
+        cmd = "{} -c '{}' -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, self.router_view, af_view, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
+    def config_bgp_route_map_delay_timer(self, val):
+        sub_cmd = "bgp route-map delay-timer {}".format(val)
+        cmd = "{} -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
+    def no_config_bgp_route_map_delay_timer(self):
+        sub_cmd = "bgp route-map delay-timer 0"
+        cmd = "{} -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
+    def config_bgp_bestpath_aspath(self, val):      # val: confed, ignore or multipath-relax
+        sub_cmd = "bgp bestpath as-path {}".format(val)
+        cmd = "{} -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, self.router_view, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
+    def no_config_bgp_bestpath_aspath(self, val):
+        sub_cmd = "no bgp bestpath as-path {}".format(val)
+        cmd = "{} -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, self.router_view, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
+    def config_bgp_extcommunity_list_standard(self, name, action, expressions):
+        sub_cmd = "bgp extcommunity-list standard {} seq 20 {} {}".format(name, action, expressions)
+        cmd = "{} -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
+    def no_config_bgp_extcommunity_list_standard(self, name, action, expressions):
+        sub_cmd = "no bgp extcommunity-list standard {}".format(name)
+        cmd = "{} -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
+    def config_bgp_extcommunity_list_expanded(self, name, action, expressions):
+        sub_cmd = "bgp extcommunity-list expanded {} seq 20 {} {}".format(name, action, expressions)
+        cmd = "{} -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
+    def no_config_bgp_extcommunity_list_expanded(self, name, action, expressions):
+        sub_cmd = "no bgp extcommunity-list expanded {}".format(name)
+        cmd = "{} -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
+    def config_bgp_network_import_check(self):
+        sub_cmd = "bgp network import-check"
+        cmd = "{} -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, self.router_view, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
+    def no_config_bgp_network_import_check(self):
+        sub_cmd = "no bgp network import-check"
+        cmd = "{} -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, self.router_view, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
+    def config_bgp_maximum_paths(self, af_view, val):
+        sub_cmd = "maximum-paths ibgp {}".format(val)
+        cmd = "{} -c '{}' -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, self.router_view, af_view, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
+    def no_config_bgp_maximum_paths(self, af_view):
+        sub_cmd = "no maximum-paths ibgp"
+        cmd = "{} -c '{}' -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, self.router_view, af_view, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
+    def config_bgp_neighbor_route_reflector_client(self, af_view, neighbor):
+        sub_cmd = "neighbor {} route-reflector-client".format(neighbor)
+        cmd = "{} -c '{}' -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, self.router_view, af_view, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
+    def no_config_bgp_neighbor_route_reflector_client(self, af_view, neighbor):
+        sub_cmd = "no neighbor {} route-reflector-client".format(neighbor)
+        cmd = "{} -c '{}' -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, self.router_view, af_view, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
+    def config_bgp_redistribute_connected(self, af_view):
+        sub_cmd = "redistribute connected"
+        cmd = "{} -c '{}' -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, self.router_view, af_view, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
+    def no_config_bgp_redistribute_connected(self, af_view):
+        sub_cmd = "no redistribute connected"
+        cmd = "{} -c '{}' -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, self.router_view, af_view, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
+    def config_bgp_redistribute_static_route_map(self, af_view, route_map):
+        sub_cmd = "redistribute static route-map {}".format(route_map)
+        cmd = "{} -c '{}' -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, self.router_view, af_view, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
+    def no_config_bgp_redistribute_static(self, af_view):
+        sub_cmd = "no redistribute static"
+        cmd = "{} -c '{}' -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, self.router_view, af_view, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
+    def config_bgp_redistribute_kernel_metric(self, af_view, val):
+        sub_cmd = "redistribute kernel metric {}".format(val)
+        cmd = "{} -c '{}' -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, self.router_view, af_view, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
+    def no_config_bgp_redistribute_kernel(self, af_view):
+        sub_cmd = "no redistribute kernel"
+        cmd = "{} -c '{}' -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, self.router_view, af_view, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
+    def config_bgp_redistribute_static_route_map_with_metric(self, af_view, route_map, val):
+        sub_cmd = "redistribute static route-map {} metric {}".format(route_map, val)
+        cmd = "{} -c '{}' -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, self.router_view, af_view, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)

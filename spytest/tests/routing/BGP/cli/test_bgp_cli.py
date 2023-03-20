@@ -12,7 +12,7 @@ from bgp_cli import BGP_CLI
 # param
 param_data = SpyTestDict()
 
-# test data 
+# test data
 data = SpyTestDict()
 data.as_num = 100
 data.remote_as_num = 200
@@ -35,6 +35,9 @@ ALICLI_VIEW = "cli"
 CONFIG_VIEW = "configure terminal"
 ROUTE_BGP_VIEW = "router bgp {}"
 
+IPV4_UNICAST_VIEW = "address-family ipv4 unicast"
+IPV6_UNICAST_VIEW = "address-family ipv6 unicast"
+
 def get_single_dut():
     vars = st.get_testbed_vars()
     data['dut'] = vars.D1
@@ -44,9 +47,9 @@ def config_depend_cli():
     bgpcli_obj = data['bgpcli_obj']
     ## create router bgp as
     bgpcli_obj.create_bgp_route(data.as_num)
-    ### config bgp router id  
+    ### config bgp router id
     bgpcli_obj.config_bgp_router_id(data.router_id)
-    ### create bgp ipv4 neighbor 
+    ### create bgp ipv4 neighbor
     bgpcli_obj.create_neighbor_v4(data.ip4_addr[0], data.remote_as_num)
 
 def restore_env():
@@ -82,9 +85,9 @@ def cli_function_hooks(request):
     ########### function epilogue #################
     st.log("psot func config cli")
 
-## check config db 
+## check config db
 ## 如果checkfield 值等于checkval， 返回true， 不等返回false。 与expect比较
-## 预期checkfield不存在， checkval为字符串 'null' ，存在为false 
+## 预期checkfield不存在， checkval为字符串 'null' ，存在为false
 def configdb_checkpoint(dut, key, checkfield, checkval, expect = True, checkpoint = ''):
     command = redis.build(dut, redis.CONFIG_DB, 'hgetall "{}"'.format(key))
     output = st.show(dut, command)
@@ -94,16 +97,17 @@ def configdb_checkpoint(dut, key, checkfield, checkval, expect = True, checkpoin
     exist = False
     redis_cfg_exist_checkpoint = False if exist else True
     for i in range(len(output)):
+        st.log("======{}".format(output[i]))
         if output[i].get('donor_intf') == checkfield:
             exist = True
             if i+1 < len(output):
                 if output[i+1].get('donor_intf') == checkval:
                     redis_cfg_checkpoint = True
-            
+
     if checkval == 'null':
         redis_cfg_exist_checkpoint = False if exist else True
         if redis_cfg_exist_checkpoint != expect:
-            st.report_fail("{} confg DB has {} config".format(checkpoint, checkfield))  
+            st.report_fail("{} confg DB has {} config".format(checkpoint, checkfield))
     else:
         if redis_cfg_checkpoint != expect:
             st.report_fail("{} confg DB has no right {} config".format(checkpoint, checkfield))
@@ -141,9 +145,9 @@ def frr_config_checkpoint(obj, key, expect = True, checkpoint = ''):
         elif temp == 'true':
             checkflag = True
             break
-        else:       
+        else:
             checkflag = False
-            break     
+            break
 
     if checkflag != expect:
         st.report_fail("{} frr config has no {} config".format(checkpoint, key))
@@ -157,13 +161,13 @@ def test_cli_bgp_remove_private_as_v4():
 
     ### config cli ###
     st.log("config cli")
-    
+
     bgpcli_obj.config_neighbor(peer = peer_ip, address_family='true', activate='true', remove_private_as='true',
         af_pro='ipv4', af_modifier='unicast')
 
     ### check config db ###
     st.log("check config db")
-    
+
     ## hgetall BGP_NEIGHBOR|192.168.1.1|ipv4
     peerkey = "BGP_NEIGHBOR|{}|ipv4".format(peer_ip)
     configdb_checkpoint(dut, peerkey, 'remove_private_as', 'true', True, 'check1')
@@ -173,7 +177,7 @@ def test_cli_bgp_remove_private_as_v4():
     frr_key = "router bgp {}|address-family ipv4 unicast|neighbor {} remove-private-AS".format(bgpcli_obj.get_local_as() ,peer_ip)
     frr_config_checkpoint(bgpcli_obj, frr_key, True, 'check2')
 
-    ### reboot and check config recovery ### 
+    ### reboot and check config recovery ###
     st.log("reboot and check config recovery")
     ##bgpcli_obj.save_config_and_reboot()
 
@@ -211,7 +215,7 @@ def test_cli_bgp_ebgp_multihop_v4():
     frr_key = "router bgp {}|neighbor {} ebgp-multihop {}".format(bgpcli_obj.get_local_as() ,peer_ip, '255')
     frr_config_checkpoint(bgpcli_obj, frr_key, True, 'check2')
 
-    ### reboot and check config recovery ### 
+    ### reboot and check config recovery ###
     st.log("reboot and check config recovery")
     ##bgpcli_obj.save_config_and_reboot()
     configdb_checkpoint(dut, peerkey, 'ebgp_multihop', '255', True, 'check3')
@@ -234,13 +238,13 @@ def test_cli_bgp_send_community_v4():
 
     ### config cli ###
     st.log("config cli")
-    
+
     bgpcli_obj.config_neighbor(peer = peer_ip, address_family='true', activate='true', send_community='false',
         af_pro='ipv4', af_modifier='unicast')
 
     ### check config db ###
     st.log("check config db")
-    
+
     ## hgetall BGP_NEIGHBOR|192.168.1.1|ipv4
     peerkey = "BGP_NEIGHBOR|{}|ipv4".format(peer_ip)
     configdb_checkpoint(dut, peerkey, 'send_community', 'false', True, 'check1')
@@ -250,7 +254,7 @@ def test_cli_bgp_send_community_v4():
     frr_key = "router bgp {}|address-family ipv4 unicast|no neighbor {} send-community".format(bgpcli_obj.get_local_as() ,peer_ip)
     frr_config_checkpoint(bgpcli_obj, frr_key, True, 'check2')
 
-    ### reboot and check config recovery ### 
+    ### reboot and check config recovery ###
     st.log("reboot and check config recovery")
     ##bgpcli_obj.save_config_and_reboot()
 
@@ -277,13 +281,13 @@ def test_cli_bgp_next_hop_self_v4():
 
     ### config cli ###
     st.log("config cli")
-    
+
     bgpcli_obj.config_neighbor(peer = peer_ip, address_family='true', activate='true', next_hop_self='true',
         af_pro='ipv4', af_modifier='unicast')
 
     ### check config db ###
     st.log("check config db")
-    
+
     ## hgetall BGP_NEIGHBOR|192.168.1.1|ipv4
     peerkey = "BGP_NEIGHBOR|{}|ipv4".format(peer_ip)
     configdb_checkpoint(dut, peerkey, 'next_hop_self', 'true', True, 'check1')
@@ -293,7 +297,7 @@ def test_cli_bgp_next_hop_self_v4():
     frr_key = "router bgp {}|address-family ipv4 unicast|neighbor {} next-hop-self".format(bgpcli_obj.get_local_as() ,peer_ip)
     frr_config_checkpoint(bgpcli_obj, frr_key, True, 'check2')
 
-    ### reboot and check config recovery ### 
+    ### reboot and check config recovery ###
     st.log("reboot and check config recovery")
     ##bgpcli_obj.save_config_and_reboot()
 
@@ -319,19 +323,19 @@ def test_cli_bgp_bfd_v4():
 
     ### config cli ###
     st.log("config cli")
-    
+
     bgpcli_obj.config_neighbor(peer = peer_ip, bfd='true')
 
     ### check config db ###
     st.log("check config db")
-    
+
     ## hgetall BGP_NEIGHBOR|192.168.1.1|global
     peerkey = "BGP_NEIGHBOR|{}|global".format(peer_ip)
     configdb_checkpoint(dut, peerkey, 'bfd', 'true', True, 'check1')
 
     ### check frr running-config ##
     st.log("check frr running-config")
-    
+
     if 'eSR' == os.getenv('SPYTEST_PROJECT'):
         frr_key = "router bgp {}|neighbor {} bfd 3 300 300".format(bgpcli_obj.get_local_as() ,peer_ip)
     else:
@@ -339,7 +343,7 @@ def test_cli_bgp_bfd_v4():
 
     frr_config_checkpoint(bgpcli_obj, frr_key, True, 'check2')
 
-    ### reboot and check config recovery ### 
+    ### reboot and check config recovery ###
     st.log("reboot and check config recovery")
     ##bgpcli_obj.save_config_and_reboot()
 
@@ -363,12 +367,12 @@ def test_cli_bgp_bfd_with_param_v4():
 
     ### config cli ###
     st.log("config cli")
-    
+
     bgpcli_obj.config_neighbor(peer = peer_ip, bfd='true',detect_multiplier=3,tx_timer=300,rx_timer=200)
 
     ### check config db ###
     st.log("check config db")
-    
+
     ## hgetall BGP_NEIGHBOR|192.168.1.1|global
     peerkey = "BGP_NEIGHBOR|{}|global".format(peer_ip)
     configdb_checkpoint(dut, peerkey, 'bfd', 'true', True, 'check1-1')
@@ -381,7 +385,7 @@ def test_cli_bgp_bfd_with_param_v4():
     frr_key = "router bgp {}|neighbor {} bfd {} {} {}".format(bgpcli_obj.get_local_as() ,peer_ip, 3, 300, 200)
     frr_config_checkpoint(bgpcli_obj, frr_key, True, 'check2')
 
-    ### reboot and check config recovery ### 
+    ### reboot and check config recovery ###
     st.log("reboot and check config recovery")
     ##bgpcli_obj.save_config_and_reboot()
 
@@ -411,7 +415,7 @@ def test_cli_bgp_reboot_config_recover():
 
     ### config cli ###
     st.log("config cli")
-    
+
     bgpcli_obj.config_neighbor(peer = peer_ip, bfd='true',detect_multiplier=3,tx_timer=300,rx_timer=200)
     bgpcli_obj.config_neighbor(peer = peer_ip, address_family='true', activate='true', remove_private_as='true',
         af_pro='ipv4', af_modifier='unicast', next_hop_self='true', ebgp_multihop='true',send_community='false')
@@ -419,7 +423,7 @@ def test_cli_bgp_reboot_config_recover():
     ## hgetall BGP_NEIGHBOR|192.168.1.1|global
     peerkey = "BGP_NEIGHBOR|{}|global".format(peer_ip)
 
-    ### reboot and check config recovery ### 
+    ### reboot and check config recovery ###
     st.log("reboot and check config recovery")
     bgpcli_obj.save_config_and_reboot()
 
@@ -489,7 +493,7 @@ def test_cli_bgp_community_list_normal():
     for i in range(len(item)):
         ### config cli ###
         bgpcli_obj.config_bgp_community_list(item[i][0], item[i][1], item[i][2])
-        
+
         if 'eSR' == os.getenv('SPYTEST_PROJECT'):
             ### check config db ###
             peerkey = "COMMUNITY_LIST|{}|seq|{}".format(item[i][0], 10)
@@ -508,15 +512,15 @@ def test_cli_bgp_community_list_normal():
             if output[j].get('community_name_num') == item[i][0] and output[j].get('param_type') == item[i][1] and output[j].get('param_val') == item[i][2]:
                 result = True
                 break
-        
+
         if result == False:
             st.report_fail("check1-2: frr check failed: {} {} {}".format(item[i][0], item[i][1], item[i][2]))
-        
+
         if 'eSR' == os.getenv('SPYTEST_PROJECT'):
             bgpcli_obj.del_config_bgp_community_list(item[i][0], "", "")
         else:
             bgpcli_obj.del_config_bgp_community_list(item[i][0], item[i][1], item[i][2])
-    
+
     st.log("Step1 Finish")
 
     ##2: add all - check all - del all
@@ -540,25 +544,25 @@ def test_cli_bgp_community_list_normal():
             if output[j].get('community_name_num') == item[i][0] and output[j].get('param_type') == item[i][1] and output[j].get('param_val') == item[i][2]:
                 result = True
                 break
-        
+
         if result == False:
             st.report_fail("check2-2: frr check failed: {} {} {}".format(item[i][0], item[i][1], item[i][2]))
     if 'eSR' == os.getenv('SPYTEST_PROJECT'):
-        # flush 
+        # flush
         for i in ["50", "60", "150", "250"]:
             bgpcli_obj.del_config_bgp_community_list(i, "", "")
     else:
         bgpcli_obj.flush_bgp_community_list()
-    
+
     st.log("Step2 Finish")
 
-    ##3: add all - del all - check all 
+    ##3: add all - del all - check all
     for i in range(len(item)):
         ### config cli ###
         bgpcli_obj.config_bgp_community_list(item[i][0], item[i][1], item[i][2])
-    
+
     if 'eSR' == os.getenv('SPYTEST_PROJECT'):
-        # flush 
+        # flush
         for i in ["50", "60", "150", "250"]:
             bgpcli_obj.del_config_bgp_community_list(i, "", "")
     else:
@@ -572,7 +576,7 @@ def test_cli_bgp_community_list_normal():
         else:
             peerkey = "COMMUNITY_LIST|{}".format(item[i][0])
             configdb_checkpoint(dut, peerkey, item[i][3], item[i][2], False, 'check3-1')
-        
+
         ### check frr running-config ##
         output = st.show(dut, "show running-config bgpd", type='vtysh')
         st.log(output)
@@ -582,7 +586,7 @@ def test_cli_bgp_community_list_normal():
             if output[j].get('community_name_num') == item[i][0] and output[j].get('param_type') == item[i][1] and output[j].get('param_val') == item[i][2]:
                 result = True
                 break
-        
+
         if result == True:
             st.report_fail("check3-2: frr check failed: {} {} {}".format(item[i][0], item[i][1], item[i][2]))
 
@@ -611,7 +615,7 @@ def test_cli_bgp_community_list_standard():
     for i in range(len(item)):
         ### config cli ###
         bgpcli_obj.config_bgp_community_list(item[i][0], item[i][1], item[i][2])
-        
+
         ### check config db ###
         if 'eSR' == os.getenv('SPYTEST_PROJECT'):
             ### check config db ###
@@ -631,15 +635,15 @@ def test_cli_bgp_community_list_standard():
             if (output[j].get('community_name_std') == item[i][0].split()[1] or output[j].get('community_name_num') == item[i][0].split()[1]) and output[j].get('param_type') == item[i][1] and output[j].get('param_val') == item[i][2]:
                 result = True
                 break
-        
+
         if result == False:
             st.report_fail("check1-2: frr check failed: {} {} {}".format(item[i][0], item[i][1], item[i][2]))
-        
+
         if 'eSR' == os.getenv('SPYTEST_PROJECT'):
             bgpcli_obj.del_config_bgp_community_list(item[i][0], "", "")
         else:
             bgpcli_obj.del_config_bgp_community_list(item[i][0], item[i][1], item[i][2])
-    
+
     st.log("Step1 Finish")
 
     ##2: add all - check all - del all
@@ -664,26 +668,26 @@ def test_cli_bgp_community_list_standard():
             if (output[j].get('community_name_std') == item[i][0].split()[1] or output[j].get('community_name_num') == item[i][0].split()[1]) and output[j].get('param_type') == item[i][1] and output[j].get('param_val') == item[i][2]:
                 result = True
                 break
-        
+
         if result == False:
             st.report_fail("check2-2: frr check failed: {} {} {}".format(item[i][0], item[i][1], item[i][2]))
-    
+
     if 'eSR' == os.getenv('SPYTEST_PROJECT'):
-        # flush 
+        # flush
         for i in ["standard list1", "standard list2", "standard name1", "standard name2", "standard 999", "standard 23453"]:
             bgpcli_obj.del_config_bgp_community_list(i, "", "")
     else:
         bgpcli_obj.flush_bgp_community_list()
-    
+
     st.log("Step2 Finish")
 
-    ##3: add all - del all - check all 
+    ##3: add all - del all - check all
     for i in range(len(item)):
         ### config cli ###
         bgpcli_obj.config_bgp_community_list(item[i][0], item[i][1], item[i][2])
-    
+
     if 'eSR' == os.getenv('SPYTEST_PROJECT'):
-        # flush 
+        # flush
         for i in ["standard list1", "standard list2", "standard name1", "standard name2", "standard 999", "standard 23453"]:
             bgpcli_obj.del_config_bgp_community_list(i, "", "")
     else:
@@ -708,7 +712,7 @@ def test_cli_bgp_community_list_standard():
             if (output[j].get('community_name_std') == item[i][0] or output[j].get('community_name_num') == item[i][0].split()[1]) and output[j].get('param_type') == item[i][1] and output[j].get('param_val') == item[i][2]:
                 result = True
                 break
-        
+
         if result == True:
             st.report_fail("check3-2: frr check failed: {} {} {}".format(item[i][0], item[i][1], item[i][2]))
 
@@ -757,7 +761,7 @@ def test_cli_bgp_community_list_expanded():
             if (output[j].get('community_name_exp') == item[i][0].split()[1] or output[j].get('community_name_num') == item[i][0].split()[1]) and output[j].get('param_type') == item[i][1] and output[j].get('param_val') == item[i][2]:
                 result = True
                 break
-        
+
         if result == False:
             st.report_fail("check1-2: frr check failed: {} {} {}".format(item[i][0], item[i][1], item[i][2]))
 
@@ -765,7 +769,7 @@ def test_cli_bgp_community_list_expanded():
             bgpcli_obj.del_config_bgp_community_list(item[i][0], "", "")
         else:
             bgpcli_obj.del_config_bgp_community_list(item[i][0], item[i][1], item[i][2])
-    
+
     st.log("Step1 Finish")
 
     ##2: add all - check all - del all
@@ -790,26 +794,26 @@ def test_cli_bgp_community_list_expanded():
             if (output[j].get('community_name_exp') == item[i][0].split()[1] or output[j].get('community_name_num') == item[i][0].split()[1]) and output[j].get('param_type') == item[i][1] and output[j].get('param_val') == item[i][2]:
                 result = True
                 break
-        
+
         if result == False:
             st.report_fail("check2-2: frr check failed: {} {} {}".format(item[i][0], item[i][1], item[i][2]))
 
     if 'eSR' == os.getenv('SPYTEST_PROJECT'):
-        # flush 
+        # flush
         for i in ["expanded list1", "expanded list2", "expanded name1", "expanded name2", "expanded 999", "expanded 23453"]:
             bgpcli_obj.del_config_bgp_community_list(i, "", "")
     else:
         bgpcli_obj.flush_bgp_community_list()
-    
-    st.log("Step2 Finish")        
 
-    ##3: add all - del all - check all 
+    st.log("Step2 Finish")
+
+    ##3: add all - del all - check all
     for i in range(len(item)):
         ### config cli ###
         bgpcli_obj.config_bgp_community_list(item[i][0], item[i][1], item[i][2])
-    
+
     if 'eSR' == os.getenv('SPYTEST_PROJECT'):
-        # flush 
+        # flush
         for i in ["expanded list1", "expanded list2", "expanded name1", "expanded name2", "expanded 999", "expanded 23453"]:
             bgpcli_obj.del_config_bgp_community_list(i, "", "")
     else:
@@ -833,7 +837,7 @@ def test_cli_bgp_community_list_expanded():
             if (output[j].get('community_name_exp') == item[i][0] or output[j].get('community_name_num') == item[i][0].split()[1]) and output[j].get('param_type') == item[i][1] and output[j].get('param_val') == item[i][2]:
                 result = True
                 break
-        
+
         if result == True:
             st.report_fail("check3-2: frr check failed: {} {} {}".format(item[i][0], item[i][1], item[i][2]))
 
@@ -855,7 +859,7 @@ def test_cli_bgp_community_list_normal_array():
     for i in range(len(item)):
         ### config cli ###
         bgpcli_obj.config_bgp_community_list(item[i][0], item[i][1], item[i][2])
-        
+
         ### check config db ###
         peerkey = "COMMUNITY_LIST|{}".format(item[i][0])
         configdb_checkarray(dut, peerkey, item[i][3], item[i][2], True, 'check1-1')
@@ -869,10 +873,10 @@ def test_cli_bgp_community_list_normal_array():
             if output[j].get('community_name_num') == item[i][0] and output[j].get('param_type') == item[i][1] and output[j].get('param_val') == item[i][2]:
                 result = True
                 break
-        
+
         if result == False:
             st.report_fail("check1-2: frr check failed: {} {} {}".format(item[i][0], item[i][1], item[i][2]))
-        
+
         bgpcli_obj.del_config_bgp_community_list(item[i][0], item[i][1], item[i][2])
 
     ##2: add all - check all - del all
@@ -893,17 +897,17 @@ def test_cli_bgp_community_list_normal_array():
             if output[j].get('community_name_num') == item[i][0] and output[j].get('param_type') == item[i][1] and output[j].get('param_val') == item[i][2]:
                 result = True
                 break
-        
+
         if result == False:
             st.report_fail("check2-2: frr check failed: {} {} {}".format(item[i][0], item[i][1], item[i][2]))
-        
+
     bgpcli_obj.flush_bgp_community_list()
 
-    ##3: add all - del all - check all 
+    ##3: add all - del all - check all
     for i in range(len(item)):
         ### config cli ###
         bgpcli_obj.config_bgp_community_list(item[i][0], item[i][1], item[i][2])
-    
+
     bgpcli_obj.flush_bgp_community_list()
 
     for i in range(len(item)):
@@ -920,7 +924,7 @@ def test_cli_bgp_community_list_normal_array():
             if output[j].get('community_name_num') == item[i][0] and output[j].get('param_type') == item[i][1] and output[j].get('param_val') == item[i][2]:
                 result = True
                 break
-        
+
         if result == True:
             st.report_fail("check3-2: frr check failed: {} {} {}".format(item[i][0], item[i][1], item[i][2]))
 
@@ -943,7 +947,7 @@ def test_cli_bgp_aspath_access_list():
     for i in range(len(item)):
         ### config cli ###
         bgpcli_obj.config_bgp_aspath_access_list(item[i][0], item[i][1], item[i][2])
-        
+
         ### check config db ###
         peerkey = "ASPATH_ACCESS_LIST|{}".format(item[i][0])
         configdb_checkpoint(dut, peerkey, item[i][3], item[i][2], True, 'check1-1')
@@ -957,10 +961,10 @@ def test_cli_bgp_aspath_access_list():
             if output[j].get('access_list_name') == item[i][0] and output[j].get('param_type') == item[i][1] and output[j].get('param_val') == item[i][2]:
                 result = True
                 break
-        
+
         if result == False:
             st.report_fail("check1-2: frr check failed: {} {} {}".format(item[i][0], item[i][1], item[i][2]))
-        
+
         bgpcli_obj.del_config_bgp_aspath_access_list(item[i][0], item[i][1], item[i][2])
 
     ##2: add all - check all - del all
@@ -981,17 +985,17 @@ def test_cli_bgp_aspath_access_list():
             if output[j].get('access_list_name') == item[i][0] and output[j].get('param_type') == item[i][1] and output[j].get('param_val') == item[i][2]:
                 result = True
                 break
-        
+
         if result == False:
             st.report_fail("check2-2: frr check failed: {} {} {}".format(item[i][0], item[i][1], item[i][2]))
-        
+
     bgpcli_obj.flush_bgp_aspath_access_lists()
 
-    ##3: add all - del all - check all 
+    ##3: add all - del all - check all
     for i in range(len(item)):
         ### config cli ###
         bgpcli_obj.config_bgp_aspath_access_list(item[i][0], item[i][1], item[i][2])
-    
+
     bgpcli_obj.flush_bgp_aspath_access_lists()
 
     for i in range(len(item)):
@@ -1008,7 +1012,7 @@ def test_cli_bgp_aspath_access_list():
             if output[j].get('access_list_name') == item[i][0] and output[j].get('param_type') == item[i][1] and output[j].get('param_val') == item[i][2]:
                 result = True
                 break
-        
+
         if result == True:
             st.report_fail("check3-2: frr check failed: {} {} {}".format(item[i][0], item[i][1], item[i][2]))
 
@@ -1031,7 +1035,7 @@ def test_cli_bgp_aspath_access_list_array():
     for i in range(len(item)):
         ### config cli ###
         bgpcli_obj.config_bgp_aspath_access_list(item[i][0], item[i][1], item[i][2])
-        
+
         ### check config db ###
         peerkey = "ASPATH_ACCESS_LIST|{}".format(item[i][0])
         configdb_checkarray(dut, peerkey, item[i][3], item[i][2], True, 'check1-1')
@@ -1045,10 +1049,10 @@ def test_cli_bgp_aspath_access_list_array():
             if output[j].get('access_list_name') == item[i][0] and output[j].get('param_type') == item[i][1] and output[j].get('param_val') == item[i][2]:
                 result = True
                 break
-        
+
         if result == False:
             st.report_fail("check1-2: frr check failed: {} {} {}".format(item[i][0], item[i][1], item[i][2]))
-        
+
         bgpcli_obj.del_config_bgp_aspath_access_list(item[i][0], item[i][1], item[i][2])
 
     ##2: add all - check all - del all
@@ -1069,17 +1073,17 @@ def test_cli_bgp_aspath_access_list_array():
             if output[j].get('access_list_name') == item[i][0] and output[j].get('param_type') == item[i][1] and output[j].get('param_val') == item[i][2]:
                 result = True
                 break
-        
+
         if result == False:
             st.report_fail("check2-2: frr check failed: {} {} {}".format(item[i][0], item[i][1], item[i][2]))
-        
+
     bgpcli_obj.flush_bgp_aspath_access_lists()
 
-    ##3: add all - del all - check all 
+    ##3: add all - del all - check all
     for i in range(len(item)):
         ### config cli ###
         bgpcli_obj.config_bgp_aspath_access_list(item[i][0], item[i][1], item[i][2])
-    
+
     bgpcli_obj.flush_bgp_aspath_access_lists()
 
     for i in range(len(item)):
@@ -1096,7 +1100,7 @@ def test_cli_bgp_aspath_access_list_array():
             if output[j].get('access_list_name') == item[i][0] and output[j].get('param_type') == item[i][1] and output[j].get('param_val') == item[i][2]:
                 result = True
                 break
-        
+
         if result == True:
             st.report_fail("check3-2: frr check failed: {} {} {}".format(item[i][0], item[i][1], item[i][2]))
 
@@ -1257,32 +1261,32 @@ def test_cli_clear_bgp_vrf_command():
 
     cmd = "clear bgp vrf Default * in prefix-filter"
     out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
-    cli_exist_check(pattern, out, cmd) 
+    cli_exist_check(pattern, out, cmd)
 
     cmd = "clear bgp vrf Default * out"
     out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
-    cli_exist_check(pattern, out, cmd) 
+    cli_exist_check(pattern, out, cmd)
 
     cmd = "clear bgp vrf Default * soft"
     out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
-    cli_exist_check(pattern, out, cmd) 
+    cli_exist_check(pattern, out, cmd)
 
     cmd = "clear bgp vrf Default * soft in"
     out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
-    cli_exist_check(pattern, out, cmd) 
+    cli_exist_check(pattern, out, cmd)
 
     cmd = "clear bgp vrf Default * soft out"
     out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
-    cli_exist_check(pattern, out, cmd) 
+    cli_exist_check(pattern, out, cmd)
 
     st.log("clear bgp vrf peer-group cli test")
     cmd = "clear bgp vrf Default peer-group X1"
     out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
-    cli_exist_check(pattern, out, cmd)    
+    cli_exist_check(pattern, out, cmd)
 
     cmd = "clear bgp vrf Default peer-group X1 in"
     out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
-    cli_exist_check(pattern, out, cmd)   
+    cli_exist_check(pattern, out, cmd)
 
     cmd = "clear bgp vrf Default peer-group X1 in prefix-filter"
     out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
@@ -1308,19 +1312,19 @@ def test_cli_clear_bgp_vrf_command():
     st.log("clear bgp vrf peer cli test")
     cmd = "clear bgp vrf Default 100"
     out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
-    cli_exist_check(pattern, out, cmd)  
+    cli_exist_check(pattern, out, cmd)
 
     cmd = "clear bgp vrf Default 1.1.1.1  in"
     out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
-    cli_exist_check(pattern, out, cmd)  
+    cli_exist_check(pattern, out, cmd)
 
     cmd = "clear bgp vrf Default 2000::1  in prefix-filter"
     out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
-    cli_exist_check(pattern, out, cmd)  
+    cli_exist_check(pattern, out, cmd)
 
     cmd = "clear bgp vrf Default testpeer out"
     out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
-    cli_exist_check(pattern, out, cmd)    
+    cli_exist_check(pattern, out, cmd)
 
     cmd = "clear bgp vrf Default external soft"
     out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
@@ -1342,11 +1346,11 @@ def test_cli_clear_bgp_vrf_command():
 
     cmd = "clear bgp vrf Default ipv4 unicast 1.1.1.1  in"
     out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
-    cli_exist_check(pattern, out, cmd)  
+    cli_exist_check(pattern, out, cmd)
 
     cmd = "clear bgp vrf Default ipv6 unicast 2000::1  in prefix-filter"
     out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
-    cli_exist_check(pattern, out, cmd)  
+    cli_exist_check(pattern, out, cmd)
 
     cmd = "clear bgp vrf Default ipv6 unicast testpeer out"
     out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
@@ -1371,7 +1375,7 @@ def test_cli_clear_bgp_vrf_command():
 
     cmd = "clear bgp vrf Default ipv4 unicast peer-group X1  in"
     out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
-    cli_exist_check(pattern, out, cmd)   
+    cli_exist_check(pattern, out, cmd)
 
     cmd = "clear bgp vrf Default ipv4 unicast peer-group X1  in prefix-filter"
     out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
@@ -1404,7 +1408,7 @@ def test_cli_clear_bgp_vrf_command():
 
     cmd = "clear bgp vrf Default ipv4 unicast * in prefix-filter"
     out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
-    cli_exist_check(pattern, out, cmd) 
+    cli_exist_check(pattern, out, cmd)
 
     cmd = "clear bgp vrf Default ipv6 unicast * out"
     out = st.show(dut, cmd, type='alicli', skip_tmpl=True)
@@ -1423,3 +1427,435 @@ def test_cli_clear_bgp_vrf_command():
     cli_exist_check(pattern, out, cmd)
 
     st.report_pass("test_case_passed")
+
+
+@pytest.mark.bgp_cli
+def test_cli_bgp_distance():
+    st.log("test_cli_bgp_distance begin")
+    bgpcli_obj = data['bgpcli_obj']
+    dut = data['dut']
+
+    # case 1:
+    st.log("test sub case 1...")
+    bgpcli_obj.config_distance(IPV4_UNICAST_VIEW, "20 30 40")
+    key_configdb = "BGP_PARAMETERS|{}|{}".format(data["as_num"], "ipv4")
+    key_frr = "router bgp {}|{}|distance bgp {}".format(data["as_num"], IPV4_UNICAST_VIEW, "20 30 40")
+    configdb_checkpoint(dut, key_configdb, "bgp_distance", "20 30 40", True, "check1")
+    frr_config_checkpoint(bgpcli_obj, key_frr, True, "check2")
+
+    bgpcli_obj.no_config_distance(IPV4_UNICAST_VIEW)
+    configdb_checkpoint(dut, key_configdb, "bgp_distance", "null", True, "check3")
+    frr_config_checkpoint(bgpcli_obj, key_frr, False, "check4")
+
+    # case 2:
+    st.log("test sub case 2...")
+    bgpcli_obj.config_distance(IPV6_UNICAST_VIEW, "20 30 40")
+    key_configdb = "BGP_PARAMETERS|{}|{}".format(data["as_num"], "ipv6")
+    key_frr = "router bgp {}|{}|distance bgp {}".format(data["as_num"], IPV6_UNICAST_VIEW, "20 30 40")
+    configdb_checkpoint(dut, key_configdb, "bgp_distance", "20 30 40", True, "check1")
+    frr_config_checkpoint(bgpcli_obj, key_frr, True, "check2")
+
+    bgpcli_obj.no_config_distance(IPV6_UNICAST_VIEW)
+    configdb_checkpoint(dut, key_configdb, "bgp_distance", "null", True, "check3")
+    frr_config_checkpoint(bgpcli_obj, key_frr, False, "check4")
+
+    st.report_pass("test_case_passed")
+
+
+@pytest.mark.bgp_cli
+def test_cli_bgp_redistribute_vrf():
+    st.log("test_cli_bgp_redistribute_vrf begin")
+    bgpcli_obj = data['bgpcli_obj']
+    dut = data['dut']
+
+    # case 1:
+    st.log("test sub case 1...")
+    local_vrf = "Vrf1"
+    redistribute_vrf = "Vrf2"
+    bgpcli_obj.config_redistribute_vrf(IPV4_UNICAST_VIEW, local_vrf, redistribute_vrf)
+    key_configdb = "BGP_PARAMETERS|{}|{}|{}".format(data["as_num"], "ipv4", local_vrf)
+    key_frr = "router bgp {} vrf {}|{}|redistribute vrf {}".format(data["as_num"], local_vrf, IPV4_UNICAST_VIEW, redistribute_vrf)
+    configdb_checkpoint(dut, key_configdb, "redistribute_vrf@", redistribute_vrf, True, "check1")
+    frr_config_checkpoint(bgpcli_obj, key_frr, True, "check2")
+
+    bgpcli_obj.no_config_redistribute_vrf(IPV4_UNICAST_VIEW, local_vrf, redistribute_vrf)
+    configdb_checkpoint(dut, key_configdb, "redistribute_vrf@", "null", True, "check3")
+    frr_config_checkpoint(bgpcli_obj, key_frr, False, "check4")
+
+    st.report_pass("test_case_passed")
+
+
+@pytest.mark.bgp_cli
+def test_cli_bgp_advertise_track_route():
+    st.log("test_cli_bgp_advertise_track_route begin")
+    bgpcli_obj = data['bgpcli_obj']
+    dut = data['dut']
+
+    # case 1:
+    st.log("test sub case 1...")
+    bgpcli_obj.create_neighbor_v6(data.ip6_addr[0], data.remote_as_num)
+    bgpcli_obj.config_neighbor(peer = data.ip6_addr[0], address_family='true', activate='true', remove_private_as='true',
+        af_pro='ipv6', af_modifier='unicast')
+
+    bgpcli_obj.config_bgp_neighbor_advertise_track_route(IPV6_UNICAST_VIEW, data.ip6_addr[0], "test", "1::1")
+    key_configdb = "BGP_NEIGHBOR|{}|{}".format(data.ip6_addr[0], "ipv6")
+    key_frr = "router bgp {}|{}|neighbor {} advertise-map {} track {}".format(data["as_num"], IPV6_UNICAST_VIEW, data.ip6_addr[0], "test", "1::1")
+    configdb_checkpoint(dut, key_configdb, "advertise_track_route", "{}|{}".format("test", "1::1"), True, "check1")
+    frr_config_checkpoint(bgpcli_obj, key_frr, True, "check2")
+
+    bgpcli_obj.no_config_bgp_neighbor_advertise_track_route(IPV6_UNICAST_VIEW, data.ip6_addr[0], "test", "1::1")
+    configdb_checkpoint(dut, key_configdb, "advertise_track_route", "null", True, "check3")
+    frr_config_checkpoint(bgpcli_obj, key_frr, False, "check4")
+
+    st.report_pass("test_case_passed")
+
+
+@pytest.mark.bgp_cli
+def test_cli_bgp_advertise_delay():
+    st.log("test_cli_bgp_advertise_delay begin")
+    bgpcli_obj = data['bgpcli_obj']
+    dut = data['dut']
+
+    # case 1:
+    st.log("test sub case 1...")
+    bgpcli_obj.config_bgp_advertise_delay(300)
+    key_configdb = "BGP_GLOBAL_PARAMETERS|advertise_delay"
+    key_frr = "bgp advertise-delay {}".format(300)
+    configdb_checkpoint(dut, key_configdb, "delay_timer", "300", True, "check1")
+    frr_config_checkpoint(bgpcli_obj, key_frr, True, "check2")
+
+    bgpcli_obj.no_config_bgp_advertise_delay()
+    configdb_checkpoint(dut, key_configdb, "delay_timer", "0", True, "check3")
+    frr_config_checkpoint(bgpcli_obj, key_frr, False, "check4")
+
+    st.report_pass("test_case_passed")
+
+
+@pytest.mark.bgp_cli
+def test_cli_bgp_redistribute():
+    st.log("test_cli_bgp_redistribute begin")
+    bgpcli_obj = data['bgpcli_obj']
+    dut = data['dut']
+
+    # case 1:
+    st.log("test sub case 1...")
+    bgpcli_obj.config_bgp_redistribute_connected(IPV4_UNICAST_VIEW)
+    key_configdb = "BGP_REDIST|connected|ipv4"
+    key_frr = "router bgp {}|{}|redistribute connected".format(data["as_num"], IPV4_UNICAST_VIEW)
+    configdb_checkpoint(dut, key_configdb, "NULL", "NULL", True, "check1")
+    frr_config_checkpoint(bgpcli_obj, key_frr, True, "check2")
+
+    bgpcli_obj.no_config_bgp_redistribute_connected(IPV4_UNICAST_VIEW)
+    configdb_checkpoint(dut, key_configdb, "NULL", "null", True, "check3")
+    frr_config_checkpoint(bgpcli_obj, key_frr, False, "check4")
+
+    # case 2:
+    st.log("test sub case 2...")
+    bgpcli_obj.config_bgp_redistribute_static_route_map(IPV4_UNICAST_VIEW, "test")
+    key_configdb = "BGP_REDIST|static|ipv4"
+    key_frr = "router bgp {}|{}|redistribute static route-map {}".format(data["as_num"], IPV4_UNICAST_VIEW, "test")
+    configdb_checkpoint(dut, key_configdb, "route_map", "test", True, "check1")
+    frr_config_checkpoint(bgpcli_obj, key_frr, True, "check2")
+
+    bgpcli_obj.no_config_bgp_redistribute_static(IPV4_UNICAST_VIEW)
+    configdb_checkpoint(dut, key_configdb, "route_map", "null", True, "check3")
+    frr_config_checkpoint(bgpcli_obj, key_frr, False, "check4")
+
+    # case 3:
+    st.log("test sub case 3...")
+    bgpcli_obj.config_bgp_redistribute_kernel_metric(IPV4_UNICAST_VIEW, 10)
+    key_configdb = "BGP_REDIST|kernel|ipv4"
+    key_frr = "router bgp {}|{}|redistribute kernel metric {}".format(data["as_num"], IPV4_UNICAST_VIEW, 10)
+    configdb_checkpoint(dut, key_configdb, "metric", "10", True, "check1")
+    frr_config_checkpoint(bgpcli_obj, key_frr, True, "check2")
+
+    bgpcli_obj.no_config_bgp_redistribute_kernel(IPV4_UNICAST_VIEW)
+    configdb_checkpoint(dut, key_configdb, "metric", "null", True, "check3")
+    frr_config_checkpoint(bgpcli_obj, key_frr, False, "check4")
+
+    # case 4:
+    st.log("test sub case 4...")
+    bgpcli_obj.config_bgp_redistribute_static_route_map_with_metric(IPV6_UNICAST_VIEW, "test", 10)
+    key_configdb = "BGP_REDIST|static|ipv6"
+    key_frr = "router bgp {}|{}|redistribute static metric {} route-map {}".format(data["as_num"], IPV6_UNICAST_VIEW, 10, "test")
+    configdb_checkpoint(dut, key_configdb, "route_map", "test", True, "check1")
+    configdb_checkpoint(dut, key_configdb, "metric", "10", True, "check1")
+    frr_config_checkpoint(bgpcli_obj, key_frr, True, "check2")
+
+    bgpcli_obj.no_config_bgp_redistribute_static(IPV6_UNICAST_VIEW)
+    configdb_checkpoint(dut, key_configdb, "route_map", "null", True, "check3")
+    frr_config_checkpoint(bgpcli_obj, key_frr, False, "check4")
+
+    st.report_pass("test_case_passed")
+
+
+@pytest.mark.bgp_cli
+def test_cli_network_non_connected():
+    st.log("test_cli_network_non_connected begin")
+    bgpcli_obj = data['bgpcli_obj']
+    dut = data['dut']
+
+    # case 1:
+    st.log("test sub case 1...")
+    bgpcli_obj.config_network_non_connected(IPV4_UNICAST_VIEW, "1.1.1.0/24")
+    key_configdb = "BGP_NETWORK|{}|ipv4".format("1.1.1.0/24")
+    key_frr = "router bgp {}|{}|network {} nonconnected".format(data["as_num"], IPV4_UNICAST_VIEW, "1.1.1.0/24")
+    configdb_checkpoint(dut, key_configdb, "type", "non-connected", True, "check1")
+    frr_config_checkpoint(bgpcli_obj, key_frr, True, "check2")
+
+    bgpcli_obj.no_config_network_non_connected(IPV4_UNICAST_VIEW, "1.1.1.0/24")
+    configdb_checkpoint(dut, key_configdb, "type", "null", True, "check3")
+    frr_config_checkpoint(bgpcli_obj, key_frr, False, "check4")
+
+    # case 2:
+    st.log("test sub case 2...")
+    bgpcli_obj.config_network_non_connected(IPV6_UNICAST_VIEW, "2000::/64")
+    key_configdb = "BGP_NETWORK|{}|ipv6".format("2000::/64")
+    key_frr = "router bgp {}|{}|network {} nonconnected".format(data["as_num"], IPV6_UNICAST_VIEW, "2000::/64")
+    configdb_checkpoint(dut, key_configdb, "type", "non-connected", True, "check1")
+    frr_config_checkpoint(bgpcli_obj, key_frr, True, "check2")
+
+    bgpcli_obj.no_config_network_non_connected(IPV6_UNICAST_VIEW, "2000::/64")
+    configdb_checkpoint(dut, key_configdb, "type", "null", True, "check3")
+    frr_config_checkpoint(bgpcli_obj, key_frr, False, "check4")
+
+    # case 3:
+    st.log("test sub case 3...")
+    bgpcli_obj.config_network_non_connected(IPV6_UNICAST_VIEW, "2000::/64", "test")
+    key_configdb = "BGP_NETWORK|{}|ipv6".format("2000::/64")
+    key_frr = "router bgp {}|{}|network {} route-map {} nonconnected".format(data["as_num"], IPV6_UNICAST_VIEW, "2000::/64", "test")
+    configdb_checkpoint(dut, key_configdb, "type", "non-connected", True, "check1")
+    configdb_checkpoint(dut, key_configdb, "route_map", "test", True, "check1")
+    frr_config_checkpoint(bgpcli_obj, key_frr, True, "check2")
+
+    bgpcli_obj.no_config_network_non_connected(IPV6_UNICAST_VIEW, "2000::/64")
+    configdb_checkpoint(dut, key_configdb, "type", "null", True, "check3")
+    frr_config_checkpoint(bgpcli_obj, key_frr, False, "check4")
+
+    st.report_pass("test_case_passed")
+
+
+@pytest.mark.bgp_cli
+def test_cli_route_map_vpn():
+    st.log("test_cli_route_map_vpn begin")
+    bgpcli_obj = data['bgpcli_obj']
+    dut = data['dut']
+
+    # case 1:
+    st.log("test sub case 1...")
+    bgpcli_obj.config_route_map_vpn_import(IPV4_UNICAST_VIEW, "aa")
+    key_configdb = "BGP_PARAMETERS|{}|ipv4".format(data["as_num"])
+    key_frr = "router bgp {}|{}|route-map vpn import {}".format(data["as_num"], IPV4_UNICAST_VIEW, "aa")
+    configdb_checkpoint(dut, key_configdb, "route_map_vpn_import", "aa", True, "check1")
+    frr_config_checkpoint(bgpcli_obj, key_frr, True, "check2")
+
+    bgpcli_obj.no_config_route_map_vpn_import(IPV4_UNICAST_VIEW, "aa")
+    configdb_checkpoint(dut, key_configdb, "route_map_vpn_import", "null", True, "check3")
+    frr_config_checkpoint(bgpcli_obj, key_frr, False, "check4")
+
+    # case 2:
+    st.log("test sub case 2...")
+    bgpcli_obj.config_route_map_vpn_export(IPV4_UNICAST_VIEW, "aa")
+    key_configdb = "BGP_PARAMETERS|{}|ipv4".format(data["as_num"])
+    key_frr = "router bgp {}|{}|route-map vpn export {}".format(data["as_num"], IPV4_UNICAST_VIEW, "aa")
+    configdb_checkpoint(dut, key_configdb, "route_map_vpn_export", "aa", True, "check1")
+    frr_config_checkpoint(bgpcli_obj, key_frr, True, "check2")
+
+    bgpcli_obj.no_config_route_map_vpn_export(IPV4_UNICAST_VIEW, "aa")
+    configdb_checkpoint(dut, key_configdb, "route_map_vpn_export", "null", True, "check3")
+    frr_config_checkpoint(bgpcli_obj, key_frr, False, "check4")
+
+    # case 3:
+    st.log("test sub case 3...")
+    bgpcli_obj.config_route_map_vpn_import(IPV6_UNICAST_VIEW, "aa")
+    key_configdb = "BGP_PARAMETERS|{}|ipv6".format(data["as_num"])
+    key_frr = "router bgp {}|{}|route-map vpn import {}".format(data["as_num"], IPV6_UNICAST_VIEW, "aa")
+    configdb_checkpoint(dut, key_configdb, "route_map_vpn_import", "aa", True, "check1")
+    frr_config_checkpoint(bgpcli_obj, key_frr, True, "check2")
+
+    bgpcli_obj.no_config_route_map_vpn_import(IPV6_UNICAST_VIEW, "aa")
+    configdb_checkpoint(dut, key_configdb, "route_map_vpn_import", "null", True, "check3")
+    frr_config_checkpoint(bgpcli_obj, key_frr, False, "check4")
+
+    # case 4:
+    st.log("test sub case 4...")
+    bgpcli_obj.config_route_map_vpn_export(IPV6_UNICAST_VIEW, "aa")
+    key_configdb = "BGP_PARAMETERS|{}|ipv6".format(data["as_num"])
+    key_frr = "router bgp {}|{}|route-map vpn export {}".format(data["as_num"], IPV6_UNICAST_VIEW, "aa")
+    configdb_checkpoint(dut, key_configdb, "route_map_vpn_export", "aa", True, "check1")
+    frr_config_checkpoint(bgpcli_obj, key_frr, True, "check2")
+
+    bgpcli_obj.no_config_route_map_vpn_export(IPV6_UNICAST_VIEW, "aa")
+    configdb_checkpoint(dut, key_configdb, "route_map_vpn_export", "null", True, "check3")
+    frr_config_checkpoint(bgpcli_obj, key_frr, False, "check4")
+
+    st.report_pass("test_case_passed")
+
+
+@pytest.mark.bgp_cli
+def test_cli_bgp_route_map_delay():
+    st.log("test_cli_bgp_route_map_delay begin")
+    bgpcli_obj = data['bgpcli_obj']
+    dut = data['dut']
+
+    # case 1:
+    st.log("test sub case 1...")
+    bgpcli_obj.config_bgp_route_map_delay_timer("300")
+    key_configdb = "BGP_GLOBAL_PARAMETERS|route_map_delay"
+    key_frr = "bgp route-map delay-timer {}".format("300")
+    configdb_checkpoint(dut, key_configdb, "delay_time", "300", True, "check1")
+    frr_config_checkpoint(bgpcli_obj, key_frr, True, "check2")
+
+    bgpcli_obj.no_config_bgp_route_map_delay_timer()
+    configdb_checkpoint(dut, key_configdb, "delay_time", "0", True, "check3")
+    frr_config_checkpoint(bgpcli_obj, key_frr, False, "check4")
+
+    st.report_pass("test_case_passed")
+
+
+@pytest.mark.bgp_cli
+def test_cli_bgp_bestpath_aspath():
+    st.log("test_cli_bgp_bestpath_aspath begin")
+    bgpcli_obj = data['bgpcli_obj']
+    dut = data['dut']
+
+    # case 1:
+    st.log("test sub case 1...")
+    bgpcli_obj.config_bgp_bestpath_aspath("confed")
+    key_configdb = "BGP_PARAMETERS|{}|global".format(data["as_num"])
+    key_frr = "router bgp {}|bgp bestpath as-path confed".format(data["as_num"])
+    configdb_checkpoint(dut, key_configdb, "bgp_bestpath_aspath_confed", "true")
+    frr_config_checkpoint(bgpcli_obj, key_frr, True, "check2")
+
+    bgpcli_obj.no_config_bgp_bestpath_aspath("confed")
+    configdb_checkpoint(dut, key_configdb, "bgp_bestpath_aspath_confed", "false", True, "check3")
+    frr_config_checkpoint(bgpcli_obj, key_frr, False, "check4")
+
+    # case 2:
+    st.log("test sub case 2...")
+    bgpcli_obj.config_bgp_bestpath_aspath("ignore")
+    key_configdb = "BGP_PARAMETERS|{}|global".format(data["as_num"])
+    key_frr = "router bgp {}|bgp bestpath as-path ignore".format(data["as_num"])
+    configdb_checkpoint(dut, key_configdb, "bgp_bestpath_aspath_ignore", "true")
+    frr_config_checkpoint(bgpcli_obj, key_frr, True, "check2")
+
+    bgpcli_obj.no_config_bgp_bestpath_aspath("ignore")
+    configdb_checkpoint(dut, key_configdb, "bgp_bestpath_aspath_ignore", "false", True, "check3")
+    frr_config_checkpoint(bgpcli_obj, key_frr, False, "check4")
+
+    # case 3:
+    st.log("test sub case 3...")
+    bgpcli_obj.config_bgp_bestpath_aspath("multipath-relax")
+    key_configdb = "BGP_PARAMETERS|{}|global".format(data["as_num"])
+    key_frr = "router bgp {}|bgp bestpath as-path multipath-relax".format(data["as_num"])
+    configdb_checkpoint(dut, key_configdb, "bgp_bestpath_aspath_multipath_relax", "true")
+    frr_config_checkpoint(bgpcli_obj, key_frr, True, "check2")
+
+    bgpcli_obj.no_config_bgp_bestpath_aspath("multipath-relax")
+    configdb_checkpoint(dut, key_configdb, "bgp_bestpath_aspath_multipath_relax", "false", True, "check3")
+    frr_config_checkpoint(bgpcli_obj, key_frr, False, "check4")
+
+    st.report_pass("test_case_passed")
+
+
+@pytest.mark.bgp_cli
+def test_cli_bgp_extcommunity_list():
+    st.log("test_cli_bgp_extcommunity_list begin")
+    bgpcli_obj = data['bgpcli_obj']
+    dut = data['dut']
+
+    # case 1:
+    st.log("test sub case 1...")
+    bgpcli_obj.config_bgp_extcommunity_list_standard("aa", "permit", "rt 11:11")
+    key_configdb = "EXTCOMMUNITY_LIST|standard|{}|seq|20".format("aa")
+    key_frr = "bgp extcommunity-list standard {} seq 20 {} {}".format("aa", "permit", "rt 11:11")
+    configdb_checkpoint(dut, key_configdb, "permit", "rt 11:11", True, "check1")
+    frr_config_checkpoint(bgpcli_obj, key_frr, True, "check2")
+
+    bgpcli_obj.no_config_bgp_extcommunity_list_standard("aa", "permit", "11:11")
+    configdb_checkpoint(dut, key_configdb, "permit", "null", True, "check3")
+    frr_config_checkpoint(bgpcli_obj, key_frr, False, "check4")
+
+    # case 2:
+    st.log("test sub case 2...")
+    bgpcli_obj.config_bgp_extcommunity_list_expanded("aa", "permit", "rt 11:11")
+    key_configdb = "EXTCOMMUNITY_LIST|expanded|{}|seq|20".format("aa")
+    key_frr = "bgp extcommunity-list expanded {} seq 20 {} {}".format("aa", "permit", "rt 11:11")
+    configdb_checkpoint(dut, key_configdb, "permit", "rt 11:11", True, "check1")
+    frr_config_checkpoint(bgpcli_obj, key_frr, True, "check2")
+
+    bgpcli_obj.no_config_bgp_extcommunity_list_expanded("aa", "permit", "rt 11:11")
+    configdb_checkpoint(dut, key_configdb, "permit", "null", True, "check3")
+    frr_config_checkpoint(bgpcli_obj, key_frr, False, "check4")
+
+    st.report_pass("test_case_passed")
+
+
+@pytest.mark.bgp_cli
+def test_cli_bgp_network_import_check():
+    st.log("test_cli_bgp_network_import_check begin")
+    bgpcli_obj = data['bgpcli_obj']
+    dut = data['dut']
+
+    # case 1:
+    st.log("test sub case 1...")
+    bgpcli_obj.no_config_bgp_network_import_check()
+    key_configdb = "BGP_PARAMETERS|{}|global".format(data["as_num"])
+    key_frr = "router bgp {}|bgp network import-check".format(data["as_num"])
+    configdb_checkpoint(dut, key_configdb, "bgp_network_import_check", "false", True, "check1")
+    frr_config_checkpoint(bgpcli_obj, key_frr, False, "check2")
+
+    bgpcli_obj.config_bgp_network_import_check()
+    configdb_checkpoint(dut, key_configdb, "bgp_network_import_check", "true", True, "check3")
+    # frr_config_checkpoint(bgpcli_obj, key_frr, True, "check4")
+
+    st.report_pass("test_case_passed")
+
+
+@pytest.mark.bgp_cli
+def test_cli_bgp_reflector_client():
+    st.log("test_cli_bgp_reflector_client begin")
+    bgpcli_obj = data['bgpcli_obj']
+    dut = data['dut']
+
+    # case 1:
+    st.log("test sub case 1...")
+
+    # create ibgp neighbor
+    bgpcli_obj.create_neighbor_v4(data.ip4_addr[1], data["as_num"])
+    bgpcli_obj.config_neighbor_activate(IPV4_UNICAST_VIEW, data.ip4_addr[1])
+    bgpcli_obj.config_bgp_neighbor_route_reflector_client(IPV4_UNICAST_VIEW, data.ip4_addr[1])
+    key_configdb = "BGP_NEIGHBOR|{}|ipv4".format(data.ip4_addr[1])
+    key_frr = "router bgp {}|{}|neighbor {} route-reflector-client".format(data["as_num"], IPV4_UNICAST_VIEW, data.ip4_addr[1])
+    configdb_checkpoint(dut, key_configdb, "rr_client", "true", True, "check1")
+    frr_config_checkpoint(bgpcli_obj, key_frr, True, "check2")
+
+    bgpcli_obj.no_config_bgp_neighbor_route_reflector_client(IPV4_UNICAST_VIEW, data.ip4_addr[1])
+    configdb_checkpoint(dut, key_configdb, "rr_client", "null", True, "check3")
+    frr_config_checkpoint(bgpcli_obj, key_frr, False, "check4")
+
+    st.report_pass("test_case_passed")
+
+
+@pytest.mark.bgp_cli
+def test_cli_bgp_maximum_paths():
+    st.log("test_cli_bgp_maximum_paths begin")
+    bgpcli_obj = data['bgpcli_obj']
+    dut = data['dut']
+
+    # case 1:
+    st.log("test sub case 1...")
+
+    bgpcli_obj.config_bgp_maximum_paths(IPV4_UNICAST_VIEW, 10)
+    key_configdb = "BGP_PARAMETERS|{}|ipv4".format(data["as_num"])
+    key_frr = "router bgp {}|{}|maximum-paths ibgp {}".format(data["as_num"], IPV4_UNICAST_VIEW, 10)
+    configdb_checkpoint(dut, key_configdb, "bgp_maximum_paths_ibgp", "10", True, "check1")
+    frr_config_checkpoint(bgpcli_obj, key_frr, True, "check2")
+
+    bgpcli_obj.no_config_bgp_maximum_paths(IPV4_UNICAST_VIEW)
+    configdb_checkpoint(dut, key_configdb, "bgp_maximum_paths_ibgp", "null", True, "check3")
+    frr_config_checkpoint(bgpcli_obj, key_frr, False, "check4")
+
+    st.report_pass("test_case_passed")
+
+

@@ -330,6 +330,9 @@ def cos_func_hooks(request):
     # add things at the start every test case
     if st.get_func_name(request) == 'test_ft_cos_bypass_pkt_verify':
         cos_bypass_streams_config()
+    elif st.get_func_name(request) == 'test_ft_cos_cpu_counters':
+        # When system reboot,  after all ports are created, it needs some time to install copp rule
+        st.wait(60)
     yield
     if st.get_func_name(request) == 'test_ft_cos_cpu_counters' or st.get_func_name(request) == 'test_ft_cos_set_copp_rate':
         ip_obj.delete_ip_interface(vars.D1, vars.D1T1P1, data.ipv6_address, data.ipv6_subnet, family="ipv6")

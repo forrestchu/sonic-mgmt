@@ -6002,5 +6002,19 @@
         "PUBLIC_TC1": {}, 
         "PUBLIC_TC2": {}, 
         "PUBLIC_TC3": {}
+    },
+    "MGMT_INTERFACE": {
+        "eth0|21.135.163.59/26": {
+            "gwaddr": "21.135.163.62"
+        }
+    },
+    "DEVICE_METADATA": {
+        "localhost": {
+            "asic": "cisco", 
+            "docker_routing_config_mode": "separated", 
+            "hostname": "MC-59", 
+            "port_form": "64x100G+32x200G+4x10G", 
+            "type": "MetroCoreRouter"
+        }
     }
 }

@@ -2975,6 +2975,7 @@ Q200,Q200,CLI,test_cli_bgp_extcommunity_list,test_cli_bgp_extcommunity_list
 Q200,Q200,CLI,test_cli_bgp_network_import_check,test_cli_bgp_network_import_check
 Q200,Q200,CLI,test_cli_bgp_reflector_client,test_cli_bgp_reflector_client
 Q200,Q200,CLI,test_cli_bgp_maximum_paths,test_cli_bgp_maximum_paths
+Q200,Q200,CLI,test_cli_ip_nht_bgp_route_map,test_cli_ip_nht_bgp_route_map
 Q200,Q200,ACL,ft_acl_ipv4,test_ft_acl_ipv4
 Q200,Q200,ACL,test_ft_acl_ipv6,test_ft_acl_ipv6
 Q200,Q200,ACL,test_ft_acl_capacity,test_ft_acl_capacity

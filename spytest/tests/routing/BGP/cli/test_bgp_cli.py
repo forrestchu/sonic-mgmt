@@ -152,6 +152,28 @@ def frr_config_checkpoint(obj, key, expect = True, checkpoint = ''):
     if checkflag != expect:
         st.report_fail("{} frr config has no {} config".format(checkpoint, key))
 
+
+def zebra_config_checkpoint(obj, key, expect = True, checkpoint = ''):
+    output_bgpd = obj.show_frr_running()
+    st.log(output_bgpd)
+    checkflag = True
+    temp = output_bgpd
+    for sub_key in key.split('|'):
+        temp = temp.get(sub_key)
+        st.log("subkey {} , val {}".format(sub_key, temp))
+        if isinstance(temp,dict):
+            continue
+        elif temp == 'true':
+            checkflag = True
+            break
+        else:
+            checkflag = False
+            break
+
+    if checkflag != expect:
+        st.report_fail("{} frr config has no {} config".format(checkpoint, key))
+
+
 @pytest.mark.bgp_cli
 def test_cli_bgp_remove_private_as_v4():
     st.log("test_cli_bgp_remove_private_as_v4 begin")
@@ -1855,6 +1877,39 @@ def test_cli_bgp_maximum_paths():
     bgpcli_obj.no_config_bgp_maximum_paths(IPV4_UNICAST_VIEW)
     configdb_checkpoint(dut, key_configdb, "bgp_maximum_paths_ibgp", "null", True, "check3")
     frr_config_checkpoint(bgpcli_obj, key_frr, False, "check4")
+
+    st.report_pass("test_case_passed")
+
+
+@pytest.mark.bgp_cli
+def test_cli_ip_nht_bgp_route_map():
+    st.log("test_cli_ip_nht_bgp_route_map begin")
+    bgpcli_obj = data['bgpcli_obj']
+    dut = data['dut']
+
+    # case 1:
+    st.log("test sub case 1...")
+    bgpcli_obj.config_ip_nht_bgp_route_map(IPV4_UNICAST_VIEW, "test")
+    key_configdb = "ZEBRA_PARAMETERS|ip"
+    key_frr = "ip nht bgp route-map {}".format("test")
+    configdb_checkpoint(dut, key_configdb, "nht@", "bgp|{}".format("test"), True, "check1")
+    zebra_config_checkpoint(bgpcli_obj, key_frr, True, "check2")
+
+    bgpcli_obj.no_config_ip_nht_bgp_route_map(IPV4_UNICAST_VIEW, "test")
+    configdb_checkpoint(dut, key_configdb, "nht@", "null", True, "check3")
+    zebra_config_checkpoint(bgpcli_obj, key_frr, False, "check4")
+
+    # case 2:
+    st.log("test sub case 2...")
+    bgpcli_obj.config_ip_nht_bgp_route_map(IPV6_UNICAST_VIEW, "test")
+    key_configdb = "ZEBRA_PARAMETERS|ipv6"
+    key_frr = "ipv6 nht bgp route-map {}".format("test")
+    configdb_checkpoint(dut, key_configdb, "nht@", "bgp|{}".format("test"), True, "check1")
+    zebra_config_checkpoint(bgpcli_obj, key_frr, True, "check2")
+
+    bgpcli_obj.no_config_ip_nht_bgp_route_map(IPV6_UNICAST_VIEW, "test")
+    configdb_checkpoint(dut, key_configdb, "nht@", "null", True, "check3")
+    zebra_config_checkpoint(bgpcli_obj, key_frr, False, "check4")
 
     st.report_pass("test_case_passed")
 

@@ -51,6 +51,7 @@
 -test:test_cli_bgp_network_import_check
 -test:test_cli_bgp_reflector_client
 -test:test_cli_bgp_maximum_paths
+-test:test_cli_ip_nht_bgp_route_map
 
 #+args:--skip-init-config
 #+args:--skip-load-config base

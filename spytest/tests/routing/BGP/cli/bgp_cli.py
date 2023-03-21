@@ -190,6 +190,16 @@ class BGP_CLI():
         output_json = json.loads(json_str)
         return output_json
 
+    def show_frr_running(self):
+        cmd = "vtysh -c 'show running-config json'"
+        #output = st.show(self.dut, cmd)
+        output = st.show(self.dut, cmd, skip_tmpl=True)
+        json_str = json.dumps(output).encode('utf-8')
+        json_str = json_str.replace('end\\n','').replace('true','"true"').replace("\\n","").replace("\\","").strip('"')
+        json_str = re.sub(r"[A-Za-z]*@\S*\$", '', json_str)
+        output_json = json.loads(json_str)
+        return output_json
+
     def save_config_and_reboot(self):
         cmd = "{} -c '{}' -c 'copy running-config startup-config'".format(ALICLI_VIEW, CONFIG_VIEW)
         st.config(self.dut, cmd)
@@ -424,5 +434,23 @@ class BGP_CLI():
     def config_bgp_redistribute_static_route_map_with_metric(self, af_view, route_map, val):
         sub_cmd = "redistribute static route-map {} metric {}".format(route_map, val)
         cmd = "{} -c '{}' -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, self.router_view, af_view, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
+    def config_ip_nht_bgp_route_map(self, af_view, route_map):
+        if af_view == IPV4_UNICAST_VIEW:
+            sub_cmd = "ip nht bgp route-map {}".format(route_map)
+        else:
+            sub_cmd = "ipv6 nht bgp route-map {}".format(route_map)
+        cmd = "{} -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+
+    def no_config_ip_nht_bgp_route_map(self, af_view, route_map):
+        if af_view == IPV4_UNICAST_VIEW:
+            sub_cmd = "no ip nht bgp route-map {}".format(route_map)
+        else:
+            sub_cmd = "no ipv6 nht bgp route-map {}".format(route_map)
+        cmd = "{} -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, sub_cmd)
         st.config(self.dut, cmd)
         st.wait(CMD_INTERVAL)

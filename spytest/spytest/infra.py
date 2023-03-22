@@ -86,8 +86,8 @@ def apply_json(dut, json):
 def apply_json2(dut, json):
     return getwa().apply_json2(dut, json)
 
-def apply_files(dut, file_list):
-    return getwa().apply_files(dut, file_list)
+def apply_files(dut, file_list, method="incremental"):
+    return getwa().apply_files(dut, file_list, method)
 
 def run_script(dut, script_path, *args):
     return getwa().run_script(dut, 600, script_path, *args)

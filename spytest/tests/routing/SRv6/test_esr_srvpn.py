@@ -62,6 +62,7 @@ dut1 = 'MC-58'
 dut2 = 'MC-59'
 data.my_dut_list = [dut1, dut2]
 data.load_multi_vrf_config_done = False
+data.load_mirror_config_done = False
 
 def add_bmp_config_background(dut):
     st.log("config global bmp")
@@ -232,6 +233,20 @@ def esr_srvpn_module_hooks(request):
     ixia_controller_deinit()
     # tgapi.set_reconnect_tgen(True)
     # del bmp log
+
+@pytest.fixture(scope="function", autouse=True)
+def esr_srvpn_func_hooks(request):
+    st.log("xxxxxxx")
+    if st.get_func_name(request) in  ["test_srvpn_mirror_config_05","test_srvpn_mirror_config_redistribute_vrf_06",
+                                      "test_srvpn_mirror_config_bgp_flap_07", "test_srvpn_mirror_config_underlay_link_flap_08",
+                                      "test_srvpn_mirror_config_underlay_ecmp_switch_09"]:
+        st.log("esr_srvpn_func_hooks enter ")
+        if data.load_mirror_config_done == False:
+            load_mirro_config()
+            data.load_mirror_config_done = True
+    yield
+    pass
+
 
 def duts_base_config():
     curr_path = os.getcwd()
@@ -545,6 +560,22 @@ def load_2ksubif_100vrf(filesuffix='multi_vrf_full'):
 
     st.banner("multi vrf config loaded completed")
 
+def load_mirro_config(filesuffix='mirror_config'):
+    curr_path = os.getcwd()
+
+    json_file_dut1_multi_vrf = curr_path+"/routing/SRv6/dut1_"+filesuffix+".json"
+    st.apply_files(dut1, [json_file_dut1_multi_vrf], method="replace_configdb")
+
+    json_file_dut2_multi_vrf = curr_path+"/routing/SRv6/dut2_"+filesuffix+".json"
+    st.apply_files(dut2, [json_file_dut2_multi_vrf], method="replace_configdb")
+
+    st.wait(10)
+
+    st.reboot(dut1)
+    st.reboot(dut2)
+
+    st.banner("mirror config loaded completed")
+
 ## 2k locator , base traffic and route learning
 @pytest.mark.community
 @pytest.mark.community_pass
@@ -842,4 +873,38 @@ def test_srvpn_ecmp_04():
     if not ret:
         st.report_fail("Stop traffic item {} rx frame failed".format(VRF_TRAFFIC_NAME))
 
+    st.report_pass("test_case_passed")
+
+
+#
+#            +--------------------+                +--------------------+
+# TG (MC)  --| PC251              |                |                    |
+#            |                    |                |                    | PC251
+# TG (RR)  --|                    | PC161-PC161    |                    |===== TG (MC)
+#            | DUT1(MC-58)        | ===========    |  DUT2(MC-59)       |
+#            |                    | PC162-PC162    |                    |----- TG (RR)
+#            |                    |                |                    |
+#            |                    |                |                    |
+#            |                    |                |                    |
+#            +--------------------+                +--------------------+
+
+def test_srvpn_mirror_config_05():
+    st.banner("test_srvpn_mirror_config_05 begin")
+    #  check base checkout
+    st.report_pass("test_case_passed")
+
+def test_srvpn_mirror_config_redistribute_vrf_06():
+    st.banner("test_srvpn_mirror_config_redistribute_vrf_06 begin")
+    st.report_pass("test_case_passed")
+
+def test_srvpn_mirror_config_bgp_flap_07():
+    st.banner("test_srvpn_mirror_config_bgp_flap_07 begin")
+    st.report_pass("test_case_passed")
+
+def test_srvpn_mirror_config_underlay_link_flap_08():
+    st.banner("test_srvpn_mirror_config_underlay_link_flap_08 begin")
+    st.report_pass("test_case_passed")
+
+def test_srvpn_mirror_config_underlay_ecmp_switch_09():
+    st.banner("test_srvpn_mirror_config_underlay_ecmp_switch_09 begin")
     st.report_pass("test_case_passed")

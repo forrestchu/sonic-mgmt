@@ -5985,6 +5985,12 @@
             "role": "ADMIN", 
             "secret": "$1$bey/UJIc$UWJ4reL7/Lo9zE8sbu.SL1", 
             "shell": "/usr/bin/cli"
+        },
+        "admin": {                                             
+            "groups": "sudo,docker", 
+            "role": "ADMIN", 
+            "secret": "$1$WFtM/P.X$vXxpA7rUt1h7TL0WfcUuF/", 
+            "shell": "/bin/bash"
         }
     }, 
     "VRF_ALIAS": {

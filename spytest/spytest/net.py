@@ -3543,10 +3543,23 @@ class Net(object):
                 for src_file in utils.make_list(name):
                     dst_file = self._upload_file2(devname, access, src_file)
                     if dst_file: dst_file_list.append(dst_file)
-            args_str = '"' + '" "'.join(dst_file_list) + '"'
-            args_str = args_str + " --apply-file-method " + method
-            self.dut_log(devname, "Applying config files remotely '{}'".format(args_str))
-            skip_error_check = True
+            if method == "replace_configdb":
+                    cli_prompt = self._get_cli_prompt(devname)
+                    configdb_path = "/etc/sonic/config_db.json"
+                    remote_dir = "/etc/spytest"
+                    src_file = value_list[1]
+                    src_file2 = "%s/%s" % (os.path.basename(os.path.dirname(src_file)),
+                                        os.path.basename(src_file))
+                    remote_file = os.path.join(remote_dir, src_file2)             
+                    execcmd = "sudo mv {} {}.bak;sudo cp {} {}".format(
+                        configdb_path, configdb_path, remote_file, configdb_path)
+                    self._send_command(access, execcmd, cli_prompt, False, 6)
+                    return  ''
+            else:
+                args_str = '"' + '" "'.join(dst_file_list) + '"'
+                args_str = args_str + " --apply-file-method " + method
+                self.dut_log(devname, "Applying config files remotely '{}'".format(args_str))
+                skip_error_check = True
         elif option_type == "run-test":
             timeout = value_list[0]
             args_str = " ".join(value_list[1:])

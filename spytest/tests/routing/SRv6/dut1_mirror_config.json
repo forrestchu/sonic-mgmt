@@ -3367,69 +3367,9 @@
             "admin_status": "up", 
             "alias": "Ethernet112"
         }, 
-        "Ethernet114": {
-            "admin_status": "up", 
-            "alias": "Ethernet114"
-        }, 
-        "Ethernet115": {
-            "admin_status": "up", 
-            "alias": "Ethernet115"
-        }, 
-        "Ethernet116": {
-            "admin_status": "up", 
-            "alias": "Ethernet116"
-        }, 
-        "Ethernet117": {
-            "admin_status": "up", 
-            "alias": "Ethernet117"
-        }, 
-        "Ethernet118": {
-            "admin_status": "up", 
-            "alias": "Ethernet118"
-        }, 
-        "Ethernet119": {
-            "admin_status": "up", 
-            "alias": "Ethernet119"
-        }, 
         "Ethernet12": {
             "admin_status": "up", 
             "alias": "Ethernet12"
-        }, 
-        "Ethernet120": {
-            "admin_status": "up", 
-            "alias": "Ethernet120"
-        }, 
-        "Ethernet121": {
-            "admin_status": "up", 
-            "alias": "Ethernet121"
-        }, 
-        "Ethernet122": {
-            "admin_status": "up", 
-            "alias": "Ethernet122"
-        }, 
-        "Ethernet123": {
-            "admin_status": "up", 
-            "alias": "Ethernet123"
-        }, 
-        "Ethernet124": {
-            "admin_status": "up", 
-            "alias": "Ethernet124"
-        }, 
-        "Ethernet125": {
-            "admin_status": "up", 
-            "alias": "Ethernet125"
-        }, 
-        "Ethernet126": {
-            "admin_status": "up", 
-            "alias": "Ethernet126"
-        }, 
-        "Ethernet127": {
-            "admin_status": "up", 
-            "alias": "Ethernet127"
-        }, 
-        "Ethernet128": {
-            "admin_status": "up", 
-            "alias": "Ethernet128"
         }, 
         "Ethernet13": {
             "admin_status": "up", 
@@ -3865,31 +3805,31 @@
         }
     }, 
     "PORT_QOS_MAP": {
-        "Ethernet1,Ethernet2,Ethernet3,Ethernet4,Ethernet5,Ethernet6,Ethernet7,Ethernet8,Ethernet9,Ethernet10,Ethernet11,Ethernet12,Ethernet13,Ethernet14,Ethernet15,Ethernet16,Ethernet17,Ethernet18,Ethernet19,Ethernet20,Ethernet21,Ethernet22,Ethernet23,Ethernet24,Ethernet25,Ethernet26,Ethernet27,Ethernet28,Ethernet29,Ethernet30,Ethernet31,Ethernet32,Ethernet33,Ethernet34,Ethernet35,Ethernet36,Ethernet37,Ethernet38,Ethernet39,Ethernet40,Ethernet41,Ethernet42,Ethernet43,Ethernet44,Ethernet45,Ethernet46,Ethernet47,Ethernet48,Ethernet49,Ethernet50,Ethernet51,Ethernet52,Ethernet53,Ethernet54,Ethernet55,Ethernet56,Ethernet57,Ethernet58,Ethernet59,Ethernet60,Ethernet61,Ethernet62,Ethernet63,Ethernet64,Ethernet66,Ethernet67,Ethernet68,Ethernet69,Ethernet70,Ethernet71,Ethernet72,Ethernet73,Ethernet74,Ethernet75,Ethernet76,Ethernet77,Ethernet78,Ethernet79,Ethernet80,Ethernet82,Ethernet83,Ethernet84,Ethernet85,Ethernet86,Ethernet87,Ethernet88,Ethernet89,Ethernet90,Ethernet91,Ethernet92,Ethernet93,Ethernet94,Ethernet95,Ethernet96,Ethernet98,Ethernet99,Ethernet100,Ethernet101,Ethernet102,Ethernet103,Ethernet104,Ethernet105,Ethernet106,Ethernet107,Ethernet108,Ethernet109,Ethernet110,Ethernet111,Ethernet112,Ethernet114,Ethernet115,Ethernet116,Ethernet117,Ethernet118,Ethernet119,Ethernet120,Ethernet121,Ethernet122,Ethernet123,Ethernet124,Ethernet125,Ethernet126,Ethernet127,Ethernet128": {
+        "Ethernet1,Ethernet2,Ethernet3,Ethernet4,Ethernet5,Ethernet6,Ethernet7,Ethernet8,Ethernet9,Ethernet10,Ethernet11,Ethernet12,Ethernet13,Ethernet14,Ethernet15,Ethernet16,Ethernet17,Ethernet18,Ethernet19,Ethernet20,Ethernet21,Ethernet22,Ethernet23,Ethernet24,Ethernet25,Ethernet26,Ethernet27,Ethernet28,Ethernet29,Ethernet30,Ethernet31,Ethernet32,Ethernet33,Ethernet34,Ethernet35,Ethernet36,Ethernet37,Ethernet38,Ethernet39,Ethernet40,Ethernet41,Ethernet42,Ethernet43,Ethernet44,Ethernet45,Ethernet46,Ethernet47,Ethernet48,Ethernet49,Ethernet50,Ethernet51,Ethernet52,Ethernet53,Ethernet54,Ethernet55,Ethernet56,Ethernet57,Ethernet58,Ethernet59,Ethernet60,Ethernet61,Ethernet62,Ethernet63,Ethernet64,Ethernet66,Ethernet67,Ethernet68,Ethernet69,Ethernet70,Ethernet71,Ethernet72,Ethernet73,Ethernet74,Ethernet75,Ethernet76,Ethernet77,Ethernet78,Ethernet79,Ethernet80,Ethernet82,Ethernet83,Ethernet84,Ethernet85,Ethernet86,Ethernet87,Ethernet88,Ethernet89,Ethernet90,Ethernet91,Ethernet92,Ethernet93,Ethernet94,Ethernet95,Ethernet96,Ethernet98,Ethernet99,Ethernet100,Ethernet101,Ethernet102,Ethernet103,Ethernet104,Ethernet105,Ethernet106,Ethernet107,Ethernet108,Ethernet109,Ethernet110,Ethernet111,Ethernet112": {
             "dscp_to_tc_map": "[DSCP_TO_TC_MAP|ALI]", 
             "tc_to_queue_map": "[TC_TO_QUEUE_MAP|ALI]"
         }
     }, 
     "QUEUE": {
-        "Ethernet1,Ethernet2,Ethernet3,Ethernet4,Ethernet5,Ethernet6,Ethernet7,Ethernet8,Ethernet9,Ethernet10,Ethernet11,Ethernet12,Ethernet13,Ethernet14,Ethernet15,Ethernet16,Ethernet17,Ethernet18,Ethernet19,Ethernet20,Ethernet21,Ethernet22,Ethernet23,Ethernet24,Ethernet25,Ethernet26,Ethernet27,Ethernet28,Ethernet29,Ethernet30,Ethernet31,Ethernet32,Ethernet33,Ethernet34,Ethernet35,Ethernet36,Ethernet37,Ethernet38,Ethernet39,Ethernet40,Ethernet41,Ethernet42,Ethernet43,Ethernet44,Ethernet45,Ethernet46,Ethernet47,Ethernet48,Ethernet49,Ethernet50,Ethernet51,Ethernet52,Ethernet53,Ethernet54,Ethernet55,Ethernet56,Ethernet57,Ethernet58,Ethernet59,Ethernet60,Ethernet61,Ethernet62,Ethernet63,Ethernet64,Ethernet66,Ethernet67,Ethernet68,Ethernet69,Ethernet70,Ethernet71,Ethernet72,Ethernet73,Ethernet74,Ethernet75,Ethernet76,Ethernet77,Ethernet78,Ethernet79,Ethernet80,Ethernet82,Ethernet83,Ethernet84,Ethernet85,Ethernet86,Ethernet87,Ethernet88,Ethernet89,Ethernet90,Ethernet91,Ethernet92,Ethernet93,Ethernet94,Ethernet95,Ethernet96,Ethernet98,Ethernet99,Ethernet100,Ethernet101,Ethernet102,Ethernet103,Ethernet104,Ethernet105,Ethernet106,Ethernet107,Ethernet108,Ethernet109,Ethernet110,Ethernet111,Ethernet112,Ethernet114,Ethernet115,Ethernet116,Ethernet117,Ethernet118,Ethernet119,Ethernet120,Ethernet121,Ethernet122,Ethernet123,Ethernet124,Ethernet125,Ethernet126,Ethernet127,Ethernet128|0": {
+        "Ethernet1,Ethernet2,Ethernet3,Ethernet4,Ethernet5,Ethernet6,Ethernet7,Ethernet8,Ethernet9,Ethernet10,Ethernet11,Ethernet12,Ethernet13,Ethernet14,Ethernet15,Ethernet16,Ethernet17,Ethernet18,Ethernet19,Ethernet20,Ethernet21,Ethernet22,Ethernet23,Ethernet24,Ethernet25,Ethernet26,Ethernet27,Ethernet28,Ethernet29,Ethernet30,Ethernet31,Ethernet32,Ethernet33,Ethernet34,Ethernet35,Ethernet36,Ethernet37,Ethernet38,Ethernet39,Ethernet40,Ethernet41,Ethernet42,Ethernet43,Ethernet44,Ethernet45,Ethernet46,Ethernet47,Ethernet48,Ethernet49,Ethernet50,Ethernet51,Ethernet52,Ethernet53,Ethernet54,Ethernet55,Ethernet56,Ethernet57,Ethernet58,Ethernet59,Ethernet60,Ethernet61,Ethernet62,Ethernet63,Ethernet64,Ethernet66,Ethernet67,Ethernet68,Ethernet69,Ethernet70,Ethernet71,Ethernet72,Ethernet73,Ethernet74,Ethernet75,Ethernet76,Ethernet77,Ethernet78,Ethernet79,Ethernet80,Ethernet82,Ethernet83,Ethernet84,Ethernet85,Ethernet86,Ethernet87,Ethernet88,Ethernet89,Ethernet90,Ethernet91,Ethernet92,Ethernet93,Ethernet94,Ethernet95,Ethernet96,Ethernet98,Ethernet99,Ethernet100,Ethernet101,Ethernet102,Ethernet103,Ethernet104,Ethernet105,Ethernet106,Ethernet107,Ethernet108,Ethernet109,Ethernet110,Ethernet111,Ethernet112|0": {
             "scheduler": "[SCHEDULER|scheduler.0]"
         }, 
-        "Ethernet1,Ethernet2,Ethernet3,Ethernet4,Ethernet5,Ethernet6,Ethernet7,Ethernet8,Ethernet9,Ethernet10,Ethernet11,Ethernet12,Ethernet13,Ethernet14,Ethernet15,Ethernet16,Ethernet17,Ethernet18,Ethernet19,Ethernet20,Ethernet21,Ethernet22,Ethernet23,Ethernet24,Ethernet25,Ethernet26,Ethernet27,Ethernet28,Ethernet29,Ethernet30,Ethernet31,Ethernet32,Ethernet33,Ethernet34,Ethernet35,Ethernet36,Ethernet37,Ethernet38,Ethernet39,Ethernet40,Ethernet41,Ethernet42,Ethernet43,Ethernet44,Ethernet45,Ethernet46,Ethernet47,Ethernet48,Ethernet49,Ethernet50,Ethernet51,Ethernet52,Ethernet53,Ethernet54,Ethernet55,Ethernet56,Ethernet57,Ethernet58,Ethernet59,Ethernet60,Ethernet61,Ethernet62,Ethernet63,Ethernet64,Ethernet66,Ethernet67,Ethernet68,Ethernet69,Ethernet70,Ethernet71,Ethernet72,Ethernet73,Ethernet74,Ethernet75,Ethernet76,Ethernet77,Ethernet78,Ethernet79,Ethernet80,Ethernet82,Ethernet83,Ethernet84,Ethernet85,Ethernet86,Ethernet87,Ethernet88,Ethernet89,Ethernet90,Ethernet91,Ethernet92,Ethernet93,Ethernet94,Ethernet95,Ethernet96,Ethernet98,Ethernet99,Ethernet100,Ethernet101,Ethernet102,Ethernet103,Ethernet104,Ethernet105,Ethernet106,Ethernet107,Ethernet108,Ethernet109,Ethernet110,Ethernet111,Ethernet112,Ethernet114,Ethernet115,Ethernet116,Ethernet117,Ethernet118,Ethernet119,Ethernet120,Ethernet121,Ethernet122,Ethernet123,Ethernet124,Ethernet125,Ethernet126,Ethernet127,Ethernet128|1": {
+        "Ethernet1,Ethernet2,Ethernet3,Ethernet4,Ethernet5,Ethernet6,Ethernet7,Ethernet8,Ethernet9,Ethernet10,Ethernet11,Ethernet12,Ethernet13,Ethernet14,Ethernet15,Ethernet16,Ethernet17,Ethernet18,Ethernet19,Ethernet20,Ethernet21,Ethernet22,Ethernet23,Ethernet24,Ethernet25,Ethernet26,Ethernet27,Ethernet28,Ethernet29,Ethernet30,Ethernet31,Ethernet32,Ethernet33,Ethernet34,Ethernet35,Ethernet36,Ethernet37,Ethernet38,Ethernet39,Ethernet40,Ethernet41,Ethernet42,Ethernet43,Ethernet44,Ethernet45,Ethernet46,Ethernet47,Ethernet48,Ethernet49,Ethernet50,Ethernet51,Ethernet52,Ethernet53,Ethernet54,Ethernet55,Ethernet56,Ethernet57,Ethernet58,Ethernet59,Ethernet60,Ethernet61,Ethernet62,Ethernet63,Ethernet64,Ethernet66,Ethernet67,Ethernet68,Ethernet69,Ethernet70,Ethernet71,Ethernet72,Ethernet73,Ethernet74,Ethernet75,Ethernet76,Ethernet77,Ethernet78,Ethernet79,Ethernet80,Ethernet82,Ethernet83,Ethernet84,Ethernet85,Ethernet86,Ethernet87,Ethernet88,Ethernet89,Ethernet90,Ethernet91,Ethernet92,Ethernet93,Ethernet94,Ethernet95,Ethernet96,Ethernet98,Ethernet99,Ethernet100,Ethernet101,Ethernet102,Ethernet103,Ethernet104,Ethernet105,Ethernet106,Ethernet107,Ethernet108,Ethernet109,Ethernet110,Ethernet111,Ethernet112|1": {
             "scheduler": "[SCHEDULER|scheduler.1]"
         }, 
-        "Ethernet1,Ethernet2,Ethernet3,Ethernet4,Ethernet5,Ethernet6,Ethernet7,Ethernet8,Ethernet9,Ethernet10,Ethernet11,Ethernet12,Ethernet13,Ethernet14,Ethernet15,Ethernet16,Ethernet17,Ethernet18,Ethernet19,Ethernet20,Ethernet21,Ethernet22,Ethernet23,Ethernet24,Ethernet25,Ethernet26,Ethernet27,Ethernet28,Ethernet29,Ethernet30,Ethernet31,Ethernet32,Ethernet33,Ethernet34,Ethernet35,Ethernet36,Ethernet37,Ethernet38,Ethernet39,Ethernet40,Ethernet41,Ethernet42,Ethernet43,Ethernet44,Ethernet45,Ethernet46,Ethernet47,Ethernet48,Ethernet49,Ethernet50,Ethernet51,Ethernet52,Ethernet53,Ethernet54,Ethernet55,Ethernet56,Ethernet57,Ethernet58,Ethernet59,Ethernet60,Ethernet61,Ethernet62,Ethernet63,Ethernet64,Ethernet66,Ethernet67,Ethernet68,Ethernet69,Ethernet70,Ethernet71,Ethernet72,Ethernet73,Ethernet74,Ethernet75,Ethernet76,Ethernet77,Ethernet78,Ethernet79,Ethernet80,Ethernet82,Ethernet83,Ethernet84,Ethernet85,Ethernet86,Ethernet87,Ethernet88,Ethernet89,Ethernet90,Ethernet91,Ethernet92,Ethernet93,Ethernet94,Ethernet95,Ethernet96,Ethernet98,Ethernet99,Ethernet100,Ethernet101,Ethernet102,Ethernet103,Ethernet104,Ethernet105,Ethernet106,Ethernet107,Ethernet108,Ethernet109,Ethernet110,Ethernet111,Ethernet112,Ethernet114,Ethernet115,Ethernet116,Ethernet117,Ethernet118,Ethernet119,Ethernet120,Ethernet121,Ethernet122,Ethernet123,Ethernet124,Ethernet125,Ethernet126,Ethernet127,Ethernet128|2": {
+        "Ethernet1,Ethernet2,Ethernet3,Ethernet4,Ethernet5,Ethernet6,Ethernet7,Ethernet8,Ethernet9,Ethernet10,Ethernet11,Ethernet12,Ethernet13,Ethernet14,Ethernet15,Ethernet16,Ethernet17,Ethernet18,Ethernet19,Ethernet20,Ethernet21,Ethernet22,Ethernet23,Ethernet24,Ethernet25,Ethernet26,Ethernet27,Ethernet28,Ethernet29,Ethernet30,Ethernet31,Ethernet32,Ethernet33,Ethernet34,Ethernet35,Ethernet36,Ethernet37,Ethernet38,Ethernet39,Ethernet40,Ethernet41,Ethernet42,Ethernet43,Ethernet44,Ethernet45,Ethernet46,Ethernet47,Ethernet48,Ethernet49,Ethernet50,Ethernet51,Ethernet52,Ethernet53,Ethernet54,Ethernet55,Ethernet56,Ethernet57,Ethernet58,Ethernet59,Ethernet60,Ethernet61,Ethernet62,Ethernet63,Ethernet64,Ethernet66,Ethernet67,Ethernet68,Ethernet69,Ethernet70,Ethernet71,Ethernet72,Ethernet73,Ethernet74,Ethernet75,Ethernet76,Ethernet77,Ethernet78,Ethernet79,Ethernet80,Ethernet82,Ethernet83,Ethernet84,Ethernet85,Ethernet86,Ethernet87,Ethernet88,Ethernet89,Ethernet90,Ethernet91,Ethernet92,Ethernet93,Ethernet94,Ethernet95,Ethernet96,Ethernet98,Ethernet99,Ethernet100,Ethernet101,Ethernet102,Ethernet103,Ethernet104,Ethernet105,Ethernet106,Ethernet107,Ethernet108,Ethernet109,Ethernet110,Ethernet111,Ethernet112|2": {
             "scheduler": "[SCHEDULER|scheduler.2]"
         }, 
-        "Ethernet1,Ethernet2,Ethernet3,Ethernet4,Ethernet5,Ethernet6,Ethernet7,Ethernet8,Ethernet9,Ethernet10,Ethernet11,Ethernet12,Ethernet13,Ethernet14,Ethernet15,Ethernet16,Ethernet17,Ethernet18,Ethernet19,Ethernet20,Ethernet21,Ethernet22,Ethernet23,Ethernet24,Ethernet25,Ethernet26,Ethernet27,Ethernet28,Ethernet29,Ethernet30,Ethernet31,Ethernet32,Ethernet33,Ethernet34,Ethernet35,Ethernet36,Ethernet37,Ethernet38,Ethernet39,Ethernet40,Ethernet41,Ethernet42,Ethernet43,Ethernet44,Ethernet45,Ethernet46,Ethernet47,Ethernet48,Ethernet49,Ethernet50,Ethernet51,Ethernet52,Ethernet53,Ethernet54,Ethernet55,Ethernet56,Ethernet57,Ethernet58,Ethernet59,Ethernet60,Ethernet61,Ethernet62,Ethernet63,Ethernet64,Ethernet66,Ethernet67,Ethernet68,Ethernet69,Ethernet70,Ethernet71,Ethernet72,Ethernet73,Ethernet74,Ethernet75,Ethernet76,Ethernet77,Ethernet78,Ethernet79,Ethernet80,Ethernet82,Ethernet83,Ethernet84,Ethernet85,Ethernet86,Ethernet87,Ethernet88,Ethernet89,Ethernet90,Ethernet91,Ethernet92,Ethernet93,Ethernet94,Ethernet95,Ethernet96,Ethernet98,Ethernet99,Ethernet100,Ethernet101,Ethernet102,Ethernet103,Ethernet104,Ethernet105,Ethernet106,Ethernet107,Ethernet108,Ethernet109,Ethernet110,Ethernet111,Ethernet112,Ethernet114,Ethernet115,Ethernet116,Ethernet117,Ethernet118,Ethernet119,Ethernet120,Ethernet121,Ethernet122,Ethernet123,Ethernet124,Ethernet125,Ethernet126,Ethernet127,Ethernet128|3": {
+        "Ethernet1,Ethernet2,Ethernet3,Ethernet4,Ethernet5,Ethernet6,Ethernet7,Ethernet8,Ethernet9,Ethernet10,Ethernet11,Ethernet12,Ethernet13,Ethernet14,Ethernet15,Ethernet16,Ethernet17,Ethernet18,Ethernet19,Ethernet20,Ethernet21,Ethernet22,Ethernet23,Ethernet24,Ethernet25,Ethernet26,Ethernet27,Ethernet28,Ethernet29,Ethernet30,Ethernet31,Ethernet32,Ethernet33,Ethernet34,Ethernet35,Ethernet36,Ethernet37,Ethernet38,Ethernet39,Ethernet40,Ethernet41,Ethernet42,Ethernet43,Ethernet44,Ethernet45,Ethernet46,Ethernet47,Ethernet48,Ethernet49,Ethernet50,Ethernet51,Ethernet52,Ethernet53,Ethernet54,Ethernet55,Ethernet56,Ethernet57,Ethernet58,Ethernet59,Ethernet60,Ethernet61,Ethernet62,Ethernet63,Ethernet64,Ethernet66,Ethernet67,Ethernet68,Ethernet69,Ethernet70,Ethernet71,Ethernet72,Ethernet73,Ethernet74,Ethernet75,Ethernet76,Ethernet77,Ethernet78,Ethernet79,Ethernet80,Ethernet82,Ethernet83,Ethernet84,Ethernet85,Ethernet86,Ethernet87,Ethernet88,Ethernet89,Ethernet90,Ethernet91,Ethernet92,Ethernet93,Ethernet94,Ethernet95,Ethernet96,Ethernet98,Ethernet99,Ethernet100,Ethernet101,Ethernet102,Ethernet103,Ethernet104,Ethernet105,Ethernet106,Ethernet107,Ethernet108,Ethernet109,Ethernet110,Ethernet111,Ethernet112|3": {
             "scheduler": "[SCHEDULER|scheduler.3]"
         }, 
-        "Ethernet1,Ethernet2,Ethernet3,Ethernet4,Ethernet5,Ethernet6,Ethernet7,Ethernet8,Ethernet9,Ethernet10,Ethernet11,Ethernet12,Ethernet13,Ethernet14,Ethernet15,Ethernet16,Ethernet17,Ethernet18,Ethernet19,Ethernet20,Ethernet21,Ethernet22,Ethernet23,Ethernet24,Ethernet25,Ethernet26,Ethernet27,Ethernet28,Ethernet29,Ethernet30,Ethernet31,Ethernet32,Ethernet33,Ethernet34,Ethernet35,Ethernet36,Ethernet37,Ethernet38,Ethernet39,Ethernet40,Ethernet41,Ethernet42,Ethernet43,Ethernet44,Ethernet45,Ethernet46,Ethernet47,Ethernet48,Ethernet49,Ethernet50,Ethernet51,Ethernet52,Ethernet53,Ethernet54,Ethernet55,Ethernet56,Ethernet57,Ethernet58,Ethernet59,Ethernet60,Ethernet61,Ethernet62,Ethernet63,Ethernet64,Ethernet66,Ethernet67,Ethernet68,Ethernet69,Ethernet70,Ethernet71,Ethernet72,Ethernet73,Ethernet74,Ethernet75,Ethernet76,Ethernet77,Ethernet78,Ethernet79,Ethernet80,Ethernet82,Ethernet83,Ethernet84,Ethernet85,Ethernet86,Ethernet87,Ethernet88,Ethernet89,Ethernet90,Ethernet91,Ethernet92,Ethernet93,Ethernet94,Ethernet95,Ethernet96,Ethernet98,Ethernet99,Ethernet100,Ethernet101,Ethernet102,Ethernet103,Ethernet104,Ethernet105,Ethernet106,Ethernet107,Ethernet108,Ethernet109,Ethernet110,Ethernet111,Ethernet112,Ethernet114,Ethernet115,Ethernet116,Ethernet117,Ethernet118,Ethernet119,Ethernet120,Ethernet121,Ethernet122,Ethernet123,Ethernet124,Ethernet125,Ethernet126,Ethernet127,Ethernet128|4": {
+        "Ethernet1,Ethernet2,Ethernet3,Ethernet4,Ethernet5,Ethernet6,Ethernet7,Ethernet8,Ethernet9,Ethernet10,Ethernet11,Ethernet12,Ethernet13,Ethernet14,Ethernet15,Ethernet16,Ethernet17,Ethernet18,Ethernet19,Ethernet20,Ethernet21,Ethernet22,Ethernet23,Ethernet24,Ethernet25,Ethernet26,Ethernet27,Ethernet28,Ethernet29,Ethernet30,Ethernet31,Ethernet32,Ethernet33,Ethernet34,Ethernet35,Ethernet36,Ethernet37,Ethernet38,Ethernet39,Ethernet40,Ethernet41,Ethernet42,Ethernet43,Ethernet44,Ethernet45,Ethernet46,Ethernet47,Ethernet48,Ethernet49,Ethernet50,Ethernet51,Ethernet52,Ethernet53,Ethernet54,Ethernet55,Ethernet56,Ethernet57,Ethernet58,Ethernet59,Ethernet60,Ethernet61,Ethernet62,Ethernet63,Ethernet64,Ethernet66,Ethernet67,Ethernet68,Ethernet69,Ethernet70,Ethernet71,Ethernet72,Ethernet73,Ethernet74,Ethernet75,Ethernet76,Ethernet77,Ethernet78,Ethernet79,Ethernet80,Ethernet82,Ethernet83,Ethernet84,Ethernet85,Ethernet86,Ethernet87,Ethernet88,Ethernet89,Ethernet90,Ethernet91,Ethernet92,Ethernet93,Ethernet94,Ethernet95,Ethernet96,Ethernet98,Ethernet99,Ethernet100,Ethernet101,Ethernet102,Ethernet103,Ethernet104,Ethernet105,Ethernet106,Ethernet107,Ethernet108,Ethernet109,Ethernet110,Ethernet111,Ethernet112|4": {
             "scheduler": "[SCHEDULER|scheduler.4]"
         }, 
-        "Ethernet1,Ethernet2,Ethernet3,Ethernet4,Ethernet5,Ethernet6,Ethernet7,Ethernet8,Ethernet9,Ethernet10,Ethernet11,Ethernet12,Ethernet13,Ethernet14,Ethernet15,Ethernet16,Ethernet17,Ethernet18,Ethernet19,Ethernet20,Ethernet21,Ethernet22,Ethernet23,Ethernet24,Ethernet25,Ethernet26,Ethernet27,Ethernet28,Ethernet29,Ethernet30,Ethernet31,Ethernet32,Ethernet33,Ethernet34,Ethernet35,Ethernet36,Ethernet37,Ethernet38,Ethernet39,Ethernet40,Ethernet41,Ethernet42,Ethernet43,Ethernet44,Ethernet45,Ethernet46,Ethernet47,Ethernet48,Ethernet49,Ethernet50,Ethernet51,Ethernet52,Ethernet53,Ethernet54,Ethernet55,Ethernet56,Ethernet57,Ethernet58,Ethernet59,Ethernet60,Ethernet61,Ethernet62,Ethernet63,Ethernet64,Ethernet66,Ethernet67,Ethernet68,Ethernet69,Ethernet70,Ethernet71,Ethernet72,Ethernet73,Ethernet74,Ethernet75,Ethernet76,Ethernet77,Ethernet78,Ethernet79,Ethernet80,Ethernet82,Ethernet83,Ethernet84,Ethernet85,Ethernet86,Ethernet87,Ethernet88,Ethernet89,Ethernet90,Ethernet91,Ethernet92,Ethernet93,Ethernet94,Ethernet95,Ethernet96,Ethernet98,Ethernet99,Ethernet100,Ethernet101,Ethernet102,Ethernet103,Ethernet104,Ethernet105,Ethernet106,Ethernet107,Ethernet108,Ethernet109,Ethernet110,Ethernet111,Ethernet112,Ethernet114,Ethernet115,Ethernet116,Ethernet117,Ethernet118,Ethernet119,Ethernet120,Ethernet121,Ethernet122,Ethernet123,Ethernet124,Ethernet125,Ethernet126,Ethernet127,Ethernet128|5": {
+        "Ethernet1,Ethernet2,Ethernet3,Ethernet4,Ethernet5,Ethernet6,Ethernet7,Ethernet8,Ethernet9,Ethernet10,Ethernet11,Ethernet12,Ethernet13,Ethernet14,Ethernet15,Ethernet16,Ethernet17,Ethernet18,Ethernet19,Ethernet20,Ethernet21,Ethernet22,Ethernet23,Ethernet24,Ethernet25,Ethernet26,Ethernet27,Ethernet28,Ethernet29,Ethernet30,Ethernet31,Ethernet32,Ethernet33,Ethernet34,Ethernet35,Ethernet36,Ethernet37,Ethernet38,Ethernet39,Ethernet40,Ethernet41,Ethernet42,Ethernet43,Ethernet44,Ethernet45,Ethernet46,Ethernet47,Ethernet48,Ethernet49,Ethernet50,Ethernet51,Ethernet52,Ethernet53,Ethernet54,Ethernet55,Ethernet56,Ethernet57,Ethernet58,Ethernet59,Ethernet60,Ethernet61,Ethernet62,Ethernet63,Ethernet64,Ethernet66,Ethernet67,Ethernet68,Ethernet69,Ethernet70,Ethernet71,Ethernet72,Ethernet73,Ethernet74,Ethernet75,Ethernet76,Ethernet77,Ethernet78,Ethernet79,Ethernet80,Ethernet82,Ethernet83,Ethernet84,Ethernet85,Ethernet86,Ethernet87,Ethernet88,Ethernet89,Ethernet90,Ethernet91,Ethernet92,Ethernet93,Ethernet94,Ethernet95,Ethernet96,Ethernet98,Ethernet99,Ethernet100,Ethernet101,Ethernet102,Ethernet103,Ethernet104,Ethernet105,Ethernet106,Ethernet107,Ethernet108,Ethernet109,Ethernet110,Ethernet111,Ethernet112|5": {
             "scheduler": "[SCHEDULER|scheduler.5]"
         }, 
-        "Ethernet1,Ethernet2,Ethernet3,Ethernet4,Ethernet5,Ethernet6,Ethernet7,Ethernet8,Ethernet9,Ethernet10,Ethernet11,Ethernet12,Ethernet13,Ethernet14,Ethernet15,Ethernet16,Ethernet17,Ethernet18,Ethernet19,Ethernet20,Ethernet21,Ethernet22,Ethernet23,Ethernet24,Ethernet25,Ethernet26,Ethernet27,Ethernet28,Ethernet29,Ethernet30,Ethernet31,Ethernet32,Ethernet33,Ethernet34,Ethernet35,Ethernet36,Ethernet37,Ethernet38,Ethernet39,Ethernet40,Ethernet41,Ethernet42,Ethernet43,Ethernet44,Ethernet45,Ethernet46,Ethernet47,Ethernet48,Ethernet49,Ethernet50,Ethernet51,Ethernet52,Ethernet53,Ethernet54,Ethernet55,Ethernet56,Ethernet57,Ethernet58,Ethernet59,Ethernet60,Ethernet61,Ethernet62,Ethernet63,Ethernet64,Ethernet66,Ethernet67,Ethernet68,Ethernet69,Ethernet70,Ethernet71,Ethernet72,Ethernet73,Ethernet74,Ethernet75,Ethernet76,Ethernet77,Ethernet78,Ethernet79,Ethernet80,Ethernet82,Ethernet83,Ethernet84,Ethernet85,Ethernet86,Ethernet87,Ethernet88,Ethernet89,Ethernet90,Ethernet91,Ethernet92,Ethernet93,Ethernet94,Ethernet95,Ethernet96,Ethernet98,Ethernet99,Ethernet100,Ethernet101,Ethernet102,Ethernet103,Ethernet104,Ethernet105,Ethernet106,Ethernet107,Ethernet108,Ethernet109,Ethernet110,Ethernet111,Ethernet112,Ethernet114,Ethernet115,Ethernet116,Ethernet117,Ethernet118,Ethernet119,Ethernet120,Ethernet121,Ethernet122,Ethernet123,Ethernet124,Ethernet125,Ethernet126,Ethernet127,Ethernet128|6-7": {
+        "Ethernet1,Ethernet2,Ethernet3,Ethernet4,Ethernet5,Ethernet6,Ethernet7,Ethernet8,Ethernet9,Ethernet10,Ethernet11,Ethernet12,Ethernet13,Ethernet14,Ethernet15,Ethernet16,Ethernet17,Ethernet18,Ethernet19,Ethernet20,Ethernet21,Ethernet22,Ethernet23,Ethernet24,Ethernet25,Ethernet26,Ethernet27,Ethernet28,Ethernet29,Ethernet30,Ethernet31,Ethernet32,Ethernet33,Ethernet34,Ethernet35,Ethernet36,Ethernet37,Ethernet38,Ethernet39,Ethernet40,Ethernet41,Ethernet42,Ethernet43,Ethernet44,Ethernet45,Ethernet46,Ethernet47,Ethernet48,Ethernet49,Ethernet50,Ethernet51,Ethernet52,Ethernet53,Ethernet54,Ethernet55,Ethernet56,Ethernet57,Ethernet58,Ethernet59,Ethernet60,Ethernet61,Ethernet62,Ethernet63,Ethernet64,Ethernet66,Ethernet67,Ethernet68,Ethernet69,Ethernet70,Ethernet71,Ethernet72,Ethernet73,Ethernet74,Ethernet75,Ethernet76,Ethernet77,Ethernet78,Ethernet79,Ethernet80,Ethernet82,Ethernet83,Ethernet84,Ethernet85,Ethernet86,Ethernet87,Ethernet88,Ethernet89,Ethernet90,Ethernet91,Ethernet92,Ethernet93,Ethernet94,Ethernet95,Ethernet96,Ethernet98,Ethernet99,Ethernet100,Ethernet101,Ethernet102,Ethernet103,Ethernet104,Ethernet105,Ethernet106,Ethernet107,Ethernet108,Ethernet109,Ethernet110,Ethernet111,Ethernet112|6-7": {
             "scheduler": "[SCHEDULER|scheduler.6]"
         }
     }, 
@@ -5070,67 +5010,7 @@
             "admin_state": "up", 
             "sample_rate": "131072"
         }, 
-        "Ethernet114": {
-            "admin_state": "up", 
-            "sample_rate": "131072"
-        }, 
-        "Ethernet115": {
-            "admin_state": "up", 
-            "sample_rate": "131072"
-        }, 
-        "Ethernet116": {
-            "admin_state": "up", 
-            "sample_rate": "131072"
-        }, 
-        "Ethernet117": {
-            "admin_state": "up", 
-            "sample_rate": "131072"
-        }, 
-        "Ethernet118": {
-            "admin_state": "up", 
-            "sample_rate": "131072"
-        }, 
-        "Ethernet119": {
-            "admin_state": "up", 
-            "sample_rate": "131072"
-        }, 
         "Ethernet12": {
-            "admin_state": "up", 
-            "sample_rate": "131072"
-        }, 
-        "Ethernet120": {
-            "admin_state": "up", 
-            "sample_rate": "131072"
-        }, 
-        "Ethernet121": {
-            "admin_state": "up", 
-            "sample_rate": "131072"
-        }, 
-        "Ethernet122": {
-            "admin_state": "up", 
-            "sample_rate": "131072"
-        }, 
-        "Ethernet123": {
-            "admin_state": "up", 
-            "sample_rate": "131072"
-        }, 
-        "Ethernet124": {
-            "admin_state": "up", 
-            "sample_rate": "131072"
-        }, 
-        "Ethernet125": {
-            "admin_state": "up", 
-            "sample_rate": "131072"
-        }, 
-        "Ethernet126": {
-            "admin_state": "up", 
-            "sample_rate": "131072"
-        }, 
-        "Ethernet127": {
-            "admin_state": "up", 
-            "sample_rate": "131072"
-        }, 
-        "Ethernet128": {
             "admin_state": "up", 
             "sample_rate": "131072"
         }, 

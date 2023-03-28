@@ -2061,6 +2061,9 @@
         "fd00:0:200:102::|global": {
             "in_group": "pg6ESR-ASRR"
         }, 
+        "fd00:0:200:172::|global": {
+            "in_group": "pg6ESR-USRR"
+        }, 
         "fd00:0:200:105::|global": {
             "in_group": "pg6ESR-USRR"
         }, 
@@ -2072,8 +2075,7 @@
         }, 
         "pg4ESR-EC-Infra|global": {
             "advertisement_interval": "0", 
-            "asn": "65050", 
-            "password": "alibabaabtn", 
+            "asn": "65050",
             "peer_group": "true"
         }, 
         "pg4ESR-EC-Infra|ipv4": {
@@ -2085,8 +2087,7 @@
         }, 
         "pg4ESR-MC-AZxxx-ACTN_TC0|global|ACTN_TC0": {
             "advertisement_interval": "0", 
-            "asn": "2200000017", 
-            "password": "alibabaabtn", 
+            "asn": "2200000017",
             "peer_group": "true"
         }, 
         "pg4ESR-MC-AZxxx-ACTN_TC0|ipv4|ACTN_TC0": {
@@ -2098,8 +2099,7 @@
         }, 
         "pg4ESR-MC-AZxxx-Infra|global": {
             "advertisement_interval": "0", 
-            "asn": "2200000012", 
-            "password": "alibabaabtn", 
+            "asn": "2200000012",  
             "peer_group": "true"
         }, 
         "pg4ESR-MC-AZxxx-Infra|ipv4": {
@@ -2111,8 +2111,7 @@
         }, 
         "pg4ESR-MC-AZxxx-OOB_TC0|global|OOB_TC0": {
             "advertisement_interval": "0", 
-            "asn": "2200000017", 
-            "password": "alibabaabtn", 
+            "asn": "2200000017",
             "peer_group": "true"
         }, 
         "pg4ESR-MC-AZxxx-OOB_TC0|ipv4|OOB_TC0": {
@@ -2125,7 +2124,6 @@
         "pg4ESR-MC-AZxxx-OTN_TC0|global|OTN_TC0": {
             "advertisement_interval": "0", 
             "asn": "2200000017", 
-            "password": "alibabaabtn", 
             "peer_group": "true"
         }, 
         "pg4ESR-MC-AZxxx-OTN_TC0|ipv4|OTN_TC0": {
@@ -2138,7 +2136,6 @@
         "pg4ESR-MC-AZxxx-PRIVATE_TC0|global|PRIVATE_TC0": {
             "advertisement_interval": "0", 
             "asn": "2200000017", 
-            "password": "alibabaabtn", 
             "peer_group": "true"
         }, 
         "pg4ESR-MC-AZxxx-PRIVATE_TC0|ipv4|PRIVATE_TC0": {
@@ -2151,7 +2148,6 @@
         "pg4ESR-MC-AZxxx-PUBLIC_TC0|global|PUBLIC_TC0": {
             "advertisement_interval": "0", 
             "asn": "2200000017", 
-            "password": "alibabaabtn", 
             "peer_group": "true"
         }, 
         "pg4ESR-MC-AZxxx-PUBLIC_TC0|ipv4|PUBLIC_TC0": {
@@ -2163,9 +2159,8 @@
         }, 
         "pg6ESR-ASRR|global": {
             "advertisement_interval": "0", 
-            "asn": "65049", 
+            "asn": "65050", 
             "extnh": "true", 
-            "password": "alibabaabtn", 
             "peer_group": "true", 
             "update_source": "fd00:0:200:171::"
         }, 
@@ -2183,7 +2178,6 @@
             "advertisement_interval": "0", 
             "asn": "65049", 
             "extnh": "true", 
-            "password": "alibabaabtn", 
             "peer_group": "true", 
             "update_source": "fd00:0:200:171::"
         }, 
@@ -2205,7 +2199,6 @@
         "pg6ESR-EC-Infra|global": {
             "advertisement_interval": "0", 
             "asn": "65050", 
-            "password": "alibabaabtn", 
             "peer_group": "true"
         }, 
         "pg6ESR-EC-Infra|ipv4": {
@@ -2221,7 +2214,6 @@
         "pg6ESR-MC-AZxxx-ACTN_TC0|global|ACTN_TC0": {
             "advertisement_interval": "0", 
             "asn": "2200000017", 
-            "password": "alibabaabtn", 
             "peer_group": "true"
         }, 
         "pg6ESR-MC-AZxxx-ACTN_TC0|ipv6|ACTN_TC0": {
@@ -2234,7 +2226,6 @@
         "pg6ESR-MC-AZxxx-Infra-Primary|global": {
             "advertisement_interval": "0", 
             "asn": "2200000017", 
-            "password": "alibabaabtn", 
             "peer_group": "true"
         }, 
         "pg6ESR-MC-AZxxx-Infra-Primary|ipv6": {
@@ -2246,7 +2237,6 @@
         "pg6ESR-MC-AZxxx-Infra-Secondary|global": {
             "advertisement_interval": "0", 
             "asn": "2200000017", 
-            "password": "alibabaabtn", 
             "peer_group": "true"
         }, 
         "pg6ESR-MC-AZxxx-Infra-Secondary|ipv6": {
@@ -2265,7 +2255,6 @@
         "pg6ESR-MC-AZxxx-PRIVATE_TC0|global|PRIVATE_TC0": {
             "advertisement_interval": "0", 
             "asn": "2200000017", 
-            "password": "alibabaabtn", 
             "peer_group": "true"
         }, 
         "pg6ESR-MC-AZxxx-PRIVATE_TC0|ipv6|PRIVATE_TC0": {
@@ -2278,7 +2267,6 @@
         "pg6ESR-MC-AZxxx-PUBLIC_TC0|global|PUBLIC_TC0": {
             "advertisement_interval": "0", 
             "asn": "2200000017", 
-            "password": "alibabaabtn", 
             "peer_group": "true"
         }, 
         "pg6ESR-MC-AZxxx-PUBLIC_TC0|ipv6|PUBLIC_TC0": {
@@ -2290,9 +2278,8 @@
         }, 
         "pg6ESR-USRR|global": {
             "advertisement_interval": "0", 
-            "asn": "65049", 
+            "asn": "65050", 
             "extnh": "true", 
-            "password": "alibabaabtn", 
             "peer_group": "true", 
             "update_source": "fd00:0:200:171::"
         }, 

@@ -761,6 +761,12 @@ def test_ft_member_state_after_interchanged_the_members_across_portchannels():
     :return:
     """
     verify_portchannel_status()
+    '''
+    DUT1:
+    PortChannel7: Port 1,2,3,4
+    DUT2:
+    PortChannel7: Port 1,2,3,4
+    '''
     portchannel_name_second = "PortChannel102"
     result_state = True
 
@@ -777,6 +783,14 @@ def test_ft_member_state_after_interchanged_the_members_across_portchannels():
     ensure_no_exception(output[1])
     if not (output[0][0] and output[0][1]):
         st.report_fail('interface_admin_startup_fail', portchannel_name_second)
+    '''
+    DUT1:
+    PortChannel7: Port 1,2
+    PortChannel102: Port 3,4
+    DUT2:
+    PortChannel7: Port 1,2
+    PortChannel102: Port 3,4
+    '''
     #Verify portchannel is up
     dict1 = {'portchannel': portchannel_name_second, 'members': data.members_dut1[2:]}
     dict2 = {'portchannel': portchannel_name_second, 'members': data.members_dut2[2:]}
@@ -787,6 +801,14 @@ def test_ft_member_state_after_interchanged_the_members_across_portchannels():
     # Interchange ports from one portchannel to another portchannel
     portchannel_obj.delete_portchannel_member(data.dut1, data.portchannel_name, data.members_dut1[0])
     portchannel_obj.delete_portchannel_member(data.dut1, portchannel_name_second, data.members_dut1[2])
+    '''
+    DUT1:
+    PortChannel7: Port 2
+    PortChannel102: Port 4
+    DUT2:
+    PortChannel7: Port 1,2
+    PortChannel102: Port 3,4
+    '''
     # Wait 3 times the lacp long timeout period to allow dut members to go down
     st.wait(90)
     output1 = portchannel_obj.verify_portchannel_member_state(data.dut2, data.portchannel_name, data.members_dut2[0], "down")
@@ -801,6 +823,19 @@ def test_ft_member_state_after_interchanged_the_members_across_portchannels():
     output2 = portchannel_obj.add_portchannel_member(data.dut1, portchannel_name_second, data.members_dut1[0])
     if not (output1 and output2):
         result_state = False
+    
+    '''
+    DUT1:
+    PortChannel7: Port 3,2
+    PortChannel102: Port 1,4
+    DUT2:
+    PortChannel7: Port 1,2
+    PortChannel102: Port 3,4
+
+    Shuai: This case is not correct.
+    In above scenario, DUT1, Port 3 and 2 can still receive LACP even from different LAG.
+    Then all the portchannel members are still up.
+    '''
     # Wait for few seconds after converge and ensure member ports states proper
     st.wait(5)
     # Verify portchannel member state with provided state
@@ -843,6 +878,83 @@ def test_ft_member_state_after_interchanged_the_members_across_portchannels():
     else:
         st.report_fail("portchannel_member_state_failed")
 
+def test_ft_lag_fast_mode():
+
+    result_state = True
+    verify_portchannel_status()
+    '''
+    DUT1:
+    PortChannel7: Port 1,2,3,4
+    DUT2:
+    PortChannel7: Port 1,2,3,4
+    '''
+    # DUT2: Remove one member from portchannel
+    st.log("Remove {}'s member {}".format(data.portchannel_name, data.members_dut2[0]))
+    portchannel_obj.delete_portchannel_member(data.dut2, data.portchannel_name, data.members_dut2[0])
+
+    # Wait for few seconds, the DUT1 portchannel should still be up (default LACP interval is 30s)
+    st.wait(5)
+    # Verify portchannel member state with provided state
+    dict1 = {'portchannel': data.portchannel_name, 'members_list': data.members_dut1[0], 'state': "up"}
+    dict2 = {'portchannel': data.portchannel_name, 'members_list': data.members_dut2[1], 'state': "up"}
+    output = exec_parallel(True, [vars.D1, vars.D2], portchannel_obj.verify_portchannel_member_state, [dict1, dict2])
+    ensure_no_exception(output[1])
+    if not (output[0][0] and output[0][1]):
+        result_state = False
+
+    # Wait 3 times the lacp long timeout period to allow dut members to go down
+    st.wait(90)
+    # Verify portchannel member state with provided state
+    dict1 = {'portchannel': data.portchannel_name, 'members_list': data.members_dut1[0], 'state': "down"}
+    dict2 = {'portchannel': data.portchannel_name, 'members_list': data.members_dut2[1], 'state': "up"}
+    output = exec_parallel(True, [vars.D1, vars.D2], portchannel_obj.verify_portchannel_member_state, [dict1, dict2])
+    ensure_no_exception(output[1])
+    if not (output[0][0] and output[0][1]):
+        result_state = False
+
+    # DUT2: Add the member back
+    st.log("Add {}'s member {}".format(data.portchannel_name, data.members_dut2[0]))
+    portchannel_obj.add_portchannel_member(data.dut2, data.portchannel_name, data.members_dut2[0])
+
+    st.wait(2)
+    # Verify portchannel member state with provided state
+    dict1 = {'portchannel': data.portchannel_name, 'members_list': data.members_dut1[0], 'state': "up"}
+    dict2 = {'portchannel': data.portchannel_name, 'members_list': data.members_dut2[1], 'state': "up"}
+    output = exec_parallel(True, [vars.D1, vars.D2], portchannel_obj.verify_portchannel_member_state, [dict1, dict2])
+    ensure_no_exception(output[1])
+    if not (output[0][0] and output[0][1]):
+        result_state = False
+
+    # DUT1: enable LACP fast mode
+    portchannel_obj.config_portchannel_fast_mode(data.dut1, fast_mode=True)
+
+    st.wait(2)
+
+    # DUT2: Remove one member from portchannel
+    st.log("Remove {}'s member {}".format(data.portchannel_name, data.members_dut2[0]))
+    portchannel_obj.delete_portchannel_member(data.dut2, data.portchannel_name, data.members_dut2[0])
+
+    # Wait for few seconds, the DUT1 portchannel should be down (now LACP interval is 1s)
+    st.wait(5)
+    # Verify portchannel member state with provided state
+    dict1 = {'portchannel': data.portchannel_name, 'members_list': data.members_dut1[0], 'state': "down"}
+    dict2 = {'portchannel': data.portchannel_name, 'members_list': data.members_dut2[1], 'state': "up"}
+    output = exec_parallel(True, [vars.D1, vars.D2], portchannel_obj.verify_portchannel_member_state, [dict1, dict2])
+    ensure_no_exception(output[1])
+    if not (output[0][0] and output[0][1]):
+        result_state = False
+
+    # DUT1: disable LACP fast mode
+    portchannel_obj.config_portchannel_fast_mode(data.dut1, fast_mode=False)
+
+    # DUT2: Add the member back
+    st.log("Add {}'s member {}".format(data.portchannel_name, data.members_dut2[0]))
+    portchannel_obj.add_portchannel_member(data.dut2, data.portchannel_name, data.members_dut2[0])
+
+    if result_state:
+        st.report_pass("operation_successful")
+    else:
+        st.report_fail("portchannel_member_state_failed")
 
 @pytest.mark.portchannel_with_vlan_variations
 @pytest.mark.community

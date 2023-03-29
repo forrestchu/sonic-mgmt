@@ -1,5 +1,7 @@
 +file:routing/SRv6/test_esr_srvpn.py
 
++test:test_ft_lag_fast_mode
+
 #+args:--skip-init-config
 #+args:--skip-load-config base
 +args:--force-keep-minimize-config

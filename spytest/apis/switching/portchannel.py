@@ -1243,3 +1243,15 @@ def get_portchannel_names(dut, cli_type=''):
             st.log("Unsupported CLI type: {}".format(cli_type))
             return False
     return result
+
+# configure the portchannel fast mode true/false at system level (not per portchannel)
+def config_portchannel_fast_mode(dut, fast_mode=True, cli_type=''):
+    cli_type = st.get_ui_type(dut, cli_type=cli_type)
+    st.log("configure port channel fast mode as {}".format(fast_mode), dut=dut)
+    if cli_type == "click":
+        command = "sw config lacp -f {}".format(str(fast_mode).lower())
+        st.config(dut, command, skip_error_check=True)
+    else:
+        st.error("Unsupported CLI Type: {}".format(cli_type))
+        return False
+    return True

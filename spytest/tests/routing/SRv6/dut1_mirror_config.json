@@ -5891,5 +5891,13 @@
             "port_form": "64x100G+32x200G+4x10G", 
             "type": "MetroCoreRouter"
         }
+    },
+    "SWITCH": {
+        "FDB": {
+            "fdb_aging_time": "1800", 
+            "fdb_broadcast_miss_packet_action": "forward", 
+            "fdb_multicast_miss_packet_action": "forward", 
+            "fdb_unicast_miss_packet_action": "forward"
+        }
     }
 }

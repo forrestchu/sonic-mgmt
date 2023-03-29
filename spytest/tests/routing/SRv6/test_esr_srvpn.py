@@ -883,6 +883,53 @@ def test_srvpn_ecmp_04():
 #            |                    |                |                    |
 #            +--------------------+                +--------------------+
 
+def check_traffic():
+    # check v4 traffic
+    ret = ixia_start_traffic(TRAFFIC_MIRROR_V4)    
+    if not ret:
+        st.log("Start traffic item {} failed".format(TRAFFIC_MIRROR_V4))
+        return False
+    st.wait(10)
+    ret = ixia_stop_traffic(TRAFFIC_MIRROR_V4)
+    if not ret:
+        st.log("Stop traffic item {} failed".format(TRAFFIC_MIRROR_V4))
+        return False
+    
+    traffic_v4 = ixia_get_traffic_stat(TRAFFIC_MIRROR_V4)
+    if not traffic_v4:
+        st.log("Get {} traffic stat failed {}".format(TRAFFIC_MIRROR_V4))
+        return False
+    # check val
+    if  traffic_v4['Rx Frames'] == '40000' and traffic_v4['Tx Frames'] == '40000' and traffic_v4['Loss %'] == '0.000':
+        st.log("traffic_v4 check success")
+    else:
+        st.log("traffic_v4 check failed")
+        return False
+
+    # check v6 traffic
+    ret = ixia_start_traffic(TRAFFIC_MIRROR_V6)    
+    if not ret:
+        st.log("Start traffic item {} failed".format(TRAFFIC_MIRROR_V6))
+        return False
+    st.wait(10)
+    ret = ixia_stop_traffic(TRAFFIC_MIRROR_V6)
+    if not ret:
+        st.log("Stop traffic item {} failed".format(TRAFFIC_MIRROR_V6))
+        return False
+    
+    traffic_v6 = ixia_get_traffic_stat(TRAFFIC_MIRROR_V6)
+    if not traffic_v6:
+        st.log("Get {} traffic stat failed {}".format(TRAFFIC_MIRROR_V6))
+        return False
+    # check val
+    if  traffic_v6['Rx Frames'] == '40000' and traffic_v6['Tx Frames'] == '40000' and traffic_v6['Loss %'] == '0.000':
+        st.log("traffic_v6 check success")
+    else:
+        st.log("traffic_v6 check failed")
+        return False
+    return True
+    
+
 def test_srvpn_mirror_config_05():
     st.banner("test_srvpn_mirror_config_05 begin")
 
@@ -892,41 +939,9 @@ def test_srvpn_mirror_config_05():
     # wait route learning
     st.wait(60)
 
-    # check v4 traffic
-    ret = ixia_start_traffic(TRAFFIC_MIRROR_V4)    
-    if not ret:
-        st.report_fail("Start traffic item {} failed".format(TRAFFIC_MIRROR_V4))
-    st.wait(10)
-    ret = ixia_stop_traffic(TRAFFIC_MIRROR_V4)
-    if not ret:
-        st.report_fail("Stop traffic item {} failed".format(TRAFFIC_MIRROR_V4))
-    
-    traffic_v4 = ixia_get_traffic_stat(TRAFFIC_MIRROR_V4)
-    if not traffic_v4:
-        st.report_fail("Get {} traffic stat failed {}".format(TRAFFIC_MIRROR_V4))
-    # check val
-    if  traffic_v4['Rx Frames'] == '40000' and traffic_v4['Tx Frames'] == '40000' and traffic_v4['Loss %'] == '0.000':
-        st.log("traffic_v4 check success")
-    else:
-        st.report_fail("traffic_v4 check failed")
-
-    # check v6 traffic
-    ret = ixia_start_traffic(TRAFFIC_MIRROR_V6)    
-    if not ret:
-        st.report_fail("Start traffic item {} failed".format(TRAFFIC_MIRROR_V6))
-    st.wait(10)
-    ret = ixia_stop_traffic(TRAFFIC_MIRROR_V6)
-    if not ret:
-        st.report_fail("Stop traffic item {} failed".format(TRAFFIC_MIRROR_V6))
-    
-    traffic_v6 = ixia_get_traffic_stat(TRAFFIC_MIRROR_V6)
-    if not traffic_v6:
-        st.report_fail("Get {} traffic stat failed {}".format(TRAFFIC_MIRROR_V6))
-    # check val
-    if  traffic_v6['Rx Frames'] == '40000' and traffic_v6['Tx Frames'] == '40000' and traffic_v6['Loss %'] == '0.000':
-        st.log("traffic_v6 check success")
-    else:
-        st.report_fail("traffic_v6 check failed")
+    # traffic check    
+    if not check_traffic():
+        st.report_fail("traffic check failed")
 
     #  check base checkout
     st.report_pass("test_case_passed")

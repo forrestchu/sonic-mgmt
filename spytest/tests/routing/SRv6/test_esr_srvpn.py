@@ -946,57 +946,53 @@ def test_srvpn_mirror_config_05():
     #  check base checkout
     st.report_pass("test_case_passed")
 
-def _test_srvpn_mirror_config_redistribute_vrf_06():
+def test_srvpn_mirror_config_redistribute_vrf_06():
     st.banner("test_srvpn_mirror_config_redistribute_vrf_06 begin")
+
+    # load ixia config
+    ixia_load_config(ESR_MIRROR_CONFIG)
+    ixia_start_all_protocols()
+
+    st.wait(50)
 
     # check1 : dut1 ACTN_TC0 route ACTN_TC1 route
     st.banner("dut1 ACTN_TC0 ACTN_TC1 route")
-    check_prefix = "11.105.231.121/32"
+    check_prefix = "14.1.64.1/32"
     svrf = 'ACTN_TC0'
     dvrf = 'ACTN_TC1'
     vtysh_cmd1 = "show bgp vrf  {} ipv4 unicast {}".format(svrf, check_prefix)
     vtysh_cmd2 = "show bgp vrf  {} ipv4 unicast {}".format(dvrf, check_prefix)
     output_1 = st.show(dut1, vtysh_cmd1, skip_tmpl=True, max_time=500, type="vtysh")
+    print(output_1)
     output_2 = st.show(dut1, vtysh_cmd2, skip_tmpl=True, max_time=500, type="vtysh")
+    print(output_2)
     # compare output, expected same
     if not compare_redistribute_vrf_route(svrf, dvrf, output_1, output_2):
         st.report_fail("{} route and {} route is diffent".format(svrf, dvrf))
     
     # check appdb
-    # 127.0.0.1:6380> hgetall ROUTE_TABLE:Vrf10000:11.105.231.121/32
-    #  1) "nexthop"
-    #  2) "fd00:0:200:121::"
-    #  3) "ifname"
-    #  4) "unknown"
-    #  5) "vpn_sid"
-    #  6) "fd00:201:2001:fff0:3::"
-    #  7) "seg_src"
-    #  8) "fd00:0:200:171::"
-    #  9) "policy"
-    # 10) "na"
-    # 11) "blackhole"
-    # 12) "false"
-    # 127.0.0.1:6380> hgetall ROUTE_TABLE:Vrf10001:11.105.231.121/32
-    #  1) "nexthop"
-    #  2) "fd00:0:200:121::"
-    #  3) "ifname"
-    #  4) "unknown"
-    #  5) "vpn_sid"
-    #  6) "fd00:201:2001:fff0:3::"
-    #  7) "seg_src"
-    #  8) "fd00:0:200:171::"
-    #  9) "policy"
-    # 10) "na"
-    # 11) "blackhole"
-    # 12) "false"
+# root@MC-58:~# redis-cli -p 6380 -n 0 hgetall "ROUTE_TABLE:Vrf10001:14.1.64.1/32"
+#  1) "nexthop"
+#  2) "fd00:0:200:172::"
+#  3) "ifname"
+#  4) "unknown"
+#  5) "vpn_sid"
+#  6) "fd00:201:2022:fff0:3::"
+#  7) "seg_src"
+#  8) "fd00:0:200:171::"
+#  9) "policy"
+# 10) "na"
+# 11) "blackhole"
+# 12) "false"
+# root@MC-58:~# 
 
-    svrf_name = get_vrf_realname(svrf)
-    dvrf_name = get_vrf_realname(dvrf)
+    svrf_name = get_vrf_realname(dut1,svrf)
+    dvrf_name = get_vrf_realname(dut1,dvrf)
     
     check_val = {
-        "nexthop":"fd00:0:200:121::",
+        "nexthop":"fd00:0:200:172::",
         "ifname":"unknown",
-        "vpn_sid":"fd00:201:2001:fff0:3::",
+        "vpn_sid":"fd00:201:2022:fff0:3::",
         "seg_src":"fd00:0:200:171::",
         "policy":"na",
         "blackhole":"false"
@@ -1010,26 +1006,42 @@ def _test_srvpn_mirror_config_redistribute_vrf_06():
   
     # check2 : dut2 PUBLIC_TC0 PUBLIC_TC1 ipv6 route
     st.banner("dut2 PUBLIC_TC0 PUBLIC_TC1 ipv6 route")
-    check_prefix = "fd00:0:200:172::/128"
+    check_prefix = "114:0:1::18f0/128"
     svrf = 'PUBLIC_TC0'
     dvrf = 'PUBLIC_TC1'
     vtysh_cmd1 = "show bgp vrf {} ipv6 unicast {}".format(svrf, check_prefix)
     vtysh_cmd2 = "show bgp vrf {} ipv6 unicast {}".format(dvrf, check_prefix)
     output_1 = st.show(dut2, vtysh_cmd1, skip_tmpl=True, max_time=500, type="vtysh")
+    print(output_1)
     output_2 = st.show(dut2, vtysh_cmd2, skip_tmpl=True, max_time=500, type="vtysh")
+    print(output_2)
     # compare output, expected same
     if not compare_redistribute_vrf_route(svrf, dvrf, output_1, output_2):
         st.report_fail("{} route and {} route is diffent".format(svrf, dvrf))
-    
+
+# 127.0.0.1:6380> hgetall ROUTE_TABLE:Vrf10011:114:0:1::18f0/128
+#  1) "nexthop"
+#  2) "fd00:0:200:171::"
+#  3) "ifname"
+#  4) "unknown"
+#  5) "vpn_sid"
+#  6) "fd00:201:2021:fff0:2::"
+#  7) "seg_src"
+#  8) "fd00:0:200:172::"
+#  9) "policy"
+# 10) "na"
+# 11) "blackhole"
+# 12) "false"
+
     # check appdb
-    svrf_name = get_vrf_realname(svrf)
-    dvrf_name = get_vrf_realname(dvrf)
+    svrf_name = get_vrf_realname(dut2, svrf)
+    dvrf_name = get_vrf_realname(dut2, dvrf)
     
     check_val = {
-        "nexthop":"fd00:0:200:121::",
+        "nexthop":"fd00:0:200:171::",
         "ifname":"unknown",
-        "vpn_sid":"fd00:201:2001:fff0:3::",
-        "seg_src":"fd00:0:200:171::",
+        "vpn_sid":"fd00:201:2021:fff0:2::",
+        "seg_src":"fd00:0:200:172::",
         "policy":"na",
         "blackhole":"false"
     }
@@ -1037,8 +1049,7 @@ def _test_srvpn_mirror_config_redistribute_vrf_06():
     for vrf_it in [svrf_name, dvrf_name]:
         appdb_key = "ROUTE_TABLE:{}:{}".format(vrf_it, check_prefix)
         for k in check_val.keys():
-            appdb_onefield_checkpoint(dut1, appdb_key, k, check_val[k], expect = True, checkpoint = checkpoint_msg)
-
+            appdb_onefield_checkpoint(dut2, appdb_key, k, check_val[k], expect = True, checkpoint = checkpoint_msg)
     # check3 : no redistribute vrf
 
     # check4 : recover redistribute vrf
@@ -1047,10 +1058,24 @@ def _test_srvpn_mirror_config_redistribute_vrf_06():
 
 def _test_srvpn_mirror_config_bgp_flap_07():
     st.banner("test_srvpn_mirror_config_bgp_flap_07 begin")
+    # load ixia config
+    ixia_load_config(ESR_MIRROR_CONFIG)
+    ixia_start_all_protocols()
+    # wait route learning
+    st.wait(10)
+    # flap
+    peer = get_bgpv4_peers()
+    # for peer in peers:
+    peer.BgpIpv4PeerConfig.Flap = True
+    st.wait(600)
     st.report_pass("test_case_passed")
 
 def _test_srvpn_mirror_config_underlay_link_flap_08():
     st.banner("test_srvpn_mirror_config_underlay_link_flap_08 begin")
+    # load ixia config
+    ixia_load_config(ESR_MIRROR_CONFIG)
+    ixia_start_all_protocols()
+    # wait route learning
     st.report_pass("test_case_passed")
 
 def _test_srvpn_mirror_config_underlay_ecmp_switch_09():

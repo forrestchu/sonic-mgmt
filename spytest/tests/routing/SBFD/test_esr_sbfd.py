@@ -287,7 +287,7 @@ def test_sbfd_base_case1():
     st.banner("test_sbfd_base_case1 begin")
     st.wait(30)
 
-    # step 1 : ping each other ， learn each nd
+    # step 1 : ping each other , learn each nd
     st.config(dut1, 'ping -c2 2023::59')
     st.config(dut2, 'ping -c2 2023::58')
     st.config(dut1, 'ping -c2 2000::59')

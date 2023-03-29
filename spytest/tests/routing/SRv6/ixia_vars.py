@@ -5,6 +5,7 @@ IXIA_PORT = 12031
 ESR_MULTI_VRF_CONFIG = "esr_multi_vrf.ixncfg"
 ESR_MULTI_VRF_ECMP_CONFIG = "esr_multi_vrf_ecmp.ixncfg"
 ESR_ECMP_CONFIG = "esr_ecmp_04.ixncfg"
+ESR_MIRROR_CONFIG = "esr_mirror.ixncfg"
 
 # IXIA_PORT connected to 179
 PORT_NAME_1 = "1/1/15"
@@ -39,5 +40,6 @@ BGP_IP_ROUTE_PROPERTY_2 = "BGP IP Route Range 2"
 VRF_TRAFFIC_NAME = "t-g1-1"
 SPECIFIC_VRF_TRAFFIC_NAME = "Specific-Vrf_traffic"
 ECMP_TRAFFIC_NAME = "traffic_ecmp"
-
+TRAFFIC_MIRROR_V4 = "TI-IPv4"
+TRAFFIC_MIRROR_V6 = "TI-IPv6"
 

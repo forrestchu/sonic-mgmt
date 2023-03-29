@@ -23,7 +23,7 @@ import apis.routing.bgp as bgp_api
 import apis.routing.arp as arp_obj
 import apis.routing.bfd as bfdapi
 import apis.routing.ip_bgp as ip_bgp
-from esr_lib import cli_show_json, json_cmp, configdb_checkpoint, configdb_checkarray, appdb_checkpoint, configdb_onefield_checkpoint,appdb_onefield_checkpoint,check_vrf_route_nums, get_random_array, check_vpn_route_nums, check_bgp_vrf_ipv4_uni_sid,appdb_get_onefield
+from esr_lib import cli_show_json, json_cmp, configdb_checkpoint, configdb_checkarray, appdb_checkpoint, configdb_onefield_checkpoint,appdb_onefield_checkpoint,check_vrf_route_nums, get_random_array, check_vpn_route_nums, check_bgp_vrf_ipv4_uni_sid,appdb_get_onefield,get_vrf_realname,compare_redistribute_vrf_route
 import esr_lib as loc_lib
 from esr_vars import * #all the variables used for vrf testcase
 from esr_vars import data
@@ -236,7 +236,6 @@ def esr_srvpn_module_hooks(request):
 
 @pytest.fixture(scope="function", autouse=True)
 def esr_srvpn_func_hooks(request):
-    st.log("xxxxxxx")
     if st.get_func_name(request) in  ["test_srvpn_mirror_config_05","test_srvpn_mirror_config_redistribute_vrf_06",
                                       "test_srvpn_mirror_config_bgp_flap_07", "test_srvpn_mirror_config_underlay_link_flap_08",
                                       "test_srvpn_mirror_config_underlay_ecmp_switch_09"]:
@@ -268,7 +267,6 @@ def l3_base_unconfig():
 
 @pytest.mark.community
 @pytest.mark.community_pass
-@pytest.mark.run(order=-4)
 def test_base_config_srvpn_locator_01():
 
     duts_base_config()
@@ -579,7 +577,6 @@ def load_mirro_config(filesuffix='mirror_config'):
 ## 2k locator , base traffic and route learning
 @pytest.mark.community
 @pytest.mark.community_pass
-@pytest.mark.run(order=-3)
 def test_base_config_srvpn_2kl_route_learn_02():
     st.banner("test_base_config_srvpn_2kl_traffic_and_route_02 begin")
 
@@ -665,7 +662,6 @@ def test_base_config_srvpn_2kl_route_learn_02():
 ## 100 vrf test
 @pytest.mark.community
 @pytest.mark.community_pass
-@pytest.mark.run(order=-2)
 def test_base_config_srvpn_multi_vrf_03():
 
     # ixia config 100 subinterface
@@ -802,7 +798,6 @@ def test_base_config_srvpn_multi_vrf_03():
 ## ecmp test
 @pytest.mark.community
 @pytest.mark.community_pass
-@pytest.mark.run(order=-1)
 def test_srvpn_ecmp_04():
     st.banner("test_srvpn_ecmp_04 begin")
 
@@ -890,21 +885,159 @@ def test_srvpn_ecmp_04():
 
 def test_srvpn_mirror_config_05():
     st.banner("test_srvpn_mirror_config_05 begin")
+
+    # load ixia config
+    ixia_load_config(ESR_MIRROR_CONFIG)
+    ixia_start_all_protocols()
+    # wait route learning
+    st.wait(60)
+
+    # check v4 traffic
+    ret = ixia_start_traffic(TRAFFIC_MIRROR_V4)    
+    if not ret:
+        st.report_fail("Start traffic item {} failed".format(TRAFFIC_MIRROR_V4))
+    st.wait(10)
+    ret = ixia_stop_traffic(TRAFFIC_MIRROR_V4)
+    if not ret:
+        st.report_fail("Stop traffic item {} failed".format(TRAFFIC_MIRROR_V4))
+    
+    traffic_v4 = ixia_get_traffic_stat(TRAFFIC_MIRROR_V4)
+    if not traffic_v4:
+        st.report_fail("Get {} traffic stat failed {}".format(TRAFFIC_MIRROR_V4))
+    # check val
+    if  traffic_v4['Rx Frames'] == '40000' and traffic_v4['Tx Frames'] == '40000' and traffic_v4['Loss %'] == '0.000':
+        st.log("traffic_v4 check success")
+    else:
+        st.report_fail("traffic_v4 check failed")
+
+    # check v6 traffic
+    ret = ixia_start_traffic(TRAFFIC_MIRROR_V6)    
+    if not ret:
+        st.report_fail("Start traffic item {} failed".format(TRAFFIC_MIRROR_V6))
+    st.wait(10)
+    ret = ixia_stop_traffic(TRAFFIC_MIRROR_V6)
+    if not ret:
+        st.report_fail("Stop traffic item {} failed".format(TRAFFIC_MIRROR_V6))
+    
+    traffic_v6 = ixia_get_traffic_stat(TRAFFIC_MIRROR_V6)
+    if not traffic_v6:
+        st.report_fail("Get {} traffic stat failed {}".format(TRAFFIC_MIRROR_V6))
+    # check val
+    if  traffic_v6['Rx Frames'] == '40000' and traffic_v6['Tx Frames'] == '40000' and traffic_v6['Loss %'] == '0.000':
+        st.log("traffic_v6 check success")
+    else:
+        st.report_fail("traffic_v6 check failed")
+
     #  check base checkout
     st.report_pass("test_case_passed")
 
-def test_srvpn_mirror_config_redistribute_vrf_06():
+def _test_srvpn_mirror_config_redistribute_vrf_06():
     st.banner("test_srvpn_mirror_config_redistribute_vrf_06 begin")
+
+    # check1 : dut1 ACTN_TC0 route ACTN_TC1 route
+    st.banner("dut1 ACTN_TC0 ACTN_TC1 route")
+    check_prefix = "11.105.231.121/32"
+    svrf = 'ACTN_TC0'
+    dvrf = 'ACTN_TC1'
+    vtysh_cmd1 = "show bgp vrf  {} ipv4 unicast {}".format(svrf, check_prefix)
+    vtysh_cmd2 = "show bgp vrf  {} ipv4 unicast {}".format(dvrf, check_prefix)
+    output_1 = st.show(dut1, vtysh_cmd1, skip_tmpl=True, max_time=500, type="vtysh")
+    output_2 = st.show(dut1, vtysh_cmd2, skip_tmpl=True, max_time=500, type="vtysh")
+    # compare output, expected same
+    if not compare_redistribute_vrf_route(svrf, dvrf, output_1, output_2):
+        st.report_fail("{} route and {} route is diffent".format(svrf, dvrf))
+    
+    # check appdb
+    # 127.0.0.1:6380> hgetall ROUTE_TABLE:Vrf10000:11.105.231.121/32
+    #  1) "nexthop"
+    #  2) "fd00:0:200:121::"
+    #  3) "ifname"
+    #  4) "unknown"
+    #  5) "vpn_sid"
+    #  6) "fd00:201:2001:fff0:3::"
+    #  7) "seg_src"
+    #  8) "fd00:0:200:171::"
+    #  9) "policy"
+    # 10) "na"
+    # 11) "blackhole"
+    # 12) "false"
+    # 127.0.0.1:6380> hgetall ROUTE_TABLE:Vrf10001:11.105.231.121/32
+    #  1) "nexthop"
+    #  2) "fd00:0:200:121::"
+    #  3) "ifname"
+    #  4) "unknown"
+    #  5) "vpn_sid"
+    #  6) "fd00:201:2001:fff0:3::"
+    #  7) "seg_src"
+    #  8) "fd00:0:200:171::"
+    #  9) "policy"
+    # 10) "na"
+    # 11) "blackhole"
+    # 12) "false"
+
+    svrf_name = get_vrf_realname(svrf)
+    dvrf_name = get_vrf_realname(dvrf)
+    
+    check_val = {
+        "nexthop":"fd00:0:200:121::",
+        "ifname":"unknown",
+        "vpn_sid":"fd00:201:2001:fff0:3::",
+        "seg_src":"fd00:0:200:171::",
+        "policy":"na",
+        "blackhole":"false"
+    }
+    checkpoint_msg = "test_srvpn_mirror_config_redistribute_vrf_06 check1"
+    for vrf_it in [svrf_name, dvrf_name]:
+        appdb_key = "ROUTE_TABLE:{}:{}".format(vrf_it, check_prefix)
+        for k in check_val.keys():
+            appdb_onefield_checkpoint(dut1, appdb_key, k, check_val[k], expect = True, checkpoint = checkpoint_msg)
+
+  
+    # check2 : dut2 PUBLIC_TC0 PUBLIC_TC1 ipv6 route
+    st.banner("dut2 PUBLIC_TC0 PUBLIC_TC1 ipv6 route")
+    check_prefix = "fd00:0:200:172::/128"
+    svrf = 'PUBLIC_TC0'
+    dvrf = 'PUBLIC_TC1'
+    vtysh_cmd1 = "show bgp vrf {} ipv6 unicast {}".format(svrf, check_prefix)
+    vtysh_cmd2 = "show bgp vrf {} ipv6 unicast {}".format(dvrf, check_prefix)
+    output_1 = st.show(dut2, vtysh_cmd1, skip_tmpl=True, max_time=500, type="vtysh")
+    output_2 = st.show(dut2, vtysh_cmd2, skip_tmpl=True, max_time=500, type="vtysh")
+    # compare output, expected same
+    if not compare_redistribute_vrf_route(svrf, dvrf, output_1, output_2):
+        st.report_fail("{} route and {} route is diffent".format(svrf, dvrf))
+    
+    # check appdb
+    svrf_name = get_vrf_realname(svrf)
+    dvrf_name = get_vrf_realname(dvrf)
+    
+    check_val = {
+        "nexthop":"fd00:0:200:121::",
+        "ifname":"unknown",
+        "vpn_sid":"fd00:201:2001:fff0:3::",
+        "seg_src":"fd00:0:200:171::",
+        "policy":"na",
+        "blackhole":"false"
+    }
+    checkpoint_msg = "test_srvpn_mirror_config_redistribute_vrf_06 check1"
+    for vrf_it in [svrf_name, dvrf_name]:
+        appdb_key = "ROUTE_TABLE:{}:{}".format(vrf_it, check_prefix)
+        for k in check_val.keys():
+            appdb_onefield_checkpoint(dut1, appdb_key, k, check_val[k], expect = True, checkpoint = checkpoint_msg)
+
+    # check3 : no redistribute vrf
+
+    # check4 : recover redistribute vrf
+
     st.report_pass("test_case_passed")
 
-def test_srvpn_mirror_config_bgp_flap_07():
+def _test_srvpn_mirror_config_bgp_flap_07():
     st.banner("test_srvpn_mirror_config_bgp_flap_07 begin")
     st.report_pass("test_case_passed")
 
-def test_srvpn_mirror_config_underlay_link_flap_08():
+def _test_srvpn_mirror_config_underlay_link_flap_08():
     st.banner("test_srvpn_mirror_config_underlay_link_flap_08 begin")
     st.report_pass("test_case_passed")
 
-def test_srvpn_mirror_config_underlay_ecmp_switch_09():
+def _test_srvpn_mirror_config_underlay_ecmp_switch_09():
     st.banner("test_srvpn_mirror_config_underlay_ecmp_switch_09 begin")
     st.report_pass("test_case_passed")

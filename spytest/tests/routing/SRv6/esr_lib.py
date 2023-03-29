@@ -581,3 +581,28 @@ def check_bgp_vrf_ipv4_uni_sid(dut, vrf, prefix, expected_sid):
                 st.log("sid is {} , expected_sid is {}".format(sid, expected_sid))
                 # return False
     return False
+
+def get_vrf_realname(alias_name):
+    vrf_name = st.show(dut1, "vrfnametodevname {}".format(alias_name), skip_tmpl=True, max_time=500, type="vtysh")
+    last_pos = vrf_name.rfind('\n')
+    vrf_name = vrf_name[:last_pos]
+    return vrf_name
+
+def compare_redistribute_vrf_route(vrf1, vrf2, info1, info2):
+    infos_1 = info1.splitlines()
+    infos_2 = info2.splitlines()
+    if len(infos_1) != len(infos_2):
+        return False
+    if len(infos_1) < 3:
+        return False
+    for i in len(infos_1):
+        if i == 0 :
+            continue
+        elif i == 2 :
+            infos_2_new = infos_2[i].replace(vrf2, vrf1)
+            if infos_1[i] != infos_2_new:
+                return False
+        else:
+            if infos_1[i] != infos_2[i]:
+                return False
+    return True

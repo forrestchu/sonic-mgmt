@@ -88,6 +88,15 @@ def ixia_check_traffic_item_rx_frame(traffic_item_name, rx_count):
         return True
     return False
 
+def ixia_get_traffic_stat(traffic_item_name):
+    st.log("get traffic stat begin")
+    traffic_item_stats = ixia_controller.get_traffic_item_statistics(traffic_item_name)
+    if traffic_item_stats is None:
+        return None
+    st.log("Get traffic item statistics {}".format(traffic_item_name))
+    st.log("\n")
+    st.log(traffic_item_stats)
+    return traffic_item_stats
 
 def ixia_load_config(config_file_name):
     ixia_controller.new_config()

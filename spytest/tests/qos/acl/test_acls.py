@@ -360,6 +360,9 @@ def acl_v4_module_hooks(request):
 
     arp_obj.show_ndp(vars.D1)
 
+    # Need to wait enable_counters.py to enable ACL flexcounter
+    st.wait(60)
+
     yield
     clear_module_configuration()
 

@@ -153,44 +153,19 @@ def ixia_check_traffic(traffic_item_name, key="Rx frame", value="0"):
 
 
 def ixia_config_bgp_flapping():
-    # 1/1/21
-    bgp_ip_route_range_1 = ixia_controller.get_bgp_ip_route_property(TOPOLOGY_3, DEVICE_GROUP_3,
-                                            NETWORK_GROUP_1, IPV4_PREFIX_POOL_1, BGP_IP_ROUTE_PROPERTY_1)
-    if not bgp_ip_route_range_1:
-        st.error("Get bgp ip route property failed. {} {} {} {} {}".format(TOPOLOGY_3, DEVICE_GROUP_3,
-                                            NETWORK_GROUP_1, IPV4_PREFIX_POOL_1, BGP_IP_ROUTE_PROPERTY_1))
-        return False
+    TOPOLOGY = "Topology 2"
+    DEVICE_GROUP = "Device Group 2"
+    ETHERNET = "Ethernet 2"
+    IPV4_NAME = "IPv4 2"
+    BGP_PEER_NAME = "BGP Peer 2"
 
-    value_list = []
-    flapping_list_1 = [10, 20]
-    for i in range(1, 50):
-        if i in flapping_list_1:
-            value_list.append('true')
-        else:
-            value_list.append('false')
+    item = ixia_controller.get_ipv4_bgp_peer(TOPOLOGY, DEVICE_GROUP, ETHERNET, IPV4_NAME, BGP_PEER_NAME)
+    if not item:
+        print("Failed to get ipv4 bgp peer")
 
-    ixia_controller.enable_bgp_ip_route_flapping(bgp_ip_route_range_1, value_list)
-    st.log("Config bgp flapping for bgp ip route range 1 completed")
-
-    # 1/1/22
-    bgp_ip_route_range_2 = ixia_controller.get_bgp_ip_route_property(TOPOLOGY_4, DEVICE_GROUP_4,
-                                                    NETWORK_GROUP_2, IPV4_PREFIX_POOL_2, BGP_IP_ROUTE_PROPERTY_2)
-    if not bgp_ip_route_range_2:
-        st.error("Get bgp ip route property failed. {} {} {} {} {}".format(TOPOLOGY_4, DEVICE_GROUP_4,
-                                            NETWORK_GROUP_2, IPV4_PREFIX_POOL_2, BGP_IP_ROUTE_PROPERTY_2))
-        return False
-
-    value_list = []
-    flapping_list_1 = [10]
-    for i in range(1, 50):
-        if i in flapping_list_1:
-            value_list.append('true')
-        else:
-            value_list.append('false')
-
-    ixia_controller.enable_bgp_ip_route_flapping(bgp_ip_route_range_2, value_list)
-    st.log("Config bgp flapping for bgp ip route range 2 completed")
-    return True
+    res = ixia_controller.enable_ipv4_bgp_peer_flapping(item, 10, 10)
+    if not res:
+        pass
 
 
 def ixia_start_traffic(traffic_item_name):

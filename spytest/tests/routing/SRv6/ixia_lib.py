@@ -151,10 +151,6 @@ class IxiaController():
 
         return None
 
-    def get_bgp_ipv4_peer(self):
-        bgp_ipv4_peer = self.ixnetwork.Globals.find().Topology.find().BgpIpv4Peer.find()
-        print(bgp_ipv4_peer)
-
     def traffic_apply(self):
         self.ixnetwork.Traffic.find().Apply()
         return True
@@ -198,6 +194,42 @@ class IxiaController():
         device_groups = topology.DeviceGroup.find()
         for item in device_groups:
             if item.Name == device_group_name:
+                return item
+        return None
+
+    def get_ethernet(self, topology_name, device_group_name, ethernet_name):
+        device_group = self.get_device_group(topology_name, device_group_name)
+        if not device_group:
+            return None
+
+        item_list = device_group.Ethernet.find()
+        for item in item_list:
+            if item.Name == ethernet_name:
+                return item
+        return None
+
+    def get_ipv4(self, topology_name, device_group_name, ethernet_name,
+                 ipv4_name):
+        parent_item = self.get_ethernet(topology_name, device_group_name, ethernet_name)
+        if not parent_item:
+            return None
+
+        item_list = parent_item.Ipv4.find()
+        for item in item_list:
+            if item.Name == ipv4_name:
+                return item
+        return None
+
+    def get_ipv4_bgp_peer(self, topology_name, device_group_name, ethernet_name,
+                 ipv4_name, bgp_peer_name):
+        parent_item = self.get_ipv4(topology_name, device_group_name, ethernet_name,
+                                     ipv4_name)
+        if not parent_item:
+            return None
+
+        item_list = parent_item.BgpIpv4Peer.find()
+        for item in item_list:
+            if item.Name == bgp_peer_name:
                 return item
         return None
 
@@ -248,6 +280,16 @@ class IxiaController():
     def disable_bgp_ip_route_flapping(self, birp):
         birp.EnableFlapping.Single('false')
 
+    def enable_ipv4_bgp_peer_flapping(self, bgp_peer, uptime_s=10, downtime_s=10):
+        if not bgp_peer:
+            return False
 
+        bgp_peer.Flap.Single('true')
+        bgp_peer.UptimeInSec.Single(uptime_s)
+        bgp_peer.DowntimeInSec.Single(downtime_s)
 
+    def disable_ipv4_bgp_peer_flapping(self, bgp_peer):
+        if not bgp_peer:
+            return False
 
+        bgp_peer.Flap.Single('false')

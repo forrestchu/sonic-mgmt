@@ -235,3 +235,29 @@ def bind_qos_map(dut, intf_name,config="yes",**kwargs):
         st.log("support for UI type {} yet to be added".format(cli_type))
         return False
     return st.config(dut, cmd, type=cli_type)
+
+
+def config_scheduler(dut, config="yes", **kwargs):
+    index = ""
+    type = ""
+    weight = ""
+    if "index" in kwargs:
+        index = kwargs["index"]
+    if "type" in kwargs:
+        type = kwargs["type"]
+    if "weight" in kwargs:
+        weight = kwargs["weight"]
+    
+    if config.lower() == "yes":
+        # no index/type/weight
+        if not index or not type or not weight:
+            return False
+        command = "sw config scheduler set --index {} --types {} --weight {}".format(index, type, weight)
+        st.config(dut, command, skip_error_check=True)
+    else:
+        # no index
+        if not index:
+            return False
+        command = "sw config scheduler delete --index {}".format(index)
+        st.config(dut, command, skip_error_check=True)
+    return True

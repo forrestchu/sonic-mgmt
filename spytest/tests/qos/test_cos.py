@@ -898,3 +898,13 @@ def test_ft_cos_tc_queue_map():
     if int(counter[0]['pkts_count'].replace(',', '')) < 2000:
         st.report_fail("queue_traffic_failed")
     st.report_pass("test_case_passed")
+
+def test_ft_create_scheduler():
+    qos_obj.config_scheduler(vars.D1, index="0", type="DWRR", weight="10")
+    qos_obj.config_scheduler(vars.D1, index="1", type="DWRR", weight="10")
+    st.config(vars.D1, "sw show qos scheduler_config")
+
+    qos_obj.config_scheduler(vars.D1, index="0", config="no")
+    qos_obj.config_scheduler(vars.D1, index="1", config="no")
+    st.config(vars.D1, "sw show qos scheduler_config")
+    st.report_pass("test_case_passed")

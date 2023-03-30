@@ -1,6 +1,11 @@
 +file:routing/VRF/test_vrf_basic.py
++file:qos/test_cos.py
 +file:switching/test_portchannel.py
 +file:routing/SRv6/test_esr_srvpn.py
+
+-test:test_ft_cos_cpu_counters
+-test:test_ft_cos_set_copp_rate
+-test:test_ft_cos_bypass_pkt_verify
 
 -test:test_ft_portchannel_behavior_with_tagged_traffic
 -test:test_ft_untagged_traffic_on_portchannel

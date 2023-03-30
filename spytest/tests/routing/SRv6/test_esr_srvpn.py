@@ -23,7 +23,7 @@ import apis.routing.bgp as bgp_api
 import apis.routing.arp as arp_obj
 import apis.routing.bfd as bfdapi
 import apis.routing.ip_bgp as ip_bgp
-from esr_lib import cli_show_json, json_cmp, configdb_checkpoint, configdb_checkarray, appdb_checkpoint, configdb_onefield_checkpoint,appdb_onefield_checkpoint,check_vrf_route_nums, get_random_array, check_vpn_route_nums, check_bgp_vrf_ipv4_uni_sid,appdb_get_onefield,get_vrf_realname,compare_redistribute_vrf_route
+from esr_lib import cli_show_json, json_cmp, configdb_checkpoint, configdb_checkarray, appdb_checkpoint, configdb_onefield_checkpoint,appdb_onefield_checkpoint,check_vrf_route_nums, get_random_array, check_vpn_route_nums, check_bgp_vrf_ipv4_uni_sid,appdb_get_onefield,get_vrf_realname,compare_redistribute_vrf_route, flap_lag_member,show_hw_route_count
 import esr_lib as loc_lib
 from esr_vars import * #all the variables used for vrf testcase
 from esr_vars import data
@@ -939,6 +939,17 @@ def test_srvpn_mirror_config_05():
     # wait route learning
     st.wait(60)
 
+    show_hw_route_count(dut1)
+    show_hw_route_count(dut2)
+
+# 2023-03-30 06:29:19,820 T0000: INFO  [D1-MC-58] FCMD: curl http://127.0.0.1:12346/route -s | grep ipv4 
+# 2023-03-30 06:29:19,871 T0000: INFO  [D1-MC-58]     "ipv4_route_count": 384071,
+# 2023-03-30 06:29:19,871 T0000: INFO  [D1-MC-58] admin@MC-58:~$ 
+# 2023-03-30 06:29:19,872 T0000: INFO  dut1 v4 route : 384071
+# 2023-03-30 06:29:20,073 T0000: INFO  [D1-MC-58] FCMD: curl http://127.0.0.1:12346/route -s | grep ipv6 
+# 2023-03-30 06:29:20,124 T0000: INFO  [D1-MC-58]     "ipv6_route_count": 256063
+# 2023-03-30 06:29:20,124 T0000: INFO  [D1-MC-58] admin@MC-58:~$ 
+# 2023-03-30 06:29:20,125 T0000: INFO  dut1 v6 route : 256063
     # traffic check    
     if not check_traffic():
         st.report_fail("traffic check failed")
@@ -953,7 +964,10 @@ def test_srvpn_mirror_config_redistribute_vrf_06():
     ixia_load_config(ESR_MIRROR_CONFIG)
     ixia_start_all_protocols()
 
-    st.wait(50)
+    st.wait(60)
+
+    show_hw_route_count(dut1)
+    show_hw_route_count(dut2)
 
     # check1 : dut1 ACTN_TC0 route ACTN_TC1 route
     st.banner("dut1 ACTN_TC0 ACTN_TC1 route")
@@ -1070,11 +1084,30 @@ def _test_srvpn_mirror_config_bgp_flap_07():
     st.wait(600)
     st.report_pass("test_case_passed")
 
-def _test_srvpn_mirror_config_underlay_link_flap_08():
+def test_srvpn_mirror_config_underlay_link_flap_08():
     st.banner("test_srvpn_mirror_config_underlay_link_flap_08 begin")
     # load ixia config
     ixia_load_config(ESR_MIRROR_CONFIG)
     ixia_start_all_protocols()
+    st.wait(60)
+
+    st.log("before flap")
+    show_hw_route_count(dut1)
+    show_hw_route_count(dut2)
+
+    # flap portchannel port 
+    flap_lag_member(dut1, "PortChannel161", 5)
+    flap_lag_member(dut1, "PortChannel162", 5)
+ 
+    # check traffic after lag member flap
+    show_hw_route_count(dut1)
+    show_hw_route_count(dut2)
+    st.log("flap finish")
+
+    # traffic check    
+    if not check_traffic():
+        st.report_fail("traffic check failed")
+
     # wait route learning
     st.report_pass("test_case_passed")
 

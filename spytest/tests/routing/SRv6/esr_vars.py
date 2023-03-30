@@ -104,6 +104,9 @@ data.tg2_handle = [0,0]
 data.tg3_handle = [0,0]
 data.streams = {}
 
+data.dut_lag = {"PortChannel161":["Ethernet1","Ethernet2"],
+                "PortChannel162":["Ethernet3","Ethernet4"]}
+
 ## srv6-vpn
 data.mysid_prefix = {
     "lsid1":"fd00:201:201::",

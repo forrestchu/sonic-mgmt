@@ -609,3 +609,26 @@ def compare_redistribute_vrf_route(vrf1, vrf2, info1, info2):
             if infos_1[i] != infos_2[i]:
                 return False
     return True
+
+def flap_lag_member(dut, lag, flap_count):
+    members = data.dut_lag[lag]
+    num = len(members)
+    if num <= 1:
+        return
+    
+    idx = random.randint(1,128) % num
+
+    for i in range(flap_count):
+        phyif = members[idx]
+        cmd = "interface {}\n shutdown\n".format(phyif)
+        st.config(dut, cmd, type='alicli',skip_error_check=True)
+        st.wait(5)
+        cmd = "interface {}\n no shutdown\n".format(phyif)
+        st.config(dut, cmd, type='alicli',skip_error_check=True)
+        st.wait(5)
+
+def show_hw_route_count(dut):
+    def_v4_route_count = asicapi.get_ipv4_route_count(dut)
+    st.log("{} v4 route : {}".format(dut, def_v4_route_count))
+    def_v6_route_count = asicapi.get_ipv6_route_count(dut)
+    st.log("{} v6 route : {}".format(dut, def_v6_route_count))

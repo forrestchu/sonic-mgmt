@@ -1,6 +1,12 @@
 +file:routing/SRv6/test_esr_srvpn.py
++file:switching/test_portchannel.py
 
-+test:test_ft_lag_fast_mode
+-test:test_ft_portchannel_behavior_with_tagged_traffic
+-test:test_ft_untagged_traffic_on_portchannel
+-test:test_ft_member_state_after_interchanged_the_members_across_portchannels
+-test:test_ft_portchannel_with_vlan_variations
+-test:test_ft_lacp_graceful_restart_with_cold_boot
+-test:test_ft_lacp_graceful_restart_with_save_reload
 
 #+args:--skip-init-config
 #+args:--skip-load-config base

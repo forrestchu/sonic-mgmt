@@ -1,5 +1,5 @@
-+file:routing/SRv6/test_esr_srvpn.py
 +file:switching/test_portchannel.py
++file:routing/SRv6/test_esr_srvpn.py
 
 -test:test_ft_portchannel_behavior_with_tagged_traffic
 -test:test_ft_untagged_traffic_on_portchannel

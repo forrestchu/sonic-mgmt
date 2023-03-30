@@ -152,18 +152,21 @@ def ixia_check_traffic(traffic_item_name, key="Rx frame", value="0"):
         return False
 
 
-def ixia_config_bgp_flapping():
+def ixia_config_bgp_flapping(enable):
     TOPOLOGY = "Topology 2"
     DEVICE_GROUP = "Device Group 2"
     ETHERNET = "Ethernet 2"
-    IPV4_NAME = "IPv4 2"
-    BGP_PEER_NAME = "BGP Peer 2"
+    IPV4_NAME = "IPv4 1"
+    BGP_PEER_NAME = "BGP Peer 1"
 
     item = ixia_controller.get_ipv4_bgp_peer(TOPOLOGY, DEVICE_GROUP, ETHERNET, IPV4_NAME, BGP_PEER_NAME)
     if not item:
         print("Failed to get ipv4 bgp peer")
 
-    res = ixia_controller.enable_ipv4_bgp_peer_flapping(item, 10, 10)
+    if enable:
+        res = ixia_controller.enable_ipv4_bgp_peer_flapping(item, 10, 10)
+    else:
+        res = ixia_controller. disable_ipv4_bgp_peer_flapping(item)
     if not res:
         pass
 

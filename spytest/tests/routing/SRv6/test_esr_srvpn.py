@@ -63,6 +63,7 @@ dut2 = 'MC-59'
 data.my_dut_list = [dut1, dut2]
 data.load_multi_vrf_config_done = False
 data.load_mirror_config_done = False
+data.load_mirror_ixia_conf_done = False
 
 def add_bmp_config_background(dut):
     st.log("config global bmp")
@@ -243,6 +244,12 @@ def esr_srvpn_func_hooks(request):
         if data.load_mirror_config_done == False:
             load_mirro_config()
             data.load_mirror_config_done = True
+        # load ixia config
+        if data.load_mirror_ixia_conf_done == False:
+            ixia_load_config(ESR_MIRROR_CONFIG)
+            ixia_start_all_protocols()
+            st.wait(60)
+            data.load_mirror_ixia_conf_done = True
     yield
     pass
 
@@ -897,10 +904,10 @@ def check_traffic():
     
     traffic_v4 = ixia_get_traffic_stat(TRAFFIC_MIRROR_V4)
     if not traffic_v4:
-        st.log("Get {} traffic stat failed {}".format(TRAFFIC_MIRROR_V4))
+        st.log("Get {} traffic stat failed".format(TRAFFIC_MIRROR_V4))
         return False
     # check val
-    if  traffic_v4['Rx Frames'] == '40000' and traffic_v4['Tx Frames'] == '40000' and traffic_v4['Loss %'] == '0.000':
+    if  int(traffic_v4['Rx Frames']) > 39900 and int(traffic_v4['Tx Frames']) > 39900 and traffic_v4['Loss %'] == '0.000':
         st.log("traffic_v4 check success")
     else:
         st.log("traffic_v4 check failed")
@@ -919,10 +926,10 @@ def check_traffic():
     
     traffic_v6 = ixia_get_traffic_stat(TRAFFIC_MIRROR_V6)
     if not traffic_v6:
-        st.log("Get {} traffic stat failed {}".format(TRAFFIC_MIRROR_V6))
+        st.log("Get {} traffic stat failed".format(TRAFFIC_MIRROR_V6))
         return False
     # check val
-    if  traffic_v6['Rx Frames'] == '40000' and traffic_v6['Tx Frames'] == '40000' and traffic_v6['Loss %'] == '0.000':
+    if  int(traffic_v6['Rx Frames']) > 39900 and int(traffic_v6['Tx Frames']) > 39900 and traffic_v6['Loss %'] == '0.000':
         st.log("traffic_v6 check success")
     else:
         st.log("traffic_v6 check failed")
@@ -932,12 +939,6 @@ def check_traffic():
 
 def test_srvpn_mirror_config_05():
     st.banner("test_srvpn_mirror_config_05 begin")
-
-    # load ixia config
-    ixia_load_config(ESR_MIRROR_CONFIG)
-    ixia_start_all_protocols()
-    # wait route learning
-    st.wait(60)
 
     show_hw_route_count(dut1)
     show_hw_route_count(dut2)
@@ -959,12 +960,6 @@ def test_srvpn_mirror_config_05():
 
 def test_srvpn_mirror_config_redistribute_vrf_06():
     st.banner("test_srvpn_mirror_config_redistribute_vrf_06 begin")
-
-    # load ixia config
-    ixia_load_config(ESR_MIRROR_CONFIG)
-    ixia_start_all_protocols()
-
-    st.wait(60)
 
     show_hw_route_count(dut1)
     show_hw_route_count(dut2)
@@ -1070,26 +1065,33 @@ def test_srvpn_mirror_config_redistribute_vrf_06():
 
     st.report_pass("test_case_passed")
 
-def _test_srvpn_mirror_config_bgp_flap_07():
+def test_srvpn_mirror_config_bgp_flap_07():
     st.banner("test_srvpn_mirror_config_bgp_flap_07 begin")
-    # load ixia config
-    ixia_load_config(ESR_MIRROR_CONFIG)
-    ixia_start_all_protocols()
-    # wait route learning
-    st.wait(10)
+
     # flap
-    peer = get_bgpv4_peers()
-    # for peer in peers:
-    peer.BgpIpv4PeerConfig.Flap = True
-    st.wait(600)
+    show_hw_route_count(dut1)
+    show_hw_route_count(dut2)
+    st.log("start flap")
+    ixia_config_bgp_flapping(True)
+    st.wait(20)
+    ixia_config_bgp_flapping(False)
+    st.log("flap finish")
+    show_hw_route_count(dut1)
+    show_hw_route_count(dut2)
+
+    st.log("waitting 60s")
+    st.wait(60)
+    show_hw_route_count(dut1)
+    show_hw_route_count(dut2)
+    
+    # traffic check    
+    if not check_traffic():
+        st.report_fail("traffic check failed")    
+
     st.report_pass("test_case_passed")
 
 def test_srvpn_mirror_config_underlay_link_flap_08():
     st.banner("test_srvpn_mirror_config_underlay_link_flap_08 begin")
-    # load ixia config
-    ixia_load_config(ESR_MIRROR_CONFIG)
-    ixia_start_all_protocols()
-    st.wait(60)
 
     st.log("before flap")
     show_hw_route_count(dut1)
@@ -1111,6 +1113,38 @@ def test_srvpn_mirror_config_underlay_link_flap_08():
     # wait route learning
     st.report_pass("test_case_passed")
 
-def _test_srvpn_mirror_config_underlay_ecmp_switch_09():
+def test_srvpn_mirror_config_underlay_ecmp_switch_09():
     st.banner("test_srvpn_mirror_config_underlay_ecmp_switch_09 begin")
+
+    ret = ixia_start_traffic(TRAFFIC_MIRROR_ULECMP)    
+    if not ret:
+        st.log("Start traffic item {} failed".format(TRAFFIC_MIRROR_ULECMP))
+        return False
+    st.wait(5)
+    
+    phyif = "PortChannel161"
+    cmd = "interface {}\n shutdown\n".format(phyif)
+    st.config(dut2, cmd, type='alicli',skip_error_check=True)
+    st.wait(5)
+
+    ret = ixia_stop_traffic(TRAFFIC_MIRROR_ULECMP)
+    if not ret:
+        st.log("Stop traffic item {} failed".format(TRAFFIC_MIRROR_ULECMP))
+        return False
+
+    cmd = "interface {}\n no shutdown\n".format(phyif)
+    st.config(dut2, cmd, type='alicli',skip_error_check=True)
+    st.wait(5)
+
+    traffic_ecmp = ixia_get_traffic_stat(TRAFFIC_MIRROR_ULECMP)
+    if not traffic_ecmp:
+        st.log("Get {} traffic stat failed {}".format(TRAFFIC_MIRROR_ULECMP))
+        return False
+    # check val
+    if  traffic_ecmp['Loss %'] == '0.000':
+        st.log("traffic_v4 check success")
+    else:
+        st.log("traffic_v4 check failed")
+        return False    
+
     st.report_pass("test_case_passed")

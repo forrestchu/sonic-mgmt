@@ -19,6 +19,18 @@ dut2_tg1_vlan = ['%s'%x for x in range (16,19)]
 dut1_loopback = ['Loopback101', 'Loopback102', 'Loopback103']
 dut2_loopback = ['Loopback101', 'Loopback102', 'Loopback103']
 
+#Loopback for IP test
+dut_loopbacks = ['Loopback4093', 'Loopback4094']
+dut_loopback_ip = '180.1.1.1'
+dut_loopback_ip_subnet = '24'
+
+dut_portchannel_name = "PortChannel888"
+dut_portchannel_name_2 = "PortChannel889"
+dut_sub_port_vlan = "888"
+dut_pc_subport = "PC888.888"
+dut_subport_ip = '190.1.1.1'
+dut_subport_ip_subnet = '24'
+
 dut1_loopback_ip =  ['50.0.%s.1'%x for x in range (1,4)]
 dut2_loopback_ip =  ['60.0.%s.1'%x for x in range (1,4)]
 dut1_loopback_ip_subnet = '32'

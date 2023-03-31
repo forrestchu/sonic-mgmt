@@ -864,6 +864,8 @@ def do_process_status_check(lvl):
             cmd += "|grep -v {} ".format(i)
         retval = execute_check_cmd(cmd, trace_cmd=False, trace_out=False, skip_error=True)
         print(retval)
+        if 'EXITED' in retval:
+            raise Exception("Process Crash !!!")
 
 def syslog_read_msgs(lvl, phase):
     if phase: execute_check_cmd("sudo echo {}".format(phase))

@@ -143,6 +143,15 @@ def frr_config_checkpoint_onekey(obj, key, expect = True, checkpoint = ''):
         else:
             return
 
+def is_routemap_configdb_exist(dut, key, name):
+    command = redis.build(dut, redis.CONFIG_DB, 'keys "{}"'.format(key))
+    output = st.show(dut, command)
+
+    st.log(output)
+    if len(output) > 1:
+        return True
+    else:
+        return False
 
 @pytest.mark.routemap_cli
 def test_cli_routemap_set_metric():
@@ -857,5 +866,25 @@ def test_cli_routemap_match_extcommunity():
     # delete route-map
     st.log("delete route-map")
     test_obj.delete_route_map(route_map)
+
+    st.report_pass("test_case_passed")
+
+@pytest.mark.routemap_cli
+def test_cli_routemap_name_len():
+    st.log("test_cli_routemap_name_len begin")
+    dut = data['dut']
+
+    # create route-map
+    st.log("create route-map")
+    long_name = '1111111111222222222233333333334444444444555555555566666666667777' # 64 
+
+    config_route_map_cli = "cli -c 'configure terminal' -c 'route-map {} {} {}'".format(long_name, data['permittion'], data['sequence'])
+    st.config(dut, config_route_map_cli)
+
+
+    key_configdb = "ROUTE_MAP|{}|{}|{}".format(long_name, data['permittion'], data['sequence'])
+
+    if not is_routemap_configdb_exist(dut, key_configdb, long_name):
+        st.report_fail("{} {}  check failed.".format(key_configdb, long_name))
 
     st.report_pass("test_case_passed")

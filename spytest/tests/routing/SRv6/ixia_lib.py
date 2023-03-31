@@ -287,6 +287,7 @@ class IxiaController():
         bgp_peer.Flap.Single('true')
         bgp_peer.UptimeInSec.Single(uptime_s)
         bgp_peer.DowntimeInSec.Single(downtime_s)
+        return True
 
     def disable_ipv4_bgp_peer_flapping(self, bgp_peer):
         if not bgp_peer:

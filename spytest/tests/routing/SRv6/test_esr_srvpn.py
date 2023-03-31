@@ -305,9 +305,9 @@ def test_base_config_srvpn_locator_01():
     expected_prefix = data.mysid_prefix['lsid1'] + "/80"
     configdb_onefield_checkpoint(dut1, mysid_configdb_key, "prefix", expected_prefix, expect = True, checkpoint = checkpoint_msg)
 
-    expected_op_val = data.mysid_opcode['Vrf1']+'|'+'end-dt46'+'|'+'Vrf1'
+    expected_op_val = '::fff1:1:0:0:0'+'|'+'end-dt46'+'|'+'Vrf1'
     configdb_checkarray(dut1, mysid_configdb_key, "opcode@", expected_op_val, expect = True, checkpoint = checkpoint_msg)
-    expected_op_val = data.mysid_opcode['PUBLIC-TC11']+'|'+'end-dt46'+'|'+'PUBLIC-TC11'
+    expected_op_val = '::fff1:11:0:0:0'+'|'+'end-dt46'+'|'+'PUBLIC-TC11'
     configdb_checkarray(dut1, mysid_configdb_key, "opcode@", expected_op_val, expect = True, checkpoint = checkpoint_msg)
 
     # step 3 : check  appdb mysid
@@ -939,7 +939,8 @@ def check_traffic():
 
 def test_srvpn_mirror_config_05():
     st.banner("test_srvpn_mirror_config_05 begin")
-
+    # wait route learning
+    st.wait(30)
     show_hw_route_count(dut1)
     show_hw_route_count(dut2)
 

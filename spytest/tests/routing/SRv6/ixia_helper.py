@@ -168,8 +168,10 @@ def ixia_config_bgp_flapping(enable):
     else:
         res = ixia_controller. disable_ipv4_bgp_peer_flapping(item)
     if not res:
-        pass
+        st.log("Set bgp peer flapping failed")
 
+    topology = ixia_controller.ixnetwork.Globals.find().Topology.find()
+    topology.ApplyOnTheFly()
 
 def ixia_start_traffic(traffic_item_name):
     st.wait(10)

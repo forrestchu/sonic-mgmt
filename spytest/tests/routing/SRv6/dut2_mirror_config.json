@@ -3602,74 +3602,14 @@
             "admin_status": "up", 
             "alias": "Ethernet65_4"
         }, 
-        "Ethernet66": {
-            "admin_status": "up", 
-            "alias": "Ethernet66"
-        }, 
-        "Ethernet67": {
-            "admin_status": "up", 
-            "alias": "Ethernet67"
-        }, 
-        "Ethernet68": {
-            "admin_status": "up", 
-            "alias": "Ethernet68"
-        }, 
-        "Ethernet69": {
-            "admin_status": "up", 
-            "alias": "Ethernet69"
-        }, 
         "Ethernet7": {
             "admin_status": "up", 
             "alias": "Ethernet7"
         }, 
-        "Ethernet70": {
-            "admin_status": "up", 
-            "alias": "Ethernet70"
-        }, 
-        "Ethernet71": {
-            "admin_status": "up", 
-            "alias": "Ethernet71"
-        }, 
-        "Ethernet72": {
-            "admin_status": "up", 
-            "alias": "Ethernet72"
-        }, 
-        "Ethernet73": {
-            "admin_status": "up", 
-            "alias": "Ethernet73"
-        }, 
-        "Ethernet74": {
-            "admin_status": "up", 
-            "alias": "Ethernet74"
-        }, 
-        "Ethernet75": {
-            "admin_status": "up", 
-            "alias": "Ethernet75"
-        }, 
-        "Ethernet76": {
-            "admin_status": "up", 
-            "alias": "Ethernet76"
-        }, 
-        "Ethernet77": {
-            "admin_status": "up", 
-            "alias": "Ethernet77"
-        }, 
-        "Ethernet78": {
-            "admin_status": "up", 
-            "alias": "Ethernet78"
-        }, 
-        "Ethernet79": {
-            "admin_status": "up", 
-            "alias": "Ethernet79"
-        }, 
         "Ethernet8": {
             "admin_status": "up", 
             "alias": "Ethernet8"
-        }, 
-        "Ethernet80": {
-            "admin_status": "up", 
-            "alias": "Ethernet80"
-        }, 
+        },
         "Ethernet82": {
             "admin_status": "up", 
             "alias": "Ethernet82"
@@ -5290,7 +5230,7 @@
         "Ethernet8": {
             "admin_state": "up", 
             "sample_rate": "131072"
-        }, 
+        },
         "Ethernet80": {
             "admin_state": "up", 
             "sample_rate": "131072"

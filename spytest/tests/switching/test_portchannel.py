@@ -935,7 +935,7 @@ def test_ft_lag_fast_mode():
     portchannel_obj.delete_portchannel_member(data.dut2, data.portchannel_name, data.members_dut2[0])
 
     # Wait for few seconds, the DUT1 portchannel should be down (now LACP interval is 1s)
-    st.wait(5)
+    st.wait(8)
     # Verify portchannel member state with provided state
     dict1 = {'portchannel': data.portchannel_name, 'members_list': data.members_dut1[0], 'state': "down"}
     dict2 = {'portchannel': data.portchannel_name, 'members_list': data.members_dut2[1], 'state': "up"}

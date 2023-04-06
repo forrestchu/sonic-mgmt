@@ -228,10 +228,14 @@ def transmit(tg):
 def verify_acl_hit_counters(dut, table_name, acl_type="ip"):
     result = True
     acl_rule_counters = acl_obj.show_acl_counters(dut, acl_table=table_name, acl_type=acl_type)
+    print_log(acl_rule_counters)
     for rule in acl_rule_counters:
         if 'PermitAny' in rule['rulename']:
             continue
-        if not rule['packetscnt'] or int(rule['packetscnt']) == 0 or 'N/A' in rule['packetscnt']:
+        if rule['packetscnt'] == 'N/A':
+            st.log("acl counter is N/A")
+            return False
+        if not rule['packetscnt'] or int(rule['packetscnt']) == 0:
             return False
     return result
 
@@ -379,6 +383,9 @@ def verify_rule_priority(dut, table_name, acl_type="ip"):
     acl_rule_counters = acl_obj.show_acl_counters(dut, acl_table=table_name, acl_rule='PermitAny', acl_type=acl_type)
     print (acl_rule_counters)
     if len(acl_rule_counters) == 1:
+        if acl_rule_counters[0]['packetscnt'] == 'N/A':
+            st.log("acl counter is N/A")
+            return False
         print (int(acl_rule_counters[0]['packetscnt']))
         if (int(acl_rule_counters[0]['packetscnt']) != 0):
             print_log("ACL Rule priority test failed")

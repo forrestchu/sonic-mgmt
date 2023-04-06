@@ -24,3 +24,5 @@ Pyro4
 scapy==2.4.3rc1
 netaddr
 ixnetwork_restpy==1.1.8
+pandas
+matplotlib

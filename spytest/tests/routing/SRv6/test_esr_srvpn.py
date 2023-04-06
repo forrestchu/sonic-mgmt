@@ -11,6 +11,11 @@ import apis.routing.bgp as bgpfeature
 from spytest import st, tgapi, SpyTestDict
 from spytest.utils import filter_and_select
 from utilities.utils import retry_api
+import pandas as pd
+import matplotlib
+matplotlib.use('Agg')
+
+import matplotlib.pyplot as plt
 
 import apis.common.asic as asicapi
 import apis.switching.vlan as vapi
@@ -553,7 +558,7 @@ def test_base_config_srvpn_locator_01():
     st.config(dut1, cmd)
     config_end_action_key = 'SRV6_LOCATOR|test_end'
     configdb_onefield_checkpoint(dut1, config_end_action_key, "opcode@", "::fff1:1:0:0:0|end", expect = True, checkpoint = "end sid configdb check failed.")
-    
+
     appl_end_action_key = 'SRV6_MY_SID_TABLE:fd00:301:301:fff1:1::/80'
     appdb_onefield_checkpoint(dut1, appl_end_action_key, "action", "end", expect = True, checkpoint = "end sid appdb check failed.")
     appdb_onefield_checkpoint(dut1, appl_end_action_key, "vrf", "Default", expect = True, checkpoint = "end sid appdb check failed.")
@@ -910,7 +915,7 @@ def test_srvpn_ecmp_04():
 
 def check_traffic():
     # check v4 traffic
-    ret = ixia_start_traffic(TRAFFIC_MIRROR_V4)    
+    ret = ixia_start_traffic(TRAFFIC_MIRROR_V4)
     if not ret:
         st.log("Start traffic item {} failed".format(TRAFFIC_MIRROR_V4))
         return False
@@ -919,7 +924,7 @@ def check_traffic():
     if not ret:
         st.log("Stop traffic item {} failed".format(TRAFFIC_MIRROR_V4))
         return False
-    
+
     traffic_v4 = ixia_get_traffic_stat(TRAFFIC_MIRROR_V4)
     if not traffic_v4:
         st.log("Get {} traffic stat failed".format(TRAFFIC_MIRROR_V4))
@@ -932,7 +937,7 @@ def check_traffic():
         return False
 
     # check v6 traffic
-    ret = ixia_start_traffic(TRAFFIC_MIRROR_V6)    
+    ret = ixia_start_traffic(TRAFFIC_MIRROR_V6)
     if not ret:
         st.log("Start traffic item {} failed".format(TRAFFIC_MIRROR_V6))
         return False
@@ -941,7 +946,7 @@ def check_traffic():
     if not ret:
         st.log("Stop traffic item {} failed".format(TRAFFIC_MIRROR_V6))
         return False
-    
+
     traffic_v6 = ixia_get_traffic_stat(TRAFFIC_MIRROR_V6)
     if not traffic_v6:
         st.log("Get {} traffic stat failed".format(TRAFFIC_MIRROR_V6))
@@ -953,7 +958,7 @@ def check_traffic():
         st.log("traffic_v6 check failed")
         return False
     return True
-    
+
 
 def test_srvpn_mirror_config_05():
     st.banner("test_srvpn_mirror_config_05 begin")
@@ -962,15 +967,15 @@ def test_srvpn_mirror_config_05():
     show_hw_route_count(dut1)
     show_hw_route_count(dut2)
 
-# 2023-03-30 06:29:19,820 T0000: INFO  [D1-MC-58] FCMD: curl http://127.0.0.1:12346/route -s | grep ipv4 
+# 2023-03-30 06:29:19,820 T0000: INFO  [D1-MC-58] FCMD: curl http://127.0.0.1:12346/route -s | grep ipv4
 # 2023-03-30 06:29:19,871 T0000: INFO  [D1-MC-58]     "ipv4_route_count": 384071,
-# 2023-03-30 06:29:19,871 T0000: INFO  [D1-MC-58] admin@MC-58:~$ 
+# 2023-03-30 06:29:19,871 T0000: INFO  [D1-MC-58] admin@MC-58:~$
 # 2023-03-30 06:29:19,872 T0000: INFO  dut1 v4 route : 384071
-# 2023-03-30 06:29:20,073 T0000: INFO  [D1-MC-58] FCMD: curl http://127.0.0.1:12346/route -s | grep ipv6 
+# 2023-03-30 06:29:20,073 T0000: INFO  [D1-MC-58] FCMD: curl http://127.0.0.1:12346/route -s | grep ipv6
 # 2023-03-30 06:29:20,124 T0000: INFO  [D1-MC-58]     "ipv6_route_count": 256063
-# 2023-03-30 06:29:20,124 T0000: INFO  [D1-MC-58] admin@MC-58:~$ 
+# 2023-03-30 06:29:20,124 T0000: INFO  [D1-MC-58] admin@MC-58:~$
 # 2023-03-30 06:29:20,125 T0000: INFO  dut1 v6 route : 256063
-    # traffic check    
+    # traffic check
     if not check_traffic():
         st.report_fail("traffic check failed")
 
@@ -997,7 +1002,7 @@ def test_srvpn_mirror_config_redistribute_vrf_06():
     # compare output, expected same
     if not compare_redistribute_vrf_route(svrf, dvrf, output_1, output_2):
         st.report_fail("{} route and {} route is diffent".format(svrf, dvrf))
-    
+
     # check appdb
 # root@MC-58:~# redis-cli -p 6380 -n 0 hgetall "ROUTE_TABLE:Vrf10001:14.1.64.1/32"
 #  1) "nexthop"
@@ -1012,11 +1017,11 @@ def test_srvpn_mirror_config_redistribute_vrf_06():
 # 10) "na"
 # 11) "blackhole"
 # 12) "false"
-# root@MC-58:~# 
+# root@MC-58:~#
 
     svrf_name = get_vrf_realname(dut1,svrf)
     dvrf_name = get_vrf_realname(dut1,dvrf)
-    
+
     check_val = {
         "nexthop":"fd00:0:200:172::",
         "ifname":"unknown",
@@ -1031,7 +1036,7 @@ def test_srvpn_mirror_config_redistribute_vrf_06():
         for k in check_val.keys():
             appdb_onefield_checkpoint(dut1, appdb_key, k, check_val[k], expect = True, checkpoint = checkpoint_msg)
 
-  
+
     # check2 : dut2 PUBLIC_TC0 PUBLIC_TC1 ipv6 route
     st.banner("dut2 PUBLIC_TC0 PUBLIC_TC1 ipv6 route")
     check_prefix = "114:0:1::18f0/128"
@@ -1064,7 +1069,7 @@ def test_srvpn_mirror_config_redistribute_vrf_06():
     # check appdb
     svrf_name = get_vrf_realname(dut2, svrf)
     dvrf_name = get_vrf_realname(dut2, dvrf)
-    
+
     check_val = {
         "nexthop":"fd00:0:200:171::",
         "ifname":"unknown",
@@ -1102,10 +1107,10 @@ def test_srvpn_mirror_config_bgp_flap_07():
     st.wait(60)
     show_hw_route_count(dut1)
     show_hw_route_count(dut2)
-    
-    # traffic check    
+
+    # traffic check
     if not check_traffic():
-        st.report_fail("traffic check failed")    
+        st.report_fail("traffic check failed")
 
     st.report_pass("test_case_passed")
 
@@ -1116,16 +1121,16 @@ def test_srvpn_mirror_config_underlay_link_flap_08():
     show_hw_route_count(dut1)
     show_hw_route_count(dut2)
 
-    # flap portchannel port 
+    # flap portchannel port
     flap_lag_member(dut1, "PortChannel161", 5)
     flap_lag_member(dut1, "PortChannel162", 5)
- 
+
     # check traffic after lag member flap
     show_hw_route_count(dut1)
     show_hw_route_count(dut2)
     st.log("flap finish")
 
-    # traffic check    
+    # traffic check
     if not check_traffic():
         st.report_fail("traffic check failed")
 
@@ -1135,12 +1140,12 @@ def test_srvpn_mirror_config_underlay_link_flap_08():
 def test_srvpn_mirror_config_underlay_ecmp_switch_09():
     st.banner("test_srvpn_mirror_config_underlay_ecmp_switch_09 begin")
 
-    ret = ixia_start_traffic(TRAFFIC_MIRROR_ULECMP)    
+    ret = ixia_start_traffic(TRAFFIC_MIRROR_ULECMP)
     if not ret:
         st.log("Start traffic item {} failed".format(TRAFFIC_MIRROR_ULECMP))
         return False
     st.wait(5)
-    
+
     phyif = "PortChannel161"
     cmd = "interface {}\n shutdown\n".format(phyif)
     st.config(dut2, cmd, type='alicli',skip_error_check=True)
@@ -1164,6 +1169,170 @@ def test_srvpn_mirror_config_underlay_ecmp_switch_09():
         st.log("traffic_v4 check success")
     else:
         st.log("traffic_v4 check failed")
-        return False    
+        return False
 
+    st.report_pass("test_case_passed")
+
+
+def duts_load_config(dut1_config, dut2_config):
+    dut_list = st.get_dut_names()
+    st.log("===== GET DUT LIST {}".format(dut_list))
+
+    dut1_config_file_path = os.path.join(os.getcwd(), "routing/SRv6/{}".format(dut1_config))
+    dut2_config_file_path = os.path.join(os.getcwd(), "routing/SRv6/{}".format(dut2_config))
+    st.apply_files(dut_list[0], [dut1_config_file_path])
+    st.apply_files(dut_list[1], [dut2_config_file_path])
+
+    reboot.config_reload_reboot(dut_list[0], "/etc/spytest/{}".format(dut1_config))
+    reboot.config_reload_reboot(dut_list[1], "/etc/spytest/{}".format(dut2_config))
+
+
+def duts_get_memory(dut, progress):
+    cmd = "cat /proc/`pidof {}`/status | grep VmRSS".format(progress)
+    memory = st.show(dut, cmd, skip_tmpl=True, skip_error_check=True).split("\n")
+    return memory
+
+def plot_perf(csv_file):
+
+    data_df = pd.read_csv(csv_file)
+
+    for col in data_df.columns:
+        if col == u"~ElapsedTime":
+            x = data_df[col]
+        elif col == u"21.135.163.53/Card01/Port33:Valid Frames Rx. Rate":
+            y = data_df[col]
+
+    plt.style.use('seaborn-colorblind')
+    plt.xlabel("timestamp", fontsize=11)
+    plt.ylabel("Frames Rx. Rate", fontsize=11)
+    plt.ylim(ymin=0, ymax=max(y)+100000)
+
+    plt.plot(x, y, color='blue')
+    plt.savefig('eSR_Performance.jpg', dpi=1200)
+    # plt.show()
+
+def get_route_load_time(cursor, csv_file):
+    data_df = pd.read_csv(csv_file)
+
+    for col in data_df.columns:
+        if col == u"~ElapsedTime":
+            x = data_df[col]
+        elif col == u"21.135.163.53/Card01/Port33:Valid Frames Rx. Rate":
+            y = data_df[col]
+
+    start_time = cursor
+    stop_time = cursor
+    max_rx_rate = max(y) + 1
+    for i in range(0, len(x) - 1):
+        if y[i] != 0 and start_time == cursor:
+            start_time = x[i]
+        if y[i] * 100 / max_rx_rate > 98 and stop_time == cursor:
+            stop_time = x[i]
+            break
+
+    return stop_time - start_time, i
+
+
+def get_route_convergence_time(cursor, csv_file):
+    data_df = pd.read_csv(csv_file)
+
+    for col in data_df.columns:
+        if col == u"~ElapsedTime":
+            x = data_df[col]
+        elif col == u"21.135.163.53/Card01/Port33:Valid Frames Rx. Rate":
+            y = data_df[col]
+
+    start_time = cursor
+    stop_time = cursor
+    max_rx_rate = max(y) + 1
+    for i in range(cursor, len(x) - 1):
+        if y[i] * 100 / max_rx_rate < 98 and start_time == cursor:
+            start_time = x[i]
+
+        if y[i] == 0 and stop_time == cursor:
+            stop_time = x[i]
+            break
+
+    return stop_time - start_time
+
+
+@pytest.mark.community
+@pytest.mark.community_pass
+def test_srvpn_performance_500K():
+    st.banner("test_srvpn_performance_500K begin")
+    dut_list = st.get_dut_names()
+    dut1 = dut_list[0]
+    dut2 = dut_list[1]
+
+    # 1. load DUT config
+    dut1_config = "performance/dut1_one_vrf.json"
+    dut2_config = "performance/dut2_one_vrf.json"
+    duts_load_config(dut1_config, dut2_config)
+
+    # 2. load TG config
+    ixia_config = os.path.join(os.getcwd(), "routing/SRv6/performance/ixia_one_vrf_500K.json")
+    ixia_load_config(ixia_config)
+
+    # 3. start traffic
+    ixia_start_all_traffic()
+    ixia_start_logging_port_view()
+
+    # 4. start protocol
+    ixia_start_all_protocols()
+    st.wait(120)
+    ret = check_vpn_route_nums(dut2, 500000, 0)
+    if not ret:
+        st.report_fail("check vpn route_nums failed")
+
+    # 5. get memory info for DUT1 bgpd,zebra,orchagent,syncd
+    st.log("====== DUT1 ======")
+    memory = duts_get_memory(dut1, 'bgpd')
+    st.log("====== Memory bgpd ======")
+    st.log(memory)
+    memory = duts_get_memory(dut1, 'zebra')
+    st.log("====== Memory zebra ======")
+    st.log(memory)
+    memory = duts_get_memory(dut1, 'orchagent')
+    st.log("====== Memory orchagent ======")
+    st.log(memory)
+    memory = duts_get_memory(dut1, 'syncd')
+    st.log("====== Memory syncd ======")
+    st.log(memory)
+
+    # 6. get memory info for DUT2 bgpd,zebra,orchagent,syncd
+    st.log("====== DUT2 ======")
+    memory = duts_get_memory(dut2, 'bgpd')
+    st.log("====== Memory bgpd ======")
+    st.log(memory)
+    memory = duts_get_memory(dut2, 'zebra')
+    st.log("====== Memory zebra ======")
+    st.log(memory)
+    memory = duts_get_memory(dut2, 'orchagent')
+    st.log("====== Memory orchagent ======")
+    st.log(memory)
+    memory = duts_get_memory(dut2, 'syncd')
+    st.log("====== Memory syncd ======")
+    st.log(memory)
+
+
+    # 7. stop protocol
+    ixia_stop_all_protocols()
+    st.wait(120)
+    # 8. get perform data
+    ixia_stop_logging_port_view()
+    local_file = "port_statictics.csv"
+    ixia_get_port_view_data(local_file)
+    plot_perf(local_file)
+
+    load_t, cursor = get_route_load_time(0, local_file)
+    covergen_t = get_route_convergence_time(cursor, local_file)
+
+    st.log("======== 500K Route Load Time =======")
+    st.log("Load Time: {} s, Rate: {} rps".format(load_t, 500000 / load_t))
+
+    st.log("======== 500K Route Convergence Time =======")
+    st.log("Convergence Time: {} s, Rate: {} rps".format(covergen_t, 500000 / covergen_t))
+
+    # 9. stop traffic
+    ixia_stop_all_traffic()
     st.report_pass("test_case_passed")

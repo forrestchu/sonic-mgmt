@@ -196,3 +196,46 @@ def ixia_stop_traffic(traffic_item_name):
     st.wait(10)
     return True
 
+
+def ixia_start_all_traffic():
+    st.log("Generate traffic item")
+    ixia_controller.generate_traffic()
+    st.wait(10)
+    st.log("Apply traffic item")
+    ixia_controller.traffic_apply()
+    st.wait(10)
+    st.log("Start all traffic item")
+    ret = ixia_controller.start_all_stateless_traffic()
+    if not ret:
+        st.error("Start all traffic item failed")
+        return False
+    st.wait(10)
+    return True
+
+
+def ixia_stop_all_traffic():
+    ret = ixia_controller.stop_all_stateless_traffic()
+    if not ret:
+        st.error("Stop all traffic item failed")
+        return False
+    st.wait(10)
+    return True
+
+
+def ixia_start_logging_port_view():
+    ixia_controller.enable_csv_logging(caption="Port Statistics")
+    st.wait(10)
+    return True
+
+
+def ixia_stop_logging_port_view():
+    ixia_controller.disable_csv_logging(caption="Port Statistics")
+    st.wait(10)
+    return True
+
+
+def ixia_get_port_view_data(local_file):
+    csv_file_name = "Port Statistics.csv"
+    remote_file_path = "{}/{}".format(ixia_controller.get_csv_file_path(caption="Port Statistics"), csv_file_name)
+    ixia_controller.download_file(remote_file_path, local_file)
+    return True

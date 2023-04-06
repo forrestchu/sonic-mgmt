@@ -13,8 +13,6 @@ class IxiaController():
             IpAddress=host,
             RestPort=port,
             LogLevel=SessionAssistant.LOGLEVEL_INFO,
-            UserName="qingyan.gw",
-            Password="ne558",
             ClearConfig=True,
         )
 
@@ -151,8 +149,20 @@ class IxiaController():
 
         return None
 
+    def generate_traffic(self):
+        self.ixnetwork.Traffic.find().TrafficItem.find().Generate()
+        return True
+
     def traffic_apply(self):
         self.ixnetwork.Traffic.find().Apply()
+        return True
+
+    def start_all_stateless_traffic(self):
+        self.ixnetwork.Traffic.find().TrafficItem.find().StartStatelessTraffic()
+        return True
+
+    def stop_all_stateless_traffic(self):
+        self.ixnetwork.Traffic.find().TrafficItem.find().StopStatelessTraffic()
         return True
 
     def start_stateless_traffic(self, traffic_item_name):
@@ -294,3 +304,29 @@ class IxiaController():
             return False
 
         bgp_peer.Flap.Single('false')
+
+    def enable_csv_logging(self, caption):
+        if caption == "Port Statistics":
+            view = self.ixnetwork.Statistics.View.find(Caption="Port Statistics")
+            view.update(EnableCsvLogging=True)
+        else:
+            pass
+
+    def disable_csv_logging(self, caption):
+        if caption == "Port Statistics":
+            view = self.ixnetwork.Statistics.View.find(Caption="Port Statistics")
+            view.update(EnableCsvLogging=False)
+        else:
+            pass
+
+    def get_csv_file_path(self, caption):
+        if caption == "Port Statistics":
+            return self.ixnetwork.Statistics.CsvFilePath
+        else:
+            pass
+
+    def download_file(self, remote_file_name, local_file_name):
+        self.session_assistant.Session.DownloadFile(remote_file_name, local_file_name)
+
+
+

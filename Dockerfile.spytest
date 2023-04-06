@@ -7,6 +7,6 @@ COPY ./spytest/bin/* /tmp/
 RUN /tmp/upgrade_requirements.sh
 
 # fix ixia ConfigElement config error
-RUN sed 's/config.copy()/list(config)/g' /projects/scid/tools/ActivPython/2.7.18/lib/python2.7/site-packages/ixnetwork_restpy/assistants/batch/batchadd.py
+RUN sed -i 's/config.copy()/list(config)/g' /projects/scid/tools/ActivPython/2.7.18/lib/python2.7/site-packages/ixnetwork_restpy/assistants/batch/batchadd.py
 
 USER $user

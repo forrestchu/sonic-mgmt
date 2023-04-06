@@ -888,3 +888,25 @@ def test_cli_routemap_name_len():
         st.report_fail("{} {}  check failed.".format(key_configdb, long_name))
 
     st.report_pass("test_case_passed")
+
+@pytest.mark.routemap_cli
+def test_cli_routemap_incomplete_key():
+    st.log("test_cli_routemap_incomplete_key begin")
+    dut = data['dut']
+
+    # create route-map
+    st.log("create route-map")
+    
+    routemap_name = "test_incomplete_key"
+    config_route_map_cli = "cli -c 'configure terminal' -c 'route-map {} {} {}'".format(routemap_name, data['permittion'], data['sequence'])
+    st.config(dut, config_route_map_cli)
+
+    set_aspath_cmd = "{} -c '{}'".format(config_route_map_cli, "set as-path pre 45108 45108 45108 45108 45108 45108 45108 45108")
+    st.config(dut, set_aspath_cmd)
+
+    key_configdb = "ROUTE_MAP|{}|{}|{}".format(routemap_name, data['permittion'], data['sequence'])
+
+    configdb_checkpoint(dut, key_configdb, "set_as_path", "prepend 45108 45108 45108 45108 45108 45108 45108 45108", True, "check1")
+
+    st.report_pass("test_case_passed")
+

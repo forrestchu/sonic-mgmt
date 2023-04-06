@@ -546,6 +546,24 @@ def test_base_config_srvpn_locator_01():
         st.log(records)
         st.report_fail("step 8 remote test_base_config_srvpn_locator_01_failed")
 
+    # config locator end action
+    locator_cmd = 'locator  test_end prefix fd00:301:301::/80 block-len 32 node-len 16 func-bits 32 argu-bits 48'
+    end_opcode_cmd = 'opcode ::fff1:1:0:0:0 end'
+    cmd = 'cli -c "configure terminal" -c "segment-routing" -c "srv6" -c "locators" -c "{}" -c "{}"'.format(locator_cmd, end_opcode_cmd)
+    st.config(dut1, cmd)
+    config_end_action_key = 'SRV6_LOCATOR|test_end'
+    configdb_onefield_checkpoint(dut1, config_end_action_key, "opcode@", "::fff1:1:0:0:0|end", expect = True, checkpoint = "end sid configdb check failed.")
+    
+    appl_end_action_key = 'SRV6_MY_SID_TABLE:fd00:301:301:fff1:1::/80'
+    appdb_onefield_checkpoint(dut1, appl_end_action_key, "action", "end", expect = True, checkpoint = "end sid appdb check failed.")
+    appdb_onefield_checkpoint(dut1, appl_end_action_key, "vrf", "Default", expect = True, checkpoint = "end sid appdb check failed.")
+
+    # show ip route
+    show_cmd = "cli -c 'show ip route vrf PUBLIC-TC11 192.100.1.0/24'"
+    result = st.show(dut2, show_cmd, skip_tmpl=True)
+    if 'seg6 fd00:201:201:fff1:11::' not in result:
+        st.report_fail("show ip route vrf cannot show right sid info.")
+
     st.report_pass("test_case_passed")
 
 

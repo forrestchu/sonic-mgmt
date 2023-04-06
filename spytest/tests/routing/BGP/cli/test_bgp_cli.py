@@ -1931,4 +1931,53 @@ def test_cli_no_update_delay():
 
     st.report_pass("test_case_passed")
 
+@pytest.mark.bgp_cli
+def test_cli_show_bgp_community_list():
+    st.log("test_cli_show_bgp_community_list begin")
+    dut = data['dut']
+
+    st.log("config bgp community-list")
+    cmd = "cli -c 'config t' -c 'bgp community-list standard aaa seq 10 permit 1:100 2:200 3:300'"
+    st.config(dut, cmd)
+    cmd = "cli -c 'config t' -c 'bgp community-list standard bbb seq 10 permit 4:400 5:500 6:600'"
+    st.config(dut, cmd)
+    
+    st.log("show bgp community-list")
+    show_cmd = "cli -c 'show bgp community-list'"
+    ret = st.show(dut, show_cmd,  skip_tmpl=True)
+    if ('permit 1:100 2:200 3:300' not in ret) or ('permit 4:400 5:500 6:600' not in ret):
+        st.report_fail("show bgp community-list check failed.")
+    
+    st.log("show bgp community-list aaa/bbb")
+    show_cmd = "cli -c 'show bgp community-list aaa detail'"
+    ret = st.show(dut, show_cmd,  skip_tmpl=True)
+    if ('permit 1:100 2:200 3:300' not in ret):
+        st.report_fail("show bgp community-list aaa check failed.")
+    
+    show_cmd = "cli -c 'show bgp community-list bbb detail'"
+    ret = st.show(dut, show_cmd,  skip_tmpl=True)
+    if ('permit 4:400 5:500 6:600' not in ret):
+        st.report_fail("show bgp community-list bbb check failed.")
+    st.report_pass("test_case_passed")
+
+@pytest.mark.bgp_cli
+def test_cli_del_vrf_bgp():
+    st.log("test_cli_del_vrf_bgp begin")
+    bgpcli_obj = data['bgpcli_obj']
+    dut = data['dut']
+
+    st.log("config vrf bgp instance")
+    cmd = "cli -c 'config t' -c 'router bgp 100 vrf Vrf1'"
+    st.config(dut, cmd)
+
+    st.log("show frr running")
+
+    key_frr = "router bgp 100 vrf Vrf1"
+    frr_config_checkpoint(bgpcli_obj, key_frr, True, "check1")
+
+    cmd = "cli -c 'config t' -c 'no router bgp 100 vrf Vrf1'"
+    st.config(dut, cmd)
+    frr_config_checkpoint(bgpcli_obj, key_frr, False, "check2")
+
+    st.report_pass("test_case_passed")
 

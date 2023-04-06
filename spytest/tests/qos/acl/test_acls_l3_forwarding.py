@@ -14,6 +14,8 @@ import apis.system.basic as basic_obj
 import utilities.common as utils
 from utilities.parallel import ensure_no_exception
 pp = pprint.PrettyPrinter(indent=4)
+import apis.routing.vrf as vrf_api
+from utilities import parallel
 
 vars = dict()
 data = SpyTestDict()
@@ -36,6 +38,13 @@ data.ipv6_portchannel_D2 = "3001::2"
 data.ipv6_network_D1 = "1001::0/64"
 data.ipv6_network_D2 = "2001::0/64"
 data.acl_type = "ipv6"
+data.pbr_primaryport = {"IN":"Ethernet34","OUT":"Ethernet35"}
+data.pbr_port = {"IN":"Eth34.100", "OUT":"Eth35.100"}
+data.pbr_ipv4 = {"IN":"172.10.1.1", "OUT":"172.10.2.1"}
+data.pbr_ipv6 = {"IN":"3100::1", "OUT":"3200::1"}
+data.pbr_vrfname = "ACTN_TC1"
+data.pbr_acl = {'V4':'PBRV4', 'V6':'PBRV6'}
+
 def print_log(msg):
     log_start = "\n================================================================================\n"
     log_end = "\n================================================================================"
@@ -279,6 +288,7 @@ def acl_v4_module_hooks(request):
     # create streams
     data.mac1 = basic_obj.get_ifconfig_ether(vars.D1, vars.D1T1P1)
     data.mac2 = basic_obj.get_ifconfig_ether(vars.D2, vars.D2T1P1)
+    data.mac3 = basic_obj.get_ifconfig_ether(vars.D1, vars.D1T1P2)
     print_log('Creating streams')
     create_streams("tg1", "tg2", acl_config1['ACL_RULE'], "L3_IPV4_INGRESS", \
                    mac_src="00:0a:01:00:00:01", mac_dst=data.mac1)
@@ -288,6 +298,34 @@ def acl_v4_module_hooks(request):
                    mac_src="00:0a:01:00:11:02", mac_dst=data.mac2)
     create_streams("tg2", "tg1", acl_config1['ACL_RULE'], "L3_IPV4_EGRESS", \
                    mac_src="00:0a:01:00:11:02", mac_dst="00:0a:01:00:00:01")
+    
+    #pbr
+    tg3, tg_ph_3 = tgapi.get_handle_byname("T1D1P2")
+    tg4, tg_ph_4 = tgapi.get_handle_byname("T1D1P3")
+    data.tgmap['tg3'] = {
+        "tg": tg3,
+        "handle": tg_ph_3,
+        "streams": {}
+    }
+    data.tgmap['tg4'] = {
+        "tg": tg4,
+        "handle": tg_ph_4,
+        "streams": {}
+    }
+    stream_v4_pbr = tg3.tg_traffic_config(port_handle=tg_ph_3, port_handle2=tg_ph_4,
+                               mode='create', transmit_mode='single_burst',
+                               pkts_per_burst=10000, 
+                               length_mode='fixed', rate_pps=5000, l3_protocol='ipv4', 
+                               mac_src="00:11:01:00:11:02", mac_dst=data.mac3, 
+                               vlan_id=100, vlan_id_count=1,
+                               ip_src_addr="172.10.1.2", ip_dst_addr="172.10.2.2", ip_dscp=10)
+
+    stream_id = stream_v4_pbr['stream_id']
+    s = {}
+    s[stream_id] = {}
+    s[stream_id]['TABLE'] = data.pbr_acl['V4']
+    data.tgmap['tg3']['streams'].update(s)
+    
     print_log('Completed module configuration')
 
     st.log("Configuring ipv4 address on ixia connected interfaces and portchannels present on both the DUTs")
@@ -305,6 +343,25 @@ def acl_v4_module_hooks(request):
                                     config='add')
     ip_obj.config_ip_addr_interface(vars.D2, data.portChannelName, data.ipv6_portchannel_D2, 64, family="ipv6",
                                     config='add')
+
+    #create subif
+    cmd = "cli -c 'configure terminal' -c 'interface sub-interface {} 100'".format(data.pbr_primaryport['IN'])
+    st.config(vars.D1, cmd)
+    cmd = "cli -c 'configure terminal' -c 'interface sub-interface {} 100'".format(data.pbr_primaryport['OUT'])
+    st.config(vars.D1, cmd)
+
+    # pbr subport config
+    dict1 = {'vrf_name':[data.pbr_vrfname],'skip_error':True}
+    parallel.exec_parallel(True, [vars.D1], vrf_api.config_vrf, [dict1])
+    dict1 = {'vrf_name':data.pbr_vrfname, 'intf_name':data.pbr_port['OUT'],'skip_error':True}
+    parallel.exec_parallel(True, [vars.D1], vrf_api.bind_vrf_interface, [dict1])
+
+    
+    cmd = "cli -c 'configure terminal' -c 'interface sub-interface {} 100'".format(data.pbr_primaryport['OUT'])
+    st.config(vars.D1, cmd)
+    ip_obj.config_ip_addr_interface(vars.D1, data.pbr_port['IN'], data.pbr_ipv4['IN'], 24, family="ipv4", cli_type='alicli')
+    ip_obj.config_ip_addr_interface(vars.D1, data.pbr_port['OUT'], data.pbr_ipv4['OUT'], 24, family="ipv4", cli_type='alicli')
+    # ip_obj.config_ip_addr_interface(vars.D1, data.pbr_port['IN'], data.pbr_ipv6['IN'], 64, family="ipv6", cli_type='alicli')
 
     st.log("configuring ipv4 static routes on both the DUTs")
     ip_obj.create_static_route(vars.D1, data.ipv4_portchannel_D2, data.ipv4_network_D2, shell="vtysh",
@@ -327,12 +384,17 @@ def acl_v4_module_hooks(request):
     arp_obj.add_static_arp(vars.D1, "1.1.1.5", "00:0a:01:00:00:01", vars.D1T1P1)
     arp_obj.add_static_arp(vars.D2, "2.2.2.6", "00:0a:01:00:11:02", vars.D2T1P1)
     arp_obj.add_static_arp(vars.D1, "1.1.1.6", "00:0a:01:00:00:01", vars.D1T1P1)
+    # pbr
+    arp_obj.add_static_arp(vars.D1, "172.10.2.2", "00:11:01:00:00:01", data.pbr_port['OUT'])
+
     arp_obj.show_arp(vars.D1)
     arp_obj.show_arp(vars.D2)
 
     st.log("configuring static ndp entries")
     arp_obj.config_static_ndp(vars.D1, "1001::2", "00:0a:01:00:00:01", vars.D1T1P1, operation="add")
     arp_obj.config_static_ndp(vars.D2, "2001::2", "00:0a:01:00:11:02", vars.D2T1P1, operation="add")
+    #pbr
+    # arp_obj.config_static_ndp(vars.D2, "3001::2", "00:11:01:00:00:01", data.pbr_port['OUT'], operation="add")
     arp_obj.show_ndp(vars.D1)
     arp_obj.show_ndp(vars.D2)
 
@@ -386,3 +448,31 @@ def test_ft_acl_ingress_ipv6_l3_forwarding():
     result3 = verify_rule_priority(vars.D2, "L3_IPV6_INGRESS")
     acl_utils.report_result(result1 and result2 and result3)
 
+@pytest.mark.acl_test123
+def test_ft_acl_pbr_setvrf_ipv4_l3_forwarding():
+    #config acl PBRV4
+    cmd = "cli -c 'config t' -c 'acl table PBRV4 stage ingress attach sub-interface Eth34.100'"
+    st.config(vars.D1, cmd)
+    cmd = "cli -c 'config t' -c 'acl rule  table PBRV4 index 10 action set-vrf action_object ACTN_TC1 dscp 10'"
+    st.config(vars.D1, cmd)
+
+    transmit('tg3')
+    data.tgmap['tg3']['tg'].tg_traffic_control(action='run', stream_handle=list(data.tgmap['tg3']['streams'].keys()),
+                                            duration=1)
+    traffic_details = {
+        '1' :{
+                'tx_ports': [vars.T1D1P2],
+                'tx_obj': [data.tgmap['tg3']['tg']],
+                'exp_ratio':[1],
+                'rx_ports': [vars.T1D1P3],
+                'rx_obj': [data.tgmap['tg4']['tg']],
+                'stream_list': [[data.tgmap['tg3']['streams'].keys()[0]]]
+            }
+        }
+
+    result_all = tgapi.validate_tgen_traffic(traffic_details=traffic_details, mode='streamblock',
+                                    comp_type='packet_count', return_all=1, delay_factor=1.2)
+    print_log(result_all)
+    print_log('Verifing PBRV4 Ingress ACL hit counters')
+    result_hit = verify_acl_hit_counters(vars.D1, "PBRV4")
+    acl_utils.report_result(result_all[0] and result_hit)

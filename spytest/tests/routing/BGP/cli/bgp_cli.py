@@ -454,3 +454,10 @@ class BGP_CLI():
         cmd = "{} -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, sub_cmd)
         st.config(self.dut, cmd)
         st.wait(CMD_INTERVAL)
+
+    def config_bgp_update_delay(self, config='add'):
+        sub_cmd = 'update-delay 15' if config=='add' else 'no update-delay' 
+        cmd = "{} -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, self.router_view, sub_cmd)
+        st.config(self.dut, cmd)
+        st.wait(CMD_INTERVAL)
+

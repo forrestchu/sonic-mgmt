@@ -1914,3 +1914,21 @@ def test_cli_ip_nht_bgp_route_map():
     st.report_pass("test_case_passed")
 
 
+@pytest.mark.bgp_cli
+def test_cli_no_update_delay():
+    st.log("test_cli_no_update_delay begin")
+    bgpcli_obj = data['bgpcli_obj']
+    dut = data['dut']
+
+    # case 1:
+    st.log("test sub case 1...")
+    bgpcli_obj.config_bgp_update_delay(config='add')
+    bgpcli_obj.config_bgp_update_delay(config='del')
+
+    
+    key_configdb = "BGP_PARAMETERS|100|global"
+    configdb_checkpoint(dut, key_configdb, "NULL", "NULL", True, "check1")
+
+    st.report_pass("test_case_passed")
+
+

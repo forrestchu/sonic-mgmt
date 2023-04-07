@@ -1278,6 +1278,72 @@ acl_json_config_v6_l3_traffic = {
     }
   }
 }
+acl_json_config_v4_l3_bind_subport_traffic = {
+  "ACL_TABLE": {
+    "L3_IPV4_BIND_SUBPORT_ING": {
+      "type": "L3",
+      "stage": "INGRESS",
+      "ports": [],
+      "policy_desc": "L3_IPV4_BIND_SUBPORT_ING"
+    }
+  },
+  "ACL_RULE": {
+    "L3_IPV4_BIND_SUBPORT_ING|rule1": {
+      "PACKET_ACTION": "FORWARD",
+      "SRC_IP": "1.1.1.7/32",
+      "DST_IP": "2.2.2.7/32",
+      "L4_SRC_PORT": 43,
+      "L4_DST_PORT": 10,
+      "IP_PROTOCOL": 6,
+      "PRIORITY": 1000
+    },
+    "L3_IPV4_BIND_SUBPORT_ING|rule2": {
+      "PACKET_ACTION": "FORWARD",
+      "SRC_IP": "1.1.1.8/32",
+      "DST_IP": "2.2.2.8/32",
+      "L4_SRC_PORT": 100,
+      "IP_PROTOCOL": 17,
+      "PRIORITY": 2000
+    },
+    "L3_IPV4_BIND_SUBPORT_ING|PermitAny": {
+      "PACKET_ACTION": "FORWARD",
+      "PRIORITY": 100
+    }
+  }
+}
+acl_json_config_v6_l3_bind_subport_traffic = {
+  "ACL_TABLE": {
+    "L3_IPV6_BIND_SUBPORT_ING": {
+      "type": "L3V6",
+      "stage": "INGRESS",
+      "ports": [],
+      "policy_desc": "L3_IPV6_BIND_SUBPORT_ING"
+    }
+  },
+  "ACL_RULE": {
+    "L3_IPV6_BIND_SUBPORT_ING|rule1": {
+      "PACKET_ACTION": "FORWARD",
+      "SRC_IPV6": "1001::2/128",
+      "DST_IPV6": "2001::2/128",
+      "L4_SRC_PORT": 100,
+      "IP_PROTOCOL": 6,
+      "PRIORITY": 1000
+    },
+    "L3_IPV6_BIND_SUBPORT_ING|rule2": {
+      "PACKET_ACTION": "DROP",
+      "SRC_IPV6": "9001::2/128",
+      "DST_IPV6": "a001::2/128",
+      "L4_SRC_PORT": 100,
+      "L4_DST_PORT": 300,
+      "IP_PROTOCOL": 6,
+      "PRIORITY": 4000
+    },
+    "L3_IPV6_BIND_SUBPORT_ING|PermitAny": {
+      "PACKET_ACTION": "FORWARD",
+      "PRIORITY": 100
+    }
+  }
+}
 acl_json_config_control_plane = {
   "ACL_TABLE":{
      "SNMP_SSH":{
@@ -13694,3 +13760,85 @@ acl_json_capacity= {
     }
 }
 
+acl_json_config_subport = {
+    "ACL_TABLE": {
+        "IN4": {
+            "type": "L3",
+            "stage": "INGRESS",
+            "ports": [],
+            "policy_desc": "L3_IPV4_INGRESS"
+        }
+    },
+    "ACL_RULE": {
+        "IN4|RULE_1": {
+            "DSCP": 0,
+            "DST_IP": "1.0.0.2/32",
+            "IP_PROTOCOL": 17,
+            "L4_DST_PORT": 22222,
+            "L4_SRC_PORT": 11111,
+            "PACKET_ACTION": "FORWARD",
+            "PRIORITY": "9999",
+            "SRC_IP": "2.0.0.2/24",
+            "in_ports": []
+        },
+        "IN4|RULE_2": {
+            "DSCP": 0,
+            "DST_IP": "1.0.0.2/32",
+            "IP_PROTOCOL": 6,
+            "L4_DST_PORT": 22222,
+            "L4_SRC_PORT": 11111,
+            "PACKET_ACTION": "FORWARD",
+            "PRIORITY": "9998",
+            "SRC_IP": "2.0.0.2/24",
+            "in_ports": []
+        },
+        "IN4|RULE_3": {
+            "DSCP": 0,
+            "DST_IP": "1.0.0.2/32",
+            "IP_PROTOCOL": 17,
+            "L4_DST_PORT": 222,
+            "L4_SRC_PORT": 111,
+            "PACKET_ACTION": "FORWARD",
+            "PRIORITY": "9997",
+            "SRC_IP": "2.0.0.2/24",
+            "in_ports": []
+        },
+        "IN4|RULE_4": {
+            "DSCP": 0,
+            "DST_IP": "1.0.0.2/32",
+            "IP_PROTOCOL": 17,
+            "PACKET_ACTION": "FORWARD",
+            "PRIORITY": "9996",
+            "SRC_IP": "2.0.0.2/24",
+            "in_ports": []
+        },
+        "IN4|RULE_5": {
+            "DSCP": 10,
+            "DST_IP": "1.0.0.2/32",
+            "IP_PROTOCOL": 17,
+            "PACKET_ACTION": "FORWARD",
+            "PRIORITY": "9995",
+            "SRC_IP": "2.0.0.2/24",
+            "in_ports": []
+        },
+        "IN4|RULE_6": {
+            "DST_IP": "1.0.0.2/32",
+            "IP_PROTOCOL": 17,
+            "PACKET_ACTION": "FORWARD",
+            "PRIORITY": "9994",
+            "SRC_IP": "2.0.0.2/24",
+            "in_ports": []
+        },
+        "IN4|RULE_7": {
+            "DST_IP": "1.0.0.2/32",
+            "PACKET_ACTION": "FORWARD",
+            "PRIORITY": "9993",
+            "SRC_IP": "4.0.0.2/32",
+            "in_ports": []
+        },
+        "IN4|PermitAny": {
+            "PACKET_ACTION": "FORWARD",
+            "PRIORITY": "9990"
+        }
+    }
+}

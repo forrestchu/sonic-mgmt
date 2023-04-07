@@ -145,6 +145,40 @@ def apply_acl_config(dut, config):
     st.apply_json2(dut, json_config)
 
 
+def create_streams_subport(tx_tg, rx_tg, rules, match, mac_src, mac_dst, vlan_id):
+    # use the ACL rule definitions to create match/non-match traffic streams
+    # instead of hard coding the traffic streams
+    my_args = {
+        'port_handle': data.tgmap[tx_tg]['handle'], 'mode': 'create', 'frame_size': '128',
+        'transmit_mode': 'continuous', 'length_mode': 'fixed', 'duration': 1,
+        'l2_encap': 'ethernet_ii_vlan', 'rate_pps': data.rate_pps,
+        'high_speed_result_analysis': 0, 'mac_src': mac_src, 'mac_dst': mac_dst, 'vlan_id': vlan_id, 'vlan_id_count': 1,
+        'port_handle2': data.tgmap[rx_tg]['handle']
+    }
+
+    for rule, attributes in rules.items():
+        if ("IP_TYPE" in attributes) or ("ETHER_TYPE" in attributes):
+            continue
+        if ("PermiAny" in rule):
+            continue
+
+        if match in rule:
+            params = {}
+            tmp = dict(my_args)
+            for key, value in attributes.items():
+                params.update(acl_utils.get_args_l3(key, value, attributes, data.rate_pps, data.tg_type))
+            tmp.update(params)
+            st.log("stream info")
+            st.log(rule)
+            st.log(tmp['port_handle'])
+            st.log(tmp['port_handle2'])
+            stream = data.tgmap[tx_tg]['tg'].tg_traffic_config(**tmp)
+            stream_id = stream['stream_id']
+            s = {}
+            s[stream_id] = attributes
+            s[stream_id]['TABLE'] = rule
+            data.tgmap[tx_tg]['streams'].update(s)
+
 def create_streams(tx_tg, rx_tg, rules, match, mac_src, mac_dst):
     # use the ACL rule definitions to create match/non-match traffic streams
     # instead of hard coding the traffic streams
@@ -476,3 +510,106 @@ def test_ft_acl_pbr_setvrf_ipv4_l3_forwarding():
     print_log('Verifing PBRV4 Ingress ACL hit counters')
     result_hit = verify_acl_hit_counters(vars.D1, "PBRV4")
     acl_utils.report_result(result_all[0] and result_hit)
+    
+@pytest.mark.acl_test123
+def test_ft_ipv4_acl_cli_bind_subport():
+    print_log('delete parent port ip address')
+    ip_obj.delete_ip_interface(vars.D1, vars.D1T1P1, data.ipv4_address_D1, 24, family="ipv4")
+    ip_obj.delete_ip_interface(vars.D1, vars.D1T1P1, data.ipv6_address_D1, 64, family="ipv6")
+    ip_obj.delete_ip_interface(vars.D2, vars.D2T1P1, data.ipv4_address_D2, 24, family="ipv4")
+    ip_obj.delete_ip_interface(vars.D2, vars.D2T1P1, data.ipv6_address_D2, 64, family="ipv6")
+
+    print_log('delete parent port acl table')
+    st.config(vars.D1, "cli -c 'configure terminal' -c 'no acl table L3_IPV4_INGRESS'")
+    st.config(vars.D1, "cli -c 'configure terminal' -c 'no ipv6 acl table L3_IPV6_INGRESS'")
+    st.config(vars.D1, "cli -c 'configure terminal' -c 'no acl table L3_IPV4_EGRESS'")
+    st.config(vars.D1, "cli -c 'configure terminal' -c 'no ipv6 acl table L3_IPV6_EGRESS'")
+
+    print_log('config subport ip address')
+    st.config(vars.D1, "cli -c 'configure terminal' -c 'interface sub-interface {} 200' -c 'ip address 1.1.1.1/24'".format(vars.D1T1P1))
+    st.config(vars.D2, "cli -c 'configure terminal' -c 'interface sub-interface {} 200' -c 'ip address 2.2.2.1/24'".format(vars.D2T1P1))
+    st.wait(5)
+
+    acl_config3 = acl_data.acl_json_config_v4_l3_bind_subport_traffic
+    add_port_to_acl_table(acl_config3, 'L3_IPV4_BIND_SUBPORT_ING', 'Eth7.200')
+    
+    # creating ACL tables and rules
+    print_log('Creating ACL tables and rules')
+    utils.exec_all(True, [
+        utils.ExecAllFunc(acl_obj.apply_acl_config, vars.D1, acl_config3),
+    ])
+
+    #configuring static arp entries
+    arp_obj.add_static_arp(vars.D2, "2.2.2.7", "00:0a:01:00:11:02", 'Eth7.200')
+    arp_obj.add_static_arp(vars.D2, "2.2.2.8", "00:0a:01:00:11:02", 'Eth7.200')
+    arp_obj.add_static_arp(vars.D1, "1.1.1.7", "00:0a:01:00:00:01", 'Eth7.200')
+    arp_obj.add_static_arp(vars.D1, "1.1.1.8", "00:0a:01:00:00:01", 'Eth7.200')
+    arp_obj.show_arp(vars.D1)
+    arp_obj.show_arp(vars.D2)
+
+    # create streams
+    data.mac1 = basic_obj.get_ifconfig_ether(vars.D1, vars.D1T1P1)
+    print_log('Creating streams')
+    create_streams_subport("tg1", "tg2", acl_config3['ACL_RULE'], "L3_IPV4_BIND_SUBPORT_ING", \
+                   mac_src="00:0a:01:00:00:01", mac_dst=data.mac1, vlan_id=200)
+    print_log('Completed module configuration')
+
+    transmit('tg1')
+    st.wait(10)
+
+    result1 = verify_packet_count('tg1', vars.T1D1P1, 'tg2', vars.T1D2P1, "L3_IPV4_BIND_SUBPORT_ING")
+    print_log('Verifing IPv4 Ingress ACL bind subport hit counters')
+    result2 = verify_acl_hit_counters(vars.D1, "L3_IPV4_BIND_SUBPORT_ING")
+    result3 = verify_rule_priority(vars.D1, "L3_IPV4_BIND_SUBPORT_ING")
+    acl_utils.report_result(result1 and result2 and result3)
+
+
+def test_ft_ipv6_acl_cli_bind_subport():
+    print_log('delete parent port ip address')
+    ip_obj.delete_ip_interface(vars.D1, vars.D1T1P1, data.ipv4_address_D1, 24, family="ipv4")
+    ip_obj.delete_ip_interface(vars.D1, vars.D1T1P1, data.ipv6_address_D1, 64, family="ipv6")
+    ip_obj.delete_ip_interface(vars.D2, vars.D2T1P1, data.ipv4_address_D2, 24, family="ipv4")
+    ip_obj.delete_ip_interface(vars.D2, vars.D2T1P1, data.ipv6_address_D2, 64, family="ipv6")
+
+    print_log('delete parent port acl table')
+    st.config(vars.D1, "cli -c 'configure terminal' -c 'no acl table L3_IPV4_INGRESS'")
+    st.config(vars.D1, "cli -c 'configure terminal' -c 'no ipv6 acl table L3_IPV6_INGRESS'")
+    st.config(vars.D1, "cli -c 'configure terminal' -c 'no acl table L3_IPV4_EGRESS'")
+    st.config(vars.D1, "cli -c 'configure terminal' -c 'no ipv6 acl table L3_IPV6_EGRESS'")
+
+    print_log('config subport ip address')
+    st.config(vars.D1, "cli -c 'configure terminal' -c 'interface sub-interface {} 200' -c 'ipv6 address 1001::1/64'".format(vars.D1T1P1))
+    st.config(vars.D2, "cli -c 'configure terminal' -c 'interface sub-interface {} 200' -c 'ipv6 address 2001::1/64'".format(vars.D2T1P1))
+    st.wait(5)
+
+    acl_config4 = acl_data.acl_json_config_v6_l3_bind_subport_traffic
+    add_port_to_acl_table(acl_config4, 'L3_IPV6_BIND_SUBPORT_ING', 'Eth7.200')
+    
+    # creating ACL tables and rules
+    print_log('Creating ACL tables and rules')
+    utils.exec_all(True, [
+        utils.ExecAllFunc(acl_obj.apply_acl_config, vars.D1, acl_config4),
+    ])
+
+    #configuring static ndp entries
+    st.log("configuring static ndp entries")
+    arp_obj.config_static_ndp(vars.D1, "1001::2", "00:0a:01:00:00:01", 'Eth7.200', operation="add")
+    arp_obj.config_static_ndp(vars.D2, "2001::2", "00:0a:01:00:11:02", 'Eth7.200', operation="add")
+    arp_obj.show_ndp(vars.D1)
+    arp_obj.show_ndp(vars.D2)
+
+    # create streams
+    data.mac1 = basic_obj.get_ifconfig_ether(vars.D1, vars.D1T1P1)
+    print_log('Creating streams')
+    create_streams_subport("tg1", "tg2", acl_config4['ACL_RULE'], "L3_IPV6_BIND_SUBPORT_ING", \
+                   mac_src="00:0a:01:00:00:01", mac_dst=data.mac1, vlan_id=200)
+    print_log('Completed module configuration')
+
+    transmit('tg1')
+    st.wait(10)
+
+    result1 = verify_packet_count('tg1', vars.T1D1P1, 'tg2', vars.T1D2P1, "L3_IPV6_BIND_SUBPORT_ING")
+    print_log('Verifing IPv6 Ingress ACL bind subport hit counters')
+    result2 = verify_acl_hit_counters(vars.D1, "L3_IPV6_BIND_SUBPORT_ING")
+    result3 = verify_rule_priority(vars.D1, "L3_IPV6_BIND_SUBPORT_ING")
+    acl_utils.report_result(result1 and result2 and result3)

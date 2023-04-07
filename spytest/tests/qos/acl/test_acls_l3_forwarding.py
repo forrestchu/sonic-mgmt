@@ -360,6 +360,20 @@ def acl_v4_module_hooks(request):
     s[stream_id]['TABLE'] = data.pbr_acl['V4']
     data.tgmap['tg3']['streams'].update(s)
     
+    #pbrv6 stream
+    stream_v6_pbr = tg4.tg_traffic_config(port_handle=tg_ph_3, port_handle2=tg_ph_4,
+                               mode='create', transmit_mode='single_burst',
+                               pkts_per_burst=10000, 
+                               length_mode='fixed', rate_pps=5000, l3_protocol='ipv6', 
+                               mac_src="00:22:01:00:11:02", mac_dst=data.mac3, 
+                               vlan_id=100, vlan_id_count=1,
+                               ipv6_src_addr="3100::2", ipv6_dst_addr="3200::2", ipv6_traffic_class=40) #dscp 10 = traffic class 40 = 1010 00 
+    stream_id = stream_v6_pbr['stream_id']
+    s = {}
+    s[stream_id] = {}
+    s[stream_id]['TABLE'] = data.pbr_acl['V6']
+    data.tgmap['tg4']['streams'].update(s)
+
     print_log('Completed module configuration')
 
     st.log("Configuring ipv4 address on ixia connected interfaces and portchannels present on both the DUTs")
@@ -395,7 +409,9 @@ def acl_v4_module_hooks(request):
     st.config(vars.D1, cmd)
     ip_obj.config_ip_addr_interface(vars.D1, data.pbr_port['IN'], data.pbr_ipv4['IN'], 24, family="ipv4", cli_type='alicli')
     ip_obj.config_ip_addr_interface(vars.D1, data.pbr_port['OUT'], data.pbr_ipv4['OUT'], 24, family="ipv4", cli_type='alicli')
-    # ip_obj.config_ip_addr_interface(vars.D1, data.pbr_port['IN'], data.pbr_ipv6['IN'], 64, family="ipv6", cli_type='alicli')
+    
+    ip_obj.config_ip_addr_interface(vars.D1, data.pbr_port['IN'], data.pbr_ipv6['IN'], 64, family="ipv6", cli_type='alicli')
+    ip_obj.config_ip_addr_interface(vars.D1, data.pbr_port['OUT'], data.pbr_ipv6['OUT'], 64, family="ipv6", cli_type='alicli')
 
     st.log("configuring ipv4 static routes on both the DUTs")
     ip_obj.create_static_route(vars.D1, data.ipv4_portchannel_D2, data.ipv4_network_D2, shell="vtysh",
@@ -428,7 +444,7 @@ def acl_v4_module_hooks(request):
     arp_obj.config_static_ndp(vars.D1, "1001::2", "00:0a:01:00:00:01", vars.D1T1P1, operation="add")
     arp_obj.config_static_ndp(vars.D2, "2001::2", "00:0a:01:00:11:02", vars.D2T1P1, operation="add")
     #pbr
-    # arp_obj.config_static_ndp(vars.D2, "3001::2", "00:11:01:00:00:01", data.pbr_port['OUT'], operation="add")
+    arp_obj.config_static_ndp(vars.D1, "3200::2", "00:22:01:00:11:02", data.pbr_port['OUT'], operation="add")
     arp_obj.show_ndp(vars.D1)
     arp_obj.show_ndp(vars.D2)
 
@@ -510,7 +526,36 @@ def test_ft_acl_pbr_setvrf_ipv4_l3_forwarding():
     print_log('Verifing PBRV4 Ingress ACL hit counters')
     result_hit = verify_acl_hit_counters(vars.D1, "PBRV4")
     acl_utils.report_result(result_all[0] and result_hit)
-    
+
+@pytest.mark.acl_test123
+def test_ft_acl_pbr_setvrf_ipv6_l3_forwarding():
+    #config acl PBRV6
+    cmd = "cli -c 'config t' -c 'ipv6 acl table PBRV6 stage ingress attach sub-interface Eth34.100'"
+    st.config(vars.D1, cmd)
+    cmd = "cli -c 'config t' -c 'ipv6 acl rule  table PBRV6 index 10 action set-vrf action_object ACTN_TC1 dscp 10'"
+    st.config(vars.D1, cmd)
+
+    transmit('tg4')
+    data.tgmap['tg4']['tg'].tg_traffic_control(action='run', stream_handle=list(data.tgmap['tg4']['streams'].keys()),
+                                            duration=1)
+    traffic_details = {
+        '1' :{
+                'tx_ports': [vars.T1D1P2],
+                'tx_obj': [data.tgmap['tg3']['tg']],
+                'exp_ratio':[1],
+                'rx_ports': [vars.T1D1P3],
+                'rx_obj': [data.tgmap['tg4']['tg']],
+                'stream_list': [[data.tgmap['tg4']['streams'].keys()[0]]]
+            }
+        }
+
+    result_all = tgapi.validate_tgen_traffic(traffic_details=traffic_details, mode='streamblock',
+                                    comp_type='packet_count', return_all=1, delay_factor=1.2)
+    print_log(result_all)
+    print_log('Verifing PBRV6 Ingress ACL hit counters')
+    result_hit = verify_acl_hit_counters(vars.D1, "PBRV6")
+    acl_utils.report_result(result_all[0] and result_hit)
+
 @pytest.mark.acl_test123
 def test_ft_ipv4_acl_cli_bind_subport():
     print_log('delete parent port ip address')

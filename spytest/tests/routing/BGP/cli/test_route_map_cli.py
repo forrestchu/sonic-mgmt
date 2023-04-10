@@ -664,9 +664,9 @@ def test_cli_prefix_list_no_seq():
 
     #  config ip prefix-list with seq
     PREFIX_NAME = 'plv4'
-    PREFIX_E1 = '1.1.1.1/32'
-    PREFIX_E2 = '2.2.2.2/32'
-    PREFIX_E3 = '3.3.3.3/32'
+    PREFIX_E1 = '1.1.1.4/32'
+    PREFIX_E2 = '2.2.2.5/32'
+    PREFIX_E3 = '3.3.3.6/32'
 
     cmd = "cli -c 'config t' -c 'ip prefix-list {} seq 90 permit {}'".format(PREFIX_NAME, PREFIX_E1)
     st.config(dut, cmd)
@@ -693,9 +693,9 @@ def test_cli_prefix_list_no_seq():
 
     #  config ipv6 prefix-list
     PREFIX6_NAME = 'plv6'
-    PREFIX6_E1 = '2000::1/128'
-    PREFIX6_E2 = '2000::2/128'
-    PREFIX6_E3 = '2000::3/128'
+    PREFIX6_E1 = '2000::4/128'
+    PREFIX6_E2 = '2000::5/128'
+    PREFIX6_E3 = '2000::6/128'
 
     cmd = "cli -c 'config t' -c 'ipv6 prefix-list {} seq 90 permit {}'".format(PREFIX6_NAME, PREFIX6_E1)
     st.config(dut, cmd)

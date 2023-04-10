@@ -1943,7 +1943,7 @@ def test_cli_no_update_delay():
 
     
     key_configdb = "BGP_PARAMETERS|100|global"
-    configdb_checkpoint(dut, key_configdb, "NULL", "NULL", True, "check1")
+    configdb_checkpoint(dut, key_configdb, "bgp_router_id", data.router_id, True, "check1")
 
     st.report_pass("test_case_passed")
 

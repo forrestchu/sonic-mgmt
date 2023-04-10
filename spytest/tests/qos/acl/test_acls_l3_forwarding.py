@@ -17,6 +17,9 @@ pp = pprint.PrettyPrinter(indent=4)
 import apis.routing.vrf as vrf_api
 from utilities import parallel
 
+SUBPORT_PREFIX = 'Eth'
+SUBPORTCHANNEL_PREFIX = 'PC'
+SUB_INTERFACE_SEPARATOR = "."
 vars = dict()
 data = SpyTestDict()
 data.rate_pps = 100
@@ -414,6 +417,8 @@ def acl_v4_module_hooks(request):
     ip_obj.config_ip_addr_interface(vars.D1, data.pbr_port['OUT'], data.pbr_ipv6['OUT'], 64, family="ipv6", cli_type='alicli')
 
     st.log("configuring ipv4 static routes on both the DUTs")
+    cmd = "cli -c 'configure terminal'"
+    st.config(vars.D1, cmd)
     ip_obj.create_static_route(vars.D1, data.ipv4_portchannel_D2, data.ipv4_network_D2, shell="vtysh",
                                family="ipv4")
     ip_obj.create_static_route(vars.D2, data.ipv4_portchannel_D1, data.ipv4_network_D1, shell="vtysh",
@@ -556,6 +561,16 @@ def test_ft_acl_pbr_setvrf_ipv6_l3_forwarding():
     result_hit = verify_acl_hit_counters(vars.D1, "PBRV6")
     acl_utils.report_result(result_all[0] and result_hit)
 
+def get_subport_from_parent(port, vlan):
+    if port.startswith(SUBPORT_PREFIX):
+        item = SUBPORT_PREFIX + port[len("Ethernet"):] + SUB_INTERFACE_SEPARATOR + vlan
+    elif port.startswith(SUBPORTCHANNEL_PREFIX):
+        item = SUBPORTCHANNEL_PREFIX + port[len("PortChannel"):] + SUB_INTERFACE_SEPARATOR + vlan
+    else:
+        print_log("get subport from parent fail.")
+        item = None
+    return item
+    
 @pytest.mark.acl_test123
 def test_ft_ipv4_acl_cli_bind_subport():
     print_log('delete parent port ip address')
@@ -576,7 +591,8 @@ def test_ft_ipv4_acl_cli_bind_subport():
     st.wait(5)
 
     acl_config3 = acl_data.acl_json_config_v4_l3_bind_subport_traffic
-    add_port_to_acl_table(acl_config3, 'L3_IPV4_BIND_SUBPORT_ING', 'Eth7.200')
+    sub_port = get_subport_from_parent(vars.D1T1P1, "200")
+    add_port_to_acl_table(acl_config3, 'L3_IPV4_BIND_SUBPORT_ING', sub_port)
     
     # creating ACL tables and rules
     print_log('Creating ACL tables and rules')
@@ -585,10 +601,10 @@ def test_ft_ipv4_acl_cli_bind_subport():
     ])
 
     #configuring static arp entries
-    arp_obj.add_static_arp(vars.D2, "2.2.2.7", "00:0a:01:00:11:02", 'Eth7.200')
-    arp_obj.add_static_arp(vars.D2, "2.2.2.8", "00:0a:01:00:11:02", 'Eth7.200')
-    arp_obj.add_static_arp(vars.D1, "1.1.1.7", "00:0a:01:00:00:01", 'Eth7.200')
-    arp_obj.add_static_arp(vars.D1, "1.1.1.8", "00:0a:01:00:00:01", 'Eth7.200')
+    arp_obj.add_static_arp(vars.D2, "2.2.2.7", "00:0a:01:00:11:02", sub_port)
+    arp_obj.add_static_arp(vars.D2, "2.2.2.8", "00:0a:01:00:11:02", sub_port)
+    arp_obj.add_static_arp(vars.D1, "1.1.1.7", "00:0a:01:00:00:01", sub_port)
+    arp_obj.add_static_arp(vars.D1, "1.1.1.8", "00:0a:01:00:00:01", sub_port)
     arp_obj.show_arp(vars.D1)
     arp_obj.show_arp(vars.D2)
 
@@ -628,7 +644,8 @@ def test_ft_ipv6_acl_cli_bind_subport():
     st.wait(5)
 
     acl_config4 = acl_data.acl_json_config_v6_l3_bind_subport_traffic
-    add_port_to_acl_table(acl_config4, 'L3_IPV6_BIND_SUBPORT_ING', 'Eth7.200')
+    sub_port = get_subport_from_parent(vars.D1T1P1, "200")
+    add_port_to_acl_table(acl_config4, 'L3_IPV6_BIND_SUBPORT_ING', sub_port)
     
     # creating ACL tables and rules
     print_log('Creating ACL tables and rules')
@@ -638,8 +655,8 @@ def test_ft_ipv6_acl_cli_bind_subport():
 
     #configuring static ndp entries
     st.log("configuring static ndp entries")
-    arp_obj.config_static_ndp(vars.D1, "1001::2", "00:0a:01:00:00:01", 'Eth7.200', operation="add")
-    arp_obj.config_static_ndp(vars.D2, "2001::2", "00:0a:01:00:11:02", 'Eth7.200', operation="add")
+    arp_obj.config_static_ndp(vars.D1, "1001::2", "00:0a:01:00:00:01", sub_port, operation="add")
+    arp_obj.config_static_ndp(vars.D2, "2001::2", "00:0a:01:00:11:02", sub_port, operation="add")
     arp_obj.show_ndp(vars.D1)
     arp_obj.show_ndp(vars.D2)
 

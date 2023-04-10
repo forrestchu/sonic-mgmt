@@ -53,6 +53,8 @@
 -test:test_cli_bgp_reflector_client
 -test:test_cli_bgp_maximum_paths
 -test:test_cli_ip_nht_bgp_route_map
+-test:test_ft_acl_pbr_setvrf_ipv4_l3_forwarding
+-test:test_ft_acl_pbr_setvrf_ipv6_l3_forwarding
 
 #+args:--skip-init-config
 #+args:--skip-load-config base

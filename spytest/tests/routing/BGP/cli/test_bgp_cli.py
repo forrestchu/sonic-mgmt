@@ -1864,11 +1864,11 @@ def test_cli_bgp_reflector_client():
     frr_config_checkpoint(bgpcli_obj, key_frr, False, "check4")
 
     # conflict check 
-    bgpcli_obj.create_neighbor_v4(data.ip4_addr[-1], data.remote_as_num)
-    bgpcli_obj.config_neighbor_activate(IPV4_UNICAST_VIEW, data.ip4_addr[-1])
-    bgpcli_obj.config_bgp_neighbor_route_reflector_client(IPV4_UNICAST_VIEW, data.ip4_addr[-1])
-    key_configdb = "BGP_NEIGHBOR|{}|ipv4".format(data.ip4_addr[-1])
-    key_frr = "router bgp {}|{}|neighbor {} route-reflector-client".format(data.remote_as_num, IPV4_UNICAST_VIEW, data.ip4_addr[-1])
+    bgpcli_obj.create_neighbor_v4(data.ip4_addr[-3], data.remote_as_num)
+    bgpcli_obj.config_neighbor_activate(IPV4_UNICAST_VIEW, data.ip4_addr[-3])
+    bgpcli_obj.config_bgp_neighbor_route_reflector_client(IPV4_UNICAST_VIEW, data.ip4_addr[-3])
+    key_configdb = "BGP_NEIGHBOR|{}|ipv4".format(data.ip4_addr[-3])
+    key_frr = "router bgp {}|{}|neighbor {} route-reflector-client".format(data.remote_as_num, IPV4_UNICAST_VIEW, data.ip4_addr[-3])
     configdb_checkpoint(dut, key_configdb, "rr_client", "null", True, "check5")
     frr_config_checkpoint(bgpcli_obj, key_frr, False, "check6")
 

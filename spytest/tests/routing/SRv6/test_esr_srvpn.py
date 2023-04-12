@@ -10,6 +10,8 @@ import apis.routing.bgp as bgpfeature
 
 from spytest import st, tgapi, SpyTestDict
 from spytest.utils import filter_and_select
+import spytest.env as env
+
 from utilities.utils import retry_api
 import pandas as pd
 import matplotlib
@@ -1192,7 +1194,7 @@ def duts_get_memory(dut, progress):
     memory = st.show(dut, cmd, skip_tmpl=True, skip_error_check=True).split("\n")
     return memory
 
-def plot_perf(csv_file):
+def plot_perf(csv_file, jpg_file):
 
     data_df = pd.read_csv(csv_file)
 
@@ -1208,7 +1210,7 @@ def plot_perf(csv_file):
     plt.ylim(ymin=0, ymax=max(y)+100000)
 
     plt.plot(x, y, color='blue')
-    plt.savefig('eSR_Performance.jpg', dpi=1200)
+    plt.savefig(jpg_file, dpi=1200)
     # plt.show()
 
 def get_route_load_time(cursor, csv_file):
@@ -1256,6 +1258,12 @@ def get_route_convergence_time(cursor, csv_file):
     return stop_time - start_time
 
 
+def get_log_dir_path():
+    user_root = env.get("SPYTEST_USER_ROOT", os.getcwd())
+    logs_path = env.get("SPYTEST_LOGS_PATH", user_root)
+    return logs_path
+
+
 @pytest.mark.community
 @pytest.mark.community_pass
 def test_srvpn_performance_500K():
@@ -1264,10 +1272,12 @@ def test_srvpn_performance_500K():
     dut1 = dut_list[0]
     dut2 = dut_list[1]
 
+    route_count = 500000
+
     # 1. load DUT config
     dut1_config = "performance/dut1_one_vrf.json"
     dut2_config = "performance/dut2_one_vrf.json"
-    duts_load_config(dut1_config, dut2_config)
+    # duts_load_config(dut1_config, dut2_config)
 
     # 2. load TG config
     ixia_config = os.path.join(os.getcwd(), "routing/SRv6/performance/ixia_one_vrf_500K.json")
@@ -1279,8 +1289,8 @@ def test_srvpn_performance_500K():
 
     # 4. start protocol
     ixia_start_all_protocols()
-    st.wait(120)
-    ret = check_vpn_route_nums(dut2, 500000, 0)
+    st.wait(180)
+    ret = check_vpn_route_nums(dut2, route_count, 0)
     if not ret:
         st.report_fail("check vpn route_nums failed")
 
@@ -1314,25 +1324,212 @@ def test_srvpn_performance_500K():
     st.log("====== Memory syncd ======")
     st.log(memory)
 
-
     # 7. stop protocol
     ixia_stop_all_protocols()
-    st.wait(120)
+    st.wait(180)
     # 8. get perform data
     ixia_stop_logging_port_view()
-    local_file = "port_statictics.csv"
+    local_file = "port_statictics_{}.csv".format(route_count)
+    local_file = os.path.join(os.getcwd(), "../", get_log_dir_path(), local_file)
+
+    perf_jpg_file = 'eSR_Performance_{}.jpg'.format(route_count)
+    perf_jpg_file = os.path.join(os.getcwd(), "../", get_log_dir_path(), perf_jpg_file)
+
+    st.log("===============")
+    st.log("===============")
+    st.log("===============")
+    st.log(local_file)
+    st.log(perf_jpg_file)
+
     ixia_get_port_view_data(local_file)
-    plot_perf(local_file)
+    plot_perf(local_file, perf_jpg_file)
 
     load_t, cursor = get_route_load_time(0, local_file)
     covergen_t = get_route_convergence_time(cursor, local_file)
 
-    st.log("======== 500K Route Load Time =======")
-    st.log("Load Time: {} s, Rate: {} rps".format(load_t, 500000 / load_t))
+    st.log("======== {} Route Load Time =======".format(route_count))
+    st.log("Load Time: {} s, Rate: {} rps".format(load_t, route_count / load_t))
 
-    st.log("======== 500K Route Convergence Time =======")
-    st.log("Convergence Time: {} s, Rate: {} rps".format(covergen_t, 500000 / covergen_t))
+    st.log("======== {} Route Convergence Time =======".format(route_count))
+    st.log("Convergence Time: {} s, Rate: {} rps".format(covergen_t, route_count / covergen_t))
 
     # 9. stop traffic
     ixia_stop_all_traffic()
-    st.report_pass("test_case_passed")
+    st.report_pass("msg", "LoadPerf: {} rps, CovergePerf: {} rps".format(route_count / load_t, route_count / covergen_t))
+
+
+@pytest.mark.community
+@pytest.mark.community_pass
+def test_srvpn_performance_1M():
+    st.banner("test_srvpn_performance_1M begin")
+    dut_list = st.get_dut_names()
+    dut1 = dut_list[0]
+    dut2 = dut_list[1]
+
+    route_count = 1000000
+
+    # 1. load DUT config
+    dut1_config = "performance/dut1_one_vrf.json"
+    dut2_config = "performance/dut2_one_vrf.json"
+    duts_load_config(dut1_config, dut2_config)
+
+    # 2. load TG config
+    ixia_config = os.path.join(os.getcwd(), "routing/SRv6/performance/ixia_one_vrf_1M.json")
+    ixia_load_config(ixia_config)
+
+    # 3. start traffic
+    ixia_start_all_traffic()
+    ixia_start_logging_port_view()
+
+    # 4. start protocol
+    ixia_start_all_protocols()
+    st.wait(200)
+    ret = check_vpn_route_nums(dut2, route_count, 0)
+    if not ret:
+        st.report_fail("check vpn route_nums failed")
+
+    # 5. get memory info for DUT1 bgpd,zebra,orchagent,syncd
+    st.log("====== DUT1 ======")
+    memory = duts_get_memory(dut1, 'bgpd')
+    st.log("====== Memory bgpd ======")
+    st.log(memory)
+    memory = duts_get_memory(dut1, 'zebra')
+    st.log("====== Memory zebra ======")
+    st.log(memory)
+    memory = duts_get_memory(dut1, 'orchagent')
+    st.log("====== Memory orchagent ======")
+    st.log(memory)
+    memory = duts_get_memory(dut1, 'syncd')
+    st.log("====== Memory syncd ======")
+    st.log(memory)
+
+    # 6. get memory info for DUT2 bgpd,zebra,orchagent,syncd
+    st.log("====== DUT2 ======")
+    memory = duts_get_memory(dut2, 'bgpd')
+    st.log("====== Memory bgpd ======")
+    st.log(memory)
+    memory = duts_get_memory(dut2, 'zebra')
+    st.log("====== Memory zebra ======")
+    st.log(memory)
+    memory = duts_get_memory(dut2, 'orchagent')
+    st.log("====== Memory orchagent ======")
+    st.log(memory)
+    memory = duts_get_memory(dut2, 'syncd')
+    st.log("====== Memory syncd ======")
+    st.log(memory)
+
+    # 7. stop protocol
+    ixia_stop_all_protocols()
+    st.wait(200)
+    # 8. get perform data
+    ixia_stop_logging_port_view()
+    local_file = "port_statictics_{}.csv".format(route_count)
+    local_file = os.path.join(os.getcwd(), "../", get_log_dir_path(), local_file)
+
+    perf_jpg_file = 'eSR_Performance_{}.jpg'.format(route_count)
+    perf_jpg_file = os.path.join(os.getcwd(), "../", get_log_dir_path(), perf_jpg_file)
+
+    ixia_get_port_view_data(local_file)
+    plot_perf(local_file, perf_jpg_file)
+
+    load_t, cursor = get_route_load_time(0, local_file)
+    covergen_t = get_route_convergence_time(cursor, local_file)
+
+    st.log("======== {} Route Load Time =======".format(route_count))
+    st.log("Load Time: {} s, Rate: {} rps".format(load_t, route_count / load_t))
+
+    st.log("======== {} Route Convergence Time =======".format(route_count))
+    st.log("Convergence Time: {} s, Rate: {} rps".format(covergen_t, route_count / covergen_t))
+
+    # 9. stop traffic
+    ixia_stop_all_traffic()
+    st.report_pass("msg", "LoadPerf: {} rps, CovergePerf: {} rps".format(route_count / load_t, route_count / covergen_t))
+
+
+@pytest.mark.community
+@pytest.mark.community_pass
+def test_srvpn_performance_2M():
+    st.banner("test_srvpn_performance_2M begin")
+    dut_list = st.get_dut_names()
+    dut1 = dut_list[0]
+    dut2 = dut_list[1]
+
+    route_count = 2000000
+
+    # 1. load DUT config
+    dut1_config = "performance/dut1_one_vrf.json"
+    dut2_config = "performance/dut2_one_vrf.json"
+    duts_load_config(dut1_config, dut2_config)
+
+    # 2. load TG config
+    ixia_config = os.path.join(os.getcwd(), "routing/SRv6/performance/ixia_one_vrf_2M.json")
+    ixia_load_config(ixia_config)
+
+    # 3. start traffic
+    ixia_start_all_traffic()
+    ixia_start_logging_port_view()
+
+    # 4. start protocol
+    ixia_start_all_protocols()
+    st.wait(300)
+    ret = check_vpn_route_nums(dut2, route_count, 0)
+    if not ret:
+        st.report_fail("check vpn route_nums failed")
+
+    # 5. get memory info for DUT1 bgpd,zebra,orchagent,syncd
+    st.log("====== DUT1 ======")
+    memory = duts_get_memory(dut1, 'bgpd')
+    st.log("====== Memory bgpd ======")
+    st.log(memory)
+    memory = duts_get_memory(dut1, 'zebra')
+    st.log("====== Memory zebra ======")
+    st.log(memory)
+    memory = duts_get_memory(dut1, 'orchagent')
+    st.log("====== Memory orchagent ======")
+    st.log(memory)
+    memory = duts_get_memory(dut1, 'syncd')
+    st.log("====== Memory syncd ======")
+    st.log(memory)
+
+    # 6. get memory info for DUT2 bgpd,zebra,orchagent,syncd
+    st.log("====== DUT2 ======")
+    memory = duts_get_memory(dut2, 'bgpd')
+    st.log("====== Memory bgpd ======")
+    st.log(memory)
+    memory = duts_get_memory(dut2, 'zebra')
+    st.log("====== Memory zebra ======")
+    st.log(memory)
+    memory = duts_get_memory(dut2, 'orchagent')
+    st.log("====== Memory orchagent ======")
+    st.log(memory)
+    memory = duts_get_memory(dut2, 'syncd')
+    st.log("====== Memory syncd ======")
+    st.log(memory)
+
+    # 7. stop protocol
+    ixia_stop_all_protocols()
+    st.wait(300)
+    # 8. get perform data
+    ixia_stop_logging_port_view()
+    local_file = "port_statictics_{}.csv".format(route_count)
+    local_file = os.path.join(os.getcwd(), "../", get_log_dir_path(), local_file)
+
+    perf_jpg_file = 'eSR_Performance_{}.jpg'.format(route_count)
+    perf_jpg_file = os.path.join(os.getcwd(), "../", get_log_dir_path(), perf_jpg_file)
+
+    ixia_get_port_view_data(local_file)
+    plot_perf(local_file, perf_jpg_file)
+
+    load_t, cursor = get_route_load_time(0, local_file)
+    covergen_t = get_route_convergence_time(cursor, local_file)
+
+    st.log("======== {} Route Load Time =======".format(route_count))
+    st.log("Load Time: {} s, Rate: {} rps".format(load_t, route_count / load_t))
+
+    st.log("======== {} Route Convergence Time =======".format(route_count))
+    st.log("Convergence Time: {} s, Rate: {} rps".format(covergen_t, route_count / covergen_t))
+
+    # 9. stop traffic
+    ixia_stop_all_traffic()
+    st.report_pass("msg", "LoadPerf: {} rps, CovergePerf: {} rps".format(route_count / load_t, route_count / covergen_t))
+

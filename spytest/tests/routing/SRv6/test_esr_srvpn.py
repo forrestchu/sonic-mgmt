@@ -847,6 +847,7 @@ def test_srvpn_ecmp_04():
     rtlist = "1:10 1:20 1:60"
 
     # # check vrf route learn
+    show_hw_route_count(dut2)
     ret = check_vrf_route_nums(dut2, to_check_vrf, 10000, 1)
     if not ret:
         st.report_fail("step1 check_vrf_route_nums {} 10000 test_srvpn_ecmp_04".format(to_check_vrf))

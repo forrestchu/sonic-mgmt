@@ -35,6 +35,8 @@
 -test:test_ft_lacp_graceful_restart_with_save_reload
 -test:test_ft_verify_interfaces_order
 -test:test_cli_bgp_community_list_normal_array
+-test:test_srvpn_performance_1M
+-test:test_srvpn_performance_2M
 
 #+args:--skip-init-config
 #+args:--skip-load-config base

@@ -1277,7 +1277,7 @@ def test_srvpn_performance_500K():
     # 1. load DUT config
     dut1_config = "performance/dut1_one_vrf.json"
     dut2_config = "performance/dut2_one_vrf.json"
-    # duts_load_config(dut1_config, dut2_config)
+    duts_load_config(dut1_config, dut2_config)
 
     # 2. load TG config
     ixia_config = os.path.join(os.getcwd(), "routing/SRv6/performance/ixia_one_vrf_500K.json")
@@ -1383,7 +1383,7 @@ def test_srvpn_performance_1M():
 
     # 4. start protocol
     ixia_start_all_protocols()
-    st.wait(200)
+    st.wait(300)
     ret = check_vpn_route_nums(dut2, route_count, 0)
     if not ret:
         st.report_fail("check vpn route_nums failed")
@@ -1420,7 +1420,7 @@ def test_srvpn_performance_1M():
 
     # 7. stop protocol
     ixia_stop_all_protocols()
-    st.wait(200)
+    st.wait(300)
     # 8. get perform data
     ixia_stop_logging_port_view()
     local_file = "port_statictics_{}.csv".format(route_count)
@@ -1471,7 +1471,7 @@ def test_srvpn_performance_2M():
 
     # 4. start protocol
     ixia_start_all_protocols()
-    st.wait(300)
+    st.wait(420)
     ret = check_vpn_route_nums(dut2, route_count, 0)
     if not ret:
         st.report_fail("check vpn route_nums failed")
@@ -1508,7 +1508,7 @@ def test_srvpn_performance_2M():
 
     # 7. stop protocol
     ixia_stop_all_protocols()
-    st.wait(300)
+    st.wait(420)
     # 8. get perform data
     ixia_stop_logging_port_view()
     local_file = "port_statictics_{}.csv".format(route_count)

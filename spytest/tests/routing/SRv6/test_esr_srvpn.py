@@ -1205,6 +1205,7 @@ def plot_perf(csv_file, jpg_file):
         elif col == u"21.135.163.53/Card01/Port33:Valid Frames Rx. Rate":
             y = data_df[col]
 
+    plt.clf()
     plt.style.use('seaborn-colorblind')
     plt.xlabel("timestamp", fontsize=11)
     plt.ylabel("Frames Rx. Rate", fontsize=11)
@@ -1384,7 +1385,7 @@ def test_srvpn_performance_1M():
 
     # 4. start protocol
     ixia_start_all_protocols()
-    st.wait(300)
+    st.wait(500)
     ret = check_vpn_route_nums(dut2, route_count, 0)
     if not ret:
         st.report_fail("check vpn route_nums failed")
@@ -1421,7 +1422,7 @@ def test_srvpn_performance_1M():
 
     # 7. stop protocol
     ixia_stop_all_protocols()
-    st.wait(300)
+    st.wait(500)
     # 8. get perform data
     ixia_stop_logging_port_view()
     local_file = "port_statictics_{}.csv".format(route_count)
@@ -1472,7 +1473,7 @@ def test_srvpn_performance_2M():
 
     # 4. start protocol
     ixia_start_all_protocols()
-    st.wait(420)
+    st.wait(600)
     ret = check_vpn_route_nums(dut2, route_count, 0)
     if not ret:
         st.report_fail("check vpn route_nums failed")
@@ -1509,7 +1510,7 @@ def test_srvpn_performance_2M():
 
     # 7. stop protocol
     ixia_stop_all_protocols()
-    st.wait(420)
+    st.wait(600)
     # 8. get perform data
     ixia_stop_logging_port_view()
     local_file = "port_statictics_{}.csv".format(route_count)

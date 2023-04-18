@@ -100,6 +100,7 @@ def ixia_get_traffic_stat(traffic_item_name):
 
 def ixia_load_config(config_file_name):
     ixia_controller.new_config()
+    st.wait(20)
     st.log("load config {} begin".format(config_file_name))
     ixia_controller.load_config(config_file_name)
     # wait 10 sec for config load
@@ -236,6 +237,7 @@ def ixia_stop_logging_port_view():
 
 def ixia_get_port_view_data(local_file):
     csv_file_name = "Port Statistics.csv"
+    st.log("Remote dir path: {}".format(ixia_controller.get_csv_file_path(caption="Port Statistics")))
     remote_file_path = "{}/{}".format(ixia_controller.get_csv_file_path(caption="Port Statistics"), csv_file_name)
     ixia_controller.download_file(remote_file_path, local_file)
     return True

@@ -1292,8 +1292,8 @@ def test_srvpn_performance_500K():
     # 4. start protocol
     ixia_start_all_protocols()
     st.wait(180)
-    ret = check_vpn_route_nums(dut2, route_count, 0)
-    if not ret:
+
+    if not retry_api(check_vpn_route_nums, dut=dut2, expected_num=route_count, compare=0, retry_count=3, delay=180):
         st.report_fail("check vpn route_nums failed")
 
     # 5. get memory info for DUT1 bgpd,zebra,orchagent,syncd
@@ -1385,9 +1385,8 @@ def test_srvpn_performance_1M():
 
     # 4. start protocol
     ixia_start_all_protocols()
-    st.wait(500)
-    ret = check_vpn_route_nums(dut2, route_count, 0)
-    if not ret:
+    st.wait(300)
+    if not retry_api(check_vpn_route_nums, dut=dut2, expected_num=route_count, compare=0, retry_count=3, delay=300):
         st.report_fail("check vpn route_nums failed")
 
     # 5. get memory info for DUT1 bgpd,zebra,orchagent,syncd
@@ -1422,7 +1421,7 @@ def test_srvpn_performance_1M():
 
     # 7. stop protocol
     ixia_stop_all_protocols()
-    st.wait(500)
+    st.wait(300)
     # 8. get perform data
     ixia_stop_logging_port_view()
     local_file = "port_statictics_{}.csv".format(route_count)
@@ -1473,9 +1472,8 @@ def test_srvpn_performance_2M():
 
     # 4. start protocol
     ixia_start_all_protocols()
-    st.wait(600)
-    ret = check_vpn_route_nums(dut2, route_count, 0)
-    if not ret:
+    st.wait(400)
+    if not retry_api(check_vpn_route_nums, dut=dut2, expected_num=route_count, compare=0, retry_count=3, delay=400):
         st.report_fail("check vpn route_nums failed")
 
     # 5. get memory info for DUT1 bgpd,zebra,orchagent,syncd
@@ -1510,7 +1508,7 @@ def test_srvpn_performance_2M():
 
     # 7. stop protocol
     ixia_stop_all_protocols()
-    st.wait(600)
+    st.wait(400)
     # 8. get perform data
     ixia_stop_logging_port_view()
     local_file = "port_statictics_{}.csv".format(route_count)

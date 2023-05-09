@@ -34,7 +34,7 @@ data.clear_parallel = False
 data.cli_type = ""
 data.dut_asn = 65021
 data.tg_asn = 65001
-data.dut_max_fib = 64 * 1024 - 4 #By default
+data.dut_max_fib = 64 * 1024 #By default
 data.route_count1 = data.dut_max_fib + 100
 
 bgp_json_config = {
@@ -180,7 +180,7 @@ def test_ip_route_and_fib_with_large_routes():
     command = 'show ip route summary | grep Dataplane | awk \'{print $NF}\''
     output = st.show(dut1, command, type="alicli", skip_error_check=True, skip_tmpl=True)
     output = output.split('\n')[0]
-    if int(output) != data.dut_max_fib:
+    if int(output) != (data.dut_max_fib - 4): # 2 ipv6 default route minus 4 
         st.report_fail("test_case_passed, dataplane route num is " + output + ", expected" + str(data.dut_max_fib))
 
     st.report_pass("test_case_passed")

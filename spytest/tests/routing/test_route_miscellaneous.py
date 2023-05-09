@@ -34,7 +34,7 @@ data.clear_parallel = False
 data.cli_type = ""
 data.dut_asn = 65021
 data.tg_asn = 65001
-data.dut_max_fib = 64 * 1024 #By default
+data.dut_max_fib = 64 * 1024 - 4 #By default
 data.route_count1 = data.dut_max_fib + 100
 
 bgp_json_config = {

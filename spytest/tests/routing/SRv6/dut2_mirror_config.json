@@ -2075,7 +2075,7 @@
         }, 
         "pg4ESR-EC-Infra|global": {
             "advertisement_interval": "0", 
-            "asn": "65049", 
+            "asn": "65050", 
             "peer_group": "true"
         }, 
         "pg4ESR-EC-Infra|ipv4": {
@@ -2159,7 +2159,7 @@
         }, 
         "pg6ESR-ASRR|global": {
             "advertisement_interval": "0", 
-            "asn": "65049", 
+            "asn": "65050", 
             "extnh": "true", 
             "peer_group": "true", 
             "update_source": "fd00:0:200:172::"
@@ -2198,7 +2198,7 @@
         }, 
         "pg6ESR-EC-Infra|global": {
             "advertisement_interval": "0", 
-            "asn": "65049", 
+            "asn": "65050", 
             "peer_group": "true"
         }, 
         "pg6ESR-EC-Infra|ipv4": {
@@ -2278,7 +2278,7 @@
         }, 
         "pg6ESR-USRR|global": {
             "advertisement_interval": "0", 
-            "asn": "65049", 
+            "asn": "65050", 
             "extnh": "true",
             "peer_group": "true", 
             "update_source": "fd00:0:200:172::"

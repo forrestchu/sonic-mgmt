@@ -2176,7 +2176,7 @@
         }, 
         "pg6ESR-CRR|global": {
             "advertisement_interval": "0", 
-            "asn": "65049", 
+            "asn": "65050", 
             "extnh": "true", 
             "peer_group": "true", 
             "update_source": "fd00:0:200:171::"
@@ -2402,79 +2402,79 @@
         }
     }, 
     "BGP_PARAMETERS": {
-        "65049|global": {
+        "65050|global": {
             "bgp_bestpath_aspath_multipath_relax": "true", 
             "bgp_network_import_check": "true", 
             "bgp_peer_up_delay": "300", 
             "bgp_router_id": "11.105.231.171", 
             "bgp_timers": "10 30"
         }, 
-        "65049|global|ACTN_TC0": {
+        "65050|global|ACTN_TC0": {
             "bgp_peer_up_delay": "300", 
             "bgp_router_id": "11.105.231.171", 
             "srv6_locator": "locNNI-Unicast"
         }, 
-        "65049|global|ACTN_TC1": {
+        "65050|global|ACTN_TC1": {
             "bgp_router_id": "11.105.231.171", 
             "srv6_locator": "locNNI-Anycast-Cluster"
         }, 
-        "65049|global|ACTN_TC2": {
+        "65050|global|ACTN_TC2": {
             "bgp_router_id": "11.105.231.171", 
             "srv6_locator": "locNNI-Anycast-Cluster"
         }, 
-        "65049|global|ACTN_TC3": {
+        "65050|global|ACTN_TC3": {
             "bgp_router_id": "11.105.231.171", 
             "srv6_locator": "locNNI-Anycast-Cluster"
         }, 
-        "65049|global|OOB_TC0": {
+        "65050|global|OOB_TC0": {
             "bgp_peer_up_delay": "300", 
             "bgp_router_id": "11.105.231.171", 
             "srv6_locator": "locNNI-Unicast"
         }, 
-        "65049|global|OTN_TC0": {
+        "65050|global|OTN_TC0": {
             "bgp_bestpath_aspath_multipath_relax": "true", 
             "bgp_peer_up_delay": "300", 
             "bgp_router_id": "11.105.231.171", 
             "srv6_locator": "locNNI-Unicast"
         }, 
-        "65049|global|PRIVATE_TC0": {
+        "65050|global|PRIVATE_TC0": {
             "bgp_peer_up_delay": "300", 
             "bgp_router_id": "11.105.231.171", 
             "srv6_locator": "locNNI-Unicast"
         }, 
-        "65049|global|PRIVATE_TC1": {
+        "65050|global|PRIVATE_TC1": {
             "bgp_router_id": "11.105.231.171", 
             "srv6_locator": "locNNI-Anycast-Cluster"
         }, 
-        "65049|global|PRIVATE_TC2": {
+        "65050|global|PRIVATE_TC2": {
             "bgp_router_id": "11.105.231.171", 
             "srv6_locator": "locNNI-Anycast-Cluster"
         }, 
-        "65049|global|PRIVATE_TC3": {
+        "65050|global|PRIVATE_TC3": {
             "bgp_router_id": "11.105.231.171", 
             "srv6_locator": "locNNI-Anycast-Cluster"
         }, 
-        "65049|global|PUBLIC_TC0": {
+        "65050|global|PUBLIC_TC0": {
             "bgp_peer_up_delay": "300", 
             "bgp_router_id": "11.105.231.171", 
             "srv6_locator": "locNNI-Unicast"
         }, 
-        "65049|global|PUBLIC_TC1": {
+        "65050|global|PUBLIC_TC1": {
             "bgp_router_id": "11.105.231.171", 
             "srv6_locator": "locNNI-Anycast-Cluster"
         }, 
-        "65049|global|PUBLIC_TC2": {
+        "65050|global|PUBLIC_TC2": {
             "bgp_router_id": "11.105.231.171", 
             "srv6_locator": "locNNI-Anycast-Cluster"
         }, 
-        "65049|global|PUBLIC_TC3": {
+        "65050|global|PUBLIC_TC3": {
             "bgp_router_id": "11.105.231.171", 
             "srv6_locator": "locNNI-Anycast-Cluster"
         }, 
-        "65049|ipv4": {
+        "65050|ipv4": {
             "bgp_maximum_paths": "64"
         }, 
-        "65049|ipv4|ACTN_TC0": {
+        "65050|ipv4|ACTN_TC0": {
             "bgp_maximum_paths": "64", 
             "export_vpn": "true", 
             "import_vpn": "true", 
@@ -2484,7 +2484,7 @@
             "rt_export": "10000:3000000", 
             "rt_import": "10000:3000000"
         }, 
-        "65049|ipv4|ACTN_TC1": {
+        "65050|ipv4|ACTN_TC1": {
             "bgp_maximum_paths": "64", 
             "export_vpn": "true", 
             "import_vpn": "true", 
@@ -2497,7 +2497,7 @@
             "rt_export": "10001:3000000", 
             "rt_import": "10001:3000000 10000:3000000"
         }, 
-        "65049|ipv4|ACTN_TC2": {
+        "65050|ipv4|ACTN_TC2": {
             "bgp_maximum_paths": "64", 
             "export_vpn": "true", 
             "import_vpn": "true", 
@@ -2510,7 +2510,7 @@
             "rt_export": "10002:3000000", 
             "rt_import": "10002:3000000 10000:3000000"
         }, 
-        "65049|ipv4|ACTN_TC3": {
+        "65050|ipv4|ACTN_TC3": {
             "bgp_maximum_paths": "64", 
             "export_vpn": "true", 
             "import_vpn": "true", 
@@ -2523,7 +2523,7 @@
             "rt_export": "10003:3000000", 
             "rt_import": "10003:3000000 10000:3000000"
         }, 
-        "65049|ipv4|OOB_TC0": {
+        "65050|ipv4|OOB_TC0": {
             "bgp_maximum_paths": "64", 
             "export_vpn": "true", 
             "import_vpn": "true", 
@@ -2531,7 +2531,7 @@
             "rt_export": "10000:4000000", 
             "rt_import": "10000:4000000"
         }, 
-        "65049|ipv4|OTN_TC0": {
+        "65050|ipv4|OTN_TC0": {
             "bgp_maximum_paths": "64", 
             "export_vpn": "true", 
             "import_vpn": "true", 
@@ -2539,7 +2539,7 @@
             "rt_export": "10000:5000000", 
             "rt_import": "10000:5000000"
         }, 
-        "65049|ipv4|PRIVATE_TC0": {
+        "65050|ipv4|PRIVATE_TC0": {
             "bgp_maximum_paths": "64", 
             "export_vpn": "true", 
             "import_vpn": "true", 
@@ -2549,7 +2549,7 @@
             "rt_export": "10000:1000000", 
             "rt_import": "10000:1000000"
         }, 
-        "65049|ipv4|PRIVATE_TC1": {
+        "65050|ipv4|PRIVATE_TC1": {
             "bgp_maximum_paths": "64", 
             "export_vpn": "true", 
             "import_vpn": "true", 
@@ -2562,7 +2562,7 @@
             "rt_export": "10001:1000000", 
             "rt_import": "10001:1000000 10000:1000000"
         }, 
-        "65049|ipv4|PRIVATE_TC2": {
+        "65050|ipv4|PRIVATE_TC2": {
             "bgp_maximum_paths": "64", 
             "export_vpn": "true", 
             "import_vpn": "true", 
@@ -2575,7 +2575,7 @@
             "rt_export": "10002:1000000", 
             "rt_import": "10002:1000000 10000:1000000"
         }, 
-        "65049|ipv4|PRIVATE_TC3": {
+        "65050|ipv4|PRIVATE_TC3": {
             "bgp_maximum_paths": "64", 
             "export_vpn": "true", 
             "import_vpn": "true", 
@@ -2588,7 +2588,7 @@
             "rt_export": "10003:1000000", 
             "rt_import": "10003:1000000 10000:1000000"
         }, 
-        "65049|ipv4|PUBLIC_TC0": {
+        "65050|ipv4|PUBLIC_TC0": {
             "bgp_maximum_paths": "64", 
             "export_vpn": "true", 
             "import_vpn": "true", 
@@ -2598,7 +2598,7 @@
             "rt_export": "10000:2000000", 
             "rt_import": "10000:2000000"
         }, 
-        "65049|ipv4|PUBLIC_TC1": {
+        "65050|ipv4|PUBLIC_TC1": {
             "bgp_maximum_paths": "64", 
             "export_vpn": "true", 
             "import_vpn": "true", 
@@ -2611,7 +2611,7 @@
             "rt_export": "10001:2000000", 
             "rt_import": "10001:2000000 10000:2000000"
         }, 
-        "65049|ipv4|PUBLIC_TC2": {
+        "65050|ipv4|PUBLIC_TC2": {
             "bgp_maximum_paths": "64", 
             "export_vpn": "true", 
             "import_vpn": "true", 
@@ -2624,7 +2624,7 @@
             "rt_export": "10002:2000000", 
             "rt_import": "10002:2000000 10000:2000000"
         }, 
-        "65049|ipv4|PUBLIC_TC3": {
+        "65050|ipv4|PUBLIC_TC3": {
             "bgp_maximum_paths": "64", 
             "export_vpn": "true", 
             "import_vpn": "true", 
@@ -2637,10 +2637,10 @@
             "rt_export": "10003:2000000", 
             "rt_import": "10003:2000000 10000:2000000"
         }, 
-        "65049|ipv6": {
+        "65050|ipv6": {
             "bgp_maximum_paths": "64"
         }, 
-        "65049|ipv6|ACTN_TC0": {
+        "65050|ipv6|ACTN_TC0": {
             "bgp_maximum_paths": "64", 
             "export_vpn": "true", 
             "import_vpn": "true", 
@@ -2650,7 +2650,7 @@
             "rt_export": "10000:3000000", 
             "rt_import": "10000:3000000"
         }, 
-        "65049|ipv6|ACTN_TC1": {
+        "65050|ipv6|ACTN_TC1": {
             "bgp_maximum_paths": "64", 
             "export_vpn": "true", 
             "import_vpn": "true", 
@@ -2663,7 +2663,7 @@
             "rt_export": "10001:3000000", 
             "rt_import": "10001:3000000 10000:3000000"
         }, 
-        "65049|ipv6|ACTN_TC2": {
+        "65050|ipv6|ACTN_TC2": {
             "bgp_maximum_paths": "64", 
             "export_vpn": "true", 
             "import_vpn": "true", 
@@ -2676,7 +2676,7 @@
             "rt_export": "10002:3000000", 
             "rt_import": "10002:3000000 10000:3000000"
         }, 
-        "65049|ipv6|ACTN_TC3": {
+        "65050|ipv6|ACTN_TC3": {
             "bgp_maximum_paths": "64", 
             "export_vpn": "true", 
             "import_vpn": "true", 
@@ -2689,7 +2689,7 @@
             "rt_export": "10003:3000000", 
             "rt_import": "10003:3000000 10000:3000000"
         }, 
-        "65049|ipv6|PRIVATE_TC0": {
+        "65050|ipv6|PRIVATE_TC0": {
             "bgp_maximum_paths": "64", 
             "export_vpn": "true", 
             "import_vpn": "true", 
@@ -2699,7 +2699,7 @@
             "rt_export": "10000:1000000", 
             "rt_import": "10000:1000000"
         }, 
-        "65049|ipv6|PRIVATE_TC1": {
+        "65050|ipv6|PRIVATE_TC1": {
             "bgp_maximum_paths": "64", 
             "export_vpn": "true", 
             "import_vpn": "true", 
@@ -2712,7 +2712,7 @@
             "rt_export": "10001:1000000", 
             "rt_import": "10001:1000000 10000:1000000"
         }, 
-        "65049|ipv6|PRIVATE_TC2": {
+        "65050|ipv6|PRIVATE_TC2": {
             "bgp_maximum_paths": "64", 
             "export_vpn": "true", 
             "import_vpn": "true", 
@@ -2725,7 +2725,7 @@
             "rt_export": "10002:1000000", 
             "rt_import": "10002:1000000 10000:1000000"
         }, 
-        "65049|ipv6|PRIVATE_TC3": {
+        "65050|ipv6|PRIVATE_TC3": {
             "bgp_maximum_paths": "64", 
             "export_vpn": "true", 
             "import_vpn": "true", 
@@ -2738,7 +2738,7 @@
             "rt_export": "10003:1000000", 
             "rt_import": "10003:1000000 10000:1000000"
         }, 
-        "65049|ipv6|PUBLIC_TC0": {
+        "65050|ipv6|PUBLIC_TC0": {
             "bgp_maximum_paths": "64", 
             "export_vpn": "true", 
             "import_vpn": "true", 
@@ -2748,7 +2748,7 @@
             "rt_export": "10000:2000000", 
             "rt_import": "10000:2000000"
         }, 
-        "65049|ipv6|PUBLIC_TC1": {
+        "65050|ipv6|PUBLIC_TC1": {
             "bgp_maximum_paths": "64", 
             "export_vpn": "true", 
             "import_vpn": "true", 
@@ -2761,7 +2761,7 @@
             "rt_export": "10001:2000000", 
             "rt_import": "10001:2000000 10000:2000000"
         }, 
-        "65049|ipv6|PUBLIC_TC2": {
+        "65050|ipv6|PUBLIC_TC2": {
             "bgp_maximum_paths": "64", 
             "export_vpn": "true", 
             "import_vpn": "true", 
@@ -2774,7 +2774,7 @@
             "rt_export": "10002:2000000", 
             "rt_import": "10002:2000000 10000:2000000"
         }, 
-        "65049|ipv6|PUBLIC_TC3": {
+        "65050|ipv6|PUBLIC_TC3": {
             "bgp_maximum_paths": "64", 
             "export_vpn": "true", 
             "import_vpn": "true", 
@@ -3829,7 +3829,7 @@
         }, 
         "rp4ESR-P-MC-ACTN_TC0-Out|permit|20": {
             "match_ip_address_prefix_list": "pl4ACTN-Aggregate-All", 
-            "set_as_path": "prepend 65049"
+            "set_as_path": "prepend 65050"
         }, 
         "rp4ESR-P-MC-Infra-In|deny|10": {}, 
         "rp4ESR-P-MC-Infra-Out|deny|10": {}, 
@@ -3872,7 +3872,7 @@
         }, 
         "rp4ESR-P-MC-PRIVATE_TC0-Out|permit|20": {
             "match_ip_address_prefix_list": "pl4PRIVATE-Aggregate-All", 
-            "set_as_path": "prepend 65049"
+            "set_as_path": "prepend 65050"
         }, 
         "rp4ESR-P-MC-PRIVATE_TC0-Out|permit|30": {
             "match_community": "clECORE-My-AISRegion-VIP-L"
@@ -3899,7 +3899,7 @@
         }, 
         "rp4ESR-P-MC-PUBLIC_TC0-Out|permit|20": {
             "match_ip_address_prefix_list": "pl4DefaultRoute", 
-            "set_as_path": "prepend 65049"
+            "set_as_path": "prepend 65050"
         }, 
         "rp4ESR-P-MC-PUBLIC_TC0-Out|permit|30": {
             "match_community": "clECORE-My-AISRegion-VIP-L"
@@ -3943,7 +3943,7 @@
         "rp4ESR-R-ACTN-BGP-From-ACTN-STATIC|permit|10": {
             "match_ip_address_prefix_list": "pl4ACTN-Aggregate-All", 
             "match_tag": "250", 
-            "set_as_path": "prepend 65049 65049 65049 65049", 
+            "set_as_path": "prepend 65050 65050 65050 65050", 
             "set_local_preference": "20", 
             "set_metric": "0", 
             "set_origin": "igp", 
@@ -3969,7 +3969,7 @@
         "rp4ESR-R-PRIVATE-BGP-From-PRIVATE-STATIC|permit|10": {
             "match_ip_address_prefix_list": "pl4PRIVATE-Aggregate-All", 
             "match_tag": "250", 
-            "set_as_path": "prepend 65049 65049 65049 65049", 
+            "set_as_path": "prepend 65050 65050 65050 65050", 
             "set_local_preference": "20", 
             "set_metric": "0", 
             "set_origin": "igp", 
@@ -3987,7 +3987,7 @@
         "rp4ESR-R-PUBLIC-BGP-From-PUBLIC-STATIC|permit|10": {
             "match_ip_address_prefix_list": "pl4DefaultRoute", 
             "match_tag": "250", 
-            "set_as_path": "prepend 65049 65049 65049 65049", 
+            "set_as_path": "prepend 65050 65050 65050 65050", 
             "set_local_preference": "20", 
             "set_metric": "0", 
             "set_origin": "igp", 
@@ -4371,7 +4371,7 @@
         }, 
         "rp6ESR-P-MC-ACTN_TC0-Out|permit|20": {
             "match_ipv6_address_prefix_list": "pl6ACTN-Aggregate-All", 
-            "set_as_path": "prepend 65049"
+            "set_as_path": "prepend 65050"
         }, 
         "rp6ESR-P-MC-Infra-Primary-In|deny|10": {}, 
         "rp6ESR-P-MC-Infra-Primary-Out|deny|1000": {}, 
@@ -4385,11 +4385,11 @@
         "rp6ESR-P-MC-Infra-Secondary-Out|deny|1000": {}, 
         "rp6ESR-P-MC-Infra-Secondary-Out|permit|10": {
             "match_ipv6_address_prefix_list": "pl6ECORE-UNI-SID-Block", 
-            "set_as_path": "prepend 65049"
+            "set_as_path": "prepend 65050"
         }, 
         "rp6ESR-P-MC-Infra-Secondary-Out|permit|20": {
             "match_ipv6_address_prefix_list": "pl6My-UNI-SID-Function-L", 
-            "set_as_path": "prepend 65049"
+            "set_as_path": "prepend 65050"
         }, 
         "rp6ESR-P-MC-PRIVATE_TC0-In|deny|10": {
             "match_ipv6_address_prefix_list": "pl6PRIVATE-Aggregate-All"
@@ -4410,7 +4410,7 @@
         }, 
         "rp6ESR-P-MC-PRIVATE_TC0-Out|permit|20": {
             "match_ipv6_address_prefix_list": "pl6PRIVATE-Aggregate-All", 
-            "set_as_path": "prepend 65049"
+            "set_as_path": "prepend 65050"
         }, 
         "rp6ESR-P-MC-PRIVATE_TC0-Out|permit|30": {
             "match_community": "clECORE-My-AISRegion-VIP-L"
@@ -4437,7 +4437,7 @@
         }, 
         "rp6ESR-P-MC-PUBLIC_TC0-Out|permit|20": {
             "match_ipv6_address_prefix_list": "pl6DefaultRoute", 
-            "set_as_path": "prepend 65049"
+            "set_as_path": "prepend 65050"
         }, 
         "rp6ESR-P-MC-PUBLIC_TC0-Out|permit|30": {
             "match_community": "clECORE-My-AISRegion-VIP-L"
@@ -4481,7 +4481,7 @@
         "rp6ESR-R-ACTN-BGP-From-ACTN-STATIC|permit|10": {
             "match_ipv6_address_prefix_list": "pl6ACTN-Aggregate-All", 
             "match_tag": "250", 
-            "set_as_path": "prepend 65049 65049 65049 65049", 
+            "set_as_path": "prepend 65050 65050 65050 65050", 
             "set_local_preference": "20", 
             "set_metric": "0", 
             "set_origin": "igp", 
@@ -4514,7 +4514,7 @@
         "rp6ESR-R-PRIVATE-BGP-From-PRIVATE-STATIC|permit|10": {
             "match_ipv6_address_prefix_list": "pl6PRIVATE-Aggregate-All", 
             "match_tag": "250", 
-            "set_as_path": "prepend 65049 65049 65049 65049", 
+            "set_as_path": "prepend 65050 65050 65050 65050", 
             "set_local_preference": "20", 
             "set_metric": "0", 
             "set_origin": "igp", 
@@ -4532,7 +4532,7 @@
         "rp6ESR-R-PUBLIC-BGP-From-PUBLIC-STATIC|permit|10": {
             "match_ipv6_address_prefix_list": "pl6DefaultRoute", 
             "match_tag": "250", 
-            "set_as_path": "prepend 65049 65049 65049 65049", 
+            "set_as_path": "prepend 65050 65050 65050 65050", 
             "set_local_preference": "20", 
             "set_metric": "0", 
             "set_origin": "igp", 

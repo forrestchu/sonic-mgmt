@@ -14,6 +14,7 @@ import socket
 import filecmp
 import argparse
 import subprocess
+import sys
 
 g_breakout_native = False
 g_breakout_file = None
@@ -52,6 +53,16 @@ port_config_file = "/usr/share/sonic/device"
 
 cores_tar_file_name = "/tmp/allcorefiles.tar.gz"
 kdump_tar_file_name = "/tmp/allkdumpfiles.tar.gz"
+
+PY_VERSION = 2
+if sys.version_info[0] == 2:
+    print("Python 2.x")
+    PY_VERSION = 2
+elif sys.version_info[0] == 3:
+    print("Python 3.x")
+    PY_VERSION = 3
+else:
+    print("Unknown Python version")
 
 def trace(msg):
     if g_debug:
@@ -134,14 +145,15 @@ def execute_check_cmd(cmd, trace_cmd=True, trace_out=True, skip_error=False):
     try:
         if trace_cmd:
             print("Remote CMD: '{}'".format(cmd))
-        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, universal_newlines=True)
         out, err = proc.communicate()
         proc.wait()
         if not skip_error and proc.returncode != 0:
             retval = "Error: Failed to execute '{}' ('{}')\n".format(cmd, err.strip())
         if out.strip() != "":
             retval = retval + out.strip()
-    except Exception:
+    except Exception as e:
+        print (e)
         retval = "Error: Exception occurred while executing the command '{}'".format(cmd)
     if trace_out and retval.strip() != "":
         print(retval)
@@ -152,7 +164,7 @@ def execute_cmd_retry(cmd, count=3):
     out_msg = ""
     try:
         for retry in range(1, count+1):
-            proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+            proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, universal_newlines=True)
             out, err = proc.communicate()
             proc.wait()
             if proc.returncode == 0:
@@ -161,7 +173,8 @@ def execute_cmd_retry(cmd, count=3):
             out_msg = "Error: Failed to execute '{}' ('{}')\n".format(cmd, err.strip())
             print("Trying {} again {}".format(cmd, retry))
             execute_check_cmd("sleep 5", trace_cmd=False)
-    except Exception:
+    except Exception as e:
+        print (e)
         out_msg = "Error: Exception occurred while executing the command '{}'".format(cmd)
     if out_msg.strip() != "":
         print(out_msg)
@@ -203,7 +216,10 @@ def get_hw_values():
     return (platform, hwsku)
 
 def read_json(filepath):
-    return eval(open(filepath, 'rU').read())
+    if PY_VERSION == 3:
+        return eval(open(filepath, 'r').read())
+    else:
+        return eval(open(filepath, 'rU').read())
 
 def get_file_diff(file1, file2, show_diff=False):
 
@@ -531,7 +547,7 @@ def wait_for_ports(port_init_wait, poll_for_ports):
     port_num = read_port_inifile()
 
     # Wait for last port to be available
-    for _ in range(0, port_init_wait/5):
+    for _ in range(0, int(port_init_wait/5)):
         port_info = get_port_status(port_num)
         if port_info and port_num in port_info:
             break

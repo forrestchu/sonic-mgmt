@@ -462,7 +462,7 @@ def create_default_base_config():
         retain.append("NTP_SERVER")
     if os.getenv("SPYTEST_CLEAR_MGMT_INTERFACE", "0") == "0":
         retain.append("MGMT_INTERFACE")
-    for key in file_dict.keys():
+    for key in file_dict.copy().keys():
         if key not in retain:
             del file_dict[key]
 

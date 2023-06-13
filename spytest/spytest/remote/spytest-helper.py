@@ -727,7 +727,7 @@ def apply_ta_config(method, port_init_wait, poll_for_ports, config_type):
         changed_files.append("frr")
 
     # Save and compare the copp.json file
-    execute_check_cmd("docker cp swss:{} {}".format(copp_config_file, tmp_copp_file))
+    # execute_check_cmd("docker cp swss:{} {}".format(copp_config_file, tmp_copp_file))
     if not os.path.exists(tmp_copp_file) and os.path.exists(ta_copp_config_file):
         trace("SWSS COPP File Missing")
         changed_files.append("copp")

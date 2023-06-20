@@ -661,7 +661,7 @@ def save_module_config():
     copy_or_delete(minigraph_file, module_minigraph_file)
 
     # Copy copp config file to ta location.
-    execute_check_cmd("docker cp swss:{} {}".format(copp_config_file, module_copp_config_file))
+    # execute_check_cmd("docker cp swss:{} {}".format(copp_config_file, module_copp_config_file))
 
     print("DONE")
 

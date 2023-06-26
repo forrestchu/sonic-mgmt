@@ -17,7 +17,7 @@ Value TX_OVR (\S+)
 
 Start
   ^Last cached.*$$ -> Continue
-  ^\s*IFACE\s+STATE\s+RX_OK\s+RX_BPS\s+RX_PPS\s+RX_UTIL\s+RX_ERR\s+RX_DRP\s+TX_OK\s+TX_BPS\s+Tx_PPS\s+TX_UTIL\s+TX_ERR\s+TX_DRP
+  ^\s*IFACE\s+STATE\s+RX_OK\s+RX_BPS\s+RX_PPS\s+RX_UTIL\s+RX_ERR\s+RX_DRP\s+RX_OVR\s+TX_OK\s+TX_BPS\s+Tx_PPS\s+TX_UTIL\s+TX_ERR\s+TX_DRP\s+TX_OVR
   ^(-+\s*)*$$
-  ^\s*${IFACE}\s+${STATE}\s+${RX_OK}\s+${RX_BPS}\s+${RX_PPS}\s+${RX_UTIL}\s+${RX_ERR}\s+${RX_DRP}\s+${TX_OK}\s+${TX_BPS}\s+${Tx_PPS}\s+${TX_UTIL}\s+${TX_ERR}\s+${TX_DRP} -> Record
+  ^\s*${IFACE}\s+${STATE}\s+${RX_OK}\s+${RX_BPS}\s+${RX_PPS}\s+${RX_UTIL}\s+${RX_ERR}\s+${RX_DRP}\s+${RX_OVR}\s+${TX_OK}\s+${TX_BPS}\s+${Tx_PPS}\s+${TX_UTIL}\s+${TX_ERR}\s+${TX_DRP}\s+${TX_OVR} -> Record
   ^$$

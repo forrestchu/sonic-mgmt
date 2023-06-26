@@ -21,7 +21,7 @@ Value DYNNBR (\d+)
 Value DYNLIMIT (\d+)
 
 Start
-  ^\s*IPv\d{1} Unicast Summary:.*$$ -> VTYSH
+  ^\s*IPv\d{1} Unicast Summary.*:.*$$ -> VTYSH
   ^\s*BGP router identifier ${ROUTERID}, local AS number ${LOCALASNNUMBER}\s*$$ -> KLISH
 
 VTYSH

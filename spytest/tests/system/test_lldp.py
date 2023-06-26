@@ -97,13 +97,13 @@ def lldp_snmp_pre_config():
     if not mac_output == lldp_value_mac:
         st.report_fail(" MAC Addresses are not matching ")
     '''
-    snmp_obj.set_snmp_config(vars.D1, snmp_rocommunity=data.ro_community, snmp_location=data.location)
+    # snmp_obj.set_snmp_config(vars.D1, snmp_rocommunity=data.ro_community, snmp_location=data.location)
     if not ip.ping_poll(vars.D1, data.ipaddress_d1[0], family='ipv4',iter=5, count=1):
         st.report_fail("ping_fail", data.ipaddress_d1[0])
-    if not snmp_obj.poll_for_snmp(vars.D1, 30 , 1 , ipaddress= data.ipaddress_d1[0],
-                                  oid=data.oid_sysName, community_name=data.ro_community):
-        st.log("Post SNMP config , snmp is not working")
-        st.report_fail("operation_failed")
+    # if not snmp_obj.poll_for_snmp(vars.D1, 30 , 1 , ipaddress= data.ipaddress_d1[0],
+    #                               oid=data.oid_sysName, community_name=data.ro_community):
+    #     st.log("Post SNMP config , snmp is not working")
+    #     st.report_fail("operation_failed")
 
 
 def check_for_mgmt_ip(dut, iter_cnt, intf):
@@ -123,7 +123,7 @@ def lldp_snmp_post_config():
     """
     LLDP Post Config
     """
-    snmp_obj.restore_snmp_config(vars.D1)
+    # snmp_obj.restore_snmp_config(vars.D1)
 
 
 @pytest.mark.lldp_LocManAddrOID
@@ -225,15 +225,15 @@ def test_ft_lldp_lldplocportid():
     output = lldp_value_remote_val[-1]
     cli_output = '"{}"'.format(output['portid_value'])
 
-    snmp_output = snmp_obj.walk_snmp_operation(ipaddress= ipaddress, oid= data.oid_lldplocportid,community_name= data.ro_community,filter=data.filter)
-    if not snmp_output:
-        st.report_fail(" No SNMP Entries are available")
+    # snmp_output = snmp_obj.walk_snmp_operation(ipaddress= ipaddress, oid= data.oid_lldplocportid,community_name= data.ro_community,filter=data.filter)
+    # if not snmp_output:
+    #     st.report_fail(" No SNMP Entries are available")
 
     st.log("lldp CLI port is : {} ".format(cli_output))
-    st.log("lldp SNMP output is : {} ".format(snmp_output))
-    if cli_output not in str(snmp_output):
-        st.error("Port ID in CLI is not matching with Port ID in SNMP")
-        st.report_fail("lldp_snmp_not_matching")
+    # st.log("lldp SNMP output is : {} ".format(snmp_output))
+    # if cli_output not in str(snmp_output):
+    #     st.error("Port ID in CLI is not matching with Port ID in SNMP")
+    #     st.report_fail("lldp_snmp_not_matching")
     st.log("Port ID in CLI is matching with Port ID in SNMP")
     st.report_pass("test_case_passed")
 

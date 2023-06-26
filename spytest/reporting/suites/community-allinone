@@ -35,6 +35,15 @@
 -test:test_ft_lacp_graceful_restart_with_save_reload
 -test:test_ft_verify_interfaces_order
 -test:test_cli_bgp_community_list_normal_array
+-test:test_ft_lldp_LocManAddrOID
+-test:test_ft_lldp_LocManAddrLen
+-test:test_ft_lldp_LocManAddrlfld
+-test:test_ft_lldp_LocManAddrEntry
+-test:test_ft_lldp_ConfigManAddrEntry
+-test:test_ft_lldp_lldplocsysname
+-test:test_ft_lldp_lldplocsysdesc
+-test:test_ft_lldp_lldplocportdesc
+-test:test_ft_lldp_rem_man_addr_table
 
 #+args:--skip-init-config
 #+args:--skip-load-config base

@@ -4654,7 +4654,7 @@
             "set_weight": "10000"
         }, 
         "rp6ESR-V-PRIVATE_TC0-In|permit|60": {
-            "match_ip_address_prefix_list": "pl6PRIVATE-Aggregate-All", 
+            "match_ipv6_address_prefix_list": "pl6PRIVATE-Aggregate-All", 
             "set_weight": "0"
         }, 
         "rp6ESR-V-PRIVATE_TC0-In|permit|70": {

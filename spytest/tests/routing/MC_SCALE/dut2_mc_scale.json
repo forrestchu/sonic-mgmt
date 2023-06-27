@@ -1599,15 +1599,7 @@
             "admin_status": "up", 
             "in_group": "RJ-MC-Aliyun-public"
         }, 
-        "11.10.100.2|long-vrf-501": {
-            "admin_status": "up", 
-            "in_group": "RJ-MC-Aliyun-public"
-        }, 
         "11.10.102.2|global|long-vrf-502": {
-            "admin_status": "up", 
-            "in_group": "RJ-MC-Aliyun"
-        }, 
-        "11.10.102.2|long-vrf-502": {
             "admin_status": "up", 
             "in_group": "RJ-MC-Aliyun"
         }, 
@@ -1619,10 +1611,6 @@
             "rx_timer": "100", 
             "tx_timer": "100"
         }, 
-        "11.108.100.2|long-vrf-501": {
-            "admin_status": "up", 
-            "in_group": "MC-Aliyun-public"
-        }, 
         "11.108.102.2|global|long-vrf-502": {
             "admin_status": "up", 
             "bfd": "true", 
@@ -1631,15 +1619,7 @@
             "rx_timer": "100", 
             "tx_timer": "100"
         }, 
-        "11.108.102.2|long-vrf-502": {
-            "admin_status": "up", 
-            "in_group": "MC-Aliyun"
-        }, 
         "11.109.104.2|global|long-vrf-503": {
-            "admin_status": "up", 
-            "in_group": "TC1_TO_MC"
-        }, 
-        "11.109.104.2|long-vrf-503": {
             "admin_status": "up", 
             "in_group": "TC1_TO_MC"
         }, 
@@ -1647,15 +1627,7 @@
             "admin_status": "up", 
             "in_group": "TC1_TO_MC"
         }, 
-        "11.109.106.2|long-vrf-504": {
-            "admin_status": "up", 
-            "in_group": "TC1_TO_MC"
-        }, 
         "11.11.100.2|global|long-vrf-501": {
-            "admin_status": "up", 
-            "in_group": "RJ-MC-Aliyun-public"
-        }, 
-        "11.11.100.2|long-vrf-501": {
             "admin_status": "up", 
             "in_group": "RJ-MC-Aliyun-public"
         }, 
@@ -1663,23 +1635,11 @@
             "admin_status": "up", 
             "in_group": "RJ-MC-Aliyun"
         }, 
-        "11.11.102.2|long-vrf-502": {
-            "admin_status": "up", 
-            "in_group": "RJ-MC-Aliyun"
-        }, 
         "11.110.104.2|global|long-vrf-503": {
             "admin_status": "up", 
             "in_group": "TC1_TO_MC"
         }, 
-        "11.110.104.2|long-vrf-503": {
-            "admin_status": "up", 
-            "in_group": "TC1_TO_MC"
-        }, 
         "11.110.106.2|global|long-vrf-504": {
-            "admin_status": "up", 
-            "in_group": "TC1_TO_MC"
-        }, 
-        "11.110.106.2|long-vrf-504": {
             "admin_status": "up", 
             "in_group": "TC1_TO_MC"
         }, 
@@ -1691,10 +1651,6 @@
             "rx_timer": "100", 
             "tx_timer": "100"
         }, 
-        "11.12.104.2|long-vrf-503": {
-            "admin_status": "up", 
-            "in_group": "MC-Aliyun-public"
-        }, 
         "11.12.106.2|global|long-vrf-504": {
             "admin_status": "up", 
             "bfd": "true", 
@@ -1702,10 +1658,6 @@
             "in_group": "MC-Aliyun", 
             "rx_timer": "100", 
             "tx_timer": "100"
-        }, 
-        "11.12.106.2|long-vrf-504": {
-            "admin_status": "up", 
-            "in_group": "MC-Aliyun"
         }, 
         "11.16.104.2|global|long-vrf-503": {
             "admin_status": "up", 
@@ -1715,10 +1667,6 @@
             "rx_timer": "100", 
             "tx_timer": "100"
         }, 
-        "11.16.104.2|long-vrf-503": {
-            "admin_status": "up", 
-            "in_group": "MC-Aliyun-public"
-        }, 
         "11.16.106.2|global|long-vrf-504": {
             "admin_status": "up", 
             "bfd": "true", 
@@ -1726,10 +1674,6 @@
             "in_group": "MC-Aliyun", 
             "rx_timer": "100", 
             "tx_timer": "100"
-        }, 
-        "11.16.106.2|long-vrf-504": {
-            "admin_status": "up", 
-            "in_group": "MC-Aliyun"
         }, 
         "11.28.104.2|global|long-vrf-503": {
             "admin_status": "up", 
@@ -1739,10 +1683,6 @@
             "rx_timer": "100", 
             "tx_timer": "100"
         }, 
-        "11.28.104.2|long-vrf-503": {
-            "admin_status": "up", 
-            "in_group": "MC-Aliyun-public"
-        }, 
         "11.28.106.2|global|long-vrf-504": {
             "admin_status": "up", 
             "bfd": "true", 
@@ -1750,10 +1690,6 @@
             "in_group": "MC-Aliyun", 
             "rx_timer": "100", 
             "tx_timer": "100"
-        }, 
-        "11.28.106.2|long-vrf-504": {
-            "admin_status": "up", 
-            "in_group": "MC-Aliyun"
         }, 
         "11.32.104.2|global|long-vrf-503": {
             "admin_status": "up", 
@@ -1763,10 +1699,6 @@
             "rx_timer": "100", 
             "tx_timer": "100"
         }, 
-        "11.32.104.2|long-vrf-503": {
-            "admin_status": "up", 
-            "in_group": "MC-Aliyun-public"
-        }, 
         "11.32.106.2|global|long-vrf-504": {
             "admin_status": "up", 
             "bfd": "true", 
@@ -1774,10 +1706,6 @@
             "in_group": "MC-Aliyun", 
             "rx_timer": "100", 
             "tx_timer": "100"
-        }, 
-        "11.32.106.2|long-vrf-504": {
-            "admin_status": "up", 
-            "in_group": "MC-Aliyun"
         }, 
         "11.44.104.2|global|long-vrf-503": {
             "admin_status": "up", 
@@ -1787,10 +1715,6 @@
             "rx_timer": "100", 
             "tx_timer": "100"
         }, 
-        "11.44.104.2|long-vrf-503": {
-            "admin_status": "up", 
-            "in_group": "MC-Aliyun-public"
-        }, 
         "11.44.106.2|global|long-vrf-504": {
             "admin_status": "up", 
             "bfd": "true", 
@@ -1798,10 +1722,6 @@
             "in_group": "MC-Aliyun", 
             "rx_timer": "100", 
             "tx_timer": "100"
-        }, 
-        "11.44.106.2|long-vrf-504": {
-            "admin_status": "up", 
-            "in_group": "MC-Aliyun"
         }, 
         "11.60.104.2|global|long-vrf-503": {
             "admin_status": "up", 
@@ -1811,10 +1731,6 @@
             "rx_timer": "100", 
             "tx_timer": "100"
         }, 
-        "11.60.104.2|long-vrf-503": {
-            "admin_status": "up", 
-            "in_group": "MC-Aliyun-public"
-        }, 
         "11.60.106.2|global|long-vrf-504": {
             "admin_status": "up", 
             "bfd": "true", 
@@ -1823,15 +1739,7 @@
             "rx_timer": "100", 
             "tx_timer": "100"
         }, 
-        "11.60.106.2|long-vrf-504": {
-            "admin_status": "up", 
-            "in_group": "MC-Aliyun"
-        }, 
         "11.8.100.2|global|long-vrf-501": {
-            "admin_status": "up", 
-            "in_group": "RJ-MC-Aliyun-public"
-        }, 
-        "11.8.100.2|long-vrf-501": {
             "admin_status": "up", 
             "in_group": "RJ-MC-Aliyun-public"
         }, 
@@ -1839,23 +1747,11 @@
             "admin_status": "up", 
             "in_group": "RJ-MC-Aliyun"
         }, 
-        "11.8.102.2|long-vrf-502": {
-            "admin_status": "up", 
-            "in_group": "RJ-MC-Aliyun"
-        }, 
         "11.9.100.2|global|long-vrf-501": {
             "admin_status": "up", 
             "in_group": "RJ-MC-Aliyun-public"
         }, 
-        "11.9.100.2|long-vrf-501": {
-            "admin_status": "up", 
-            "in_group": "RJ-MC-Aliyun-public"
-        }, 
         "11.9.102.2|global|long-vrf-502": {
-            "admin_status": "up", 
-            "in_group": "RJ-MC-Aliyun"
-        }, 
-        "11.9.102.2|long-vrf-502": {
             "admin_status": "up", 
             "in_group": "RJ-MC-Aliyun"
         }, 
@@ -1867,10 +1763,6 @@
             "rx_timer": "100", 
             "tx_timer": "100"
         }, 
-        "11.92.100.2|long-vrf-501": {
-            "admin_status": "up", 
-            "in_group": "MC-Aliyun-public"
-        }, 
         "11.92.102.2|global|long-vrf-502": {
             "admin_status": "up", 
             "bfd": "true", 
@@ -1878,14 +1770,6 @@
             "in_group": "MC-Aliyun", 
             "rx_timer": "100", 
             "tx_timer": "100"
-        }, 
-        "11.92.102.2|long-vrf-502": {
-            "admin_status": "up", 
-            "in_group": "MC-Aliyun"
-        }, 
-        "11.96.100.1|long-vrf-501": {
-            "admin_status": "up", 
-            "in_group": "MC-Aliyun-public"
         }, 
         "11.96.100.2|global|long-vrf-501": {
             "admin_status": "up", 
@@ -1902,10 +1786,6 @@
             "in_group": "MC-Aliyun", 
             "rx_timer": "100", 
             "tx_timer": "100"
-        }, 
-        "11.96.102.2|long-vrf-502": {
-            "admin_status": "up", 
-            "in_group": "MC-Aliyun"
         }, 
         "110.2.0.100|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
@@ -2530,15 +2410,6 @@
             "activate": "true", 
             "soft_reconfiguration_inbound": "true"
         }, 
-        "MC-Aliyun-public-v6|long-vrf-503": {
-            "activate": "true", 
-            "addr_family": "ipv6", 
-            "admin_status": "up", 
-            "advertisement_interval": "0", 
-            "asn": "4200015155", 
-            "peer_group": "true", 
-            "soft_reconfiguration_inbound": "true"
-        }, 
         "MC-Aliyun-public|global|long-vrf-501": {
             "admin_status": "up", 
             "advertisement_interval": "0", 
@@ -2567,33 +2438,6 @@
         }, 
         "MC-Aliyun-public|ipv4|long-vrf-503": {
             "activate": "true", 
-            "soft_reconfiguration_inbound": "true"
-        }, 
-        "MC-Aliyun-public|long-vrf-501": {
-            "activate": "true", 
-            "addr_family": "ipv4", 
-            "admin_status": "up", 
-            "advertisement_interval": "0", 
-            "asn": "4200015155", 
-            "peer_group": "true", 
-            "soft_reconfiguration_inbound": "true"
-        }, 
-        "MC-Aliyun-public|long-vrf-502": {
-            "activate": "true", 
-            "addr_family": "ipv4", 
-            "admin_status": "up", 
-            "advertisement_interval": "0", 
-            "asn": "4200015155", 
-            "peer_group": "true", 
-            "soft_reconfiguration_inbound": "true"
-        }, 
-        "MC-Aliyun-public|long-vrf-503": {
-            "activate": "true", 
-            "addr_family": "ipv4", 
-            "admin_status": "up", 
-            "advertisement_interval": "0", 
-            "asn": "4200015155", 
-            "peer_group": "true", 
             "soft_reconfiguration_inbound": "true"
         }, 
         "MC-Aliyun-v6|global|long-vrf-501": {
@@ -2626,33 +2470,6 @@
             "activate": "true", 
             "soft_reconfiguration_inbound": "true"
         }, 
-        "MC-Aliyun-v6|long-vrf-501": {
-            "activate": "true", 
-            "addr_family": "ipv6", 
-            "admin_status": "up", 
-            "advertisement_interval": "0", 
-            "asn": "4200015155", 
-            "peer_group": "true", 
-            "soft_reconfiguration_inbound": "true"
-        }, 
-        "MC-Aliyun-v6|long-vrf-502": {
-            "activate": "true", 
-            "addr_family": "ipv6", 
-            "admin_status": "up", 
-            "advertisement_interval": "0", 
-            "asn": "4200015155", 
-            "peer_group": "true", 
-            "soft_reconfiguration_inbound": "true"
-        }, 
-        "MC-Aliyun-v6|long-vrf-504": {
-            "activate": "true", 
-            "addr_family": "ipv6", 
-            "admin_status": "up", 
-            "advertisement_interval": "0", 
-            "asn": "4200015155", 
-            "peer_group": "true", 
-            "soft_reconfiguration_inbound": "true"
-        }, 
         "MC-Aliyun|global|long-vrf-501": {
             "admin_status": "up", 
             "advertisement_interval": "0", 
@@ -2681,42 +2498,6 @@
         }, 
         "MC-Aliyun|ipv4|long-vrf-504": {
             "activate": "true", 
-            "soft_reconfiguration_inbound": "true"
-        }, 
-        "MC-Aliyun|long-vrf-501": {
-            "activate": "true", 
-            "addr_family": "ipv4", 
-            "admin_status": "up", 
-            "advertisement_interval": "0", 
-            "asn": "4200015155", 
-            "peer_group": "true", 
-            "soft_reconfiguration_inbound": "true"
-        }, 
-        "MC-Aliyun|long-vrf-502": {
-            "activate": "true", 
-            "addr_family": "ipv4", 
-            "admin_status": "up", 
-            "advertisement_interval": "0", 
-            "asn": "4200015155", 
-            "peer_group": "true", 
-            "soft_reconfiguration_inbound": "true"
-        }, 
-        "MC-Aliyun|long-vrf-504": {
-            "activate": "true", 
-            "addr_family": "ipv4", 
-            "admin_status": "up", 
-            "advertisement_interval": "0", 
-            "asn": "4200015155", 
-            "peer_group": "true", 
-            "soft_reconfiguration_inbound": "true"
-        }, 
-        "RJ-MC-Aliyun-public-public|long-vrf-501": {
-            "activate": "true", 
-            "addr_family": "ipv4", 
-            "admin_status": "up", 
-            "advertisement_interval": "0", 
-            "asn": "4200015157", 
-            "peer_group": "true", 
             "soft_reconfiguration_inbound": "true"
         }, 
         "RJ-MC-Aliyun-public-v6|global|long-vrf-501": {
@@ -2753,24 +2534,6 @@
             "activate": "true", 
             "soft_reconfiguration_inbound": "true"
         }, 
-        "RJ-MC-Aliyun-v6|long-vrf-501": {
-            "activate": "true", 
-            "addr_family": "ipv6", 
-            "admin_status": "up", 
-            "advertisement_interval": "0", 
-            "asn": "4200015157", 
-            "peer_group": "true", 
-            "soft_reconfiguration_inbound": "true"
-        }, 
-        "RJ-MC-Aliyun-v6|long-vrf-502": {
-            "activate": "true", 
-            "addr_family": "ipv6", 
-            "admin_status": "up", 
-            "advertisement_interval": "0", 
-            "asn": "4200015157", 
-            "peer_group": "true", 
-            "soft_reconfiguration_inbound": "true"
-        }, 
         "RJ-MC-Aliyun|global|long-vrf-502": {
             "admin_status": "up", 
             "advertisement_interval": "0", 
@@ -2783,15 +2546,6 @@
         }, 
         "RJ-MC-Aliyun|ipv4|long-vrf-502": {
             "activate": "true", 
-            "soft_reconfiguration_inbound": "true"
-        }, 
-        "RJ-MC-Aliyun|long-vrf-502": {
-            "activate": "true", 
-            "addr_family": "ipv4", 
-            "admin_status": "up", 
-            "advertisement_interval": "0", 
-            "asn": "4200015157", 
-            "peer_group": "true", 
             "soft_reconfiguration_inbound": "true"
         }, 
         "TC1_TO_MC_V6|global|long-vrf-503": {
@@ -2824,24 +2578,6 @@
             "route_map_out": "zlydeny", 
             "soft_reconfiguration_inbound": "true"
         }, 
-        "TC1_TO_MC_V6|long-vrf-503": {
-            "activate": "true", 
-            "addr_family": "ipv4", 
-            "admin_status": "up", 
-            "advertisement_interval": "0", 
-            "asn": "4200015156", 
-            "peer_group": "true", 
-            "soft_reconfiguration_inbound": "true"
-        }, 
-        "TC1_TO_MC_V6|long-vrf-504": {
-            "activate": "true", 
-            "addr_family": "ipv4", 
-            "admin_status": "up", 
-            "advertisement_interval": "0", 
-            "asn": "4200015156", 
-            "peer_group": "true", 
-            "soft_reconfiguration_inbound": "true"
-        }, 
         "TC1_TO_MC|global|long-vrf-503": {
             "admin_status": "up", 
             "advertisement_interval": "0", 
@@ -2872,24 +2608,6 @@
             "route_map_out": "zlydeny", 
             "soft_reconfiguration_inbound": "true"
         }, 
-        "TC1_TO_MC|long-vrf-503": {
-            "activate": "true", 
-            "addr_family": "ipv4", 
-            "admin_status": "up", 
-            "advertisement_interval": "0", 
-            "asn": "4200015156", 
-            "peer_group": "true", 
-            "soft_reconfiguration_inbound": "true"
-        }, 
-        "TC1_TO_MC|long-vrf-504": {
-            "activate": "true", 
-            "addr_family": "ipv4", 
-            "admin_status": "up", 
-            "advertisement_interval": "0", 
-            "asn": "4200015156", 
-            "peer_group": "true", 
-            "soft_reconfiguration_inbound": "true"
-        }, 
         "dut1_v4|global|long-vrf-dut-bfd1": {
             "asn": "4200015155", 
             "bfd": "true", 
@@ -2916,15 +2634,7 @@
             "admin_status": "up", 
             "in_group": "TC1_TO_MC_V6"
         }, 
-        "fd40:11:109:104::2|long-vrf-503": {
-            "admin_status": "up", 
-            "in_group": "TC1_TO_MC_V6"
-        }, 
         "fd40:11:109:106::2|global|long-vrf-504": {
-            "admin_status": "up", 
-            "in_group": "TC1_TO_MC_V6"
-        }, 
-        "fd40:11:109:106::2|long-vrf-504": {
             "admin_status": "up", 
             "in_group": "TC1_TO_MC_V6"
         }, 
@@ -2932,15 +2642,7 @@
             "admin_status": "up", 
             "in_group": "TC1_TO_MC_V6"
         }, 
-        "fd40:11:110:104::2|long-vrf-503": {
-            "admin_status": "up", 
-            "in_group": "TC1_TO_MC_V6"
-        }, 
         "fd40:11:110:106::2|global|long-vrf-504": {
-            "admin_status": "up", 
-            "in_group": "TC1_TO_MC_V6"
-        }, 
-        "fd40:11:110:106::2|long-vrf-504": {
             "admin_status": "up", 
             "in_group": "TC1_TO_MC_V6"
         }, 
@@ -4360,15 +4062,6 @@
             "rd": "37963:514305291", 
             "rt_export": "37963:15140", 
             "rt_import": "37963:15140"
-        }, 
-        "4200015154|long-vrf-502": {
-            "bgp_maximum_paths": "64", 
-            "bgp_peer_up_delay": "600", 
-            "bgp_router_id": "11.161.62.178", 
-            "bgp_timers": "10 30", 
-            "rd": "37963:512305291", 
-            "rt_export": "37963:15120", 
-            "rt_import": "37963:15120"
         }
     }, 
     "BUFFER_POOL": {
@@ -4468,7 +4161,7 @@
         }
     }, 
     "IPV6_PREFIX_LIST": {
-        "LOOPBACK_IP_v6|seq|5": {
+        "LOOPBACK_IP_V6|seq|5": {
             "permit": "fd04:400:0:200::5/64"
         }, 
         "default-routing-V6|seq|5": {
@@ -5391,9 +5084,6 @@
         "rpAliyun-DSW2MA-Public-V6|permit|10": {}, 
         "rpAliyun-DSW2MA-Public|permit|10": {}, 
         "rpAliyun-MA2DSW-Private-V6|deny|1000": {}, 
-        "rpAliyun-MA2DSW-Private-V6|permit|10": {
-            "match_ipv6_address_prefix_list": "plALL-Private-Aggregate-V6"
-        }, 
         "rpAliyun-MA2DSW-Private|deny|1000": {}, 
         "rpAliyun-MA2DSW-Private|permit|10": {
             "match_ip_address_prefix_list": "plALL-Private-Aggregate"

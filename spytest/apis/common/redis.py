@@ -63,7 +63,7 @@ def db_cli_init(dut):
 def db_map_read(dut):
     global db_port_map
     db_dict = None
-    db_json = st.config(dut, "cat /var/run/redis/sonic-db/database_config.json").split("\n")
+    db_json = st.config(dut, "cat /var/run/redis/sonic-db/database_config.json && echo").split("\n")
     db_json.pop()
     try:
         db_dict = json.loads("".join(db_json))

@@ -21,7 +21,7 @@ def get_mac(dut,**kwargs):
     cli_type = st.get_ui_type(dut, **kwargs)
     if cli_type == "click":
         #yaopei, chg to sw show mac
-        return st.show(dut, "sw show mac_addr_table")
+        return st.show(dut, "sw show mac-addr-table")
     elif cli_type == "klish":
         response = dict()
         attrs = ["address", "interface", "type", "vlan", "count"]
@@ -363,7 +363,7 @@ def config_mac_agetime(dut, agetime, cli_type="", config= "add", **kwargs):
     command = ''
     if cli_type == 'click':
         #yaopei, chg to sw command
-        command = "sw config mac_aging_time -t {}".format(int(agetime))
+        command = "sw config mac-aging-time -t {}".format(int(agetime))
         if not st.is_feature_supported("config-mac-aging_time-command", dut):
             st.community_unsupported(command, dut)
             skip_error_check=True

@@ -583,7 +583,7 @@ def delete_acl_table(dut, acl_type=None, acl_table_name=None, cli_type=""):
     if cli_type == "click":
         command = "sudo config acl table delete"
         if not st.is_feature_supported("config-acl-table-delete-command", dut):
-            command = "sudo sw config acl_table delete"
+            command = "sudo sw config acl-table delete"
         if acl_table_name:
             table_name = list([str(e) for e in acl_table_name]) if isinstance(acl_table_name, list) \
                 else [acl_table_name]

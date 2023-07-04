@@ -866,11 +866,12 @@ def do_process_status_check(lvl):
 
     #exclude some normal exit process
     for docker in docker_list:
-	    exclude_process[docker] = ['start.sh']
+        exclude_process[docker] = ['start.sh', 'dependent-startup']
     exclude_process['swss'].extend(['restore_neighbors', 'enable_counters', 'gearsyncd', 'swssconfig'])
     exclude_process['database'].extend(['flushdb'])
     exclude_process['bgp'].extend(['bgp_eoiu_marker'])
     exclude_process['amon'].extend(['gearbox_check', 'hardware_diag'])
+    exclude_process['lldp'].extend(['waitfor_lldp_ready', 'start'])
 
     #reverse all dockers to check exited process
     print("=" * 17 + " PROCESS CHECK " + "=" * 17)

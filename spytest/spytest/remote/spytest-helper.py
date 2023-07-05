@@ -56,10 +56,8 @@ kdump_tar_file_name = "/tmp/allkdumpfiles.tar.gz"
 
 PY_VERSION = 2
 if sys.version_info[0] == 2:
-    print("Python 2.x")
     PY_VERSION = 2
 elif sys.version_info[0] == 3:
-    print("Python 3.x")
     PY_VERSION = 3
 else:
     print("Unknown Python version")
@@ -252,7 +250,10 @@ def get_file_diff(file1, file2, show_diff=False):
     return False
 
 def json_fix(filepath):
-    data = open(filepath, 'rU').read()
+    if PY_VERSION == 3:
+        data = open(filepath, 'rU').read()
+    else:
+        data = open(filepath, 'r').read()
     try:
         obj = json.loads(data)
     except Exception:

@@ -868,7 +868,7 @@ def do_process_status_check(lvl):
     #exclude some normal exit process
     for docker in docker_list:
         exclude_process[docker] = ['start', 'dependent-startup']
-    exclude_process['swss'].extend(['restore_neighbors', 'enable_counters', 'gearsyncd', 'swssconfig'])
+    exclude_process['swss'].extend(['restore_neighbors', 'enable_counters', 'gearsyncd', 'swssconfig', 'arpdefender', 'wait_for_link'])
     exclude_process['database'].extend(['flushdb'])
     exclude_process['bgp'].extend(['bgp_eoiu_marker'])
     exclude_process['amon'].extend(['gearbox_check', 'hardware_diag'])

@@ -880,7 +880,7 @@ def do_process_status_check(lvl):
         cmd = "docker exec -i {} supervisorctl status |grep EXITED ".format(docker)
         for i in exclude_process[docker]:
             cmd += "|grep -v {} ".format(i)
-        retval = execute_check_cmd(cmd, skip_error=True)
+        retval = execute_check_cmd(cmd, trace_cmd=False, skip_error=True)
         if 'EXITED' in retval:
             raise Exception("Process Crash !!!")
 

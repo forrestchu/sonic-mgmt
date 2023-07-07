@@ -3737,6 +3737,7 @@ class Net(object):
 
         if option_type == "syslog-check":
             if re.search(r'\s*\S+\s+EXITED\s+', output):
+                self.dut_log(devname, output)
                 raise Exception("find exited process")
             if re.search("NO-SYSLOGS-CAPTURED", output):
                 self.dut_log(devname, output)

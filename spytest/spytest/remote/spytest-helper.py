@@ -251,9 +251,9 @@ def get_file_diff(file1, file2, show_diff=False):
 
 def json_fix(filepath):
     if PY_VERSION == 3:
-        data = open(filepath, 'rU').read()
-    else:
         data = open(filepath, 'r').read()
+    else:
+        data = open(filepath, 'rU').read()
     try:
         obj = json.loads(data)
     except Exception:

@@ -249,7 +249,7 @@ def esr_srvpn_func_hooks(request):
                                       "test_srvpn_mirror_config_underlay_ecmp_switch_09"]:
         st.log("esr_srvpn_func_hooks enter ")
         if data.load_mirror_config_done == False:
-            load_mirro_config()
+            load_json_config('mirror_config')
             data.load_mirror_config_done = True
         # load ixia config
         if data.load_mirror_ixia_conf_done == False:
@@ -573,24 +573,7 @@ def test_base_config_srvpn_locator_01():
 
     st.report_pass("test_case_passed")
 
-
-def load_2ksubif_100vrf(filesuffix='multi_vrf_full'):
-    curr_path = os.getcwd()
-
-    json_file_dut1_multi_vrf = curr_path+"/routing/SRv6/dut1_"+filesuffix+".json"
-    st.apply_files(dut1, [json_file_dut1_multi_vrf])
-
-    json_file_dut2_multi_vrf = curr_path+"/routing/SRv6/dut2_"+filesuffix+".json"
-    st.apply_files(dut2, [json_file_dut2_multi_vrf])
-
-    st.wait(10)
-
-    reboot.config_reload_reboot(dut1, "/etc/spytest/SRv6/dut1_"+filesuffix+".json")
-    reboot.config_reload_reboot(dut2, "/etc/spytest/SRv6/dut2_"+filesuffix+".json")
-
-    st.banner("multi vrf config loaded completed")
-
-def load_mirro_config(filesuffix='mirror_config'):
+def load_json_config(filesuffix='multi_vrf_full'):
     curr_path = os.getcwd()
 
     json_file_dut1_multi_vrf = curr_path+"/routing/SRv6/dut1_"+filesuffix+".json"
@@ -604,7 +587,7 @@ def load_mirro_config(filesuffix='mirror_config'):
     st.reboot(dut1)
     st.reboot(dut2)
 
-    st.banner("mirror config loaded completed")
+    st.banner("%s json config loaded completed" % (filesuffix))
 
 ## 2k locator , base traffic and route learning
 @pytest.mark.community
@@ -614,7 +597,7 @@ def test_base_config_srvpn_2kl_route_learn_02():
 
     # load full config
     if data.load_multi_vrf_config_done == False:
-        load_2ksubif_100vrf()
+        load_json_config()
         data.load_multi_vrf_config_done = True
 
     # load ixia config
@@ -700,7 +683,7 @@ def test_base_config_srvpn_multi_vrf_03():
     st.banner("test_base_config_srvpn_multi_vrf_03 begin")
 
     if data.load_multi_vrf_config_done == False:
-        load_2ksubif_100vrf()
+        load_json_config()
         data.load_multi_vrf_config_done = True
 
     # load ixia config
@@ -833,7 +816,7 @@ def test_base_config_srvpn_multi_vrf_03():
 def test_srvpn_ecmp_04():
     st.banner("test_srvpn_ecmp_04 begin")
 
-    load_2ksubif_100vrf("multi_vrf_ecmp")
+    load_json_config("multi_vrf_ecmp")
 
     # load ixia config
     ixia_load_config(ESR_ECMP_CONFIG)

@@ -386,7 +386,7 @@
         "ipv4.*|.*": {
             ".*": "ISOLATE"
         }, 
-        "ipv6*|.*": {
+        "ipv6.*|.*": {
             ".*": "ISOLATE_V6"
         }
     }, 
@@ -1544,7 +1544,7 @@
         }
     }, 
     "ROUTE_MAP": {
-        "ISOLATE-V6|permit|10": {
+        "ISOLATE_V6|permit|10": {
             "match_ipv6_address_prefix_list": "LOOPBACK_IP_V6"
         }, 
         "ISOLATE|permit|10": {

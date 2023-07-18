@@ -1061,6 +1061,10 @@ class WorkArea(object):
         """
         retval_1 = self.net.config_db_reload(dut, save, max_time=max_time)
 
+        # wait the service to be restarted
+        # https://aliyuque.antfin.com/aone604087/ur6iu4/frqggehq81k5f6pv
+        time.sleep(5)
+
         # wait for system ready
         retval_2 = self.wait_system_status(dut)
 

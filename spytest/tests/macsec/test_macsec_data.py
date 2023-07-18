@@ -75,7 +75,7 @@ def setup_macsec(dut, port, profile_name, cipher_suite, cak="", sci=""):
     if not ret:
         st.report_fail("Failed to enable macsec port {} with profile {}".format(port, profile_name))
 
-    st.wait(3)
+    st.wait(4)
 
     # 3. check wpa_supplicant
     ret = macsec_api.check_wpa_supplicant_process(dut, port)
@@ -89,7 +89,7 @@ def destroy_macsec(dut, port, profile_name):
         st.report_fail("Failed to disable macsec port {}".format(port))
 
     # check wpa_supplicant, should not exist
-    st.wait(3)
+    st.wait(4)
     ret = macsec_api.check_wpa_supplicant_process(dut, port)
     if ret:
         st.report_fail("The wpa_supplicant for the port {} wasn't stopped.".format(port))

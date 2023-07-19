@@ -1171,11 +1171,15 @@ def duts_load_config(dut1_config, dut2_config):
 
     dut1_config_file_path = os.path.join(os.getcwd(), "routing/SRv6/{}".format(dut1_config))
     dut2_config_file_path = os.path.join(os.getcwd(), "routing/SRv6/{}".format(dut2_config))
-    st.apply_files(dut_list[0], [dut1_config_file_path])
-    st.apply_files(dut_list[1], [dut2_config_file_path])
+    st.apply_files(dut_list[0], [dut1_config_file_path], method="replace_configdb")
+    st.apply_files(dut_list[1], [dut2_config_file_path], method="replace_configdb")
 
-    reboot.config_reload_reboot(dut_list[0], "/etc/spytest/{}".format(dut1_config))
-    reboot.config_reload_reboot(dut_list[1], "/etc/spytest/{}".format(dut2_config))
+    st.wait(10)
+
+    st.reboot(dut1)
+    st.reboot(dut2)
+
+    st.banner("config loaded %s and %s completed" % (dut1_config, dut2_config))
 
 
 def duts_get_memory(dut, progress):

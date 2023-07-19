@@ -950,8 +950,7 @@
             "import_vpn":"true",
             "rt_import":"1:10 1:60",
             "rd":"2:2",
-            "bgp_maximum_paths": "8", 
-            "bgp_maximum_paths_ibgp": "8"
+            "bgp_maximum_paths": "8"
         },
         "100|global|VPN6":{
             "bgp_router_id":"3.3.3.70"

@@ -1,5 +1,5 @@
-+file:routing/SRv6/test_esr_srvpn.py
 +file:routing/MC_SCALE/test_mc_scale.py
++file:routing/SRv6/test_esr_srvpn.py
 
 -test:test_subintf_503_504_traffic
 -test:test_subintf_501_502_traffic

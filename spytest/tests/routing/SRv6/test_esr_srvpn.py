@@ -424,7 +424,7 @@ def test_base_config_srvpn_locator_01():
     vrf_name = 'Vrf1'
     bgp_as = '100'
 
-    st.config(dut1, 'cli -c "config t" -c "router bgp {} vrf {}" -c "no srv6-locator"'.format(vrf_name, bgp_as))
+    st.config(dut1, 'cli -c "config t" -c "router bgp {} vrf {}" -c "no srv6-locator"'.format(bgp_as, vrf_name))
 
     # records = st.show(dut1, "show bgp ipv4 vpn", type='alicli')
     cmd = "cli -c 'no page' -c 'show bgp ipv4 vpn 192.100.1.0/24'"

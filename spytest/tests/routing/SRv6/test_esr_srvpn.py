@@ -575,7 +575,7 @@ def test_base_config_srvpn_locator_01():
     cmd = "cli -c 'no page' -c 'show bgp ipv4 vpn 192.100.1.0/24'"
     records = st.show(dut2, cmd)
     st.log(records)
-
+    st.wait(200)
     # show ip route
     show_cmd = "cli -c 'show ip route vrf PUBLIC-TC11 192.100.1.0/24'"
     result = st.show(dut2, show_cmd, skip_tmpl=True)

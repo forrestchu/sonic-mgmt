@@ -1,13 +1,16 @@
-+file:routing/MC_SCALE/test_mc_scale.py
 +file:routing/SRv6/test_esr_srvpn.py
 
--test:test_subintf_503_504_traffic
--test:test_subintf_501_502_traffic
--test:test_read_all_bfd_counter
--test:test_bfd_attr_set
--test:test_ixia_bfd_flap_in_bfd_vrf
--test:test_dut_bfd_flap_in_vrf_503
-
+-test:test_base_config_srvpn_2kl_route_learn_02
+-test:test_base_config_srvpn_multi_vrf_03
+-test:test_srvpn_mirror_config_05
+-test:test_srvpn_mirror_config_redistribute_vrf_06
+-test:test_srvpn_mirror_config_bgp_flap_07
+-test:test_srvpn_mirror_config_underlay_link_flap_08
+-test:test_srvpn_mirror_config_underlay_ecmp_switch_09
+-test:test_srvpn_performance_500K
+-test:test_srvpn_performance_1M
+-test:test_srvpn_performance_2M
+-test:test_srvpn_ecmp_04
 
 #+args:--skip-init-config
 #+args:--skip-load-config base

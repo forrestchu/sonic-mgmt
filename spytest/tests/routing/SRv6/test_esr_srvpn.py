@@ -566,6 +566,12 @@ def test_base_config_srvpn_locator_01():
     appdb_onefield_checkpoint(dut1, appl_end_action_key, "action", "end", expect = True, checkpoint = "end sid appdb check failed.")
     appdb_onefield_checkpoint(dut1, appl_end_action_key, "vrf", "Default", expect = True, checkpoint = "end sid appdb check failed.")
 
+    records = st.show(dut2, "show running-config bgpd", type='vtysh')
+    st.log(records)
+
+    records = st.show(dut2, "show bgp summary", type='vtysh')
+    st.log(records)
+
     cmd = "cli -c 'no page' -c 'show bgp ipv4 vpn 192.100.1.0/24'"
     records = st.show(dut2, cmd)
     st.log(records)

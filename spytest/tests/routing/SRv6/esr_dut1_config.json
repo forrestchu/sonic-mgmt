@@ -46,10 +46,12 @@
     }, 
     "BGP_PARAMETERS": {
         "100|global": {
-            "bgp_router_id": "1.1.1.179"
+            "bgp_router_id": "1.1.1.179",
+            "bgp_timers": "10 30"
         }, 
         "100|global|PUBLIC-TC11": {
             "bgp_router_id": "2.2.2.179",
+            "bgp_timers": "10 30",
             "srv6_locator": "lsid1"
         }, 
         "100|global|Vrf1": {                                   

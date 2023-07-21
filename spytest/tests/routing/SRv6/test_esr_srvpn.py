@@ -837,14 +837,14 @@ def test_srvpn_ecmp_04():
     # PRIVATE-TC10  PUBLIC-TC20  ACTN-TC60
 
     # step1: change vrf import rt withsame service-SID
-    to_check_vrf = 'PUBLIC-TC20'
-    rtlist = "1:10 1:20 1:60"
-
     # # check vrf route learn
-    show_hw_route_count(dut2)
-    ret = check_vrf_route_nums(dut2, to_check_vrf, 10000, 1)
-    if not ret:
-        st.report_fail("step1 check_vrf_route_nums {} 10000 test_srvpn_ecmp_04".format(to_check_vrf))
+    to_check_vrf = 'PUBLIC-TC20'
+    def check_route_nums():
+        show_hw_route_count(dut2)
+        return check_vrf_route_nums(dut2, to_check_vrf, 10000, 1) 
+
+    if not retry_api(check_route_nums, retry_count= 3, delay= 10):
+        st.report_fail("step1 check_route_nums test_srvpn_ecmp_04")
 
     # check vrf ipv4 uni route and sid
     # to_check_prefix_sid = {
@@ -862,13 +862,23 @@ def test_srvpn_ecmp_04():
     last_pos = vrf_name.rfind('\n')
     vrf_name = vrf_name[:last_pos]
 
-    key = 'ROUTE_TABLE:' + vrf_name + ':200.10.0.1/32'
     st.wait(5)
     checkpoint_msg = "step1 route appdb check failed"
-    appdb_onefield_checkpoint(dut2, key, "nexthop", "2000::179,3000::179", expect = True, checkpoint = checkpoint_msg)
-    appdb_onefield_checkpoint(dut2, key, "ifname", "unknown,unknown", expect = True, checkpoint = checkpoint_msg)
-    #appdb_onefield_checkpoint(dut2, key, "vpn_sid", "fd00:201:201:fff1:20::,fd00:201:202:fff1:10::,fd00:201:201:fff1:60::", expect = True, checkpoint = checkpoint_msg)
-    #appdb_onefield_checkpoint(dut2, key, "seg_src", "3000::178,3000::178", expect = True, checkpoint = checkpoint_msg)
+ 
+    key = 'ROUTE_TABLE:' + vrf_name + ':200.10.0.1/32'
+    def check_ecmp_appdb():
+        dut = dut2
+        nexthop = appdb_get_onefield(dut, key, "nexthop")
+        if nexthop != "2000::179,3000::179":
+            return False
+
+        ifname = appdb_get_onefield(dut, key, "ifname")
+        if ifname != "unknown,unknown":
+            return False       
+        return True
+
+    if not retry_api(check_ecmp_appdb, retry_count= 3, delay= 10):
+        st.report_fail("step1 check_vrf_fib test_srvpn_ecmp_04")
 
     vpnsid_val = appdb_get_onefield(dut2, key, "vpn_sid")
     if vpnsid_val is None:

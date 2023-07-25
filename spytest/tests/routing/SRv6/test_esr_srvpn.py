@@ -554,6 +554,12 @@ def test_base_config_srvpn_locator_01():
         st.log(records)
         st.report_fail("step 8 remote test_base_config_srvpn_locator_01_failed")
 
+    records = st.show(dut1, "show bgp neighbors 2000::178", type='vtysh')
+    st.log(records)
+
+    records = st.show(dut2, "show bgp neighbors 2000::179", type='vtysh')
+    st.log(records)
+
     # config locator end action
     locator_cmd = 'locator  test_end prefix fd00:301:301::/80 block-len 32 node-len 16 func-bits 32 argu-bits 48'
     end_opcode_cmd = 'opcode ::fff1:1:0:0:0 end'
@@ -566,7 +572,11 @@ def test_base_config_srvpn_locator_01():
     appdb_onefield_checkpoint(dut1, appl_end_action_key, "action", "end", expect = True, checkpoint = "end sid appdb check failed.")
     appdb_onefield_checkpoint(dut1, appl_end_action_key, "vrf", "Default", expect = True, checkpoint = "end sid appdb check failed.")
 
-    records = st.show(dut2, "show running-config bgpd", type='vtysh')
+
+    records = st.show(dut1, "show bgp neighbors 2000::178", type='vtysh')
+    st.log(records)
+
+    records = st.show(dut2, "show bgp neighbors 2000::179", type='vtysh')
     st.log(records)
 
     records = st.show(dut2, "show bgp summary", type='vtysh')
@@ -575,7 +585,7 @@ def test_base_config_srvpn_locator_01():
     cmd = "cli -c 'no page' -c 'show bgp ipv4 vpn 192.100.1.0/24'"
     records = st.show(dut2, cmd)
     st.log(records)
-    st.wait(200)
+
     # show ip route
     show_cmd = "cli -c 'show ip route vrf PUBLIC-TC11 192.100.1.0/24'"
     result = st.show(dut2, show_cmd, skip_tmpl=True)

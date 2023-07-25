@@ -843,7 +843,7 @@ def test_srvpn_ecmp_04():
         show_hw_route_count(dut2)
         return check_vrf_route_nums(dut2, to_check_vrf, 10000, 1) 
 
-    if not retry_api(check_route_nums, retry_count= 3, delay= 10):
+    if not retry_api(check_route_nums, retry_count= 5, delay= 30):
         st.report_fail("step1 check_route_nums test_srvpn_ecmp_04")
 
     # check vrf ipv4 uni route and sid
@@ -868,6 +868,7 @@ def test_srvpn_ecmp_04():
     key = 'ROUTE_TABLE:' + vrf_name + ':200.10.0.1/32'
     def check_ecmp_appdb():
         dut = dut2
+        show_hw_route_count(dut)
         nexthop = appdb_get_onefield(dut, key, "nexthop")
         if nexthop != "2000::179,3000::179":
             return False

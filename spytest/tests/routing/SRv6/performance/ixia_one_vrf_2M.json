@@ -8762,7 +8762,7 @@
                           "clearOverlays": false,
                           "singleValue": {
                             "xpath": "/multivalue[@source = '/topology[1]/deviceGroup[1]/ethernet[1]/ipv4[1]/bgpIpv4Peer[1] holdTimer']/singleValue",
-                            "value": "90"
+                            "value": "3600"
                           },
                           "nest": [
                             {
@@ -8785,7 +8785,7 @@
                           "clearOverlays": false,
                           "singleValue": {
                             "xpath": "/multivalue[@source = '/topology[1]/deviceGroup[1]/ethernet[1]/ipv4[1]/bgpIpv4Peer[1] keepaliveTimer']/singleValue",
-                            "value": "30"
+                            "value": "1200"
                           },
                           "nest": [
                             {
@@ -10365,7 +10365,7 @@
                           "clearOverlays": false,
                           "singleValue": {
                             "xpath": "/multivalue[@source = '/topology[2]/deviceGroup[1]/ethernet[1]/ipv4[1]/bgpIpv4Peer[1] holdTimer']/singleValue",
-                            "value": "90"
+                            "value": "3600"
                           },
                           "nest": [
                             {
@@ -10388,7 +10388,7 @@
                           "clearOverlays": false,
                           "singleValue": {
                             "xpath": "/multivalue[@source = '/topology[2]/deviceGroup[1]/ethernet[1]/ipv4[1]/bgpIpv4Peer[1] keepaliveTimer']/singleValue",
-                            "value": "30"
+                            "value": "1200"
                           },
                           "nest": [
                             {

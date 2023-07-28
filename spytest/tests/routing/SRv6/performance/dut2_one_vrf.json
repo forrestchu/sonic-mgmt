@@ -29,7 +29,8 @@
             "bgp_router_id": "1.1.1.178"
         },
         "100|global|Vrf1": {
-            "bgp_router_id": "3.3.3.1"
+            "bgp_router_id": "3.3.3.1",
+            "bgp_timers": "1200 3600"
         },
         "100|ipv4|Vrf1": {
             "import_vpn": "true",

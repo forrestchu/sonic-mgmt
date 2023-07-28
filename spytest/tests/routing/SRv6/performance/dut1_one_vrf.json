@@ -32,6 +32,7 @@
         },
         "101|global|Vrf1": {
             "bgp_router_id": "13.3.3.1",
+            "bgp_timers": "1200 3600",
             "srv6_locator": "lsid1"
         },
         "101|ipv4|Vrf1": {

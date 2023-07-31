@@ -1,7 +1,7 @@
 +file:routing/SRv6/test_esr_srvpn.py
 
--test:test_base_config_srvpn_2kl_route_learn_02
--test:test_base_config_srvpn_multi_vrf_03
+#-test:test_base_config_srvpn_2kl_route_learn_02
+#-test:test_base_config_srvpn_multi_vrf_03
 -test:test_srvpn_mirror_config_05
 -test:test_srvpn_mirror_config_redistribute_vrf_06
 -test:test_srvpn_mirror_config_bgp_flap_07

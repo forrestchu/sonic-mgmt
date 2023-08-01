@@ -879,6 +879,11 @@ def test_srvpn_ecmp_04():
     def check_ecmp_appdb():
         dut = dut2
         show_hw_route_count(dut)
+
+        # show ip route
+        show_cmd = "cli -c 'show ip route vrf {} {}'".format(vrf_name, "200.10.0.1/32")
+        st.show(dut, show_cmd, skip_tmpl=True)
+        
         nexthop = appdb_get_onefield(dut, key, "nexthop")
         if nexthop != "2000::179,3000::179":
             return False

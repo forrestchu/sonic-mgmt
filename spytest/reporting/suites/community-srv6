@@ -2,14 +2,14 @@
 
 #-test:test_base_config_srvpn_2kl_route_learn_02
 #-test:test_base_config_srvpn_multi_vrf_03
--test:test_srvpn_mirror_config_05
--test:test_srvpn_mirror_config_redistribute_vrf_06
--test:test_srvpn_mirror_config_bgp_flap_07
--test:test_srvpn_mirror_config_underlay_link_flap_08
--test:test_srvpn_mirror_config_underlay_ecmp_switch_09
--test:test_srvpn_performance_500K
--test:test_srvpn_performance_1M
--test:test_srvpn_performance_2M
+# -test:test_srvpn_mirror_config_05
+# -test:test_srvpn_mirror_config_redistribute_vrf_06
+# -test:test_srvpn_mirror_config_bgp_flap_07
+# -test:test_srvpn_mirror_config_underlay_link_flap_08
+# -test:test_srvpn_mirror_config_underlay_ecmp_switch_09
+# -test:test_srvpn_performance_500K
+# -test:test_srvpn_performance_1M
+# -test:test_srvpn_performance_2M
 # -test:test_srvpn_ecmp_04
 
 #+args:--skip-init-config
@@ -18,6 +18,6 @@
 +args:--load-config-method force-reboot
 +args:--get-tech-support none
 +args:--fetch-core-files none
-# +args:--build-url http://21.135.167.180:8888/dailybuild/SONiC-dev-master/cisco/q200/latest/sonic-cisco.bin
++args:--build-url http://21.135.167.180:8888/dailybuild/SONiC-dev-master/cisco/q200/latest/sonic-cisco.bin
 +args:--load-image installer
 +args:--tc-max-timeout 1200

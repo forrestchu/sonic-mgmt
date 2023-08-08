@@ -348,6 +348,13 @@ def test_base_config_srvpn_locator_01():
 
     appdb_onefield_checkpoint(dut1, key, "vrf", vrf_name, expect = True, checkpoint = checkpoint_msg)
 
+    cmd = "cli -c 'no page' -c 'show ip interface br'"
+    records = st.show(dut1, cmd)
+    st.log(records)
+
+    cmd = "cli -c 'no page' -c 'show ip interface br'"
+    records = st.show(dut2, cmd)
+    st.log(records)
     # step 4 : check  vpn router
     check_filed = ['rdroute', 'sid', 'peerv6', 'secetced']
     bgp_as = 100

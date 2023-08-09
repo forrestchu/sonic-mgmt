@@ -366,33 +366,6 @@ def test_base_config_srvpn_locator_01():
     }
 
     if not records or len(records)==0:
-        st.banner("fail log collect")
-        cmd = "cli -c 'no page' -c 'show ip interface br'"
-        records = st.show(dut1, cmd, skip_tmpl=True)
-        st.log(records)
-
-        cmd = "cli -c 'no page' -c 'show ip interface br'"
-        records = st.show(dut2, cmd, skip_tmpl=True)
-        st.log(records)
-
-        records = st.show(dut1, "show bgp neighbors 2000::178", type='vtysh')
-        st.log(records)
-
-        records = st.show(dut2, "show bgp neighbors 2000::179", type='vtysh')
-        st.log(records)        
-
-        records = st.show(dut1, "show ipv6 route 2000::178", type='vtysh')
-        st.log(records)
-
-        records = st.show(dut2, "show ipv6 route 2000::179", type='vtysh')
-        st.log(records)
-
-        records = st.show(dut1, "ip neigh show", type='click')
-        st.log(records)
-
-        records = st.show(dut2, "ip neigh show", type='click')
-        st.log(records)
-
         st.report_fail("step 4 test_base_config_srvpn_locator_01_failed")
 
     check = False
@@ -410,6 +383,27 @@ def test_base_config_srvpn_locator_01():
 
     if not check:
         st.log(records)
+
+        st.banner("fail log collect")
+        cmd = "cli -c 'no page' -c 'show ip interface br'"
+        st.show(dut1, cmd, skip_tmpl=True)
+        st.show(dut2, cmd, skip_tmpl=True)
+
+        st.show(dut1, "show interface Ethernet3", type='cli')
+        st.show(dut2, "show interface Ethernet3", type='cli')
+        
+        st.show(dut1, "ip neigh show", type='click')
+        st.show(dut2, "ip neigh show", type='click')
+
+        st.show(dut1, "show ipv6 route 2000::178", type='vtysh')
+        st.show(dut2, "show ipv6 route 2000::179", type='vtysh')
+
+        st.show(dut1, "show bgp neighbors 2000::178", type='vtysh')
+        st.show(dut2, "show bgp neighbors 2000::179", type='vtysh')     
+
+        st.show(dut1, "show bgp summary", type='vtysh')
+        st.show(dut2, "show bgp summary", type='vtysh')
+
         st.report_fail("step 4 test_base_config_srvpn_locator_01_failed")
 
 
@@ -598,16 +592,6 @@ def test_base_config_srvpn_locator_01():
     appl_end_action_key = 'SRV6_MY_SID_TABLE:fd00:301:301:fff1:1::/80'
     appdb_onefield_checkpoint(dut1, appl_end_action_key, "action", "end", expect = True, checkpoint = "end sid appdb check failed.")
     appdb_onefield_checkpoint(dut1, appl_end_action_key, "vrf", "Default", expect = True, checkpoint = "end sid appdb check failed.")
-
-
-    records = st.show(dut1, "show bgp neighbors 2000::178", type='vtysh')
-    st.log(records)
-
-    records = st.show(dut2, "show bgp neighbors 2000::179", type='vtysh')
-    st.log(records)
-
-    records = st.show(dut2, "show bgp summary", type='vtysh')
-    st.log(records)
 
     cmd = "cli -c 'no page' -c 'show bgp ipv4 vpn 192.100.1.0/24'"
     records = st.show(dut2, cmd)

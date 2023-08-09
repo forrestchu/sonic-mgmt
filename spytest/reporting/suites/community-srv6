@@ -1,4 +1,4 @@
-+file:qos/test_cos.py
+# +file:qos/test_cos.py
 +file:routing/SRv6/test_esr_srvpn.py
 
  -test_ft_cos_cpu_counters
@@ -14,10 +14,10 @@
  -test:test_srvpn_performance_1M
  -test:test_srvpn_performance_2M
  -test:test_srvpn_ecmp_04
- -test:test_ft_cos_cpu_counters
- -test:test_ft_cos_set_copp_rate
- -test:test_ft_cos_bypass_pkt_verify
- -test:test_ft_cos_tc_queue_map
+#  -test:test_ft_cos_cpu_counters
+#  -test:test_ft_cos_set_copp_rate
+#  -test:test_ft_cos_bypass_pkt_verify
+#  -test:test_ft_cos_tc_queue_map
 
 
 #+args:--skip-init-config
@@ -26,6 +26,6 @@
 +args:--load-config-method force-reboot
 +args:--get-tech-support none
 +args:--fetch-core-files none
-+args:--build-url http://21.135.167.180:8888/dailybuild/SONiC-dev-master/cisco/q200/latest/sonic-cisco.bin
+# +args:--build-url http://21.135.167.180:8888/dailybuild/SONiC-dev-master/cisco/q200/latest/sonic-cisco.bin
 +args:--load-image installer
 +args:--tc-max-timeout 1200

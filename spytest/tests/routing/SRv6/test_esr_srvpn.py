@@ -348,6 +348,18 @@ def test_base_config_srvpn_locator_01():
 
     appdb_onefield_checkpoint(dut1, key, "vrf", vrf_name, expect = True, checkpoint = checkpoint_msg)
 
+    # add check bgp neighber Established
+    def check_bgp_state():
+        output=st.show(dut1,'show bgp neighbors {}'.format('2000::178'), type='vtysh')
+        bgp_state = output[0]['state']
+        if bgp_state != 'Established':
+            return False
+        else:    
+            return True
+
+    if not retry_api(check_bgp_state, retry_count= 3, delay= 10):
+        st.report_fail("step4 pre check bgp state failed")
+
     # step 4 : check  vpn router
     check_filed = ['rdroute', 'sid', 'peerv6', 'secetced']
     bgp_as = 100
@@ -389,8 +401,9 @@ def test_base_config_srvpn_locator_01():
         st.show(dut1, cmd, skip_tmpl=True)
         st.show(dut2, cmd, skip_tmpl=True)
 
-        st.show(dut1, "show interface Ethernet3", type='cli')
-        st.show(dut2, "show interface Ethernet3", type='cli')
+        cmd = "cli -c 'no page' -c 'show interface Ethernet3'"
+        st.show(dut1, cmd, skip_tmpl=True)
+        st.show(dut2, cmd, skip_tmpl=True)
         
         st.show(dut1, "ip neigh show", type='click')
         st.show(dut2, "ip neigh show", type='click')

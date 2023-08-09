@@ -355,6 +355,24 @@ def test_base_config_srvpn_locator_01():
     cmd = "cli -c 'no page' -c 'show ip interface br'"
     records = st.show(dut2, cmd)
     st.log(records)
+    records = st.show(dut1, "show bgp neighbors 2000::178", type='vtysh')
+    st.log(records)
+
+    records = st.show(dut2, "show bgp neighbors 2000::179", type='vtysh')
+    st.log(records)
+    time.sleep(10)
+    records = st.show(dut1, "show bgp neighbors 2000::178", type='vtysh')
+    st.log(records)
+
+    records = st.show(dut2, "show bgp neighbors 2000::179", type='vtysh')
+    st.log(records)
+    time.sleep(10)
+    records = st.show(dut1, "show bgp neighbors 2000::178", type='vtysh')
+    st.log(records)
+
+    records = st.show(dut2, "show bgp neighbors 2000::179", type='vtysh')
+    st.log(records)
+
     # step 4 : check  vpn router
     check_filed = ['rdroute', 'sid', 'peerv6', 'secetced']
     bgp_as = 100

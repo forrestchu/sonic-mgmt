@@ -348,31 +348,6 @@ def test_base_config_srvpn_locator_01():
 
     appdb_onefield_checkpoint(dut1, key, "vrf", vrf_name, expect = True, checkpoint = checkpoint_msg)
 
-    cmd = "cli -c 'no page' -c 'show ip interface br'"
-    records = st.show(dut1, cmd)
-    st.log(records)
-
-    cmd = "cli -c 'no page' -c 'show ip interface br'"
-    records = st.show(dut2, cmd)
-    st.log(records)
-    records = st.show(dut1, "show bgp neighbors 2000::178", type='vtysh')
-    st.log(records)
-
-    records = st.show(dut2, "show bgp neighbors 2000::179", type='vtysh')
-    st.log(records)
-    time.sleep(10)
-    records = st.show(dut1, "show bgp neighbors 2000::178", type='vtysh')
-    st.log(records)
-
-    records = st.show(dut2, "show bgp neighbors 2000::179", type='vtysh')
-    st.log(records)
-    time.sleep(10)
-    records = st.show(dut1, "show bgp neighbors 2000::178", type='vtysh')
-    st.log(records)
-
-    records = st.show(dut2, "show bgp neighbors 2000::179", type='vtysh')
-    st.log(records)
-
     # step 4 : check  vpn router
     check_filed = ['rdroute', 'sid', 'peerv6', 'secetced']
     bgp_as = 100
@@ -391,6 +366,33 @@ def test_base_config_srvpn_locator_01():
     }
 
     if not records or len(records)==0:
+        st.banner("fail log collect")
+        cmd = "cli -c 'no page' -c 'show ip interface br'"
+        records = st.show(dut1, cmd, skip_tmpl=True)
+        st.log(records)
+
+        cmd = "cli -c 'no page' -c 'show ip interface br'"
+        records = st.show(dut2, cmd, skip_tmpl=True)
+        st.log(records)
+
+        records = st.show(dut1, "show bgp neighbors 2000::178", type='vtysh')
+        st.log(records)
+
+        records = st.show(dut2, "show bgp neighbors 2000::179", type='vtysh')
+        st.log(records)        
+
+        records = st.show(dut1, "show ipv6 route 2000::178", type='vtysh')
+        st.log(records)
+
+        records = st.show(dut2, "show ipv6 route 2000::179", type='vtysh')
+        st.log(records)
+
+        records = st.show(dut1, "ip neigh show", type='click')
+        st.log(records)
+
+        records = st.show(dut2, "ip neigh show", type='click')
+        st.log(records)
+
         st.report_fail("step 4 test_base_config_srvpn_locator_01_failed")
 
     check = False

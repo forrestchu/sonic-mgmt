@@ -14,6 +14,10 @@
  -test:test_srvpn_performance_1M
  -test:test_srvpn_performance_2M
  -test:test_srvpn_ecmp_04
+ -test:test_ft_cos_cpu_counters
+ -test:test_ft_cos_set_copp_rate
+ -test:test_ft_cos_bypass_pkt_verify
+
 
 #+args:--skip-init-config
 #+args:--skip-load-config base

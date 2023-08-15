@@ -22,6 +22,7 @@ import apis.routing.ip_bgp as ip_bgp
 import mc_lib as loc_lib
 from mc_vars import * #all the variables used for vrf testcase
 from mc_vars import data
+import sys
 #
 #            +-------------------+                 +-------------------+
 # TG1_1====  |                    |                |                    |
@@ -1116,6 +1117,9 @@ def test_subintf_503_504_traffic():
     if not check_dut_intf_tx_traffic_counters(dut2,data.ecmp_503_504_dut_tg_portlist,ixia_ecmp_Gbps):
         st.log("dut2 dut-to-ixia ecmp members rate check failed")
         result=1
+        ###############just for debug ecmp bug###############
+        sys.exit()
+        #####################################################
 
     if not check_dut_intf_tx_traffic_counters(dut1,data.ecmp_503_504_dut_tg_portlist,ixia_ecmp_Gbps):
         st.log("dut1 dut-to-ixia ecmp members rate check failed")

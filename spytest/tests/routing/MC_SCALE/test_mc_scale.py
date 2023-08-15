@@ -1544,8 +1544,10 @@ def test_ixia_bfd_flap_in_bfd_vrf():
             break
 
     if current_down_session > init_down_session:
-        result=1
+        result=1        
         st.log("check bfd status failed")
+        command = "cli -c 'no page' -c 'show copp stat'"
+        st.show(dut1, command, skip_tmpl=False)
     
     tg.tg_traffic_control(action='stop', stream_handle=traffic_list)
 

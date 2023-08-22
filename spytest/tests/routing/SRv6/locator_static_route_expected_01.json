@@ -8,10 +8,9 @@
           "selected":"true",
           "destSelected":"true",
           "installed":"true",
-          "offloaded":"true",
           "table":254,
           "internalStatus":16,
-          "internalFlags":265,
+          "internalFlags":2057,
           "internalNextHopNum":1,
           "internalNextHopActiveNum":1,
           "nexthops":[
@@ -39,10 +38,9 @@
           "selected":"true",
           "destSelected":"true",
           "installed":"true",
-          "offloaded":"true",
           "table":254,
           "internalStatus":16,
-          "internalFlags":265,
+          "internalFlags":2057,
           "internalNextHopNum":1,
           "internalNextHopActiveNum":1,
           "nexthops":[

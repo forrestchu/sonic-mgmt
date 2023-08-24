@@ -403,8 +403,8 @@
             "asn": "178", 
             "bfd": "true", 
             "detect_multiplier": "3", 
-            "rx_timer": "100", 
-            "tx_timer": "100"
+            "rx_timer": "300", 
+            "tx_timer": "300"
         }, 
         "1.0.0.178|ipv4|long-vrf-101": {
             "activate": "true"
@@ -1617,48 +1617,48 @@
             "bfd": "true", 
             "detect_multiplier": "3", 
             "in_group": "MC-Aliyun-public", 
-            "rx_timer": "100", 
-            "tx_timer": "100"
+            "rx_timer": "300", 
+            "tx_timer": "300"
         }, 
         "11.108.102.1|global|long-vrf-502": {
             "admin_status": "up", 
             "bfd": "true", 
             "detect_multiplier": "3", 
             "in_group": "MC-Aliyun", 
-            "rx_timer": "100", 
-            "tx_timer": "100"
+            "rx_timer": "300", 
+            "tx_timer": "300"
         }, 
         "11.12.104.1|global|long-vrf-503": {
             "admin_status": "up", 
             "bfd": "true", 
             "detect_multiplier": "3", 
             "in_group": "MC-Aliyun-public", 
-            "rx_timer": "100", 
-            "tx_timer": "100"
+            "rx_timer": "300", 
+            "tx_timer": "300"
         }, 
         "11.12.106.1|global|long-vrf-504": {
             "admin_status": "up", 
             "bfd": "true", 
             "detect_multiplier": "3", 
             "in_group": "MC-Aliyun", 
-            "rx_timer": "100", 
-            "tx_timer": "100"
+            "rx_timer": "300", 
+            "tx_timer": "300"
         }, 
         "11.16.104.1|global|long-vrf-503": {
             "admin_status": "up", 
             "bfd": "true", 
             "detect_multiplier": "3", 
             "in_group": "MC-Aliyun-public", 
-            "rx_timer": "100", 
-            "tx_timer": "100"
+            "rx_timer": "300", 
+            "tx_timer": "300"
         }, 
         "11.16.106.1|global|long-vrf-504": {
             "admin_status": "up", 
             "bfd": "true", 
             "detect_multiplier": "3", 
             "in_group": "MC-Aliyun", 
-            "rx_timer": "100", 
-            "tx_timer": "100"
+            "rx_timer": "300", 
+            "tx_timer": "300"
         }, 
         "11.18.100.1|global|long-vrf-501": {
             "admin_status": "up", 
@@ -1697,96 +1697,96 @@
             "bfd": "true", 
             "detect_multiplier": "3", 
             "in_group": "MC-Aliyun-public", 
-            "rx_timer": "100", 
-            "tx_timer": "100"
+            "rx_timer": "300", 
+            "tx_timer": "300"
         }, 
         "11.28.106.1|global|long-vrf-504": {
             "admin_status": "up", 
             "bfd": "true", 
             "detect_multiplier": "3", 
             "in_group": "MC-Aliyun", 
-            "rx_timer": "100", 
-            "tx_timer": "100"
+            "rx_timer": "300", 
+            "tx_timer": "300"
         }, 
         "11.32.104.1|global|long-vrf-503": {
             "admin_status": "up", 
             "bfd": "true", 
             "detect_multiplier": "3", 
             "in_group": "MC-Aliyun-public", 
-            "rx_timer": "100", 
-            "tx_timer": "100"
+            "rx_timer": "300", 
+            "tx_timer": "300"
         }, 
         "11.32.106.1|global|long-vrf-504": {
             "admin_status": "up", 
             "bfd": "true", 
             "detect_multiplier": "3", 
             "in_group": "MC-Aliyun", 
-            "rx_timer": "100", 
-            "tx_timer": "100"
+            "rx_timer": "300", 
+            "tx_timer": "300"
         }, 
         "11.44.104.1|global|long-vrf-503": {
             "admin_status": "up", 
             "bfd": "true", 
             "detect_multiplier": "3", 
             "in_group": "MC-Aliyun-public", 
-            "rx_timer": "100", 
-            "tx_timer": "100"
+            "rx_timer": "300", 
+            "tx_timer": "300"
         }, 
         "11.44.106.1|global|long-vrf-504": {
             "admin_status": "up", 
             "bfd": "true", 
             "detect_multiplier": "3", 
             "in_group": "MC-Aliyun", 
-            "rx_timer": "100", 
-            "tx_timer": "100"
+            "rx_timer": "300", 
+            "tx_timer": "300"
         }, 
         "11.60.104.1|global|long-vrf-503": {
             "admin_status": "up", 
             "bfd": "true", 
             "detect_multiplier": "3", 
             "in_group": "MC-Aliyun-public", 
-            "rx_timer": "100", 
-            "tx_timer": "100"
+            "rx_timer": "300", 
+            "tx_timer": "300"
         }, 
         "11.60.106.1|global|long-vrf-504": {
             "admin_status": "up", 
             "bfd": "true", 
             "detect_multiplier": "3", 
             "in_group": "MC-Aliyun", 
-            "rx_timer": "100", 
-            "tx_timer": "100"
+            "rx_timer": "300", 
+            "tx_timer": "300"
         }, 
         "11.92.100.1|global|long-vrf-501": {
             "admin_status": "up", 
             "bfd": "true", 
             "detect_multiplier": "3", 
             "in_group": "MC-Aliyun-public", 
-            "rx_timer": "100", 
-            "tx_timer": "100"
+            "rx_timer": "300", 
+            "tx_timer": "300"
         }, 
         "11.92.102.1|global|long-vrf-502": {
             "admin_status": "up", 
             "bfd": "true", 
             "detect_multiplier": "3", 
             "in_group": "MC-Aliyun", 
-            "rx_timer": "100", 
-            "tx_timer": "100"
+            "rx_timer": "300", 
+            "tx_timer": "300"
         }, 
         "11.96.100.1|global|long-vrf-501": {
             "admin_status": "up", 
             "bfd": "true", 
             "detect_multiplier": "3", 
             "in_group": "MC-Aliyun-public", 
-            "rx_timer": "100", 
-            "tx_timer": "100"
+            "rx_timer": "300", 
+            "tx_timer": "300"
         }, 
         "11.96.102.1|global|long-vrf-502": {
             "admin_status": "up", 
             "bfd": "true", 
             "detect_multiplier": "3", 
             "in_group": "MC-Aliyun", 
-            "rx_timer": "100", 
-            "tx_timer": "100"
+            "rx_timer": "300", 
+            "tx_timer": "300"
         }, 
         "110.2.0.100|global|long-vrf-TG-bfd2": {
             "in_group": "ixia2_v4"
@@ -3750,8 +3750,8 @@
             "bfd": "true", 
             "detect_multiplier": "3", 
             "peer_group": "true", 
-            "rx_timer": "100", 
-            "tx_timer": "100"
+            "rx_timer": "300", 
+            "tx_timer": "300"
         }, 
         "RJ-MC-Aliyun-public|ipv4|long-vrf-501": {
             "activate": "true", 
@@ -3774,8 +3774,8 @@
             "bfd": "true", 
             "detect_multiplier": "3", 
             "peer_group": "true", 
-            "rx_timer": "100", 
-            "tx_timer": "100"
+            "rx_timer": "300", 
+            "tx_timer": "300"
         }, 
         "RJ-MC-Aliyun|ipv4|long-vrf-502": {
             "activate": "true", 
@@ -3786,32 +3786,32 @@
             "bfd": "true", 
             "detect_multiplier": "3", 
             "peer_group": "true", 
-            "rx_timer": "100", 
-            "tx_timer": "100"
+            "rx_timer": "300", 
+            "tx_timer": "300"
         }, 
         "TC2_TO_MC_V6|global|long-vrf-502": {
             "asn": "4200015158", 
             "bfd": "true", 
             "detect_multiplier": "3", 
             "peer_group": "true", 
-            "rx_timer": "100", 
-            "tx_timer": "100"
+            "rx_timer": "300", 
+            "tx_timer": "300"
         }, 
         "TC2_TO_MC_V6|global|long-vrf-503": {
             "asn": "4200015158", 
             "bfd": "true", 
             "detect_multiplier": "3", 
             "peer_group": "true", 
-            "rx_timer": "100", 
-            "tx_timer": "100"
+            "rx_timer": "300", 
+            "tx_timer": "300"
         }, 
         "TC2_TO_MC_V6|global|long-vrf-504": {
             "asn": "4200015158", 
             "bfd": "true", 
             "detect_multiplier": "3", 
             "peer_group": "true", 
-            "rx_timer": "100", 
-            "tx_timer": "100"
+            "rx_timer": "300", 
+            "tx_timer": "300"
         }, 
         "TC2_TO_MC_V6|ipv4|long-vrf-501": {
             "activate": "false", 
@@ -3838,8 +3838,8 @@
             "bfd": "true", 
             "detect_multiplier": "3", 
             "peer_group": "true", 
-            "rx_timer": "100", 
-            "tx_timer": "100"
+            "rx_timer": "300", 
+            "tx_timer": "300"
         }, 
         "TC2_TO_MC|global|long-vrf-502": {
             "admin_status": "up", 
@@ -3848,8 +3848,8 @@
             "bfd": "true", 
             "detect_multiplier": "3", 
             "peer_group": "true", 
-            "rx_timer": "100", 
-            "tx_timer": "100"
+            "rx_timer": "300", 
+            "tx_timer": "300"
         }, 
         "TC2_TO_MC|global|long-vrf-503": {
             "admin_status": "up", 
@@ -3858,8 +3858,8 @@
             "bfd": "true", 
             "detect_multiplier": "3", 
             "peer_group": "true", 
-            "rx_timer": "100", 
-            "tx_timer": "100"
+            "rx_timer": "300", 
+            "tx_timer": "300"
         }, 
         "TC2_TO_MC|global|long-vrf-504": {
             "admin_status": "up", 
@@ -3868,8 +3868,8 @@
             "bfd": "true", 
             "detect_multiplier": "3", 
             "peer_group": "true", 
-            "rx_timer": "100", 
-            "tx_timer": "100"
+            "rx_timer": "300", 
+            "tx_timer": "300"
         }, 
         "TC2_TO_MC|ipv4|long-vrf-501": {
             "activate": "true", 
@@ -3892,8 +3892,8 @@
             "bfd": "true", 
             "detect_multiplier": "3", 
             "peer_group": "true", 
-            "rx_timer": "100", 
-            "tx_timer": "100"
+            "rx_timer": "300", 
+            "tx_timer": "300"
         }, 
         "dut2_v4|ipv4|long-vrf-dut-bfd1": {
             "activate": "true"
@@ -3903,8 +3903,8 @@
             "bfd": "true", 
             "detect_multiplier": "3", 
             "peer_group": "true", 
-            "rx_timer": "100", 
-            "tx_timer": "100"
+            "rx_timer": "300", 
+            "tx_timer": "300"
         }, 
         "dut2_v6|ipv6|long-vrf-dut-bfd1": {
             "activate": "true"
@@ -5216,8 +5216,8 @@
             "bfd": "true", 
             "detect_multiplier": "3", 
             "peer_group": "true", 
-            "rx_timer": "100", 
-            "tx_timer": "100"
+            "rx_timer": "300", 
+            "tx_timer": "300"
         }, 
         "ixia1_v4|ipv4|long-vrf-TG-bfd1": {
             "activate": "true"
@@ -5227,8 +5227,8 @@
             "bfd": "true", 
             "detect_multiplier": "3", 
             "peer_group": "true", 
-            "rx_timer": "100", 
-            "tx_timer": "100"
+            "rx_timer": "300", 
+            "tx_timer": "300"
         }, 
         "ixia1_v6|ipv6|long-vrf-TG-bfd1": {
             "activate": "true"
@@ -5238,8 +5238,8 @@
             "bfd": "true", 
             "detect_multiplier": "3", 
             "peer_group": "true", 
-            "rx_timer": "100", 
-            "tx_timer": "100"
+            "rx_timer": "300", 
+            "tx_timer": "300"
         }, 
         "ixia2_v4|ipv4|long-vrf-TG-bfd2": {
             "activate": "true"
@@ -5249,8 +5249,8 @@
             "bfd": "true", 
             "detect_multiplier": "3", 
             "peer_group": "true", 
-            "rx_timer": "100", 
-            "tx_timer": "100"
+            "rx_timer": "300", 
+            "tx_timer": "300"
         }, 
         "ixia2_v6|ipv6|long-vrf-TG-bfd2": {
             "activate": "true"
@@ -5260,8 +5260,8 @@
             "bfd": "true", 
             "detect_multiplier": "3", 
             "peer_group": "true", 
-            "rx_timer": "100", 
-            "tx_timer": "100"
+            "rx_timer": "300", 
+            "tx_timer": "300"
         }, 
         "ixia3_v4|ipv4|long-vrf-TG-bfd3": {
             "activate": "true"
@@ -5271,8 +5271,8 @@
             "bfd": "true", 
             "detect_multiplier": "3", 
             "peer_group": "true", 
-            "rx_timer": "100", 
-            "tx_timer": "100"
+            "rx_timer": "300", 
+            "tx_timer": "300"
         }, 
         "ixia3_v6|ipv6|long-vrf-TG-bfd3": {
             "activate": "true"
@@ -5282,8 +5282,8 @@
             "bfd": "true", 
             "detect_multiplier": "3", 
             "peer_group": "true", 
-            "rx_timer": "100", 
-            "tx_timer": "100"
+            "rx_timer": "300", 
+            "tx_timer": "300"
         }, 
         "ixia4_v4|ipv4|long-vrf-TG-bfd4": {
             "activate": "true"
@@ -5293,8 +5293,8 @@
             "bfd": "true", 
             "detect_multiplier": "3", 
             "peer_group": "true", 
-            "rx_timer": "100", 
-            "tx_timer": "100"
+            "rx_timer": "300", 
+            "tx_timer": "300"
         }, 
         "ixia4_v6|ipv6|long-vrf-TG-bfd4": {
             "activate": "true"

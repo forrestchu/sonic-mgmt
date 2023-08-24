@@ -155,7 +155,7 @@ def get_dut_ip():
     data.dut1_all_ip_addr = copy.deepcopy(output1)
     data.dut2_all_ip_addr = copy.deepcopy(output2)
 
-def ixia_bfd_params_modify(bfd_handler, ipver, flap_interval='0', tx_interval='100', rx_interval='100'):
+def ixia_bfd_params_modify(bfd_handler, ipver, flap_interval='0', tx_interval='300', rx_interval='300'):
     tg = data.tg_list[0]
 
     if ipver == "4":
@@ -1623,7 +1623,7 @@ def test_dut_bfd_flap_in_vrf_503():
     tg.tg_traffic_control(action='clear_stats', port_handle=data.tg_ph_list)
     tg.tg_traffic_control(action='run', stream_handle=traffic_vrf_503_list)
 
-    flap_timer = '100'
+    flap_timer = '300'
     st.log("config TG bfd flap timer = {}".format(flap_timer))
     ixia_bfd_params_modify(bfd_handler = data.tg1_handle[0]['bfd_v4'][0], flap_interval = flap_timer, ipver='4')
     ixia_bfd_params_modify(bfd_handler = data.tg1_handle[1]['bfd_v4'][0], flap_interval = flap_timer, ipver='4')
@@ -1634,7 +1634,7 @@ def test_dut_bfd_flap_in_vrf_503():
         st.config(dut2,flap_cmd, type='alicli',skip_error_check=True)
         st.wait(6)
         flap_cmd = "router bgp {} vrf {}\n".format(data.dut2_vrf_bgp_as, data.dut1_dut2_bfd_vrf_name[0])
-        flap_cmd += "neighbor dut1_v4 bfd 3 100 100\n"
+        flap_cmd += "neighbor dut1_v4 bfd 3 300 300\n"
         st.config(dut2,flap_cmd, type='alicli',skip_error_check=True)
         st.wait(6)
     #for i in range(5):

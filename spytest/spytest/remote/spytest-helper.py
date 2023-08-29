@@ -485,6 +485,8 @@ def create_default_base_config():
         port_dict = file_dict['PORT']
         for _, v in port_dict.items():
             v["admin_status"] = "up"
+            if "macsec" in v:
+                del v["macsec"]
 
     # save the configuration to init file
     with open(init_config_file, 'w') as outfile:

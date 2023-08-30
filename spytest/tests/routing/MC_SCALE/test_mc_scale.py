@@ -205,6 +205,8 @@ def mc_scale_module_hooks(request):
     vrfs_traffic_v6_add()
     get_dut_ip()
     yield
+    if (data.skip_finalize == True):
+        return
     l3_base_unconfig()
 
 @pytest.fixture(scope="function", autouse=True)
@@ -1118,7 +1120,8 @@ def test_subintf_503_504_traffic():
         st.log("dut2 dut-to-ixia ecmp members rate check failed")
         result=1
         ###############just for debug ecmp bug###############
-        sys.exit()
+        data.skip_finalize = True
+        pytest.exit("Stopping further execution.")
         #####################################################
 
     if not check_dut_intf_tx_traffic_counters(dut1,data.ecmp_503_504_dut_tg_portlist,ixia_ecmp_Gbps):

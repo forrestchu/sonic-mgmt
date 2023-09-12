@@ -157,6 +157,15 @@ class BGP_CLI():
             if af is not None:
                 cmd = "{} -c '{}' -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, self.router_view, af_cmd, t_cmd)
                 st.config(self.dut, cmd)
+        ## bgp af-ip view
+        allowas_in = properties.get('allowas_in', None)
+        if allowas_in is not None:
+            t_cmd = "{} neighbor {} allowas-in {}".format(
+                'no' if allowas_in == 'false' else '', peer, '' if allowas_in == 'false' else allowas_in)
+            cmd = ''
+            if af is not None:
+                cmd = "{} -c '{}' -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, self.router_view, af_cmd, t_cmd)
+                st.config(self.dut, cmd)
 
         bfd = properties.get('bfd', None)
         detect_multiplier = properties.get('detect_multiplier', None)

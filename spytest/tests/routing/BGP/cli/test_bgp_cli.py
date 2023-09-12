@@ -436,6 +436,50 @@ def test_cli_bgp_bfd_with_param_v4():
     st.report_pass("test_case_passed")
 
 @pytest.mark.bgp_cli
+def test_cli_bgp_allowas_in():
+    st.log("test_cli_bgp_allowas_in begin")
+    bgpcli_obj = data['bgpcli_obj']
+    dut = data['dut']
+    peer_ip = data.ip4_addr[0]
+
+    ### config cli ###
+    st.log("config cli")
+
+    bgpcli_obj.config_neighbor(peer = peer_ip, address_family = 'true', allowas_in = 'origin',
+        af_pro = 'ipv4', af_modifier = 'unicast')
+    bgpcli_obj.config_neighbor(peer = peer_ip, address_family = 'true', allowas_in = '10',
+        af_pro = 'ipv6', af_modifier = 'unicast')
+    
+    ### check config db ###
+    st.log("check config db")
+
+    ## hgetall BGP_NEIGHBOR|192.168.1.1|ipv4 
+    peerkey = "BGP_NEIGHBOR|{}|ipv4".format(peer_ip)
+    configdb_checkpoint(dut, peerkey, 'allowas_in', 'origin', True, 'check1-1')
+    peerkey_num = "BGP_NEIGHBOR|{}|ipv6".format(peer_ip)
+    configdb_checkpoint(dut, peerkey_num, 'allowas_in', '10', True, 'check1-2')
+
+    ### check frr running-config ##
+    st.log("check frr running-config")
+    frr_key = "router bgp {}|address-family ipv4 unicast|neighbor {} allowas-in origin".format(bgpcli_obj.get_local_as(), peer_ip)
+    frr_config_checkpoint(bgpcli_obj, frr_key, True, 'check2-1')
+    frr_key_num = "router bgp {}|address-family ipv6 unicast|neighbor {} allowas-in 10".format(bgpcli_obj.get_local_as(), peer_ip)
+    frr_config_checkpoint(bgpcli_obj, frr_key_num, True, 'check2-2')
+
+    ### restore the environment
+    st.log("restore the environment")
+    bgpcli_obj.config_neighbor(peer = peer_ip, address_family = 'true', allowas_in = 'false',
+        af_pro = 'ipv4', af_modifier = 'unicast')
+    configdb_checkpoint(dut, peerkey, 'allowas_in', 'null', True, 'check3-1')
+    frr_config_checkpoint(bgpcli_obj, frr_key, False, 'check4-1')
+    bgpcli_obj.config_neighbor(peer = peer_ip, address_family = 'true', allowas_in = 'false',
+        af_pro = 'ipv6', af_modifier = 'unicast')
+    configdb_checkpoint(dut, peerkey_num, 'allowas_in', 'null', True, 'check3-2')
+    frr_config_checkpoint(bgpcli_obj, frr_key_num, False, 'check4-2')
+
+    st.report_pass("test_case_passed")
+
+@pytest.mark.bgp_cli
 def test_cli_bgp_reboot_config_recover():
     st.log("test_cli_bgp_reboot_config_recover begin")
     bgpcli_obj = data['bgpcli_obj']
@@ -447,7 +491,9 @@ def test_cli_bgp_reboot_config_recover():
 
     bgpcli_obj.config_neighbor(peer = peer_ip, bfd='true',detect_multiplier=3,tx_timer=300,rx_timer=200)
     bgpcli_obj.config_neighbor(peer = peer_ip, address_family='true', activate='true', remove_private_as='true',
-        af_pro='ipv4', af_modifier='unicast', next_hop_self='true', ebgp_multihop='true',send_community='false')
+        af_pro='ipv4', af_modifier='unicast', next_hop_self='true', ebgp_multihop='true',send_community='false', allowas_in = 'origin')
+    bgpcli_obj.config_neighbor(peer = peer_ip, address_family = 'true', allowas_in = '10',
+        af_pro = 'ipv6', af_modifier = 'unicast')
 
     ## hgetall BGP_NEIGHBOR|192.168.1.1|global
     peerkey = "BGP_NEIGHBOR|{}|global".format(peer_ip)
@@ -475,6 +521,7 @@ def test_cli_bgp_reboot_config_recover():
     bgpcli_obj.config_neighbor(peer = peer_ip, ebgp_multihop='false')
 
     peerkey = "BGP_NEIGHBOR|{}|ipv4".format(peer_ip)
+    peerkey_num = "BGP_NEIGHBOR|{}|ipv6".format(peer_ip)
 
     ## remove-private-AS
     frr_key = "router bgp {}|address-family ipv4 unicast|neighbor {} remove-private-AS".format(bgpcli_obj.get_local_as() ,peer_ip)
@@ -499,6 +546,19 @@ def test_cli_bgp_reboot_config_recover():
     st.log("restore the environment")
     bgpcli_obj.config_neighbor(peer = peer_ip, next_hop_self='false', address_family='true',
         af_pro='ipv4', af_modifier='unicast')
+
+    ## allowas_in
+    frr_key = "router bgp {}|address-family ipv4 unicast|neighbor {} allowas-in origin".format(bgpcli_obj.get_local_as(), peer_ip)
+    frr_key_num = "router bgp {}|address-family ipv6 unicast|neighbor {} allowas-in 10".format(bgpcli_obj.get_local_as(), peer_ip)
+    frr_config_checkpoint(bgpcli_obj, frr_key, True, 'check6-1-1')
+    frr_config_checkpoint(bgpcli_obj, frr_key_num, True, 'check6-1-2')
+    configdb_checkpoint(dut, peerkey, 'allowas_in', 'origin', True, 'check6-2-1')
+    configdb_checkpoint(dut, peerkey_num, 'allowas_in', '10', True, 'check6-2-2')
+    st.log("restore the environment")
+    bgpcli_obj.config_neighbor(peer = peer_ip, address_family = 'true', allowas_in = 'false',
+        af_pro = 'ipv4', af_modifier = 'unicast')
+    bgpcli_obj.config_neighbor(peer = peer_ip, address_family = 'true', allowas_in = 'false',
+        af_pro = 'ipv6', af_modifier = 'unicast')
 
     st.report_pass("test_case_passed")
 

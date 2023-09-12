@@ -241,7 +241,7 @@ def test_bmp_global_case():
     st.log("check bmp monitor")
     BMP_INS.bmp_server_data_read(topic3)
     st.config(dut1, "cli -c 'configure terminal' -c 'ip route  100.1.1.10/32 blackhole'")
-    st.config(dut1, "cli -c 'configure terminal' -c 'router bgp 178' -c 'address-family ipv4 unicast' -c 'network 100.1.1.10/32 non-connected'")
+    st.config(dut1, "cli -c 'configure terminal' -c 'router bgp 178' -c 'address-family ipv4 unicast' -c 'network 100.1.1.10/32 nonconnected'")
     
     st.wait(30)
     BMP_INS.read_bmp_data(topic3)
@@ -293,7 +293,7 @@ def test_bmp_global_del_bgp_case():
     st.config(dut2, "cli -c 'configure terminal' -c 'router bgp 200 vrf VRF01' -c 'bgp router-id 10.10.10.10'")
 
     st.config(dut1, "cli -c 'configure terminal' -c 'ip route  100.1.1.11/32 blackhole'")
-    st.config(dut1, "cli -c 'configure terminal' -c 'router bgp 178' -c 'address-family ipv4 unicast' -c 'network 100.1.1.11/32 non-connected'")
+    st.config(dut1, "cli -c 'configure terminal' -c 'router bgp 178' -c 'address-family ipv4 unicast' -c 'network 100.1.1.11/32 nonconnected'")
     
     st.wait(5)
 
@@ -354,7 +354,7 @@ def test_bmp_bgp_case():
     st.log("check bmp monitor")
     BMP_INS.bmp_server_data_read(topic3)
     st.config(dut1, "cli -c 'configure terminal' -c 'ip route   200.1.1.10/32 blackhole'")
-    st.config(dut1, "cli -c 'configure terminal' -c 'router bgp 178' -c 'address-family ipv4 unicast' -c 'network 200.1.1.10/32 non-connected'")
+    st.config(dut1, "cli -c 'configure terminal' -c 'router bgp 178' -c 'address-family ipv4 unicast' -c 'network 200.1.1.10/32 nonconnected'")
     
     st.wait(30)
     BMP_INS.read_bmp_data(topic3)

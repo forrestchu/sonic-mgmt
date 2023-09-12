@@ -283,9 +283,9 @@ class BGP_CLI():
 
     def config_network_non_connected(self, af_view, network, route_map=None):
         if route_map:
-            sub_cmd = "network {} route-map {} non-connected".format(network, route_map)
+            sub_cmd = "network {} route-map {} nonconnected".format(network, route_map)
         else:
-            sub_cmd = "network {} non-connected".format(network)
+            sub_cmd = "network {} nonconnected".format(network)
         cmd = "{} -c '{}' -c '{}' -c '{}' -c '{}'".format(ALICLI_VIEW, CONFIG_VIEW, self.router_view, af_view, sub_cmd)
         st.config(self.dut, cmd)
         st.wait(CMD_INTERVAL)

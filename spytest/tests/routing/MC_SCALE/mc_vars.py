@@ -102,5 +102,3 @@ data.tg1_handle = [0,0,0,0]
 data.tg2_handle = [0,0]
 data.tg3_handle = [0,0]
 data.streams = {}
-
-data.skip_finalize = False

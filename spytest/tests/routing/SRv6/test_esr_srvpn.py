@@ -257,6 +257,16 @@ def esr_srvpn_func_hooks(request):
             ixia_start_all_protocols()
             st.wait(60)
             data.load_mirror_ixia_conf_done = True
+    
+    if  st.get_func_name(request) in ["test_srvpn_mirror_16nexthops_10"]:
+        st.log("esr_srvpn_func_hooks enter ")
+        load_json_config('mirror_config_16nht')
+
+        #load TG config
+        ixia_config = os.path.join(os.getcwd(), "routing/SRv6/esr_mirror_16nexthop.json")
+        ixia_load_config(ixia_config)
+        ixia_start_all_protocols()
+        st.wait(60)
     yield
     pass
 
@@ -1581,3 +1591,18 @@ def test_srvpn_performance_2M():
     ixia_stop_all_traffic()
     st.report_pass("msg", "LoadPerf: {} rps, CovergePerf: {} rps".format(route_count / load_t, route_count / covergen_t))
 
+
+@pytest.mark.community
+@pytest.mark.community_pass
+def test_srvpn_mirror_16nexthops_10():
+    st.banner("test_srvpn_mirror_16nexthops_10 begin")
+    # wait route learning
+    st.wait(30)
+    show_hw_route_count(dut1)
+    show_hw_route_count(dut2)
+
+# 2023-03-30 06:29:19,820 T0000: INFO  [D1-MC-58] FCMD: curl http://127.0.0.1:12346/route -s | grep ipv4
+# 2023-03-30 06:29:20,073 T0000: INFO  [D1-MC-58] FCMD: curl http://127.0.0.1:12346/route -s | grep ipv6
+
+    #  check base checkout
+    st.report_pass("test_case_passed")

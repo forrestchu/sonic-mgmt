@@ -3,6 +3,7 @@ import pytest
 import sys
 import json
 import netaddr
+import re
 import time,datetime
 from collections import OrderedDict
 from utilities import parallel
@@ -644,6 +645,24 @@ def load_json_config(filesuffix='multi_vrf_full'):
 
     st.banner("%s json config loaded completed" % (filesuffix))
 
+def get_kernel_ip_route(dut, number):
+    command = "ip route show vrf Vrf{}| wc -l".format(number)
+    output = st.show(dut, command, skip_tmpl=True, skip_error_check=True)
+    x = re.findall(r"\d+", output)
+    if x:
+        return int(x[0])
+    else:
+        return 0
+
+def get_kernel_ipv6_route(dut, number):
+    command = "ip -6 route show vrf Vrf{}| wc -l".format(number)
+    output = st.show(dut, command, skip_tmpl=True, skip_error_check=True)
+    x = re.findall(r"\d+", output)
+    if x:
+        return int(x[0])
+    else:
+        return 0
+    
 ## 2k locator , base traffic and route learning
 @pytest.mark.community
 @pytest.mark.community_pass
@@ -727,6 +746,15 @@ def test_base_config_srvpn_2kl_route_learn_02():
     st.log("dut2 v6 learn 5w time cost "+str(get_time_diff(str_start_time, end_timev6_egress)))
     st.log("dut1 v4 learn 50w time cost "+str(get_time_diff(str_start_time, end_timev4_ingress)))
     st.log("dut1 v6 learn 5w time cost "+str(get_time_diff(str_start_time, end_timev4_ingress)))
+    for num in range(10000, 10100):
+        ip_route = get_kernel_ip_route(dut1, num)
+        if int(ip_route) > 5:
+            st.report_fail("dut1 vrf Vrf{} ip route kernel bypass fail route number {}".format(num, ip_route))
+        ipv6_route = get_kernel_ipv6_route(dut1, num)
+        if int(ipv6_route) > 5:
+            st.report_fail("dut1 vrf Vrf{} ipv6 route kernel bypass fail route number {}".format(num, ipv6_route))
+        st.wait(1)
+
     st.report_pass("test_case_passed")
 
 ## 100 vrf test

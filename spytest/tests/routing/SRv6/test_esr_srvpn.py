@@ -640,8 +640,7 @@ def load_json_config(filesuffix='multi_vrf_full'):
 
     st.wait(10)
 
-    st.reboot(dut1)
-    st.reboot(dut2)
+    st.reboot([dut1, dut2])
 
     st.banner("%s json config loaded completed" % (filesuffix))
 
@@ -1270,8 +1269,7 @@ def duts_load_config(dut1_config, dut2_config):
 
     st.wait(10)
 
-    st.reboot(dut1)
-    st.reboot(dut2)
+    st.reboot([dut1, dut2])
 
     st.banner("config loaded %s and %s completed" % (dut1_config, dut2_config))
 

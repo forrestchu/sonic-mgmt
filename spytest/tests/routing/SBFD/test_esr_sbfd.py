@@ -23,8 +23,7 @@ import apis.routing.bfd as bfdapi
 import apis.routing.ip_bgp as ip_bgp
 from apis.common import redis
 from sbfd_vars import data
-from SRv6.ixia_vars import *
-from SRv6.ixia_helper import *
+from apis.common.ixia_helper import *
 
 #
 #            +-------------------+                 +-------------------+
@@ -51,8 +50,8 @@ data.load_base_config_done = False
 def load_json_config(filesuffix=''):
     curr_path = os.getcwd()
 
-    json_file_dut1_multi_vrf = curr_path+"/routing/SRv6/dut1_"+filesuffix+".json"
-    json_file_dut2_multi_vrf = curr_path+"/routing/SRv6/dut2_"+filesuffix+".json"
+    json_file_dut1_multi_vrf = curr_path+"/routing/SBFD/dut1_"+filesuffix+".json"
+    json_file_dut2_multi_vrf = curr_path+"/routing/SBFD/dut2_"+filesuffix+".json"
 
     st.apply_files(dut1, [json_file_dut1_multi_vrf], method="replace_configdb")
     st.apply_files(dut2, [json_file_dut2_multi_vrf], method="replace_configdb")
@@ -77,17 +76,17 @@ def config_sbfd(dut, policy, sbfd_cli):
 
 def double_check_sbfd(dut, sbfd_key, sbfd_check_filed, offload=True, delete=False):
     # show bfd peers | grep 'peer 20.20.20.58 (endpoint 20.20.20.58 color 1 sidlist sl1_ipv4) local-address 20.20.20.58' -A 20
-    cmd = "show bfd peers | grep '{}' -A 20".format(sbfd_key)
-    output = st.show(dut, cmd, type='vtysh')
+    cmd = 'cli -c "show bfd peers" | grep {} -A 20'.format('"'+sbfd_key+'"')
+    output = st.show(dut, cmd, skip_tmpl=True)
     st.log (output)
 
     st.wait(10)
-    output = st.show(dut, cmd, type='vtysh')
+    output = st.show(dut, cmd, skip_tmpl=True)
     st.log (output)
 
     # show bfd peers counters | grep 'peer 20.20.20.58 (endpoint 20.20.20.58 color 1 sidlist sl1_ipv4) local-address 20.20.20.58' -A 7
-    count_cmd = "show bfd peers counters | grep '{}' -A 7".format(sbfd_key)
-    output = st.show(dut, count_cmd, type='vtysh')
+    count_cmd = 'cli -c "show bfd peers counters | grep "{}" -A 7"'.format(sbfd_key)
+    output = st.show(dut, count_cmd, skip_tmpl=True)
     st.log (output)
 
     if offload:
@@ -97,7 +96,7 @@ def double_check_sbfd(dut, sbfd_key, sbfd_check_filed, offload=True, delete=Fals
     return True
 
 def save_config_and_reboot(dut):
-    cmd = "cli -c 'config t' -c 'copy running-config startup-config'"
+    cmd = 'cli -c "config t" -c "copy running-config startup-config"'
     st.config(dut, cmd)
     st.log("start reboot")
     st.reboot(dut)
@@ -138,8 +137,8 @@ def sbfd_func_hooks(request):
         # check
         st.show(dut1, 'ip neigh show', skip_tmpl=True)
 
-        show_appdb_tbale_info(dut1, 'SRV6_MY_SID_TABLE')
-        show_appdb_tbale_info(dut2, 'SRV6_MY_SID_TABLE')
+        show_appdb_tbale_info(dut1, '*SRV6_MY_SID_TABLE*')
+        show_appdb_tbale_info(dut2, '*SRV6_MY_SID_TABLE*')
         
     #load TG config
 
@@ -200,6 +199,8 @@ def test_sbfd_echo_single_endx_case1():
         ret = double_check_sbfd(dut1, key, check_filed, False, False) 
         if not ret:
             st.report_fail("step 4 test_sbfd_echo_single_endx_case1 failed")
+    
+    st.show(dut1, "vtysh -c 'show sr-te policy detail'", skip_tmpl=True)
 
     # step 5 : check del sbfd echo 
     config_sbfd(dut1, police_v4, 'no sbfd echo')
@@ -287,7 +288,6 @@ def test_sbfd_echo_single_endx_case1():
         if not ret:
             st.report_fail("step 9 test_sbfd_echo_single_endx_case1 failed")
 
-    
     st.show(dut1, "vtysh -c 'show sr-te policy detail'", skip_tmpl=True)
 
     # step 10 : check del sbfd echo 

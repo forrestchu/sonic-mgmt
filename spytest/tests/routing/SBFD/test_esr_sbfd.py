@@ -76,7 +76,7 @@ def config_sbfd(dut, policy, sbfd_cli):
 
 def double_check_sbfd(dut, sbfd_key, sbfd_check_filed, offload=True, delete=False):
     # show bfd peers | grep 'peer 20.20.20.58 (endpoint 20.20.20.58 color 1 sidlist sl1_ipv4) local-address 20.20.20.58' -A 20
-    cmd = 'cli -c "show bfd peers" | grep {} -A 20'.format('"'+sbfd_key+'"')
+    cmd = 'cli -c "no page" -c "show bfd peers" | grep {} -A 20'.format('"'+sbfd_key+'"')
     output = st.show(dut, cmd, skip_tmpl=True)
     st.log (output)
 
@@ -85,7 +85,7 @@ def double_check_sbfd(dut, sbfd_key, sbfd_check_filed, offload=True, delete=Fals
     st.log (output)
 
     # show bfd peers counters | grep 'peer 20.20.20.58 (endpoint 20.20.20.58 color 1 sidlist sl1_ipv4) local-address 20.20.20.58' -A 7
-    count_cmd = 'cli -c "show bfd peers counters | grep "{}" -A 7"'.format(sbfd_key)
+    count_cmd = 'cli -c "no page" -c "show bfd peers counters" | grep {} -A 7'.format('"'+sbfd_key+'"')
     output = st.show(dut, count_cmd, skip_tmpl=True)
     st.log (output)
 

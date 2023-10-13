@@ -1,5 +1,5 @@
-MC-58(config)# do show running-config quagga  
-Building configuration...
+MC-58# show running-config quagga 
+ Building configuration...
 
 Current configuration:
 !
@@ -42,40 +42,40 @@ segment-routing
  !
  traffic-eng
   segment-list sl1_ipv4
-   index 10 ipv6-address fd00:101:2022:fff1:1::
+   forwarding-ignore-first-sid fd00:101:2022:fff1:1::
   exit
   segment-list sl2_ipv6
-   index 10 ipv6-address fd00:101:2022:fff1:2::
+   forwarding-ignore-first-sid fd00:101:2022:fff1:2::
   exit
   segment-list sl3_ipv4                                        
-   index 10 ipv6-address fd00:101:2022:fff1:3::
+   forwarding-ignore-first-sid fd00:101:2022:fff1:3::
   exit
   segment-list sl4_ipv6
-   index 20 ipv6-address fd00:101:2022:fff1:4::
+   forwarding-ignore-first-sid fd00:101:2022:fff1:4::
   exit
   segment-list sl5_ipv4
-   index 10 ipv6-address fd00:101:2022:fff1:1::
+   forwarding-ignore-first-sid fd00:101:2022:fff1:1::
    index 20 ipv6-address fd00:202:2022:fff1:1::
   exit
   segment-list sl6_ipv6
-   index 10 ipv6-address fd00:101:2022:fff1:2::
+   forwarding-ignore-first-sid fd00:101:2022:fff1:2::
    index 20 ipv6-address fd00:202:2022:fff1:2::
   exit
   segment-list sl7_ipv4
-   index 10 ipv6-address fd00:101:2022:fff1:3::
+   forwarding-ignore-first-sid fd00:101:2022:fff1:3::
    index 20 ipv6-address fd00:202:2022:fff1:3::
   exit
   segment-list sl8_ipv6
-   index 10 ipv6-address fd00:101:2022:fff1:4::
+   forwarding-ignore-first-sid fd00:101:2022:fff1:4::
    index 20 ipv6-address fd00:202:2022:fff1:4::
   exit
   segment-list sl9_sbfd
-   forwarding-ignore-last-sid fd00:303:2022:fff1:eee::
-   index 10 ipv6-address fd00:101:2022:fff1:2::                
+   forwarding-ignore-first-sid fd00:101:2022:fff1:2::
+   forwarding-ignore-last-sid fd00:303:2022:fff1:eee::         
   exit
   segment-list sla_sbfd
+   forwarding-ignore-first-sid fd00:101:2022:fff1:4::
    forwarding-ignore-last-sid fd00:303:2022:fff1:eee::
-   index 10 ipv6-address fd00:101:2022:fff1:4::
   exit
   policy color 1 endpoint 2000::59
    candidate-path preference 100 name cp1_ipv4 explicit segment-list sl1_ipv4 weight 1
@@ -107,7 +107,6 @@ segment-routing
    candidate-path preference 100 name cp1_ipv4_two_endx explicit segment-list sl5_ipv4 weight 1
    candidate-path preference 200 name cp2_ipv4_two_endx explicit segment-list sl7_ipv4 weight 1
    candidate-path preference 200 name cp3_ipv4_signle_endx explicit segment-list sl1_ipv4 weight 1
-   sbfd echo source-address 20.20.20.58 3 300 300
   exit
   policy color 9 endpoint 2000::59
    candidate-path preference 100 name cp1_sbfd explicit segment-list sl9_sbfd weight 1

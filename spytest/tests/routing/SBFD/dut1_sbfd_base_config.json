@@ -505,39 +505,39 @@
     },
     "SRV6_SID_LIST": {
         "sl1_ipv4": {
-            "10": "fd00:101:2022:fff1:1::"
+            "forwarding-ignore-first-sid": "fd00:101:2022:fff1:1::"
         },
         "sl2_ipv6": {
-            "10": "fd00:101:2022:fff1:2::"
+            "forwarding-ignore-first-sid": "fd00:101:2022:fff1:2::"
         },
         "sl3_ipv4": {
-            "10": "fd00:101:2022:fff1:3::"
+            "forwarding-ignore-first-sid": "fd00:101:2022:fff1:3::"
         },
         "sl4_ipv6": {
-            "20": "fd00:101:2022:fff1:4::"
+            "forwarding-ignore-first-sid": "fd00:101:2022:fff1:4::"
         },
         "sl5_ipv4": {
-            "10": "fd00:101:2022:fff1:1::",
+            "forwarding-ignore-first-sid": "fd00:101:2022:fff1:1::",
             "20": "fd00:202:2022:fff1:1::"
         },
         "sl6_ipv6": {
-            "10": "fd00:101:2022:fff1:2::",
+            "forwarding-ignore-first-sid": "fd00:101:2022:fff1:2::",
             "20": "fd00:202:2022:fff1:2::"
         },
         "sl7_ipv4": {
-            "10": "fd00:101:2022:fff1:3::",
+            "forwarding-ignore-first-sid": "fd00:101:2022:fff1:3::",
             "20": "fd00:202:2022:fff1:3::"
         },
         "sl8_ipv6": {
-            "10": "fd00:101:2022:fff1:4::",
+            "forwarding-ignore-first-sid": "fd00:101:2022:fff1:4::",
             "20": "fd00:202:2022:fff1:4::"
         },
         "sl9_sbfd": {
-            "10": "fd00:101:2022:fff1:2::",
+            "forwarding-ignore-first-sid": "fd00:101:2022:fff1:2::",
             "forwarding-ignore-last-sid": "fd00:303:2022:fff1:eee::"
         },
         "sla_sbfd": {
-            "10": "fd00:101:2022:fff1:4::",
+            "forwarding-ignore-first-sid": "fd00:101:2022:fff1:4::",
             "forwarding-ignore-last-sid": "fd00:303:2022:fff1:eee::"
         }
     },

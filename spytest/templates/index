@@ -211,6 +211,8 @@ show_bfd_peers_brief.tmpl, .* , sonic, show bfd vrf .* peers brief
 show_bfd_couters.tmpl, .*, sonic, show bfd vrf .* peers counters
 show_bfd_couters.tmpl, .*, sonic, show bfd vrf .* peer .* counters
 show_bfd_peer.tmpl, .*, sonic, show bfd vrf .* peer*
+show_bfd_peer.tmpl, .* , sonic, cli .*show bfd peers\S\s\|.*
+show_bfd_couters.tmpl, .* , sonic, cli .*show bfd peers counters\S\s\|.*
 show_nat_config_bindings.tmpl, .*, sonic, show nat config bindings
 show_nat_config_globalvalues.tmpl, .*, sonic, show nat config globalvalues
 show_nat_config_pool.tmpl, .*, sonic, show nat config pool

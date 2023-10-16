@@ -22,6 +22,7 @@ Value List rx_interval (\d+)
 Value List tx_interval (\d+)
 Value List echo_tx_interval (\d+)
 Value err ([\w\s]+)
+Value hardware (\S+)
 
 Start
   ^\s*\%\s*${err}\s*\'peer ${peer}\'\s*$$ -> Record
@@ -75,4 +76,5 @@ Start
   ^\s*Receive\s*interval:\s*${rx_interval}ms
   ^\s*Transmission\s*interval:\s*${tx_interval}ms
   ^\s*Echo\s*transmission\s*interval:\s*${echo_tx_interval}ms
+  ^\s*Created by ${hardware}\.
 

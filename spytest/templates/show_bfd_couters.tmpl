@@ -9,6 +9,9 @@ Value echoPktOut (\d+)
 Value SessionUpEv (\d+)
 Value SessionDownEv (\d+)
 Value ZebraNotifys (\d+)
+Value endpoint (\S+)
+Value color (\d+)
+Value sidlist (\S+)
 
 Start
   ^\s*peer\s*${peerAddress}$$
@@ -21,6 +24,7 @@ Start
   ^\s*peer\s*${peerAddress}\s*local-address\s*${localAddr}$$
   ^\s*peer\s*${peerAddress}\s*multihop\s*local-address\s*${localAddr}\s*vrf\s*${vrfname}$$
   ^\s*peer\s*${peerAddress}\s*multihop\s*local-address\s*${localAddr}$$
+  ^\s*peer\s*${peerAddress}\s*\(endpoint\s*${endpoint}\s*color\s*${color}\s*sidlist\s*${sidlist}\)\s*local-address\s*${localAddr}\s*vrf\s*${vrfname}$$
   ^\s*Control packet input:\s*${cntrlPktIn}\s*packets
   ^\s*Control packet output:\s*${cntrlPktOut}\s*packets
   ^\s*Echo packet input:\s*${echoPktIn}\s*packets

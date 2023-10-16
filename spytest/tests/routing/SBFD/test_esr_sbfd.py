@@ -45,7 +45,7 @@ data.srv6 = {}
 dut1 = 'MC-58'
 dut2 = 'MC-59'
 data.my_dut_list = [dut1, dut2]
-data.load_base_config_done = False
+data.load_base_config_done = True
 
 def load_json_config(filesuffix=''):
     curr_path = os.getcwd()
@@ -74,24 +74,90 @@ def config_sbfd(dut, policy, sbfd_cli):
               -c '{}' \
               -c '{}'".format(policy, sbfd_cli))
 
+def get_bfd_uptime_sec(output):
+    uptime = 0
+    if 'status' in output and output['status'] == 'up':
+        uptime_day = 0 if output.get('uptimeday') == '' else int(output.get('uptimeday'))
+        uptime_hour= 0 if output.get('uptimehr') == '' else int(output.get('uptimehr'))
+        uptime_min= 0 if output.get('uptimemin') == '' else int(output.get('uptimemin'))
+        uptime_sec= 0 if output.get('uptimesec') == '' else int(output.get('uptimesec'))
+        uptime =  uptime_day * 86400 +  uptime_hour * 3600 + uptime_min * 60 + uptime_sec
+    st.log("get bfd uptime {} , day {}, hour {}, min {}, sec {}".format(uptime, uptime_day, uptime_hour, uptime_min, uptime_sec))
+    return uptime
+
 def double_check_sbfd(dut, sbfd_key, sbfd_check_filed, offload=True, delete=False):
     # show bfd peers | grep 'peer 20.20.20.58 (endpoint 20.20.20.58 color 1 sidlist sl1_ipv4) local-address 20.20.20.58' -A 20
+    create_by_hardware = False
     cmd = 'cli -c "no page" -c "show bfd peers" | grep {} -A 20'.format('"'+sbfd_key+'"')
-    output = st.show(dut, cmd, skip_tmpl=True)
+    output = st.show(dut, cmd)
     st.log (output)
+    if type(output) != list:
+        st.log ("output is not list type")
+        return False
+
+    if len(output)>0:
+        output = output[0]
+    st.log (output)
+
+    if delete:
+        if len(output) == 0:
+            return True
+        if output.get('peer', '') == '':
+            return True
+        else:
+            return False
+
+    uptime1 = get_bfd_uptime_sec(output)
+    st.log (sbfd_check_filed)
+    for filed, val in sbfd_check_filed.items():
+        st.log (filed)
+        st.log (val)
+        if filed in output :
+            if type(output[filed]) == list:
+                checkval = output[filed][0]
+            else:
+                checkval = output[filed]
+            if val != checkval:
+                st.log("{} 's {} is not match, expect {}".format(sbfd_key, filed, val))
+                return False
 
     st.wait(10)
-    output = st.show(dut, cmd, skip_tmpl=True)
-    st.log (output)
 
+    output = st.show(dut, cmd)
+    if type(output) == list and len(output)>0:
+        output = output[0]
+    st.log (output)
+    uptime2 = get_bfd_uptime_sec(output)
+    for filed, val in sbfd_check_filed.items():
+        if filed in output :
+            if type(output[filed]) == list:
+                checkval = output[filed][0]
+            else:
+                checkval = output[filed]
+            if val != checkval:
+                st.log("{} 's {} is not match, expect {}".format(sbfd_key, filed, val))
+                return False
+    
+    if uptime2 - uptime1 < 10:
+        st.log("{} not up continuously".format(sbfd_key))
+        return False  
+    
+    if 'hardware' in output:
+        if output['hardware'] == 'hardware':
+            create_by_hardware = True
+    
     # show bfd peers counters | grep 'peer 20.20.20.58 (endpoint 20.20.20.58 color 1 sidlist sl1_ipv4) local-address 20.20.20.58' -A 7
     count_cmd = 'cli -c "no page" -c "show bfd peers counters" | grep {} -A 7'.format('"'+sbfd_key+'"')
-    output = st.show(dut, count_cmd, skip_tmpl=True)
+    output = st.show(dut, count_cmd)
+    if type(output) == list and len(output)>0:
+        output = output[0]
     st.log (output)
 
     if offload:
         # check appdb ,check hardware flag
-        pass
+        if create_by_hardware == False:
+            st.log("{} not offload".format(sbfd_key))
+            return False  
     
     return True
 
@@ -124,10 +190,19 @@ def sbfd_func_hooks(request):
             data.load_base_config_done = True
         
         # ping each other to learn nd and arp 
-        st.config(dut1, 'ping -c2 2000::59')
-        st.config(dut2, 'ping -c2 2000::58')
+        st.config(dut1, 'ping -c2 192.168.1.59')
+        st.config(dut1, 'ping -c2 192.168.2.59')
+        st.config(dut1, 'ping -c2 fd00:abcd::59')
+        st.config(dut1, 'ping -c2 fd00:ccdd::59')
         st.config(dut1, 'ping -c2 20.20.20.59')
+        st.config(dut1, 'ping -c2 2000::59')
+
+        st.config(dut2, 'ping -c2 192.168.1.58')
+        st.config(dut2, 'ping -c2 192.168.2.58')
+        st.config(dut2, 'ping -c2 fd00:abcd::58')
+        st.config(dut2, 'ping -c2 fd00:ccdd::58')
         st.config(dut2, 'ping -c2 20.20.20.58')
+        st.config(dut2, 'ping -c2 2000::58')
         
         st.show(dut1, "vtysh -c 'show bfd nd infos'", skip_tmpl=True)
         # check
@@ -159,10 +234,10 @@ def test_sbfd_echo_single_endx_case1():
 
     # step 2 : check sbfd echo    
     check_filed = {
-        'Status':'up',
-        'Peer Type' : 'echo',
-        'Detect-multiplier': '3',
-        'Echo transmission interval' : '300' 
+        'status':'up',
+        'peer_type' : 'echo',
+        'multiplier': '3',
+        'echo_tx_interval' : '300' 
     }
     for key in data['policy_sbfd'][police_v4]:
         ret = double_check_sbfd(dut1, key, check_filed, False, False)
@@ -190,10 +265,10 @@ def test_sbfd_echo_single_endx_case1():
     # step 4 : modify interval
     config_sbfd(dut1, police_v4, 'sbfd echo source-address 20.20.20.58 3 100 100')   
     check_filed = {
-        'Status':'up',
-        'Peer Type' : 'echo',
-        'Detect-multiplier': '3',
-        'Echo transmission interval' : '100' 
+        'status':'up',
+        'peer_type' : 'echo',
+        'multiplier': '3',
+        'echo_tx_interval' : '100' 
     }
     for key in data['policy_sbfd'][police_v4]:
         ret = double_check_sbfd(dut1, key, check_filed, False, False) 
@@ -216,10 +291,10 @@ def test_sbfd_echo_single_endx_case1():
 
     # step 7 : check sbfd echo
     check_filed = {
-        'Status':'up',
-        'Peer Type' : 'echo',
-        'Detect-multiplier': '3',
-        'Echo transmission interval' : '300' 
+        'status':'up',
+        'peer_type' : 'echo',
+        'multiplier': '3',
+        'echo_tx_interval' : '300' 
     }
     for key in data['policy_sbfd'][police_v6]:
         ret = double_check_sbfd(dut1, key, check_filed, True, False)
@@ -278,10 +353,10 @@ def test_sbfd_echo_single_endx_case1():
     # step 9 : modify interval
     config_sbfd(dut1, police_v6, 'sbfd echo source-address 2000::58 3 100 100')   
     check_filed = {
-        'Status':'up',
-        'Peer Type' : 'echo',
-        'Detect-multiplier': '3',
-        'Echo transmission interval' : '100' 
+        'status':'up',
+        'peer_type' : 'echo',
+        'multiplier': '3',
+        'echo_tx_interval' : '100' 
     }
     for key in data['policy_sbfd'][police_v6]:
         ret = double_check_sbfd(dut1, key, check_filed, True, False) 
@@ -316,10 +391,10 @@ def test_sbfd_echo_two_endx_case2():
 
     # step 2 : check sbfd echo
     check_filed = {
-        'Status':'up',
-        'Peer Type' : 'echo',
-        'Detect-multiplier': '3',
-        'Echo transmission interval' : '300' 
+        'status':'up',
+        'peer_type' : 'echo',
+        'multiplier': '3',
+        'echo_tx_interval' : '300' 
     }
     for key in data['policy_sbfd'][policy]:
         ret = double_check_sbfd(dut1, key, check_filed, True, False)
@@ -332,10 +407,10 @@ def test_sbfd_echo_two_endx_case2():
     # step 4 : modify interval
     config_sbfd(dut1, policy, 'sbfd echo source-address 20.20.20.58 3 100 100')   
     check_filed = {
-        'Status':'up',
-        'Peer Type' : 'echo',
-        'Detect-multiplier': '3',
-        'Echo transmission interval' : '100' 
+        'status':'up',
+        'peer_type' : 'echo',
+        'multiplier': '3',
+        'echo_tx_interval' : '100' 
     }
     for key in data['policy_sbfd'][policy]:
         ret = double_check_sbfd(dut1, key, check_filed, True, False)
@@ -374,10 +449,10 @@ def test_sbfd_echo_mspath_case3():
 
     # step 2 : check sbfd echo
     check_filed = {
-        'Status':'up',
-        'Peer Type' : 'echo',
-        'Detect-multiplier': '3',
-        'Echo transmission interval' : '300' 
+        'status':'up',
+        'peer_type' : 'echo',
+        'multiplier': '3',
+        'echo_tx_interval' : '300' 
     }
 
     for key in data['policy_sbfd'][policy_v4] + data['policy_sbfd'][policy_v6] :
@@ -417,10 +492,10 @@ def test_sbfd_echo_loadbalancing_case4():
 
     # step 2 : check sbfd echo
     check_filed = {
-        'Status':'up',
-        'Peer Type' : 'echo',
-        'Detect-multiplier': '3',
-        'Echo transmission interval' : '300' 
+        'status':'up',
+        'peer_type' : 'echo',
+        'multiplier': '3',
+        'echo_tx_interval' : '300' 
     }
     for key in data['policy_sbfd'][policy_v4] + data['policy_sbfd'][policy_v6] :
         ret = double_check_sbfd(dut1, key, check_filed, True, False)
@@ -458,28 +533,16 @@ def test_sbfd_mspath_case5():
 
     # step 2 : check sbfd
     check_filed = {
-        'Status':'up',
-        'Peer Type' : 'sbfd initiator',
-        'Detect-multiplier': '3',
-        'Receive interval': '300ms',
-        'Transmission interval': '300ms'
+        'status':'up',
+        'peer_type' : 'sbfd initiator',
+        'multiplier': '3',
+        'rx_interval' : '300',
+        'tx_interval' : '300'
     }
     for key in data['policy_sbfd'][policy] :
         ret = double_check_sbfd(dut1, key, check_filed, True, False)
         if not ret:
             st.report_fail("step 2 test_sbfd_mspath_case5 failed")
-
-    st.wait(30)
-    check_filed = {
-        'Status':'up',
-        'Peer Type' : 'sbfd initiator',
-        'Uptime:': 30  #need > 20s
-    }
-    for key in data['policy_sbfd'][policy] :
-        ret = double_check_sbfd(dut1, key, check_filed, True, False)
-        if not ret:
-            st.report_fail("step 2 wait 20s test_sbfd_mspath_case5 failed")
-
 
     # step 3 : simulate fault
     
@@ -518,9 +581,8 @@ def test_sbfd_reboot_recover_case6():
     config_sbfd(dut1, policy_6, 'sbfd enable source-address 2000::58')
 
     # step 2 : check sbfd 
-  
     check_filed = {
-        'Status':'up'
+        'status':'up'
     }
     combined_list = data['policy_sbfd'][policy_1] \
                 + data['policy_sbfd'][policy_2] \
@@ -572,7 +634,7 @@ def test_sbfd_flapping_case7():
 
     # step 2 : check sbfd status
     check_filed = {
-        'Status':'up'
+        'status':'up'
     }
 
     combined_list = data['policy_sbfd'][policy_1] \
@@ -623,9 +685,8 @@ def test_sbfd_flapping_case7():
 
     st.wait(20)
     check_filed = {
-        'Status':'up',
-        'Uptime:': 20  #need > 20s
-    }    
+        'status':'up'
+    }
     for key in combined_list:
         ret = double_check_sbfd(dut1, key, check_filed, True, False)
         if not ret:

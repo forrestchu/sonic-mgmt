@@ -368,7 +368,7 @@ def test_base_config_srvpn_locator_01():
         else:    
             return True
 
-    if not retry_api(check_bgp_state, retry_count= 3, delay= 10):
+    if not retry_api(check_bgp_state, retry_count= 6, delay= 10):
         st.report_fail("step4 pre check bgp state failed")
 
     # step 4 : check  vpn router

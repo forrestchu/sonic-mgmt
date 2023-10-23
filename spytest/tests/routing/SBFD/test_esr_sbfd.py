@@ -22,6 +22,7 @@ import apis.routing.arp as arp_obj
 import apis.routing.bfd as bfdapi
 import apis.routing.ip_bgp as ip_bgp
 from apis.common import redis
+from sbfd_lib import *
 from sbfd_vars import data
 from apis.common.ixia_helper import *
 
@@ -45,7 +46,8 @@ data.srv6 = {}
 dut1 = 'MC-58'
 dut2 = 'MC-59'
 data.my_dut_list = [dut1, dut2]
-data.load_base_config_done = True
+data.load_base_config_done = False
+data.current_discr = 0
 
 def load_json_config(filesuffix=''):
     curr_path = os.getcwd()
@@ -140,7 +142,10 @@ def double_check_sbfd(dut, sbfd_key, sbfd_check_filed, offload=True, delete=Fals
     
     if uptime2 - uptime1 < 10:
         st.log("{} not up continuously".format(sbfd_key))
-        return False  
+        return False
+    
+    if 'local_id' in output:
+        data.current_discr = output['local_id']
     
     if 'hardware' in output:
         if output['hardware'] == 'hardware':
@@ -244,6 +249,14 @@ def test_sbfd_echo_single_endx_case1():
         if not ret:
             st.report_fail("step 2 test_sbfd_echo_single_endx_case1 failed")
 
+    # check configdb
+    configdb_key = "SRV6_POLICY|1|2000::59"
+    checkpoint_msg = "test_base_config_srvpn_locator_01 config {} check failed.".format(configdb_key)
+    configdb_onefield_checkpoint(dut1, configdb_key, "sbfd_type", "echo", expect = True, checkpoint = checkpoint_msg)
+    configdb_onefield_checkpoint(dut1, configdb_key, "sbfd_update_source", "20.20.20.58", expect = True, checkpoint = checkpoint_msg)
+    expected_cpath = '100|cp1_ipv4|sl1_ipv4|1'
+    configdb_checkarray(dut1, configdb_key, "cpath@", expected_cpath, expect = True, checkpoint = checkpoint_msg)
+
     # step 3 : check configdb , single endx ipv4 cannot offload ,so has no bfd appdb
 #127.0.0.1:6379[4]> hgetall SRV6_POLICY|1|2000::59
 #  1) "cpath@"
@@ -274,8 +287,21 @@ def test_sbfd_echo_single_endx_case1():
         ret = double_check_sbfd(dut1, key, check_filed, False, False) 
         if not ret:
             st.report_fail("step 4 test_sbfd_echo_single_endx_case1 failed")
-    
-    st.show(dut1, "vtysh -c 'show sr-te policy detail'", skip_tmpl=True)
+
+    # check configdb
+    # check configdb
+    configdb_key = "SRV6_POLICY|1|2000::59"
+    checkpoint_msg = "test_base_config_srvpn_locator_01 config {} check failed.".format(configdb_key)
+    configdb_onefield_checkpoint(dut1, configdb_key, "sbfd_type", "echo", expect = True, checkpoint = checkpoint_msg)
+    configdb_onefield_checkpoint(dut1, configdb_key, "sbfd_update_source", "20.20.20.58", expect = True, checkpoint = checkpoint_msg)
+    configdb_onefield_checkpoint(dut1, configdb_key, "sbfd_detect_multiplier", "3", expect = True, checkpoint = checkpoint_msg)
+    configdb_onefield_checkpoint(dut1, configdb_key, "sbfd_rx_timer", "100", expect = True, checkpoint = checkpoint_msg)
+    configdb_onefield_checkpoint(dut1, configdb_key, "sbfd_tx_timer", "100", expect = True, checkpoint = checkpoint_msg)
+    expected_cpath = '100|cp1_ipv4|sl1_ipv4|1'
+    configdb_checkarray(dut1, configdb_key, "cpath@", expected_cpath, expect = True, checkpoint = checkpoint_msg)
+
+    output = st.show(dut1, "show sr-te policy color 1 endpoint 2000::59 detail", type="vtysh")
+    st.log(output)
 
     # step 5 : check del sbfd echo 
     config_sbfd(dut1, police_v4, 'no sbfd echo')
@@ -302,7 +328,13 @@ def test_sbfd_echo_single_endx_case1():
             st.report_fail("step 7 test_sbfd_echo_single_endx_case1 failed")
 
     # step 8 : check configdb and appdb
-    
+    configdb_key = "SRV6_POLICY|2|2000::59"
+    checkpoint_msg = "test_base_config_srvpn_locator_01 config {} check failed.".format(configdb_key)
+    configdb_onefield_checkpoint(dut1, configdb_key, "sbfd_type", "echo", expect = True, checkpoint = checkpoint_msg)
+    configdb_onefield_checkpoint(dut1, configdb_key, "sbfd_update_source", "2000::58", expect = True, checkpoint = checkpoint_msg)
+    expected_cpath = '100|cp1_ipv6|sl2_ipv6|1'
+    configdb_checkarray(dut1, configdb_key, "cpath@", expected_cpath, expect = True, checkpoint = checkpoint_msg)
+
 #127.0.0.1:6379[4]> hgetall SRV6_POLICY|1|2000::59
 #  1) "cpath@"
 #  2) "100|cp1_ipv6|sl2_ipv6|1"
@@ -363,7 +395,19 @@ def test_sbfd_echo_single_endx_case1():
         if not ret:
             st.report_fail("step 9 test_sbfd_echo_single_endx_case1 failed")
 
-    st.show(dut1, "vtysh -c 'show sr-te policy detail'", skip_tmpl=True)
+    # check configdb
+    configdb_key = "SRV6_POLICY|2|2000::59"
+    checkpoint_msg = "test_base_config_srvpn_locator_01 config {} check failed.".format(configdb_key)
+    configdb_onefield_checkpoint(dut1, configdb_key, "sbfd_type", "echo", expect = True, checkpoint = checkpoint_msg)
+    configdb_onefield_checkpoint(dut1, configdb_key, "sbfd_update_source", "2000::58", expect = True, checkpoint = checkpoint_msg)
+    configdb_onefield_checkpoint(dut1, configdb_key, "sbfd_detect_multiplier", "3", expect = True, checkpoint = checkpoint_msg)
+    configdb_onefield_checkpoint(dut1, configdb_key, "sbfd_rx_timer", "100", expect = True, checkpoint = checkpoint_msg)
+    configdb_onefield_checkpoint(dut1, configdb_key, "sbfd_tx_timer", "100", expect = True, checkpoint = checkpoint_msg)
+    expected_cpath = '100|cp1_ipv6|sl2_ipv6|1'
+    configdb_checkarray(dut1, configdb_key, "cpath@", expected_cpath, expect = True, checkpoint = checkpoint_msg)
+
+    output = st.show(dut1, "show sr-te policy color 2 endpoint 2000::59 detail", type="vtysh")
+    st.log(output)
 
     # step 10 : check del sbfd echo 
     config_sbfd(dut1, police_v6, 'no sbfd echo')
@@ -397,12 +441,16 @@ def test_sbfd_echo_two_endx_case2():
         'echo_tx_interval' : '300' 
     }
     for key in data['policy_sbfd'][policy]:
-        ret = double_check_sbfd(dut1, key, check_filed, True, False)
+        if "sl1_ipv4" in key:
+            ret = double_check_sbfd(dut1, key, check_filed, False, False)
+        else:
+            ret = double_check_sbfd(dut1, key, check_filed, True, False)
         if not ret:
             st.report_fail("step 2  test_sbfd_echo_two_endx_case2 failed")        
 
     # step 3 : check configdb and appdn, need offload
-    st.show(dut1, "vtysh -c 'show sr-te policy detail'", skip_tmpl=True)
+    output = st.show(dut1, "show sr-te policy color 8 endpoint 2000::59 detail", type="vtysh")
+    st.log(output)
 
     # step 4 : modify interval
     config_sbfd(dut1, policy, 'sbfd echo source-address 20.20.20.58 3 100 100')   
@@ -413,13 +461,17 @@ def test_sbfd_echo_two_endx_case2():
         'echo_tx_interval' : '100' 
     }
     for key in data['policy_sbfd'][policy]:
-        ret = double_check_sbfd(dut1, key, check_filed, True, False)
+        if "sl1_ipv4" in key:
+            ret = double_check_sbfd(dut1, key, check_filed, False, False)
+        else:
+            ret = double_check_sbfd(dut1, key, check_filed, True, False)
         if not ret:
             st.report_fail("step 4 test_sbfd_echo_two_endx_case2 failed")   
 
     # step 5 : simulate fault
     
-    st.show(dut1, "vtysh -c 'show sr-te policy detail'", skip_tmpl=True)
+    output = st.show(dut1, "show sr-te policy color 8 endpoint 2000::59 detail", type="vtysh")
+    st.log(output)
 
     # step 6 : check del sbfd echo 
     config_sbfd(dut1, policy, 'no sbfd echo')
@@ -461,8 +513,11 @@ def test_sbfd_echo_mspath_case3():
             st.report_fail("step 2 test_sbfd_echo_mspath_case3 failed")
 
     # step 3 : simulate fault
-    
-    st.show(dut1, "vtysh -c 'show sr-te policy detail'", skip_tmpl=True)
+    output = st.show(dut1, "show sr-te policy color 6 endpoint 2000::59 detail", type="vtysh")
+    st.log(output)
+
+    output = st.show(dut1, "show sr-te policy color 7 endpoint 2000::59 detail", type="vtysh")
+    st.log(output)
 
     # step 4 : check del sbfd echo 
     config_sbfd(dut1, policy_v4, 'no sbfd echo')
@@ -505,7 +560,11 @@ def test_sbfd_echo_loadbalancing_case4():
 
     # step 3 : simulate fault
     
-    st.show(dut1, "vtysh -c 'show sr-te policy detail'", skip_tmpl=True)
+    output = st.show(dut1, "show sr-te policy color 3 endpoint 2000::59 detail", type="vtysh")
+    st.log(output)
+
+    output = st.show(dut1, "show sr-te policy color 4 endpoint 2000::59 detail", type="vtysh")
+    st.log(output)
 
     # step 4 : check del sbfd echo 
     config_sbfd(dut1, policy_v4, 'no sbfd echo')
@@ -546,7 +605,8 @@ def test_sbfd_mspath_case5():
 
     # step 3 : simulate fault
     
-    st.show(dut1, "vtysh -c 'show sr-te policy detail'", skip_tmpl=True)
+    output = st.show(dut1, "show sr-te policy color 9 endpoint 2000::59 detail", type="vtysh")
+    st.log(output)
 
     # step 4 : check del sbfd echo 
     config_sbfd(dut1, policy, 'no sbfd enable')

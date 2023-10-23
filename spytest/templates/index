@@ -607,3 +607,4 @@ show_isolated_precheck.tmpl, .*, sonic, cli .* 'show isolated_precheck'
 show_isolated_bgp.tmpl, .*, sonic, cli .* 'show isolated_bgp'
 show_link_delay.tmpl, .*, sonic, show link delay .*
 show_macsec_connections.tmpl, .*, sonic, cli .* 'show macsec connections interface .*
+show_srte_policy.tmpl, .*, sonic, show sr-te policy .*

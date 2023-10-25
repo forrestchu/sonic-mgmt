@@ -1,0 +1,7 @@
+Value TOTALADV (\d+)
+Value TOTALPREFIX (\d+)
+
+Start
+  ^\s*BGP IP6 VPN RIB statistics.*
+  ^\s*Total Advertisements\s*:\s*${TOTALADV}\s*
+  ^\s*Total Prefixes\s*:\s*${TOTALPREFIX}\s*$$ -> Record

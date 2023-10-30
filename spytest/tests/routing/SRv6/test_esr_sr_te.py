@@ -364,7 +364,7 @@ def test_base_config_sr_te_config_check_01():
     if policy_val != "2000::179_2":
         st.report_fail("step 9 test_base_config_sr_te_config_check_01_ipv6_failed, check policy")
 
-    st.report_pass("test_base_config_sr_te_config_check_01 after")
+    st.report_pass("test_case_passed")
 
 def load_json_config(filesuffix='te_multi_vrf_full'):
     curr_path = os.getcwd()
@@ -480,7 +480,7 @@ def test_base_config_sr_te_2kl_route_learn_02():
             st.show(dut2, cmd, skip_tmpl=True, skip_error_check=True)
             st.report_fail("test_base_config_sr_te_2kl_route_learn_02_failed, vrf {} prefix {}".format(vrf_name, prefix))
 
-    st.report_pass("test_base_config_sr_te_2kl_route_learn_02 after")
+    st.report_pass("test_case_passed")
 
 def duts_load_config(dut1_config, dut2_config):
     dut_list = st.get_dut_names()

@@ -491,9 +491,29 @@ def test_base_config_srvpn_locator_01():
 #        Remote label: 3
 #        Last update: Tue Mar 14 14:55:23 2023
 
+    expected_vpn = {
+        'rdroute':'2:2:192.100.1.0/24',
+        'sid':'',
+        'peerv6':'2000::178',
+        'secetced':'1 available, best #1'
+    }
+
     if not records or len(records)==0:
-        st.log ("step 7 success")
-    else:
+        st.report_fail("step 7 test_base_config_srvpn_locator_01_failed")
+
+    check = False
+    for re in records:
+        match_cnt = 0
+        for it in check_filed:
+            if re[it] ==  expected_vpn[it]:
+                match_cnt +=1
+
+        if match_cnt == len(check_filed):
+            check = True
+            break
+
+    if not check:
+        st.log(records)
         st.report_fail("step 7 test_base_config_srvpn_locator_01_failed")
 
 # OSPREY-MC-B09-18-179.EU6# show bgp ipv4 vpn

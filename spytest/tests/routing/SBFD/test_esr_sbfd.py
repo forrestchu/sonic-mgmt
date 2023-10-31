@@ -162,8 +162,8 @@ def double_check_sbfd(dut, sbfd_key, sbfd_check_filed, offload=True, delete=Fals
         # check appdb ,check hardware flag
         if create_by_hardware == False:
             st.log("{} not offload".format(sbfd_key))
-            return False  
-    
+            return False
+
     return True
 
 def save_config_and_reboot(dut):
@@ -174,6 +174,21 @@ def save_config_and_reboot(dut):
     st.wait(5) 
     st.log("finish reboot")
 
+def learn_arp_by_ping():
+    st.config(dut1, 'ping -c2 192.168.1.59')
+    st.config(dut1, 'ping -c2 192.168.2.59')
+    st.config(dut1, 'ping -c2 fd00:abcd::59')
+    st.config(dut1, 'ping -c2 fd00:ccdd::59')
+    st.config(dut1, 'ping -c2 20.20.20.59')
+    st.config(dut1, 'ping -c2 2000::59')
+
+    st.config(dut2, 'ping -c2 192.168.1.58')
+    st.config(dut2, 'ping -c2 192.168.2.58')
+    st.config(dut2, 'ping -c2 fd00:abcd::58')
+    st.config(dut2, 'ping -c2 fd00:ccdd::58')
+    st.config(dut2, 'ping -c2 20.20.20.58')
+    st.config(dut2, 'ping -c2 2000::58')
+    
 @pytest.fixture(scope="module", autouse=True)
 def sbfd_module_hooks(request):
     #add things at the start of this module
@@ -187,7 +202,9 @@ def sbfd_func_hooks(request):
     # add things at the start every test case
 
     if st.get_func_name(request) in  ["test_sbfd_echo_single_endx_case1","test_sbfd_echo_two_endx_case2",
-                                      "test_sbfd_echo_ms_path_case3"]:
+                                      "test_sbfd_echo_ms_path_case3", "test_sbfd_echo_loadbalancing_case4",
+                                      "test_sbfd_mspath_case5", "test_sbfd_reboot_recover_case6",
+                                      "test_sbfd_flapping_case7"]:
         st.log("sbfd_base_config case enter ")
         if data.load_base_config_done == False:
             load_json_config('sbfd_base_config')
@@ -195,20 +212,8 @@ def sbfd_func_hooks(request):
             data.load_base_config_done = True
         
         # ping each other to learn nd and arp 
-        st.config(dut1, 'ping -c2 192.168.1.59')
-        st.config(dut1, 'ping -c2 192.168.2.59')
-        st.config(dut1, 'ping -c2 fd00:abcd::59')
-        st.config(dut1, 'ping -c2 fd00:ccdd::59')
-        st.config(dut1, 'ping -c2 20.20.20.59')
-        st.config(dut1, 'ping -c2 2000::59')
-
-        st.config(dut2, 'ping -c2 192.168.1.58')
-        st.config(dut2, 'ping -c2 192.168.2.58')
-        st.config(dut2, 'ping -c2 fd00:abcd::58')
-        st.config(dut2, 'ping -c2 fd00:ccdd::58')
-        st.config(dut2, 'ping -c2 20.20.20.58')
-        st.config(dut2, 'ping -c2 2000::58')
-        
+        learn_arp_by_ping()
+    
         st.show(dut1, "vtysh -c 'show bfd nd infos'", skip_tmpl=True)
         # check
         st.show(dut1, "vtysh -c 'show bfd sr endx infos'", skip_tmpl=True)
@@ -507,7 +512,12 @@ def test_sbfd_echo_mspath_case3():
         'echo_tx_interval' : '300' 
     }
 
-    for key in data['policy_sbfd'][policy_v4] + data['policy_sbfd'][policy_v6] :
+    for key in data['policy_sbfd'][policy_v4] :
+        ret = double_check_sbfd(dut1, key, check_filed, False, False)
+        if not ret:
+            st.report_fail("step 2 test_sbfd_echo_mspath_case3 failed")
+
+    for key in data['policy_sbfd'][policy_v6] :
         ret = double_check_sbfd(dut1, key, check_filed, True, False)
         if not ret:
             st.report_fail("step 2 test_sbfd_echo_mspath_case3 failed")
@@ -552,7 +562,12 @@ def test_sbfd_echo_loadbalancing_case4():
         'multiplier': '3',
         'echo_tx_interval' : '300' 
     }
-    for key in data['policy_sbfd'][policy_v4] + data['policy_sbfd'][policy_v6] :
+    for key in data['policy_sbfd'][policy_v4] :
+        ret = double_check_sbfd(dut1, key, check_filed, False, False)
+        if not ret:
+            st.report_fail("step 2 test_sbfd_loadbalancing_case4 failed")
+
+    for key in data['policy_sbfd'][policy_v6] :
         ret = double_check_sbfd(dut1, key, check_filed, True, False)
         if not ret:
             st.report_fail("step 2 test_sbfd_loadbalancing_case4 failed")
@@ -588,7 +603,9 @@ def test_sbfd_mspath_case5():
     policy = 'policy color 9 endpoint 2000::59'
 
     # step 1 : config sbfd
-    config_sbfd(dut1, policy, 'sbfd enable source-address 2000::58')
+    config_sbfd(dut1, policy, 'sbfd enable remote 10086 source-address 2000::58')
+    
+    st.wait(3)
 
     # step 2 : check sbfd
     check_filed = {
@@ -638,7 +655,7 @@ def test_sbfd_reboot_recover_case6():
     config_sbfd(dut1, policy_3, 'sbfd echo source-address 2000::58')
     config_sbfd(dut1, policy_4, 'sbfd echo source-address 2000::58')
     config_sbfd(dut1, policy_5, 'sbfd echo source-address 20.20.20.58')
-    config_sbfd(dut1, policy_6, 'sbfd enable source-address 2000::58')
+    config_sbfd(dut1, policy_6, 'sbfd enable remote 10086 source-address 2000::58')
 
     # step 2 : check sbfd 
     check_filed = {
@@ -652,17 +669,20 @@ def test_sbfd_reboot_recover_case6():
                 + data['policy_sbfd'][policy_6] 
 
     for key in combined_list:
-        ret = double_check_sbfd(dut1, key, check_filed, True, False)
+        ret = double_check_sbfd(dut1, key, check_filed, None, False)
         if not ret:
-            st.report_fail("step 2 test_sbfd_mspath_case5 failed")
+            st.report_fail("step 2 test_sbfd_reboot_recover_case6 failed")
+    st.log("offload check finish")
 
     save_config_and_reboot(dut1)
-    
+    learn_arp_by_ping()
+
     # step 3 : check sbfd status
     for key in combined_list:
-        ret = double_check_sbfd(dut1, key, check_filed, True, False)
+        ret = double_check_sbfd(dut1, key, check_filed, None, False)
         if not ret:
-            st.report_fail("step 2 test_sbfd_mspath_case5 failed")
+            st.report_fail("step 2 test_sbfd_reboot_recover_case6 failed")
+    st.log("after reboot offload check finish")
 
     # step 4 : clear sbfd config
     config_sbfd(dut1, policy_1, 'no sbfd echo')
@@ -690,7 +710,7 @@ def test_sbfd_flapping_case7():
     config_sbfd(dut1, policy_2, 'sbfd echo source-address 20.20.20.58')
     config_sbfd(dut1, policy_3, 'sbfd echo source-address 2000::58')
     config_sbfd(dut1, policy_4, 'sbfd echo source-address 20.20.20.58')
-    config_sbfd(dut1, policy_5, 'sbfd enable source-address 2000::58')
+    config_sbfd(dut1, policy_5, 'sbfd enable remote 10086 source-address 2000::58')
 
     # step 2 : check sbfd status
     check_filed = {
@@ -704,9 +724,9 @@ def test_sbfd_flapping_case7():
                 + data['policy_sbfd'][policy_5]
 
     for key in combined_list:
-        ret = double_check_sbfd(dut1, key, check_filed, True, False)
+        ret = double_check_sbfd(dut1, key, check_filed, None, False)
         if not ret:
-            st.report_fail("step 2 test_sbfd_mspath_case5 failed")
+            st.report_fail("step 2 test_sbfd_flapping_case7 failed")
 
 
     # step 3: interface flap 
@@ -739,18 +759,18 @@ def test_sbfd_flapping_case7():
 
     # step 5: check sbfd status
     for key in combined_list:
-        ret = double_check_sbfd(dut1, key, check_filed, True, False)
+        ret = double_check_sbfd(dut1, key, check_filed, None, False)
         if not ret:
-            st.report_fail("step 5 test_sbfd_mspath_case5 failed")
+            st.report_fail("step 5 test_sbfd_flapping_case7 failed")
 
     st.wait(20)
     check_filed = {
         'status':'up'
     }
     for key in combined_list:
-        ret = double_check_sbfd(dut1, key, check_filed, True, False)
+        ret = double_check_sbfd(dut1, key, check_filed, None, False)
         if not ret:
-            st.report_fail("step 5 wait 20s test_sbfd_mspath_case5 failed")
+            st.report_fail("step 5 wait 20s test_sbfd_flapping_case7 failed")
 
 
     # step 6 : clear sbfd config

@@ -31,8 +31,8 @@ data['policy_sbfd'] = {
          'peer 20.20.20.58 (endpoint 20.20.20.58 color 8 sidlist sl7_ipv4) local-address 20.20.20.58'
         ],
     'policy color 9 endpoint 2000::59':
-        ['peer 2000::58 (endpoint 2000::58 color 9 sidlist sl9_sbfd) local-address 2000::58',
-         'peer 2000::58 (endpoint 2000::58 color 9 sidlist sla_sbfd) local-address 2000::58'
+        ['peer 2000::59 (endpoint 2000::59 color 9 sidlist sl9_sbfd) local-address 2000::58',
+         'peer 2000::59 (endpoint 2000::59 color 9 sidlist sla_sbfd) local-address 2000::58'
         ]
 } 
 

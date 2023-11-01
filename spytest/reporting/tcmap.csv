@@ -3032,3 +3032,6 @@ Q200,Q200,SBFD,test_sbfd_echo_loadbalancing_case4,test_sbfd_echo_loadbalancing_c
 Q200,Q200,SBFD,test_sbfd_mspath_case5,test_sbfd_mspath_case5
 Q200,Q200,SBFD,test_sbfd_reboot_recover_case6,test_sbfd_reboot_recover_case6
 Q200,Q200,SBFD,test_sbfd_flapping_case7,test_sbfd_flapping_case7
+Q200,Q200,SRTE,test_base_config_sr_te_config_check_01
+Q200,Q200,SRTE,test_base_config_sr_te_2kl_route_learn_02
+Q200,Q200,SRTE,test_sr_te_performance_2M

@@ -734,9 +734,9 @@ def test_sbfd_flapping_case7():
     
     for i in range(10):
         for intf in intf_list:
-            st.config(dut2, 'cli -c "config t" -c "interface {}" -c "shutdown"')
+            st.config(dut2, 'cli -c "config t" -c "interface {}" -c "shutdown"'.format(intf))
             st.wait(5)
-            st.config(dut2, 'cli -c "config t" -c "interface {}" -c "no shutdown"')
+            st.config(dut2, 'cli -c "config t" -c "interface {}" -c "no shutdown"'.format(intf))
             st.wait(5)
     
     # step 4: check dependency

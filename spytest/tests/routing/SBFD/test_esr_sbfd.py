@@ -208,7 +208,7 @@ def sbfd_func_hooks(request):
         st.log("sbfd_base_config case enter ")
         if data.load_base_config_done == False:
             load_json_config('sbfd_base_config')
-            st.wait(30)
+            st.wait(120)
             data.load_base_config_done = True
         
         # ping each other to learn nd and arp 

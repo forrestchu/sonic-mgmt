@@ -47,6 +47,7 @@ dut1 = 'MC-58'
 dut2 = 'MC-59'
 data.my_dut_list = [dut1, dut2]
 data.load_base_config_done = False
+data.load_static_config_done = False
 data.current_discr = 0
 
 def load_json_config(filesuffix=''):
@@ -68,6 +69,7 @@ def show_appdb_tbale_info(dut, table):
     if output is '':
         st.report_fail("{} app DB has no {}".format(dut, table))
     st.log(output)
+    return output
 
 def config_sbfd(dut, policy, sbfd_cli):
     st.config(dut, "cli -c 'configure terminal' \
@@ -224,7 +226,13 @@ def sbfd_func_hooks(request):
 
         show_appdb_tbale_info(dut1, '*SRV6_MY_SID_TABLE*')
         show_appdb_tbale_info(dut2, '*SRV6_MY_SID_TABLE*')
-        
+    
+    if st.get_func_name(request) in  ["test_bfd_for_static_route_case8"]:
+        st.log("static_bfd_config case enter ")
+        if data.load_static_config_done == False:
+            load_json_config('static_bfd_config')
+            st.wait(120)
+            data.load_static_config_done = True
     #load TG config
 
     yield
@@ -782,3 +790,86 @@ def test_sbfd_flapping_case7():
 
     st.report_pass("test_case_passed")
 
+@pytest.mark.community
+@pytest.mark.community_pass
+def test_bfd_for_static_route_case8():
+    st.banner("test_bfd_for_static_route_case8 begin")
+
+    # config bfd
+    cmd = "bfd peer 192.10.1.59 bfd-name static_bfd_default status enable local-address 192.10.1.58"
+    st.config(dut1, 'cli -c "config t" -c "{}"'.format(cmd))
+    cmd = "bfd peer 192.20.1.59 bfd-name static_bfd_test1 status enable local-address 192.20.1.58 vrf Test1"
+    st.config(dut1, 'cli -c "config t" -c "{}"'.format(cmd))
+    cmd = "bfd peer 192.10.1.58 bfd-name static_bfd_default status enable local-address 192.10.1.59"
+    st.config(dut2, 'cli -c "config t" -c "{}"'.format(cmd))
+    cmd = "bfd peer 192.20.1.58 bfd-name static_bfd_test1 status enable local-address 192.20.1.59 vrf Test1"
+    st.config(dut2, 'cli -c "config t" -c "{}"'.format(cmd))
+    
+    st.wait(5)
+    # show bfd 
+    st.show(dut1, "vtysh -c 'show bfd peers'",skip_tmpl=True )
+    st.show(dut2, "vtysh -c 'show bfd peers'",skip_tmpl=True)
+    
+    # show static route
+    output = show_appdb_tbale_info(dut1, 'ROUTE_TABLE:10.10.10.10/32')
+    if "empty array"  in output:
+        st.report_fail("test_bfd_for_static_route_case8 check static route 10.10.10.10/32 failed")
+
+    output = show_appdb_tbale_info(dut1, 'ROUTE_TABLE:Vrf10000:20.20.20.20/32')
+    if "empty array"  in output:
+        st.report_fail("test_bfd_for_static_route_case8 check static route Vrf10000:20.20.20.20/32 failed")
+
+    # static route track bfd
+    cmd = "ip route 10.10.10.10/32 192.10.1.59 bfd-name  static_bfd_default"
+    st.config(dut1, 'cli -c "config t" -c "{}"'.format(cmd))
+    cmd = "ip route 20.20.20.20/32 192.20.1.59 vrf Test1 bfd-name  static_bfd_test1"
+    st.config(dut1, 'cli -c "config t" -c "{}"'.format(cmd))
+
+    # set bfd down
+    st.config(dut2, 'vtysh -c "config t" -c "bfd" -c \
+              "peer 192.10.1.58 bfd-name static_bfd_default local-address 192.10.1.59" -c \
+              "shutdown"'.format(cmd))
+
+    st.config(dut2, 'vtysh -c "config t" -c "bfd" -c \
+              "peer 192.20.1.58 bfd-name statc_bfd_test1 local-address 192.20.1.59 vrf Test1" -c \
+              "shutdown"'.format(cmd))
+    
+    st.wait(10)
+
+    # check bfd
+    st.show(dut1, "vtysh -c 'show bfd peers'",skip_tmpl=True)
+
+    # check static route
+    # redis-cli -p 6380 -n 0 keys "ROUTE_TABLE:10.10.10.10/32"
+    # (empty array)
+    output = show_appdb_tbale_info(dut1, 'ROUTE_TABLE:10.10.10.10/32')
+    if "empty array" not in output:
+        st.report_fail("test_bfd_for_static_route_case8 2 check static route 10.10.10.10/32 failed")
+
+    output = show_appdb_tbale_info(dut1, 'ROUTE_TABLE:Vrf10000:20.20.20.20/32')
+    if "empty array" not in output:
+        st.report_fail("test_bfd_for_static_route_case8 2 check static route Vrf10000:20.20.20.20/32 failed")
+
+    # recover bfd
+    st.config(dut2, 'vtysh -c "config t" -c "bfd" -c \
+              "peer 192.10.1.58 bfd-name static_bfd_default local-address 192.10.1.59" -c \
+              "no shutdown"'.format(cmd))
+
+    st.config(dut2, 'vtysh -c "config t" -c "bfd" -c \
+              "peer 192.20.1.58 bfd-name statc_bfd_test1 local-address 192.20.1.59 vrf Test1" -c \
+              "no shutdown"'.format(cmd))
+    st.wait(10)
+
+    # check bfd
+    st.show(dut1, "vtysh -c 'show bfd peers'",skip_tmpl=True)
+
+    # show static route
+    output = show_appdb_tbale_info(dut1, 'ROUTE_TABLE:10.10.10.10/32')
+    if "empty array"  in output:
+        st.report_fail("test_bfd_for_static_route_case8 3 check static route 10.10.10.10/32 failed")
+
+    output = show_appdb_tbale_info(dut1, 'ROUTE_TABLE:Vrf10000:20.20.20.20/32')
+    if "empty array"  in output:
+        st.report_fail("test_bfd_for_static_route_case8 3 check static route Vrf10000:20.20.20.20/32 failed")
+
+    st.report_pass("test_case_passed")

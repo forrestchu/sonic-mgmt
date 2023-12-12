@@ -893,9 +893,11 @@ def test_ft_lag_fast_mode():
     portchannel_obj.delete_portchannel_member(data.dut2, data.portchannel_name, data.members_dut2[0])
 
     # Wait for few seconds, the DUT1 portchannel should still be up (default LACP interval is 30s)
+    # ==> With new libteam patch, libteam send out lacp to notify partner when removing member, the partner
+    #     DUT1 portchannel member will be down
     st.wait(5)
     # Verify portchannel member state with provided state
-    dict1 = {'portchannel': data.portchannel_name, 'members_list': data.members_dut1[0], 'state': "up"}
+    dict1 = {'portchannel': data.portchannel_name, 'members_list': data.members_dut1[0], 'state': "down"}
     dict2 = {'portchannel': data.portchannel_name, 'members_list': data.members_dut2[1], 'state': "up"}
     output = exec_parallel(True, [vars.D1, vars.D2], portchannel_obj.verify_portchannel_member_state, [dict1, dict2])
     ensure_no_exception(output[1])

@@ -964,12 +964,21 @@ def test_srvpn_ecmp_04():
         # show ip route
         show_cmd = "cli -c 'show ip route vrf {} {}'".format(vrf_name, "200.10.0.1/32")
         st.show(dut, show_cmd, skip_tmpl=True)
+
+        nexthop_group = appdb_get_onefield(dut, key, "nexthop_group")
+        nexthop = ""
+        ifname = ""
+        if nexthop_group and nexthop_group != "na":
+            nhg_key = 'NEXTHOP_GROUP_TABLE:' + nexthop_group
+            nexthop = appdb_get_onefield(dut, nhg_key, "nexthop")
+            ifname = appdb_get_onefield(dut, nhg_key, "ifname")
+        else:
+            nexthop = appdb_get_onefield(dut, key, "nexthop")
+            ifname = appdb_get_onefield(dut, key, "ifname")
         
-        nexthop = appdb_get_onefield(dut, key, "nexthop")
         if nexthop != "2000::179,3000::179":
             return False
 
-        ifname = appdb_get_onefield(dut, key, "ifname")
         if ifname != "unknown,unknown":
             return False       
         return True
@@ -977,7 +986,14 @@ def test_srvpn_ecmp_04():
     if not retry_api(check_ecmp_appdb, retry_count= 3, delay= 10):
         st.report_fail("step1 check_vrf_fib test_srvpn_ecmp_04")
 
-    vpnsid_val = appdb_get_onefield(dut2, key, "vpn_sid")
+    pic_context_id = appdb_get_onefield(dut2, key, "pic_context_id")
+    vpnsid_val = ""
+    if pic_context_id and pic_context_id != "na":
+        pic_key = 'PIC_CONTEXT_TABLE:' + pic_context_id
+        vpnsid_val = appdb_get_onefield(dut2, pic_key, "vpn_sid")
+    else:
+        vpnsid_val = appdb_get_onefield(dut2, key, "vpn_sid")
+
     if vpnsid_val is None:
         st.report_fail(checkpoint_msg)
 
@@ -1246,8 +1262,7 @@ def test_srvpn_mirror_config_underlay_ecmp_switch_09():
 
     ret = ixia_start_traffic(TRAFFIC_MIRROR_ULECMP)
     if not ret:
-        st.log("Start traffic item {} failed".format(TRAFFIC_MIRROR_ULECMP))
-        return False
+        st.report_fail("Start traffic item {} failed".format(TRAFFIC_MIRROR_ULECMP))
     st.wait(5)
 
     phyif = "PortChannel161"
@@ -1257,8 +1272,7 @@ def test_srvpn_mirror_config_underlay_ecmp_switch_09():
 
     ret = ixia_stop_traffic(TRAFFIC_MIRROR_ULECMP)
     if not ret:
-        st.log("Stop traffic item {} failed".format(TRAFFIC_MIRROR_ULECMP))
-        return False
+        st.report_fail("Stop traffic item {} failed".format(TRAFFIC_MIRROR_ULECMP))
 
     cmd = "interface {}\n no shutdown\n".format(phyif)
     st.config(dut2, cmd, type='alicli',skip_error_check=True)
@@ -1266,14 +1280,12 @@ def test_srvpn_mirror_config_underlay_ecmp_switch_09():
 
     traffic_ecmp = ixia_get_traffic_stat(TRAFFIC_MIRROR_ULECMP)
     if not traffic_ecmp:
-        st.log("Get {} traffic stat failed {}".format(TRAFFIC_MIRROR_ULECMP))
-        return False
+        st.report_fail("Get {} traffic stat failed {}".format(TRAFFIC_MIRROR_ULECMP))
     # check val
     if  traffic_ecmp['Loss %'] == '0.000':
         st.log("traffic_v4 check success")
     else:
-        st.log("traffic_v4 check failed")
-        return False
+        st.report_fail("traffic_v4 check failed")
 
     st.report_pass("test_case_passed")
 

@@ -495,7 +495,7 @@ def appdb_onefield_checkpoint(dut, key, checkfield, checkval, expect = True, che
 def appdb_get_onefield(dut, key, field):
     command = redis.build(dut, redis.APPL_DB, 'hget "{}" "{}"'.format(key, field))
     output = st.show(dut, command, skip_tmpl=True)
-    if output is '':
+    if output is '' or output is '(nil)':
         return None
 
     output = output.strip('"')

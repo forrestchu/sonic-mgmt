@@ -304,6 +304,7 @@ class IxiaController():
             return False
 
         bgp_peer.Flap.Single('false')
+        return True
 
     def enable_csv_logging(self, caption):
         if caption == "Port Statistics":

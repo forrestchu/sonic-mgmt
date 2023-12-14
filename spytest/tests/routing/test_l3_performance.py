@@ -267,7 +267,7 @@ def fixture_v6(request):
 
     # Configuring BGP on TG interface
     conf_var = {'mode':'enable', 'ip_version':'6', 'active_connect_enable':'1', 'local_as':data.remote_as_num, 'remote_as':data.as_num, 'remote_ipv6_addr':data.my_ipv6_addr}
-    route_var = [ {'mode':'add', 'ip_version':'6', 'num_routes':data.ip6_full_mask_num, 'prefix':'3400:1::', 'as_path':'as_seq:1', 'ipv6_prefix_length': 128}, {'mode':'add', 'ip_version':'6', 'num_routes':data.test_bgp_route_count, 'prefix':'3300:1::', 'as_path':'as_seq:1', 'ipv6_prefix_length': 64}]
+    route_var = [ {'mode':'add', 'ip_version':'6', 'num_routes':data.ip6_full_mask_num, 'prefix':'3400:1::', 'as_path':'as_seq:1', 'ipv6_prefix_length': 80}, {'mode':'add', 'ip_version':'6', 'num_routes':data.test_bgp_route_count, 'prefix':'3300:1::', 'as_path':'as_seq:1', 'ipv6_prefix_length': 64}]
     ctrl_start = {'mode':'start'}
 
     # Starting the BGP router on TG.

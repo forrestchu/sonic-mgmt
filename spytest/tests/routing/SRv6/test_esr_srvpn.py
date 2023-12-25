@@ -70,8 +70,10 @@ dut1 = 'MC-58'
 dut2 = 'MC-59'
 data.my_dut_list = [dut1, dut2]
 data.load_multi_vrf_config_done = False
+data.load_multi_vrf_ixia_conf_done = False
 data.load_mirror_config_done = False
 data.load_mirror_ixia_conf_done = False
+data.load_one_vrf_config_done = False
 
 def add_bmp_config_background(dut):
     st.log("config global bmp")
@@ -245,7 +247,21 @@ def esr_srvpn_module_hooks(request):
 
 @pytest.fixture(scope="function", autouse=True)
 def esr_srvpn_func_hooks(request):
-    if st.get_func_name(request) in  ["test_srvpn_mirror_config_05","test_srvpn_mirror_config_redistribute_vrf_06",
+    if st.get_func_name(request) in ["test_base_config_srvpn_2kl_route_learn_02",
+                                     "test_base_config_srvpn_multi_vrf_03",
+                                     "test_srvpn_ecmp_04"]:
+        st.log("esr_srvpn_func_hooks enter ")
+        if data.load_multi_vrf_config_done == False:
+            load_json_config("multi_vrf_ecmp")
+            data.load_multi_vrf_config_done = True
+        # load ixia config
+        if data.load_multi_vrf_ixia_conf_done == False and st.get_func_name(request) != "test_srvpn_ecmp_04":
+            ixia_load_config(ESR_MULTI_VRF_CONFIG)
+            ixia_start_all_protocols()
+            st.wait(60)
+            data.load_multi_vrf_ixia_conf_done = True
+
+    if st.get_func_name(request) in ["test_srvpn_mirror_config_05","test_srvpn_mirror_config_redistribute_vrf_06",
                                       "test_srvpn_mirror_config_bgp_flap_07", "test_srvpn_mirror_config_underlay_link_flap_08",
                                       "test_srvpn_mirror_config_underlay_ecmp_switch_09"]:
         st.log("esr_srvpn_func_hooks enter ")
@@ -268,6 +284,15 @@ def esr_srvpn_func_hooks(request):
         ixia_load_config(ixia_config)
         ixia_start_all_protocols()
         st.wait(60)
+
+    if st.get_func_name(request) in ["test_srvpn_performance_500K",
+                                    "test_srvpn_performance_1M",
+                                    "test_srvpn_performance_2M"]:
+        st.log("esr_srvpn_func_hooks enter ")
+        if data.load_one_vrf_config_done == False:
+            load_json_config("one_vrf", '/performance')
+            data.load_one_vrf_config_done = True
+
     yield
     pass
 
@@ -649,13 +674,13 @@ def test_base_config_srvpn_locator_01():
 
     st.report_pass("test_case_passed")
 
-def load_json_config(filesuffix='multi_vrf_full'):
+def load_json_config(filesuffix='multi_vrf_full', appendixDir=''):
     curr_path = os.getcwd()
 
-    json_file_dut1_multi_vrf = curr_path+"/routing/SRv6/dut1_"+filesuffix+".json"
+    json_file_dut1_multi_vrf = curr_path+"/routing/SRv6"+appendixDir+"/dut1_"+filesuffix+".json"
     st.apply_files(dut1, [json_file_dut1_multi_vrf], method="replace_configdb")
 
-    json_file_dut2_multi_vrf = curr_path+"/routing/SRv6/dut2_"+filesuffix+".json"
+    json_file_dut2_multi_vrf = curr_path+"/routing/SRv6"+appendixDir+"/dut2_"+filesuffix+".json"
     st.apply_files(dut2, [json_file_dut2_multi_vrf], method="replace_configdb")
 
     st.wait(10)
@@ -687,15 +712,6 @@ def get_kernel_ipv6_route(dut, number):
 @pytest.mark.community_pass
 def test_base_config_srvpn_2kl_route_learn_02():
     st.banner("test_base_config_srvpn_2kl_traffic_and_route_02 begin")
-
-    # load full config
-    if data.load_multi_vrf_config_done == False:
-        load_json_config()
-        data.load_multi_vrf_config_done = True
-
-    # load ixia config
-    ixia_load_config(ESR_MULTI_VRF_CONFIG)
-    ixia_start_all_protocols()
 
     # check redis db , check route
     finish_v4_egress = False
@@ -772,7 +788,6 @@ def test_base_config_srvpn_2kl_route_learn_02():
         ipv6_route = get_kernel_ipv6_route(dut1, num)
         if int(ipv6_route) > 5:
             st.report_fail("dut1 vrf Vrf{} ipv6 route kernel bypass fail route number {}".format(num, ipv6_route))
-        st.wait(1)
 
     st.report_pass("test_case_passed")
 
@@ -784,16 +799,8 @@ def test_base_config_srvpn_multi_vrf_03():
     # ixia config 100 subinterface
     st.banner("test_base_config_srvpn_multi_vrf_03 begin")
 
-    if data.load_multi_vrf_config_done == False:
-        load_json_config()
-        data.load_multi_vrf_config_done = True
-
-    # load ixia config
-    ixia_load_config(ESR_MULTI_VRF_CONFIG)
-    ixia_start_all_protocols()
-
     # step1 check vpn route learn 50w
-    ret = check_vpn_route_nums(dut2, 500000, 0)
+    ret = check_vpn_route_nums(dut2, 1000000, 0)
     if not ret:
         st.report_fail("step1 check_vpn_route_nums test_base_config_srvpn_multi_vrf_03")
 
@@ -810,7 +817,10 @@ def test_base_config_srvpn_multi_vrf_03():
     # vrf_array = get_check_vrf_list()
     def check_vrf_fib():
         for chcek_vrf in data.vrf_list[0:100]:
-            ret = check_vrf_route_nums(dut2, chcek_vrf, 5000, 1)
+            expected_num = 5000
+            if chcek_vrf == 'PUBLIC-TC20':
+                expected_num = 10000
+            ret = check_vrf_route_nums(dut2, chcek_vrf, expected_num, 1)
             if not ret:
                 st.error("step1 check_vrf_route_nums {} 5000 test_base_config_srvpn_multi_vrf_03".format(chcek_vrf))
                 return False
@@ -841,7 +851,7 @@ def test_base_config_srvpn_multi_vrf_03():
 
     # check vrf ipv4 uni route and sid
     to_check_prefix_sid = {
-        '200.10.0.1':'fd00:201:201:fff1:10::',
+        '200.10.0.1':'fd00:201:202:fff1:10::',
         '200.30.0.1':'fd00:201:201:fff1:30::',
         '200.50.0.1':'fd00:201:201:fff1:50::',
         '201.20.0.1':'fd00:201:201:fff2:6::',
@@ -881,7 +891,7 @@ def test_base_config_srvpn_multi_vrf_03():
 
     st.wait(10)
      #check vpn route learn 50w
-    ret = check_vpn_route_nums(dut2, 500000, 0)
+    ret = check_vpn_route_nums(dut2, 1000000, 0)
     if not ret:
         st.report_fail("step3 check_vpn_route_nums test_base_config_srvpn_multi_vrf_03")
 
@@ -893,7 +903,7 @@ def test_base_config_srvpn_multi_vrf_03():
 
     # check vrf ipv4 uni route and sid
     to_check_prefix_sid = {
-        '200.10.0.1':'fd00:201:201:fff1:10::',
+        '200.10.0.1':'fd00:201:202:fff1:10::',
         '200.30.0.1':'fd00:201:202:fff1:30::',
         '200.50.0.1':'fd00:201:201:fff1:50::',
         '201.20.0.1':'fd00:201:203:fff2:6::',
@@ -913,12 +923,12 @@ def test_base_config_srvpn_multi_vrf_03():
     st.report_pass("test_case_passed")
 
 ## ecmp test
+## be careful that some configs have been changed in test_base_config_srvpn_multi_vrf_03,
+## but it should not have any impact on test_srvpn_ecmp_04
 @pytest.mark.community
 @pytest.mark.community_pass
 def test_srvpn_ecmp_04():
     st.banner("test_srvpn_ecmp_04 begin")
-
-    load_json_config("multi_vrf_ecmp")
 
     # load ixia config
     ixia_load_config(ESR_ECMP_CONFIG)
@@ -1392,11 +1402,6 @@ def test_srvpn_performance_500K():
 
     route_count = 500000
 
-    # 1. load DUT config
-    dut1_config = "performance/dut1_one_vrf.json"
-    dut2_config = "performance/dut2_one_vrf.json"
-    duts_load_config(dut1_config, dut2_config)
-
     # 2. load TG config
     ixia_config = os.path.join(os.getcwd(), "routing/SRv6/performance/ixia_one_vrf_500K.json")
     ixia_load_config(ixia_config)
@@ -1486,11 +1491,6 @@ def test_srvpn_performance_1M():
 
     route_count = 1000000
 
-    # 1. load DUT config
-    dut1_config = "performance/dut1_one_vrf.json"
-    dut2_config = "performance/dut2_one_vrf.json"
-    duts_load_config(dut1_config, dut2_config)
-
     # 2. load TG config
     ixia_config = os.path.join(os.getcwd(), "routing/SRv6/performance/ixia_one_vrf_1M.json")
     ixia_load_config(ixia_config)
@@ -1572,11 +1572,6 @@ def test_srvpn_performance_2M():
     dut2 = dut_list[1]
 
     route_count = 2000000
-
-    # 1. load DUT config
-    dut1_config = "performance/dut1_one_vrf.json"
-    dut2_config = "performance/dut2_one_vrf.json"
-    duts_load_config(dut1_config, dut2_config)
 
     # 2. load TG config
     ixia_config = os.path.join(os.getcwd(), "routing/SRv6/performance/ixia_one_vrf_2M.json")

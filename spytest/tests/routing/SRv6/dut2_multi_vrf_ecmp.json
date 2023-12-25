@@ -948,7 +948,7 @@
         },
         "100|ipv4|PUBLIC-TC20":{
             "import_vpn":"true",
-            "rt_import":"1:10 1:60",
+            "rt_import":"1:10 1:20",
             "rd":"2:2",
             "bgp_maximum_paths": "8"
         },

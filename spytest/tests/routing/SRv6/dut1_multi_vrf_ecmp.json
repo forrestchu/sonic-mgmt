@@ -2770,6 +2770,11 @@
             "vrf_name":"VPN36"
         }
     },
+    "ROUTE_MAP": {
+        "kernel-bypass|permit|10": {
+            "set_kernel_bypass": "None"
+        }
+    },
     "SRV6_LOCATOR": {
         "lsid1": {
             "argu_len": "48", 
@@ -5111,5 +5116,1017 @@
         "ZJ-HANGZHOU-CU-ALIYUN-TC62": {},
         "ZJ-HANGZHOU-CU-ALIYUN-TC63": {},
         "ZJ-HANGZHOU-CU-ALIYUN-TC64": {}
+    },
+    "ZEBRA_PARAMETERS": {
+        "ip|PRIVATE-TC3": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|PRIVATE-TC3": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|PRIVATE-TC4": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|PRIVATE-TC4": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|PRIVATE-TC5": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|PRIVATE-TC5": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|PRIVATE-TC6": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|PRIVATE-TC6": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|PRIVATE-TC7": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|PRIVATE-TC7": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|PRIVATE-TC8": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|PRIVATE-TC8": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|PRIVATE-TC9": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|PRIVATE-TC9": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|PRIVATE-TC10": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|PRIVATE-TC10": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|PUBLIC-TC11": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|PUBLIC-TC11": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|PUBLIC-TC12": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|PUBLIC-TC12": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|PUBLIC-TC13": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|PUBLIC-TC13": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|PUBLIC-TC14": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|PUBLIC-TC14": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|PUBLIC-TC15": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|PUBLIC-TC15": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|PUBLIC-TC16": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|PUBLIC-TC16": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|PUBLIC-TC17": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|PUBLIC-TC17": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|PUBLIC-TC18": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|PUBLIC-TC18": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|PUBLIC-TC19": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|PUBLIC-TC19": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|PUBLIC-TC20": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|PUBLIC-TC20": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|SX-XIAN-CM-TC21": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|SX-XIAN-CM-TC21": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|SX-XIAN-CM-TC22": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|SX-XIAN-CM-TC22": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|SX-XIAN-CM-TC23": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|SX-XIAN-CM-TC23": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|SX-XIAN-CM-TC24": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|SX-XIAN-CM-TC24": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|SX-XIAN-CM-TC25": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|SX-XIAN-CM-TC25": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|SX-XIAN-CM-TC26": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|SX-XIAN-CM-TC26": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|SX-XIAN-CM-TC27": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|SX-XIAN-CM-TC27": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|SX-XIAN-CM-TC28": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|SX-XIAN-CM-TC28": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|SX-XIAN-CM-TC29": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|SX-XIAN-CM-TC29": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|SX-XIAN-CM-TC30": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|SX-XIAN-CM-TC30": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|SX-XIAN-CM-TC31": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|SX-XIAN-CM-TC31": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|SX-XIAN-CM-TC32": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|SX-XIAN-CM-TC32": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|SX-XIAN-CM-TC33": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|SX-XIAN-CM-TC33": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|SX-XIAN-CM-TC34": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|SX-XIAN-CM-TC34": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|SX-XIAN-CM-TC35": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|SX-XIAN-CM-TC35": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|SX-XIAN-CM-TC36": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|SX-XIAN-CM-TC36": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|SX-XIAN-CM-TC37": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|SX-XIAN-CM-TC37": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|SX-XIAN-CM-TC38": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|SX-XIAN-CM-TC38": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|SX-XIAN-CM-TC39": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|SX-XIAN-CM-TC39": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|SX-XIAN-CM-TC40": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|SX-XIAN-CM-TC40": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|ACTN-TC41": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|ACTN-TC41": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|ACTN-TC42": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|ACTN-TC42": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|ACTN-TC43": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|ACTN-TC43": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|ACTN-TC44": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|ACTN-TC44": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|ACTN-TC45": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|ACTN-TC45": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|ACTN-TC46": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|ACTN-TC46": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|ACTN-TC47": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|ACTN-TC47": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|ACTN-TC48": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|ACTN-TC48": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|ACTN-TC49": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|ACTN-TC49": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|ACTN-TC50": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|ACTN-TC50": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|ACTN-TC51": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|ACTN-TC51": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|ACTN-TC52": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|ACTN-TC52": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|ACTN-TC53": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|ACTN-TC53": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|ACTN-TC54": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|ACTN-TC54": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|ACTN-TC55": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|ACTN-TC55": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|ACTN-TC56": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|ACTN-TC56": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|ACTN-TC57": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|ACTN-TC57": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|ACTN-TC58": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|ACTN-TC58": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|ACTN-TC59": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|ACTN-TC59": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|ACTN-TC60": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|ACTN-TC60": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|ACTN-TC61": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|ACTN-TC61": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|ACTN-TC62": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|ACTN-TC62": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|ACTN-TC63": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|ACTN-TC63": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|ACTN-TC64": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|ACTN-TC64": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|VPN1": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|VPN1": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|VPN2": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|VPN2": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|VPN3": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|VPN3": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|VPN4": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|VPN4": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|VPN5": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|VPN5": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|VPN6": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|VPN6": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|VPN7": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|VPN7": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|VPN8": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|VPN8": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|VPN9": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|VPN9": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|VPN10": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|VPN10": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|VPN11": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|VPN11": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|VPN12": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|VPN12": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|VPN13": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|VPN13": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|VPN14": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|VPN14": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|VPN15": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|VPN15": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|VPN16": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|VPN16": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|VPN17": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|VPN17": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|VPN18": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|VPN18": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|VPN19": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|VPN19": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|VPN20": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|VPN20": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|VPN21": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|VPN21": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|VPN22": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|VPN22": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|VPN23": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|VPN23": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|VPN24": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|VPN24": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|VPN25": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|VPN25": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|VPN26": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|VPN26": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|VPN27": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|VPN27": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|VPN28": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|VPN28": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|VPN29": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|VPN29": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|VPN30": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|VPN30": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|VPN31": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|VPN31": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|VPN32": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|VPN32": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|VPN33": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|VPN33": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|VPN34": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|VPN34": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|VPN35": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|VPN35": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|VPN36": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|VPN36": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|VPN37": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|VPN37": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|VPN38": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|VPN38": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ip|VPN39": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        },
+        "ipv6|VPN39": {
+            "protocol": [
+                "any|kernel-bypass"
+            ]
+        }
     }
 }

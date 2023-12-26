@@ -176,6 +176,14 @@ def intf_traffic_stats(entry_tx):
     p_tx = abs(int(float(p_txmt)))
     return p_tx
 
+def intf_traffic_stats_percentage(entry_tx):
+    for i in entry_tx:
+        p_txmt = i['tx_util']
+        p_txmt = p_txmt.replace("%","")
+
+    p_tx = abs(int(float(p_txmt)))
+    return p_tx
+
 def check_dut_intf_tx_traffic_counters(dut, portlist, expect_val):
     papi.clear_interface_counters(dut)
     st.wait(5)
@@ -194,20 +202,55 @@ def check_dut_intf_tx_traffic_counters(dut, portlist, expect_val):
         tx_bps = intf_traffic_stats(filter_and_select(output, ["tx_bps"], {'iface': port}))
         tx_bps_list.append(tx_bps)
 
-    st.log("Inter Dut port stats  tx_ok xounter value on DUT Egress ports : {} expect: {}".format(tx_bps_list,expect_val))
+    st.log("Inter Dut port stats  tx_ok counter value on DUT Egress ports : {} expect: {}".format(tx_bps_list,expect_val))
 
     for tx_bps in tx_bps_list:
         if tx_bps == 0:
-            st.error("Error:Inter Dut port stats tx_ok xounter value on DUT Egress port: {}".format(tx_bps))
+            st.error("Error:Inter Dut port stats tx_ok counter value on DUT Egress port: {}".format(tx_bps))
             return False
         else:
             deviation = abs(expect_val - tx_bps)
             percent = (float(deviation)/expect_val)*100
             if percent > 10:
-                st.log("Inter Dut port stats tx_ok xounter value on DUT Egress ports {}".format(tx_bps))
+                st.log("Inter Dut port stats tx_ok counter value on DUT Egress ports {}".format(tx_bps))
                 return False
 
     st.log("All ECMP paths are utilized")
+    return True
+
+def check_dut_intf_tx_traffic_percentage(dut, portlist, expect_val):
+    papi.clear_interface_counters(dut)
+    st.wait(5)
+    output = papi.get_interface_counters_all(dut)
+    retry = 0
+    while len(output) == 0 and retry < 10:
+        output = papi.get_interface_counters_all(dut)
+        retry += 1
+        st.wait(2)
+    if retry == 10:
+        st.error("Error: Dut port stats")
+        return False
+
+    tx_util_list = []
+    for port in portlist:
+        tx_util = intf_traffic_stats_percentage(filter_and_select(output, ["tx_util"], {'iface': port}))
+        tx_util_list.append(tx_util)
+
+    st.log("Inter Dut port stats tx_util counter value on DUT Egress ports : {} expect: {}".format(tx_util_list,expect_val))
+
+    for tx_util in tx_util_list:
+        if expect_val <= 10:
+            deviation = abs(expect_val - tx_util)
+            if deviation > 1:
+                st.log("Inter Dut port stats tx_util counter value on DUT Egress ports {}".format(tx_util))
+                return False
+        else:
+            deviation = abs(expect_val - tx_util)
+            percent = (float(deviation)/expect_val)*100
+            if percent > 10:
+                st.log("Inter Dut port stats tx_util counter value on DUT Egress ports {}".format(tx_util))
+                return False
+
     return True
 
 def get_handles():
@@ -248,6 +291,7 @@ def esr_srvpn_module_hooks(request):
 def esr_srvpn_func_hooks(request):
     if st.get_func_name(request) in ["test_base_config_srvpn_2kl_route_learn_02",
                                      "test_base_config_srvpn_multi_vrf_03",
+                                     "test_end_x_action",
                                      "test_srvpn_ecmp_04",
                                      "test_srvpn_performance_500K",
                                      "test_srvpn_performance_1M",
@@ -471,8 +515,8 @@ def test_base_config_srvpn_locator_01():
 
     # step 6 : del locator
 #    locator lsid1 prefix fd00:201:201::/80 block-len 32 node-len 16 func-bits 32 argu-bits 48
-#     opcode ::FFF1:1:0:0:0 end-dt46 vrf Vrf1
-#     opcode ::FFF1:11:0:0:0 end-dt46 vrf PUBLIC-TC11
+#     opcode ::fff1:1:0:0:0 end-dt46 vrf Vrf1
+#     opcode ::fff1:11:0:0:0 end-dt46 vrf PUBLIC-TC11
 #    exit
 
     del_loc_cmd = 'cli -c "configure terminal" -c "segment-routing" -c "srv6" -c "locators" -c "no locator {}"'.format(locator_name)
@@ -917,8 +961,48 @@ def test_base_config_srvpn_multi_vrf_03():
 
     st.report_pass("test_case_passed")
 
+@pytest.mark.community
+@pytest.mark.community_pass
+def test_end_x_action():
+    st.banner("test_end_x_action begin")
+
+    # load ixia config
+    ixia_load_config("esr_end_x.ixncfg")
+    ixia_start_all_protocols()
+    ixia_start_all_traffic()
+
+    ret1 = check_dut_intf_tx_traffic_percentage(dut1, ["Ethernet33"], 60)
+    ret2 = check_dut_intf_tx_traffic_percentage(dut1, ["Ethernet34"], 0)
+    if not ret1 or not ret2:
+        st.report_fail("Check dut interface counters failed")
+
+    # delete opcode
+    locator_name = 'lsid1'
+    vrf_name = 'PUBLIC-TC19'
+    locator_cmd = "locator {} prefix {}/80 block-len 32 node-len 16 func-bits 32 argu-bits 48".format(locator_name, data.mysid_prefix[locator_name])
+    del_opc_cmd = 'vtysh -c "configure terminal" -c "segment-routing" -c "srv6" -c "locators" -c  "{}" -c "no opcode {}"'.format(locator_cmd, data.mysid_opcode[vrf_name])
+    st.config(dut1, del_opc_cmd)
+
+    # add end.x opcode
+    add_opc_cmd = 'vtysh -c "configure terminal" -c "segment-routing" -c "srv6" -c "locators" -c  "{}" -c "opcode {} end-x interface {} nexthop {}"'.format(locator_cmd, data.mysid_opcode[vrf_name], "Eth34.150", "101.2.50.2")
+    st.config(dut1, add_opc_cmd)
+
+    ret1 = check_dut_intf_tx_traffic_percentage(dut1, ["Ethernet33"], 0)
+    ret2 = check_dut_intf_tx_traffic_percentage(dut1, ["Ethernet34"], 60)
+    if not ret1 or not ret2:
+        st.report_fail("Check dut interface counters failed")
+
+    # shutdown
+    cmd = "interface {}\n shutdown\n".format("Eth34.150")
+    st.config(dut1, cmd, type="alicli", skip_error_check = True)
+    ret1 = check_dut_intf_tx_traffic_percentage(dut1, ["Ethernet34"], 0)
+    if not ret1:
+        st.report_fail("Check dut interface counters failed")
+
+    st.report_pass("test_case_passed")
+
 ## ecmp test
-## be careful that some configs have been changed in test_base_config_srvpn_multi_vrf_03,
+## be careful that some configs have been changed in test_base_config_srvpn_multi_vrf_03 & test_end_x_action,
 ## but it should not have any impact on test_srvpn_ecmp_04
 @pytest.mark.community
 @pytest.mark.community_pass

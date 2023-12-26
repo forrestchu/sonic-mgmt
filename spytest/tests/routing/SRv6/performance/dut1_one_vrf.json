@@ -476,7 +476,7 @@
             "func_len": "32",
             "node_len": "16",
             "opcode": [
-                "::FFF1:1:0:0:0|end-dt46|Vrf1"
+                "::fff1:1:0:0:0|end-dt46|Vrf1"
             ],
             "prefix": "fd00:201:201::/80"
         }

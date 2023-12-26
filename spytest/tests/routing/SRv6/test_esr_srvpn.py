@@ -310,27 +310,22 @@ def esr_srvpn_func_hooks(request):
 
     if st.get_func_name(request) in ["test_srvpn_mirror_config_05","test_srvpn_mirror_config_redistribute_vrf_06",
                                       "test_srvpn_mirror_config_bgp_flap_07", "test_srvpn_mirror_config_underlay_link_flap_08",
-                                      "test_srvpn_mirror_config_underlay_ecmp_switch_09"]:
+                                      "test_srvpn_mirror_config_underlay_ecmp_switch_09", "test_srvpn_mirror_16nexthops_10"]:
         st.log("esr_srvpn_func_hooks enter ")
         if data.load_mirror_config_done == False:
-            load_json_config('mirror_config')
+            load_json_config('mirror_config_16nht')
             data.load_mirror_config_done = True
         # load ixia config
-        if data.load_mirror_ixia_conf_done == False:
+        if st.get_func_name(request) == "test_srvpn_mirror_16nexthops_10":
+            ixia_config = os.path.join(os.getcwd(), "routing/SRv6/esr_mirror_16nexthop.json")
+            ixia_load_config(ixia_config)
+            ixia_start_all_protocols()
+            st.wait(60)
+        elif data.load_mirror_ixia_conf_done == False:
             ixia_load_config(ESR_MIRROR_CONFIG)
             ixia_start_all_protocols()
             st.wait(60)
             data.load_mirror_ixia_conf_done = True
-    
-    if  st.get_func_name(request) in ["test_srvpn_mirror_16nexthops_10"]:
-        st.log("esr_srvpn_func_hooks enter ")
-        load_json_config('mirror_config_16nht')
-
-        #load TG config
-        ixia_config = os.path.join(os.getcwd(), "routing/SRv6/esr_mirror_16nexthop.json")
-        ixia_load_config(ixia_config)
-        ixia_start_all_protocols()
-        st.wait(60)
 
     yield
     pass

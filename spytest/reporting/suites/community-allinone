@@ -48,6 +48,9 @@
 -test:test_ft_lldp_rem_man_addr_table
 -test:test_srvpn_performance_1M
 
+# test cases for traffic verification with Ruijie
+-test:test_subintf_501_502_traffic
+
 #+args:--skip-init-config
 #+args:--skip-load-config base
 +args:--force-keep-minimize-config

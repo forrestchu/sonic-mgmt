@@ -664,6 +664,8 @@ def test_bfd_ipv6_attr_set():
             seq_key = ''
         command = redis.build(dut1, redis.APPL_DB, "hgetall '{}' ".format(seq_key))
         output = st.show(dut1, command)
+        # RFC 5880, Section 6.8.7.
+        # transmission time will be determined by the system with the slowest rate.
         match_list = [{"donor_intf": '100000'}, {"donor_intf": '100000'}]
         for match in match_list:
             entries = filter_and_select(output, None, match)
@@ -701,17 +703,7 @@ def test_bfd_ipv6_attr_set():
         #skip multiplier check
         if not bfdapi.verify_bfd_peer(dut1, peer=neigh_ipv6_addr, local_addr=dut1_ipv6_addr, rx_interval=[['50',data.tg_bfd_timer]], 
                                 status='up', cli_type='alicli', vrf_name=data.vrf):
-            st.report_fail("bfd status error", dut1_ipv6_addr, dut1)       
-
-    output = bfdapi.get_bfd_peer_counters(dut1, peer=neigh_ipv6_addr, local_addr=dut1_ipv6_addr, cli_type='alicli', vrf_name=data.vrf)
-    tx_counter1 = output[0]['cntrlpktout']
-    st.wait(5)
-    output = bfdapi.get_bfd_peer_counters(dut1, peer=neigh_ipv6_addr, local_addr=dut1_ipv6_addr, cli_type='alicli', vrf_name=data.vrf)
-    tx_counter2 = output[0]['cntrlpktout']
-    tx_pps = (int(tx_counter2) - int(tx_counter1))/5
-    st.log("current bfd session tx pps:{}".format(tx_pps))
-    if tx_pps > 2*(1000/new_interval) or tx_pps < (1000/new_interval)/2:
-        st.report_fail("bfd tx counter error,", dut1_ipv6_addr, dut1)
+            st.report_fail("bfd status error", dut1_ipv6_addr, dut1)
 
     st.log("set TG bfd params")
     # TG BFD params change

@@ -445,7 +445,7 @@
                 "::fff1:3:0:0:0|end-x|Ethernet3|192.168.2.59",
                 "::fff1:4:0:0:0|end-x|Ethernet4|fd00:ccdd::59"
             ],
-            "prefix": "fd00:101:2022::/80"
+            "prefix": "fd00:101:2022::/48"
         }
     },
     "SRV6_POLICY": {

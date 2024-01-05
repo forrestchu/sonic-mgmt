@@ -30,7 +30,7 @@ ipv6 route fd00:ccdd::58/128 lo
 segment-routing
  srv6
   locators
-   locator loc_endx prefix fd00:101:2022::/80 block-len 32 node-len 16 func-bits 32 argu-bits 48
+   locator loc_endx prefix fd00:101:2022::/48 block-len 32 node-len 16 func-bits 32 argu-bits 48
     opcode ::fff1:1:0:0:0 end-x interface Ethernet1 nexthop 192.168.1.59
     opcode ::fff1:2:0:0:0 end-x interface Ethernet2 nexthop fd00:abcd::59
     opcode ::fff1:3:0:0:0 end-x interface Ethernet3 nexthop 192.168.2.59

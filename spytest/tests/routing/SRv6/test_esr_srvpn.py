@@ -379,7 +379,7 @@ def test_base_config_srvpn_locator_01():
     configdb_onefield_checkpoint(dut1, mysid_configdb_key, "node_len", data.mysid_base_prefix_len["node_len"], expect = True, checkpoint = checkpoint_msg)
     configdb_onefield_checkpoint(dut1, mysid_configdb_key, "func_len", data.mysid_base_prefix_len["func_len"], expect = True, checkpoint = checkpoint_msg)
     configdb_onefield_checkpoint(dut1, mysid_configdb_key, "argu_len", data.mysid_base_prefix_len["argu_len"], expect = True, checkpoint = checkpoint_msg)
-    expected_prefix = data.mysid_prefix['lsid1'] + "/80"
+    expected_prefix = data.mysid_prefix['lsid1'] + "/48"
     configdb_onefield_checkpoint(dut1, mysid_configdb_key, "prefix", expected_prefix, expect = True, checkpoint = checkpoint_msg)
 
     expected_op_val = '::fff1:1:0:0:0'+'|'+'end-dt46'+'|'+'Vrf1'
@@ -493,7 +493,7 @@ def test_base_config_srvpn_locator_01():
     # step 5 : del opcode
     locator_name = 'lsid1'
     vrf_name = 'PUBLIC-TC11'
-    locator_cmd = "locator {} prefix {}/80 block-len 32 node-len 16 func-bits 32 argu-bits 48".format(locator_name, data.mysid_prefix[locator_name])
+    locator_cmd = "locator {} prefix {}/48 block-len 32 node-len 16 func-bits 32 argu-bits 48".format(locator_name, data.mysid_prefix[locator_name])
     del_opc_cmd = 'cli -c "configure terminal" -c "segment-routing" -c "srv6" -c "locators" -c  "{}" -c "no opcode {}"'.format(locator_cmd, data.mysid_opcode[vrf_name])
 
     st.config(dut1, del_opc_cmd)
@@ -509,7 +509,7 @@ def test_base_config_srvpn_locator_01():
 
 
     # step 6 : del locator
-#    locator lsid1 prefix fd00:201:201::/80 block-len 32 node-len 16 func-bits 32 argu-bits 48
+#    locator lsid1 prefix fd00:201:201::/48 block-len 32 node-len 16 func-bits 32 argu-bits 48
 #     opcode ::fff1:1:0:0:0 end-dt46 vrf Vrf1
 #     opcode ::fff1:11:0:0:0 end-dt46 vrf PUBLIC-TC11
 #    exit
@@ -596,7 +596,7 @@ def test_base_config_srvpn_locator_01():
     bgp_as = '100'
     locator_name = 'lsid1'
     vrf_name = 'PUBLIC-TC11'
-    locator_cmd = "locator {} prefix {}/80 block-len 32 node-len 16 func-bits 32 argu-bits 48".format(locator_name, data.mysid_prefix[locator_name])
+    locator_cmd = "locator {} prefix {}/48 block-len 32 node-len 16 func-bits 32 argu-bits 48".format(locator_name, data.mysid_prefix[locator_name])
     opc_cmd = 'cli -c "configure terminal" -c "segment-routing" -c "srv6" -c "locators" -c  "{}" -c "opcode {} end-dt46 vrf {}"'.format(locator_cmd, data.mysid_opcode[vrf_name], vrf_name)
 
     st.config(dut1, opc_cmd)
@@ -685,7 +685,7 @@ def test_base_config_srvpn_locator_01():
     st.log(records)
 
     # config locator end action
-    locator_cmd = 'locator  test_end prefix fd00:301:301::/80 block-len 32 node-len 16 func-bits 32 argu-bits 48'
+    locator_cmd = 'locator  test_end prefix fd00:301:301::/48 block-len 32 node-len 16 func-bits 32 argu-bits 48'
     end_opcode_cmd = 'opcode ::fff1:1:0:0:0 end'
     cmd = 'cli -c "configure terminal" -c "segment-routing" -c "srv6" -c "locators" -c "{}" -c "{}"'.format(locator_cmd, end_opcode_cmd)
     st.config(dut1, cmd)
@@ -974,7 +974,7 @@ def test_end_x_action():
     # delete opcode
     locator_name = 'lsid1'
     vrf_name = 'PUBLIC-TC19'
-    locator_cmd = "locator {} prefix {}/80 block-len 32 node-len 16 func-bits 32 argu-bits 48".format(locator_name, data.mysid_prefix[locator_name])
+    locator_cmd = "locator {} prefix {}/48 block-len 32 node-len 16 func-bits 32 argu-bits 48".format(locator_name, data.mysid_prefix[locator_name])
     del_opc_cmd = 'vtysh -c "configure terminal" -c "segment-routing" -c "srv6" -c "locators" -c  "{}" -c "no opcode {}"'.format(locator_cmd, data.mysid_opcode[vrf_name])
     st.config(dut1, del_opc_cmd)
 

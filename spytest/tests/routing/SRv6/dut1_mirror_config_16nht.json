@@ -5549,7 +5549,7 @@
                 "::fff0:4:0:0:0|end-dt46|OOB_TC0", 
                 "::fff0:5:0:0:0|end-dt46|OTN_TC0"
             ], 
-            "prefix": "fd00:201:202a::/80"
+            "prefix": "fd00:201:202a::/48"
         }, 
         "locNNI-Unicast": {
             "argu_len": "48", 
@@ -5572,7 +5572,7 @@
                 "::fff0:4:0:0:0|end-dt46|OOB_TC0", 
                 "::fff0:5:0:0:0|end-dt46|OTN_TC0"
             ], 
-            "prefix": "fd00:201:2021::/80"
+            "prefix": "fd00:201:2021::/48"
         }, 
         "locUNI-Anycast-Cluster": {
             "argu_len": "48", 
@@ -5595,7 +5595,7 @@
                 "::fff0:4:0:0:0|end-dt46|OOB_TC0", 
                 "::fff0:5:0:0:0|end-dt46|OTN_TC0"
             ], 
-            "prefix": "fd00:200:202a::/80"
+            "prefix": "fd00:200:202a::/48"
         }, 
         "locUNI-Unicast": {
             "argu_len": "48", 
@@ -5618,7 +5618,7 @@
                 "::fff0:4:0:0:0|end-dt46|OOB_TC0", 
                 "::fff0:5:0:0:0|end-dt46|OTN_TC0"
             ], 
-            "prefix": "fd00:200:2021::/80"
+            "prefix": "fd00:200:2021::/48"
         }
     }, 
     "STATIC_ROUTE": {

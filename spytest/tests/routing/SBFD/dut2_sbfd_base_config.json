@@ -447,7 +447,7 @@
             "opcode": [
                 "::fff1:eee:0:0:0|end"
             ],
-            "prefix": "fd00:303:2022::/80"
+            "prefix": "fd00:303:2022::/48"
         },
         "loc_endx": {
             "argu_len": "48",
@@ -460,7 +460,7 @@
                 "::fff1:3:0:0:0|end-x|Ethernet3|192.168.2.58",
                 "::fff1:4:0:0:0|end-x|Ethernet4|fd00:ccdd::58"
             ],
-            "prefix": "fd00:202:2022::/80"
+            "prefix": "fd00:202:2022::/48"
         }
     },
     "STATIC_ROUTE": {

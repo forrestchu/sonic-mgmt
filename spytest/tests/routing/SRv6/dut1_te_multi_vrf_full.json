@@ -3298,7 +3298,7 @@
                 "::fff2:63:0:0:0|end-dt46|ZJ-HANGZHOU-CU-ALIYUN-TC63",
                 "::fff2:64:0:0:0|end-dt46|ZJ-HANGZHOU-CU-ALIYUN-TC64"
             ], 
-            "prefix": "fd00:201:201::/80"
+            "prefix": "fd00:201:201::/48"
         },
         "lsid2": {
             "argu_len": "48", 
@@ -3435,7 +3435,7 @@
                 "::fff2:63:0:0:0|end-dt46|ZJ-HANGZHOU-CU-ALIYUN-TC63",
                 "::fff2:64:0:0:0|end-dt46|ZJ-HANGZHOU-CU-ALIYUN-TC64"
             ], 
-            "prefix": "fd00:201:202::/80"
+            "prefix": "fd00:201:202::/48"
         },
         "lsid3": {
             "argu_len": "48", 
@@ -3572,7 +3572,7 @@
                 "::fff2:63:0:0:0|end-dt46|ZJ-HANGZHOU-CU-ALIYUN-TC63",
                 "::fff2:64:0:0:0|end-dt46|ZJ-HANGZHOU-CU-ALIYUN-TC64"
             ], 
-            "prefix": "fd00:201:203::/80"
+            "prefix": "fd00:201:203::/48"
         },
         "lsid4": {
             "argu_len": "48", 
@@ -3709,7 +3709,7 @@
                 "::fff2:63:0:0:0|end-dt46|ZJ-HANGZHOU-CU-ALIYUN-TC63",
                 "::fff2:64:0:0:0|end-dt46|ZJ-HANGZHOU-CU-ALIYUN-TC64"
             ], 
-            "prefix": "fd00:201:204::/80"
+            "prefix": "fd00:201:204::/48"
         },
         "lsid5": {
             "argu_len": "48", 
@@ -3846,7 +3846,7 @@
                 "::fff2:63:0:0:0|end-dt46|ZJ-HANGZHOU-CU-ALIYUN-TC63",
                 "::fff2:64:0:0:0|end-dt46|ZJ-HANGZHOU-CU-ALIYUN-TC64"
             ], 
-            "prefix": "fd00:201:205::/80"
+            "prefix": "fd00:201:205::/48"
         },
         "lsid6": {
             "argu_len": "48", 
@@ -3983,7 +3983,7 @@
                 "::fff2:63:0:0:0|end-dt46|ZJ-HANGZHOU-CU-ALIYUN-TC63",
                 "::fff2:64:0:0:0|end-dt46|ZJ-HANGZHOU-CU-ALIYUN-TC64"
             ], 
-            "prefix": "fd00:201:206::/80"
+            "prefix": "fd00:201:206::/48"
         },
         "lsid7": {
             "argu_len": "48", 
@@ -4120,7 +4120,7 @@
                 "::fff2:63:0:0:0|end-dt46|ZJ-HANGZHOU-CU-ALIYUN-TC63",
                 "::fff2:64:0:0:0|end-dt46|ZJ-HANGZHOU-CU-ALIYUN-TC64"
             ], 
-            "prefix": "fd00:201:207::/80"
+            "prefix": "fd00:201:207::/48"
         },
         "lsid8": {
             "argu_len": "48", 
@@ -4257,7 +4257,7 @@
                 "::fff2:63:0:0:0|end-dt46|ZJ-HANGZHOU-CU-ALIYUN-TC63",
                 "::fff2:64:0:0:0|end-dt46|ZJ-HANGZHOU-CU-ALIYUN-TC64"
             ], 
-            "prefix": "fd00:201:208::/80"
+            "prefix": "fd00:201:208::/48"
         },
         "lsid9": {
             "argu_len": "48", 
@@ -4394,7 +4394,7 @@
                 "::fff2:63:0:0:0|end-dt46|ZJ-HANGZHOU-CU-ALIYUN-TC63",
                 "::fff2:64:0:0:0|end-dt46|ZJ-HANGZHOU-CU-ALIYUN-TC64"
             ], 
-            "prefix": "fd00:201:209::/80"
+            "prefix": "fd00:201:209::/48"
         },
         "lsid10": {
             "argu_len": "48", 
@@ -4531,7 +4531,7 @@
                 "::fff2:63:0:0:0|end-dt46|ZJ-HANGZHOU-CU-ALIYUN-TC63",
                 "::fff2:64:0:0:0|end-dt46|ZJ-HANGZHOU-CU-ALIYUN-TC64"
             ], 
-            "prefix": "fd00:201:2010::/80"
+            "prefix": "fd00:201:2010::/48"
         },
         "lsid11": {
             "argu_len": "48", 
@@ -4668,7 +4668,7 @@
                 "::fff2:63:0:0:0|end-dt46|ZJ-HANGZHOU-CU-ALIYUN-TC63",
                 "::fff2:64:0:0:0|end-dt46|ZJ-HANGZHOU-CU-ALIYUN-TC64"
             ], 
-            "prefix": "fd00:201:2011::/80"
+            "prefix": "fd00:201:2011::/48"
         },
         "lsid12": {
             "argu_len": "48", 
@@ -4805,7 +4805,7 @@
                 "::fff2:63:0:0:0|end-dt46|ZJ-HANGZHOU-CU-ALIYUN-TC63",
                 "::fff2:64:0:0:0|end-dt46|ZJ-HANGZHOU-CU-ALIYUN-TC64"
             ], 
-            "prefix": "fd00:201:2012::/80"
+            "prefix": "fd00:201:2012::/48"
         },
         "lsid13": {
             "argu_len": "48", 
@@ -4942,7 +4942,7 @@
                 "::fff2:63:0:0:0|end-dt46|ZJ-HANGZHOU-CU-ALIYUN-TC63",
                 "::fff2:64:0:0:0|end-dt46|ZJ-HANGZHOU-CU-ALIYUN-TC64"
             ], 
-            "prefix": "fd00:201:2013::/80"
+            "prefix": "fd00:201:2013::/48"
         },
         "lsid14": {
             "argu_len": "48", 
@@ -5079,7 +5079,7 @@
                 "::fff2:63:0:0:0|end-dt46|ZJ-HANGZHOU-CU-ALIYUN-TC63",
                 "::fff2:64:0:0:0|end-dt46|ZJ-HANGZHOU-CU-ALIYUN-TC64"
             ], 
-            "prefix": "fd00:201:2014::/80"
+            "prefix": "fd00:201:2014::/48"
         },
         "lsid15": {
             "argu_len": "48", 
@@ -5216,7 +5216,7 @@
                 "::fff2:63:0:0:0|end-dt46|ZJ-HANGZHOU-CU-ALIYUN-TC63",
                 "::fff2:64:0:0:0|end-dt46|ZJ-HANGZHOU-CU-ALIYUN-TC64"
             ], 
-            "prefix": "fd00:201:2015::/80"
+            "prefix": "fd00:201:2015::/48"
         },
         "lsid16": {
             "argu_len": "48", 
@@ -5353,7 +5353,7 @@
                 "::fff2:63:0:0:0|end-dt46|ZJ-HANGZHOU-CU-ALIYUN-TC63",
                 "::fff2:64:0:0:0|end-dt46|ZJ-HANGZHOU-CU-ALIYUN-TC64"
             ], 
-            "prefix": "fd00:201:2016::/80"
+            "prefix": "fd00:201:2016::/48"
         }
     },
     "SWITCH": {

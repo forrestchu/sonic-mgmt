@@ -72,6 +72,9 @@ def sonic_installer_install2(dut, url, max_time=1800, skip_error_check=False, mi
             return "skipped"
         if re.search("is current running. Do nothing...", output):
             return "skipped"
+        if re.search("is just installed, no need to repeat installation", output) and \
+           re.search(r"Set image .* to default", output):
+            return "skipped"
         return "error"
     elif cli_type == 'klish':
         cmd = "image install {}".format(url)

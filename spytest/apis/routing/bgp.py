@@ -128,6 +128,8 @@ def config_router_bgp_mode(dut, local_asn, config_mode='enable', vrf='default', 
             command = "{} router bgp {}".format(mode, local_asn)
         else:
             command = "{} router bgp {} vrf {}".format(mode, local_asn, vrf)
+        if mode == '':
+            command += '\ntimers bgp start-timer 1\n'
     elif cli_type == 'klish':
         if vrf.lower() == 'default':
             if not mode:
@@ -433,6 +435,9 @@ def create_bgp_neighbor(dut, local_asn, neighbor_ip, remote_asn, keep_alive=60, 
         command = "neighbor {} remote-as {}".format(neighbor_ip, remote_asn)
         st.config(dut, command, type='vtysh')
         command = "neighbor {} timers {} {}".format(neighbor_ip, keep_alive, hold)
+        st.config(dut, command, type='vtysh')
+        # walkaroud for BGP start-timer
+        command = 'neighbor {} timers connect 10\n'.format(neighbor_ip)
         st.config(dut, command, type='vtysh')
         if password:
             command = " neighbor {} password {}".format(neighbor_ip, password)
@@ -2577,6 +2582,8 @@ def create_bgp_peergroup(dut, local_asn, peer_grp_name, remote_asn, keep_alive=6
         cmd = cmd + "neighbor {} peer-group\n".format(peer_grp_name)
         cmd = cmd + "neighbor {} remote-as {}\n".format(peer_grp_name, remote_asn)
         cmd = cmd + "neighbor {} timers {} {}\n".format(peer_grp_name, keep_alive, hold)
+        # walkaroud for BGP start-timer
+        cmd = cmd + 'neighbor {} timers connect 10\n'.format(peer_grp_name)
         if password:
             cmd = cmd + " neighbor {} password {}\n".format(peer_grp_name, password)
         cmd = cmd + "\n address-family {} unicast\n".format(family)
@@ -3026,6 +3033,8 @@ def config_bgp_multi_neigh_use_peergroup(dut, **kwargs):
     if cli_type == 'vtysh':
         command = "no bgp default ipv4-unicast \n"
         command += "neighbor {} peer-group \n".format(kwargs['peer_grp_name'])
+        # walkaroud for BGP start-timer
+        command += "neighbor {} timers connect 10 \n".format(kwargs['peer_grp_name'])
         command += "neighbor {} remote-as {} \n".format(kwargs['peer_grp_name'], kwargs['remote_asn'])
         if 'keep_alive' in kwargs and 'hold' in kwargs:
             command += "neighbor {} timers {} {} \n".format(kwargs['peer_grp_name'], kwargs['keep_alive'], kwargs['hold'])
@@ -3611,6 +3620,11 @@ def config_bgp(dut, **kwargs):
             else:
                 my_cmd = 'router bgp {}\n'.format(local_as)
 
+            # the default start-timer of AliNOS is 10s, change it to 1s to be compatible with spytest cases
+            # we don't know it's create bgp instance or change bgp attriburtes, however, it doesn't matter
+            if config_cmd == '':
+                my_cmd += 'timers bgp start-timer 1\n'
+
         if router_id != '':
             my_cmd += '{} bgp router-id {}\n'.format(config_cmd, router_id)
         if keepalive != '' and holdtime != '':
@@ -3626,6 +3640,9 @@ def config_bgp(dut, **kwargs):
         for type1 in config_type_list:
             if type1 == 'neighbor':
                 my_cmd += '{} neighbor {} remote-as {}\n'.format(config_cmd, neighbor, remote_as)
+                if config_cmd == '':
+                    # walkaroud for BGP start-timer
+                    my_cmd += 'neighbor {} timers connect 10\n'.format(neighbor)
             elif type1 == 'shutdown':
                 my_cmd += '{} neighbor {} shutdown\n'.format(config_cmd, neighbor)
             elif type1 == 'failover':

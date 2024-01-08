@@ -637,10 +637,12 @@
     }, 
     "BGP_PARAMETERS":{
         "100|global": {
+            "bgp_start_timer": "1",
             "bgp_router_id": "1.1.1.179"
         }, 
         "101|global|Vrf1":{
             "bgp_router_id":"13.3.3.1",
+            "bgp_start_timer": "1",
             "srv6_locator":"lsid1"
         },
         "101|ipv4|Vrf1":{
@@ -650,6 +652,7 @@
         },
         "101|global|ACTN-TC51":{
             "bgp_router_id":"13.3.3.51",
+            "bgp_start_timer": "1",
             "srv6_locator":"lsid1"
         },
         "101|ipv4|ACTN-TC51":{
@@ -659,6 +662,7 @@
         },
         "101|global|Vrf2":{
             "bgp_router_id":"13.3.3.2",
+            "bgp_start_timer": "1",
             "srv6_locator":"lsid1"
         },
         "101|ipv4|Vrf2":{
@@ -668,6 +672,7 @@
         },
         "101|global|ACTN-TC52":{
             "bgp_router_id":"13.3.3.52",
+            "bgp_start_timer": "1",
             "srv6_locator":"lsid1"
         },
         "101|ipv4|ACTN-TC52":{
@@ -677,6 +682,7 @@
         },
         "101|global|PRIVATE-TC3":{
             "bgp_router_id":"13.3.3.3",
+            "bgp_start_timer": "1",
             "srv6_locator":"lsid1"
         },
         "101|ipv4|PRIVATE-TC3":{
@@ -686,6 +692,7 @@
         },
         "101|global|ACTN-TC53":{
             "bgp_router_id":"13.3.3.53",
+            "bgp_start_timer": "1",
             "srv6_locator":"lsid1"
         },
         "101|ipv4|ACTN-TC53":{
@@ -695,6 +702,7 @@
         },
         "101|global|PRIVATE-TC4":{
             "bgp_router_id":"13.3.3.4",
+            "bgp_start_timer": "1",
             "srv6_locator":"lsid1"
         },
         "101|ipv4|PRIVATE-TC4":{
@@ -704,6 +712,7 @@
         },
         "101|global|ACTN-TC54":{
             "bgp_router_id":"13.3.3.54",
+            "bgp_start_timer": "1",
             "srv6_locator":"lsid1"
         },
         "101|ipv4|ACTN-TC54":{
@@ -713,6 +722,7 @@
         },
         "101|global|PRIVATE-TC5":{
             "bgp_router_id":"13.3.3.5",
+            "bgp_start_timer": "1",
             "srv6_locator":"lsid1"
         },
         "101|ipv4|PRIVATE-TC5":{
@@ -722,6 +732,7 @@
         },
         "101|global|ACTN-TC55":{
             "bgp_router_id":"13.3.3.55",
+            "bgp_start_timer": "1",
             "srv6_locator":"lsid1"
         },
         "101|ipv4|ACTN-TC55":{
@@ -731,6 +742,7 @@
         },
         "101|global|PRIVATE-TC6":{
             "bgp_router_id":"13.3.3.6",
+            "bgp_start_timer": "1",
             "srv6_locator":"lsid1"
         },
         "101|ipv4|PRIVATE-TC6":{
@@ -740,6 +752,7 @@
         },
         "101|global|ACTN-TC56":{
             "bgp_router_id":"13.3.3.56",
+            "bgp_start_timer": "1",
             "srv6_locator":"lsid1"
         },
         "101|ipv4|ACTN-TC56":{
@@ -749,6 +762,7 @@
         },
         "101|global|PRIVATE-TC7":{
             "bgp_router_id":"13.3.3.7",
+            "bgp_start_timer": "1",
             "srv6_locator":"lsid1"
         },
         "101|ipv4|PRIVATE-TC7":{
@@ -758,6 +772,7 @@
         },
         "101|global|ACTN-TC57":{
             "bgp_router_id":"13.3.3.57",
+            "bgp_start_timer": "1",
             "srv6_locator":"lsid1"
         },
         "101|ipv4|ACTN-TC57":{
@@ -767,6 +782,7 @@
         },
         "101|global|PRIVATE-TC8":{
             "bgp_router_id":"13.3.3.8",
+            "bgp_start_timer": "1",
             "srv6_locator":"lsid1"
         },
         "101|ipv4|PRIVATE-TC8":{
@@ -776,6 +792,7 @@
         },
         "101|global|ACTN-TC58":{
             "bgp_router_id":"13.3.3.58",
+            "bgp_start_timer": "1",
             "srv6_locator":"lsid1"
         },
         "101|ipv4|ACTN-TC58":{
@@ -785,6 +802,7 @@
         },
         "101|global|PRIVATE-TC9":{
             "bgp_router_id":"13.3.3.9",
+            "bgp_start_timer": "1",
             "srv6_locator":"lsid1"
         },
         "101|ipv4|PRIVATE-TC9":{
@@ -794,6 +812,7 @@
         },
         "101|global|ACTN-TC59":{
             "bgp_router_id":"13.3.3.59",
+            "bgp_start_timer": "1",
             "srv6_locator":"lsid1"
         },
         "101|ipv4|ACTN-TC59":{
@@ -803,6 +822,7 @@
         },
         "101|global|PRIVATE-TC10":{
             "bgp_router_id":"13.3.3.10",
+            "bgp_start_timer": "1",
             "srv6_locator":"lsid2"
         },
         "101|ipv4|PRIVATE-TC10":{
@@ -812,6 +832,7 @@
         },
         "101|global|ACTN-TC60":{
             "bgp_router_id":"13.3.3.60",
+            "bgp_start_timer": "1",
             "srv6_locator":"lsid3"
         },
         "101|ipv4|ACTN-TC60":{

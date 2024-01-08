@@ -1,7 +1,8 @@
 {
     "BGP_NEIGHBOR": {
         "101.1.0.2|global|PUBLIC-TC11": {
-            "asn": "999"
+            "asn": "999",
+            "connect": "10"
         }, 
         "101.1.0.2|ipv4|PUBLIC-TC11": {
             "activate": "true"
@@ -10,7 +11,8 @@
             "activate": "true"
         }, 
         "101.2.0.2|global|PUBLIC-TC11": {
-            "asn": "998"
+            "asn": "998",
+            "connect": "10"
         }, 
         "101.2.0.2|ipv4|PUBLIC-TC11": {
             "activate": "true"
@@ -21,19 +23,22 @@
         "2000::178|global": {
             "asn": "100", 
             "extnh": "true", 
-            "update_source": "2000::179"
+            "update_source": "2000::179",
+            "connect": "10"
         }, 
         "2000::178|ipv4_vpn": {
             "activate": "true"
         }, 
         "2033::178|global": {
-            "asn": "100"
+            "asn": "100",
+            "connect": "10"
         },                                                     
         "2033::178|ipv6": {
             "activate": "true"
         }, 
         "2044::178|global": {
-            "asn": "100"
+            "asn": "100",
+            "connect": "10"
         }, 
         "2044::178|ipv6": {
             "activate": "true"
@@ -47,14 +52,17 @@
     "BGP_PARAMETERS": {
         "100|global": {
             "bgp_router_id": "1.1.1.179",
+            "bgp_start_timer": "1",
             "bgp_timers": "10 30"
         }, 
         "100|global|PUBLIC-TC11": {
             "bgp_router_id": "2.2.2.179",
             "bgp_timers": "10 30",
+            "bgp_start_timer": "1",
             "srv6_locator": "lsid1"
         }, 
         "100|global|Vrf1": {                                   
+            "bgp_start_timer": "1",
             "srv6_locator": "lsid1"
         }, 
         "100|ipv4|PUBLIC-TC11": {

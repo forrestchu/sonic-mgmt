@@ -2407,68 +2407,83 @@
             "bgp_network_import_check": "true", 
             "bgp_peer_up_delay": "300", 
             "bgp_router_id": "11.105.231.172", 
+            "bgp_start_timer": "1",
             "bgp_timers": "10 30"
         }, 
         "65050|global|ACTN_TC0": {
             "bgp_peer_up_delay": "300", 
             "bgp_router_id": "11.105.231.172", 
+            "bgp_start_timer": "1",
             "srv6_locator": "locNNI-Unicast"
         }, 
         "65050|global|ACTN_TC1": {
             "bgp_router_id": "11.105.231.172", 
+            "bgp_start_timer": "1",
             "srv6_locator": "locNNI-Anycast-Cluster"
         }, 
         "65050|global|ACTN_TC2": {
             "bgp_router_id": "11.105.231.172", 
+            "bgp_start_timer": "1",
             "srv6_locator": "locNNI-Anycast-Cluster"
         }, 
         "65050|global|ACTN_TC3": {
             "bgp_router_id": "11.105.231.172", 
+            "bgp_start_timer": "1",
             "srv6_locator": "locNNI-Anycast-Cluster"
         }, 
         "65050|global|OOB_TC0": {
             "bgp_peer_up_delay": "300", 
             "bgp_router_id": "11.105.231.172", 
+            "bgp_start_timer": "1",
             "srv6_locator": "locNNI-Unicast"
         }, 
         "65050|global|OTN_TC0": {
             "bgp_bestpath_aspath_multipath_relax": "true", 
             "bgp_peer_up_delay": "300", 
             "bgp_router_id": "11.105.231.172", 
+            "bgp_start_timer": "1",
             "srv6_locator": "locNNI-Unicast"
         }, 
         "65050|global|PRIVATE_TC0": {
             "bgp_peer_up_delay": "300", 
             "bgp_router_id": "11.105.231.172", 
+            "bgp_start_timer": "1",
             "srv6_locator": "locNNI-Unicast"
         }, 
         "65050|global|PRIVATE_TC1": {
             "bgp_router_id": "11.105.231.172", 
+            "bgp_start_timer": "1",
             "srv6_locator": "locNNI-Anycast-Cluster"
         }, 
         "65050|global|PRIVATE_TC2": {
             "bgp_router_id": "11.105.231.172", 
+            "bgp_start_timer": "1",
             "srv6_locator": "locNNI-Anycast-Cluster"
         }, 
         "65050|global|PRIVATE_TC3": {
             "bgp_router_id": "11.105.231.172", 
+            "bgp_start_timer": "1",
             "srv6_locator": "locNNI-Anycast-Cluster"
         }, 
         "65050|global|PUBLIC_TC0": {
             "bgp_peer_up_delay": "300", 
             "bgp_router_id": "11.105.231.172", 
+            "bgp_start_timer": "1",
             "srv6_locator": "locNNI-Unicast"
         }, 
         "65050|global|PUBLIC_TC1": {
             "bgp_router_id": "11.105.231.172", 
+            "bgp_start_timer": "1",
             "srv6_locator": "locNNI-Anycast-Cluster"
         }, 
         "65050|global|PUBLIC_TC2": {
             "bgp_router_id": "11.105.231.172", 
+            "bgp_start_timer": "1",
             "srv6_locator": "locNNI-Anycast-Cluster"
         }, 
         "65050|global|PUBLIC_TC3": {
             "bgp_router_id": "11.105.231.172", 
+            "bgp_start_timer": "1",
             "srv6_locator": "locNNI-Anycast-Cluster"
         }, 
         "65050|ipv4": {

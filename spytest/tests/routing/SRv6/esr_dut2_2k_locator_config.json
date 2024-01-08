@@ -26,6 +26,7 @@
     }, 
     "BGP_PARAMETERS": {
         "100|global": {
+            "bgp_start_timer": "1",
             "bgp_router_id": "1.1.1.178"
         }, 
         "100|ipv4|Test1": {

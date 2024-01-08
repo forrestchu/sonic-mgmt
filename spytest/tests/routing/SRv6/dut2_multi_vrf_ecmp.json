@@ -637,9 +637,11 @@
     }, 
     "BGP_PARAMETERS":{
         "100|global": {
+            "bgp_start_timer": "1",
             "bgp_router_id": "1.1.1.178"
         }, 
         "100|global|Vrf1":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.1"
         },
         "100|ipv4|Vrf1":{
@@ -648,6 +650,7 @@
             "rd":"2:2"
         },
         "100|global|ACTN-TC51":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.51"
         },
         "100|ipv4|ACTN-TC51":{
@@ -656,6 +659,7 @@
             "rd":"2:2"
         },
         "100|global|Vrf2":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.2"
         },
         "100|ipv4|Vrf2":{
@@ -664,6 +668,7 @@
             "rd":"2:2"
         },
         "100|global|ACTN-TC52":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.52"
         },
         "100|ipv4|ACTN-TC52":{
@@ -672,6 +677,7 @@
             "rd":"2:2"
         },
         "100|global|PRIVATE-TC3":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.3"
         },
         "100|ipv4|PRIVATE-TC3":{
@@ -680,6 +686,7 @@
             "rd":"2:2"
         },
         "100|global|ACTN-TC53":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.53"
         },
         "100|ipv4|ACTN-TC53":{
@@ -688,6 +695,7 @@
             "rd":"2:2"
         },
         "100|global|PRIVATE-TC4":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.4"
         },
         "100|ipv4|PRIVATE-TC4":{
@@ -696,6 +704,7 @@
             "rd":"2:2"
         },
         "100|global|ACTN-TC54":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.54"
         },
         "100|ipv4|ACTN-TC54":{
@@ -704,6 +713,7 @@
             "rd":"2:2"
         },
         "100|global|PRIVATE-TC5":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.5"
         },
         "100|ipv4|PRIVATE-TC5":{
@@ -712,6 +722,7 @@
             "rd":"2:2"
         },
         "100|global|ACTN-TC55":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.55"
         },
         "100|ipv4|ACTN-TC55":{
@@ -720,6 +731,7 @@
             "rd":"2:2"
         },
         "100|global|PRIVATE-TC6":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.6"
         },
         "100|ipv4|PRIVATE-TC6":{
@@ -728,6 +740,7 @@
             "rd":"2:2"
         },
         "100|global|ACTN-TC56":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.56"
         },
         "100|ipv4|ACTN-TC56":{
@@ -736,6 +749,7 @@
             "rd":"2:2"
         },
         "100|global|PRIVATE-TC7":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.7"
         },
         "100|ipv4|PRIVATE-TC7":{
@@ -744,6 +758,7 @@
             "rd":"2:2"
         },
         "100|global|ACTN-TC57":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.57"
         },
         "100|ipv4|ACTN-TC57":{
@@ -752,6 +767,7 @@
             "rd":"2:2"
         },
         "100|global|PRIVATE-TC8":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.8"
         },
         "100|ipv4|PRIVATE-TC8":{
@@ -760,6 +776,7 @@
             "rd":"2:2"
         },
         "100|global|ACTN-TC58":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.58"
         },
         "100|ipv4|ACTN-TC58":{
@@ -768,6 +785,7 @@
             "rd":"2:2"
         },
         "100|global|PRIVATE-TC9":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.9"
         },
         "100|ipv4|PRIVATE-TC9":{
@@ -776,6 +794,7 @@
             "rd":"2:2"
         },
         "100|global|ACTN-TC59":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.59"
         },
         "100|ipv4|ACTN-TC59":{
@@ -784,6 +803,7 @@
             "rd":"2:2"
         },
         "100|global|PRIVATE-TC10":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.10"
         },
         "100|ipv4|PRIVATE-TC10":{
@@ -792,6 +812,7 @@
             "rd":"2:2"
         },
         "100|global|ACTN-TC60":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.60"
         },
         "100|ipv4|ACTN-TC60":{
@@ -800,6 +821,7 @@
             "rd":"2:2"
         },
         "100|global|PUBLIC-TC11":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.11"
         },
         "100|ipv4|PUBLIC-TC11":{
@@ -808,6 +830,7 @@
             "rd":"2:2"
         },
         "100|global|ACTN-TC61":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.61"
         },
         "100|ipv4|ACTN-TC61":{
@@ -816,6 +839,7 @@
             "rd":"2:2"
         },
         "100|global|PUBLIC-TC12":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.12"
         },
         "100|ipv4|PUBLIC-TC12":{
@@ -824,6 +848,7 @@
             "rd":"2:2"
         },
         "100|global|ACTN-TC62":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.62"
         },
         "100|ipv4|ACTN-TC62":{
@@ -832,6 +857,7 @@
             "rd":"2:2"
         },
         "100|global|PUBLIC-TC13":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.13"
         },
         "100|ipv4|PUBLIC-TC13":{
@@ -840,6 +866,7 @@
             "rd":"2:2"
         },
         "100|global|ACTN-TC63":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.63"
         },
         "100|ipv4|ACTN-TC63":{
@@ -848,6 +875,7 @@
             "rd":"2:2"
         },
         "100|global|PUBLIC-TC14":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.14"
         },
         "100|ipv4|PUBLIC-TC14":{
@@ -856,6 +884,7 @@
             "rd":"2:2"
         },
         "100|global|ACTN-TC64":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.64"
         },
         "100|ipv4|ACTN-TC64":{
@@ -864,6 +893,7 @@
             "rd":"2:2"
         },
         "100|global|PUBLIC-TC15":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.15"
         },
         "100|ipv4|PUBLIC-TC15":{
@@ -872,6 +902,7 @@
             "rd":"2:2"
         },
         "100|global|VPN1":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.65"
         },
         "100|ipv4|VPN1":{
@@ -880,6 +911,7 @@
             "rd":"2:2"
         },
         "100|global|PUBLIC-TC16":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.16"
         },
         "100|ipv4|PUBLIC-TC16":{
@@ -888,6 +920,7 @@
             "rd":"2:2"
         },
         "100|global|VPN2":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.66"
         },
         "100|ipv4|VPN2":{
@@ -896,6 +929,7 @@
             "rd":"2:2"
         },
         "100|global|PUBLIC-TC17":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.17"
         },
         "100|ipv4|PUBLIC-TC17":{
@@ -904,6 +938,7 @@
             "rd":"2:2"
         },
         "100|global|VPN3":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.67"
         },
         "100|ipv4|VPN3":{
@@ -912,6 +947,7 @@
             "rd":"2:2"
         },
         "100|global|PUBLIC-TC18":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.18"
         },
         "100|ipv4|PUBLIC-TC18":{
@@ -920,6 +956,7 @@
             "rd":"2:2"
         },
         "100|global|VPN4":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.68"
         },
         "100|ipv4|VPN4":{
@@ -928,6 +965,7 @@
             "rd":"2:2"
         },
         "100|global|PUBLIC-TC19":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.19"
         },
         "100|ipv4|PUBLIC-TC19":{
@@ -936,6 +974,7 @@
             "rd":"2:2"
         },
         "100|global|VPN5":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.69"
         },
         "100|ipv4|VPN5":{
@@ -944,6 +983,7 @@
             "rd":"2:2"
         },
         "100|global|PUBLIC-TC20":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.20"
         },
         "100|ipv4|PUBLIC-TC20":{
@@ -953,6 +993,7 @@
             "bgp_maximum_paths": "8"
         },
         "100|global|VPN6":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.70"
         },
         "100|ipv4|VPN6":{
@@ -961,6 +1002,7 @@
             "rd":"2:2"
         },
         "100|global|SX-XIAN-CM-TC21":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.21"
         },
         "100|ipv4|SX-XIAN-CM-TC21":{
@@ -969,6 +1011,7 @@
             "rd":"2:2"
         },
         "100|global|VPN7":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.71"
         },
         "100|ipv4|VPN7":{
@@ -977,6 +1020,7 @@
             "rd":"2:2"
         },
         "100|global|SX-XIAN-CM-TC22":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.22"
         },
         "100|ipv4|SX-XIAN-CM-TC22":{
@@ -985,6 +1029,7 @@
             "rd":"2:2"
         },
         "100|global|VPN8":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.72"
         },
         "100|ipv4|VPN8":{
@@ -993,6 +1038,7 @@
             "rd":"2:2"
         },
         "100|global|SX-XIAN-CM-TC23":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.23"
         },
         "100|ipv4|SX-XIAN-CM-TC23":{
@@ -1001,6 +1047,7 @@
             "rd":"2:2"
         },
         "100|global|VPN9":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.73"
         },
         "100|ipv4|VPN9":{
@@ -1009,6 +1056,7 @@
             "rd":"2:2"
         },
         "100|global|SX-XIAN-CM-TC24":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.24"
         },
         "100|ipv4|SX-XIAN-CM-TC24":{
@@ -1017,6 +1065,7 @@
             "rd":"2:2"
         },
         "100|global|VPN10":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.74"
         },
         "100|ipv4|VPN10":{
@@ -1025,6 +1074,7 @@
             "rd":"2:2"
         },
         "100|global|SX-XIAN-CM-TC25":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.25"
         },
         "100|ipv4|SX-XIAN-CM-TC25":{
@@ -1033,6 +1083,7 @@
             "rd":"2:2"
         },
         "100|global|VPN11":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.75"
         },
         "100|ipv4|VPN11":{
@@ -1041,6 +1092,7 @@
             "rd":"2:2"
         },
         "100|global|SX-XIAN-CM-TC26":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.26"
         },
         "100|ipv4|SX-XIAN-CM-TC26":{
@@ -1049,6 +1101,7 @@
             "rd":"2:2"
         },
         "100|global|VPN12":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.76"
         },
         "100|ipv4|VPN12":{
@@ -1057,6 +1110,7 @@
             "rd":"2:2"
         },
         "100|global|SX-XIAN-CM-TC27":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.27"
         },
         "100|ipv4|SX-XIAN-CM-TC27":{
@@ -1065,6 +1119,7 @@
             "rd":"2:2"
         },
         "100|global|VPN13":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.77"
         },
         "100|ipv4|VPN13":{
@@ -1073,6 +1128,7 @@
             "rd":"2:2"
         },
         "100|global|SX-XIAN-CM-TC28":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.28"
         },
         "100|ipv4|SX-XIAN-CM-TC28":{
@@ -1081,6 +1137,7 @@
             "rd":"2:2"
         },
         "100|global|VPN14":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.78"
         },
         "100|ipv4|VPN14":{
@@ -1089,6 +1146,7 @@
             "rd":"2:2"
         },
         "100|global|SX-XIAN-CM-TC29":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.29"
         },
         "100|ipv4|SX-XIAN-CM-TC29":{
@@ -1097,6 +1155,7 @@
             "rd":"2:2"
         },
         "100|global|VPN15":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.79"
         },
         "100|ipv4|VPN15":{
@@ -1105,6 +1164,7 @@
             "rd":"2:2"
         },
         "100|global|SX-XIAN-CM-TC30":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.30"
         },
         "100|ipv4|SX-XIAN-CM-TC30":{
@@ -1113,6 +1173,7 @@
             "rd":"2:2"
         },
         "100|global|VPN16":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.80"
         },
         "100|ipv4|VPN16":{
@@ -1121,6 +1182,7 @@
             "rd":"2:2"
         },
         "100|global|SX-XIAN-CM-TC31":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.31"
         },
         "100|ipv4|SX-XIAN-CM-TC31":{
@@ -1129,6 +1191,7 @@
             "rd":"2:2"
         },
         "100|global|VPN17":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.81"
         },
         "100|ipv4|VPN17":{
@@ -1137,6 +1200,7 @@
             "rd":"2:2"
         },
         "100|global|SX-XIAN-CM-TC32":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.32"
         },
         "100|ipv4|SX-XIAN-CM-TC32":{
@@ -1145,6 +1209,7 @@
             "rd":"2:2"
         },
         "100|global|VPN18":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.82"
         },
         "100|ipv4|VPN18":{
@@ -1153,6 +1218,7 @@
             "rd":"2:2"
         },
         "100|global|SX-XIAN-CM-TC33":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.33"
         },
         "100|ipv4|SX-XIAN-CM-TC33":{
@@ -1161,6 +1227,7 @@
             "rd":"2:2"
         },
         "100|global|VPN19":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.83"
         },
         "100|ipv4|VPN19":{
@@ -1169,6 +1236,7 @@
             "rd":"2:2"
         },
         "100|global|SX-XIAN-CM-TC34":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.34"
         },
         "100|ipv4|SX-XIAN-CM-TC34":{
@@ -1177,6 +1245,7 @@
             "rd":"2:2"
         },
         "100|global|VPN20":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.84"
         },
         "100|ipv4|VPN20":{
@@ -1185,6 +1254,7 @@
             "rd":"2:2"
         },
         "100|global|SX-XIAN-CM-TC35":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.35"
         },
         "100|ipv4|SX-XIAN-CM-TC35":{
@@ -1193,6 +1263,7 @@
             "rd":"2:2"
         },
         "100|global|VPN21":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.85"
         },
         "100|ipv4|VPN21":{
@@ -1201,6 +1272,7 @@
             "rd":"2:2"
         },
         "100|global|SX-XIAN-CM-TC36":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.36"
         },
         "100|ipv4|SX-XIAN-CM-TC36":{
@@ -1209,6 +1281,7 @@
             "rd":"2:2"
         },
         "100|global|VPN22":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.86"
         },
         "100|ipv4|VPN22":{
@@ -1217,6 +1290,7 @@
             "rd":"2:2"
         },
         "100|global|SX-XIAN-CM-TC37":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.37"
         },
         "100|ipv4|SX-XIAN-CM-TC37":{
@@ -1225,6 +1299,7 @@
             "rd":"2:2"
         },
         "100|global|VPN23":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.87"
         },
         "100|ipv4|VPN23":{
@@ -1233,6 +1308,7 @@
             "rd":"2:2"
         },
         "100|global|SX-XIAN-CM-TC38":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.38"
         },
         "100|ipv4|SX-XIAN-CM-TC38":{
@@ -1241,6 +1317,7 @@
             "rd":"2:2"
         },
         "100|global|VPN24":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.88"
         },
         "100|ipv4|VPN24":{
@@ -1249,6 +1326,7 @@
             "rd":"2:2"
         },
         "100|global|SX-XIAN-CM-TC39":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.39"
         },
         "100|ipv4|SX-XIAN-CM-TC39":{
@@ -1257,6 +1335,7 @@
             "rd":"2:2"
         },
         "100|global|VPN25":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.89"
         },
         "100|ipv4|VPN25":{
@@ -1265,6 +1344,7 @@
             "rd":"2:2"
         },
         "100|global|SX-XIAN-CM-TC40":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.40"
         },
         "100|ipv4|SX-XIAN-CM-TC40":{
@@ -1273,6 +1353,7 @@
             "rd":"2:2"
         },
         "100|global|VPN26":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.90"
         },
         "100|ipv4|VPN26":{
@@ -1281,6 +1362,7 @@
             "rd":"2:2"
         },
         "100|global|ACTN-TC41":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.41"
         },
         "100|ipv4|ACTN-TC41":{
@@ -1289,6 +1371,7 @@
             "rd":"2:2"
         },
         "100|global|VPN27":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.91"
         },
         "100|ipv4|VPN27":{
@@ -1297,6 +1380,7 @@
             "rd":"2:2"
         },
         "100|global|ACTN-TC42":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.42"
         },
         "100|ipv4|ACTN-TC42":{
@@ -1305,6 +1389,7 @@
             "rd":"2:2"
         },
         "100|global|VPN28":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.92"
         },
         "100|ipv4|VPN28":{
@@ -1313,6 +1398,7 @@
             "rd":"2:2"
         },
         "100|global|ACTN-TC43":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.43"
         },
         "100|ipv4|ACTN-TC43":{
@@ -1321,6 +1407,7 @@
             "rd":"2:2"
         },
         "100|global|VPN29":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.93"
         },
         "100|ipv4|VPN29":{
@@ -1329,6 +1416,7 @@
             "rd":"2:2"
         },
         "100|global|ACTN-TC44":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.44"
         },
         "100|ipv4|ACTN-TC44":{
@@ -1337,6 +1425,7 @@
             "rd":"2:2"
         },
         "100|global|VPN30":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.94"
         },
         "100|ipv4|VPN30":{
@@ -1345,6 +1434,7 @@
             "rd":"2:2"
         },
         "100|global|ACTN-TC45":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.45"
         },
         "100|ipv4|ACTN-TC45":{
@@ -1353,6 +1443,7 @@
             "rd":"2:2"
         },
         "100|global|VPN31":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.95"
         },
         "100|ipv4|VPN31":{
@@ -1361,6 +1452,7 @@
             "rd":"2:2"
         },
         "100|global|ACTN-TC46":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.46"
         },
         "100|ipv4|ACTN-TC46":{
@@ -1369,6 +1461,7 @@
             "rd":"2:2"
         },
         "100|global|VPN32":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.96"
         },
         "100|ipv4|VPN32":{
@@ -1377,6 +1470,7 @@
             "rd":"2:2"
         },
         "100|global|ACTN-TC47":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.47"
         },
         "100|ipv4|ACTN-TC47":{
@@ -1385,6 +1479,7 @@
             "rd":"2:2"
         },
         "100|global|VPN33":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.97"
         },
         "100|ipv4|VPN33":{
@@ -1393,6 +1488,7 @@
             "rd":"2:2"
         },
         "100|global|ACTN-TC48":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.48"
         },
         "100|ipv4|ACTN-TC48":{
@@ -1401,6 +1497,7 @@
             "rd":"2:2"
         },
         "100|global|VPN34":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.98"
         },
         "100|ipv4|VPN34":{
@@ -1409,6 +1506,7 @@
             "rd":"2:2"
         },
         "100|global|ACTN-TC49":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.49"
         },
         "100|ipv4|ACTN-TC49":{
@@ -1417,6 +1515,7 @@
             "rd":"2:2"
         },
         "100|global|VPN35":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.99"
         },
         "100|ipv4|VPN35":{
@@ -1425,6 +1524,7 @@
             "rd":"2:2"
         },
         "100|global|ACTN-TC50":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.50"
         },
         "100|ipv4|ACTN-TC50":{
@@ -1433,6 +1533,7 @@
             "rd":"2:2"
         },
         "100|global|VPN36":{
+            "bgp_start_timer": "1",
             "bgp_router_id":"3.3.3.100"
         },
         "100|ipv4|VPN36":{

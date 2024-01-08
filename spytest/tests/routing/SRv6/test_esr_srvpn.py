@@ -708,13 +708,13 @@ def test_base_config_srvpn_locator_01():
 
     st.report_pass("test_case_passed")
 
-def load_json_config(filesuffix='multi_vrf_full', appendixDir=''):
+def load_json_config(filesuffix):
     curr_path = os.getcwd()
 
-    json_file_dut1_multi_vrf = curr_path+"/routing/SRv6"+appendixDir+"/dut1_"+filesuffix+".json"
+    json_file_dut1_multi_vrf = curr_path+"/routing/SRv6/dut1_"+filesuffix+".json"
     st.apply_files(dut1, [json_file_dut1_multi_vrf], method="replace_configdb")
 
-    json_file_dut2_multi_vrf = curr_path+"/routing/SRv6"+appendixDir+"/dut2_"+filesuffix+".json"
+    json_file_dut2_multi_vrf = curr_path+"/routing/SRv6/dut2_"+filesuffix+".json"
     st.apply_files(dut2, [json_file_dut2_multi_vrf], method="replace_configdb")
 
     st.wait(10)

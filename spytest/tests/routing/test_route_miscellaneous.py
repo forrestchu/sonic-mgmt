@@ -155,7 +155,7 @@ def test_ip_route_and_fib_with_large_routes():
     ctrl_start = {'mode':'start'}
     bgp_rtr = tgapi.tg_bgp_config(tg=tg, handle=h1, conf_var=conf_var, route_var = route_var, ctrl_var=ctrl_start)
     if 'eSR' == os.getenv('SPYTEST_PROJECT'):
-        time.sleep(40)
+        time.sleep(200)
     else:
         time.sleep(10)
 

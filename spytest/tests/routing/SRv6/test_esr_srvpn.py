@@ -1179,12 +1179,11 @@ def get_route_convergence_time(cursor, csv_file):
     start_time = cursor
     stop_time = cursor
     max_rx_rate = max(y) + 1
-    for i in range(cursor, len(x) - 1):
-        if y[i] * 100 / max_rx_rate < 98 and start_time == cursor:
-            start_time = x[i]
-
-        if y[i] == 0 and stop_time == cursor:
+    for i in range(len(x) - 1, 0, -1):
+        if y[i] * 100 / max_rx_rate > 1 and stop_time == cursor:
             stop_time = x[i]
+        if y[i] * 100 / max_rx_rate > 98 and start_time == cursor:
+            start_time = x[i]
             break
 
     return stop_time - start_time

@@ -658,7 +658,7 @@ def test_VrfFun_28_36_43_47(vrf_fixture_tc_28_36_43_47):
         dict1 = {'vrf_name':vrf_name[1],'local_as':dut1_as[1],'peergroup':'peergroup_v6','config_type_list':['peergroup'],'remote_as':dut2_as[1],'neighbor':nbr_1,'addr_family':'ipv6'}
         dict2 = {'vrf_name':vrf_name[1],'local_as':dut2_as[1],'peergroup':'peergroup_v6','config_type_list':['peergroup'],'remote_as':dut1_as[1],'neighbor':nbr_2,'addr_family':'ipv6'}
         parallel.exec_parallel(True, [data.dut1, data.dut2], bgp_api.config_bgp, [dict1, dict2])
-    if not ip_bgp.verify_bgp_neighbor(data.dut1, neighborip = dut2_dut1_vrf_ip[1], state='Established', vrf = vrf_name[1]):
+    if not utils.poll_wait(ip_bgp.verify_bgp_neighbor, 60, data.dut1, neighborip = dut2_dut1_vrf_ip[1], state='Established', vrf = vrf_name[1]):
         st.log('IPv6 IBGP neighbor did not come up on VRF-102 after peer-group configuration')
         result += 1
     loc_lib.clear_tg()
@@ -669,7 +669,7 @@ def test_VrfFun_28_36_43_47(vrf_fixture_tc_28_36_43_47):
     if not aggrResult:
         st.log('IPv4 Traffic on VRF-102 failed after peer-group configuration')
         result += 1
-    if not ip_bgp.verify_bgp_neighbor(data.dut1, neighborip = dut2_dut1_vrf_ipv6[1], state='Established', vrf = vrf_name[1]):
+    if not utils.poll_wait(ip_bgp.verify_bgp_neighbor, 60, data.dut1, neighborip = dut2_dut1_vrf_ipv6[1], state='Established', vrf = vrf_name[1]):
         st.log('IPv6 IBGP neighbor did not come up on VRF-102 after peer-group configuration')
         result += 1
     if result == 0:

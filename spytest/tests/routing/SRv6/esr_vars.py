@@ -388,27 +388,6 @@ data.vrf_list = [
     "ZJ-HANGZHOU-CU-ALIYUN-TC63",
     "ZJ-HANGZHOU-CU-ALIYUN-TC64"
 ]
-data.te_policy_key = ['active_members', 'endpoint', 'weight', 'color', 'policy_status', 'preference', 'cpath_name', 'cpath_status', 'preference_status', 'sidlist']
-
-data.dut1_policy = [
-	{'active_members':'1', 'endpoint':'2000::59', 'weight':'1', 'color':'1', 'policy_status':'Active', 'preference':'100', 'cpath_name':'cp1_ipv4', 'cpath_status':'UP', 'preference_status':'UP', 'sidlist':'sl1_ipv4'},
-	{'active_members':'1', 'endpoint':'2000::59', 'weight':'1', 'color':'2', 'policy_status':'Active', 'preference':'100', 'cpath_name':'cp1_ipv6', 'cpath_status':'UP', 'preference_status':'UP', 'sidlist':'sl2_ipv6'},
-	{'active_members':'2', 'endpoint':'2000::59', 'weight':'1', 'color':'3', 'policy_status':'Active', 'preference':'100', 'cpath_name':'cp1_ipv4', 'cpath_status':'UP', 'preference_status':'UP', 'sidlist':'sl1_ipv4'},
-	{'active_members':'', 'endpoint':'', 'weight':'1', 'color':'', 'policy_status':'', 'preference':'', 'cpath_name':'cp2_ipv4', 'cpath_status':'UP', 'preference_status':'', 'sidlist':'sl3_ipv4'},
-	{'active_members':'2', 'endpoint':'2000::59', 'weight':'1', 'color':'4', 'policy_status':'Active', 'preference':'100', 'cpath_name':'cp1_ipv6', 'cpath_status':'UP', 'preference_status':'UP', 'sidlist':'sl2_ipv6'},
-	{'active_members':'', 'endpoint':'', 'weight':'1', 'color':'', 'policy_status':'', 'preference':'', 'cpath_name':'cp2_ipv6', 'cpath_status':'UP', 'preference_status':'', 'sidlist':'sl4_ipv6'},
-	{'active_members':'2', 'endpoint':'2000::59', 'weight':'1', 'color':'5', 'policy_status':'Active', 'preference':'100', 'cpath_name':'cp1_ipv4', 'cpath_status':'UP', 'preference_status':'UP', 'sidlist':'sl1_ipv4'},
-	{'active_members':'', 'endpoint':'', 'weight':'1', 'color':'', 'policy_status':'', 'preference':'', 'cpath_name':'cp2_ipv6', 'cpath_status':'UP', 'preference_status':'', 'sidlist':'sl2_ipv6'},
-	{'active_members':'1', 'endpoint':'2000::59', 'weight':'1', 'color':'6', 'policy_status':'Active', 'preference':'100', 'cpath_name':'cp2_ipv4', 'cpath_status':'UP', 'preference_status':'UP', 'sidlist':'sl3_ipv4'},
-	{'active_members':'1', 'endpoint':'', 'weight':'1', 'color':'', 'policy_status':'', 'preference':'200', 'cpath_name':'cp1_ipv4', 'cpath_status':'UP', 'preference_status':'UP', 'sidlist':'sl1_ipv4'},
-	{'active_members':'1', 'endpoint':'2000::59', 'weight':'1', 'color':'7', 'policy_status':'Active', 'preference':'100', 'cpath_name':'cp2_ipv6', 'cpath_status':'UP', 'preference_status':'UP', 'sidlist':'sl4_ipv6'},
-	{'active_members':'1', 'endpoint':'', 'weight':'1', 'color':'', 'policy_status':'', 'preference':'200', 'cpath_name':'cp1_ipv6', 'cpath_status':'UP', 'preference_status':'UP', 'sidlist':'sl2_ipv6'},
-	{'active_members':'1', 'endpoint':'2000::59', 'weight':'1', 'color':'8', 'policy_status':'Active', 'preference':'100', 'cpath_name':'cp1_ipv4_two_endx', 'cpath_status':'UP', 'preference_status':'UP', 'sidlist':'sl5_ipv4'},
-	{'active_members':'2', 'endpoint':'', 'weight':'1', 'color':'', 'policy_status':'', 'preference':'200', 'cpath_name':'cp2_ipv4_two_endx', 'cpath_status':'UP', 'preference_status':'UP', 'sidlist':'sl7_ipv4'},
-	{'active_members':'', 'endpoint':'', 'weight':'1', 'color':'', 'policy_status':'', 'preference':'', 'cpath_name':'cp3_ipv4_signle_endx', 'cpath_status':'UP', 'preference_status':'', 'sidlist':'sl1_ipv4'},
-	{'active_members':'2', 'endpoint':'2000::59', 'weight':'1', 'color':'9', 'policy_status':'Active', 'preference':'100', 'cpath_name':'cp1_sbfd', 'cpath_status':'UP', 'preference_status':'UP', 'sidlist':'sl9_sbfd'},
-	{'active_members':'', 'endpoint':'', 'weight':'1', 'color':'', 'policy_status':'', 'preference':'', 'cpath_name':'cp2_sbfd', 'cpath_status':'UP', 'preference_status':'', 'sidlist':'sla_sbfd'}
-]
 
 data.vrf_prefix = {
     "Vrf1":"200.1.19.136/32",

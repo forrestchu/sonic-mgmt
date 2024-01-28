@@ -74,7 +74,7 @@ data.load_mirror_config_done = False
 data.load_mirror_ixia_conf_done = False
 
 @pytest.fixture(scope="module", autouse=True)
-def esr_sr_te_module_hooks(request):
+def esr_srvpn_module_hooks(request):
     #add things at the start of this module
     # add bmp
     ixia_controller_init()
@@ -83,6 +83,44 @@ def esr_sr_te_module_hooks(request):
     ixia_controller_deinit()
     # tgapi.set_reconnect_tgen(True)
     # del bmp log
+
+@pytest.fixture(scope="function", autouse=True)
+def esr_srvpn_func_hooks(request):
+    if st.get_func_name(request) in ["test_base_config_sr_te_2kl_route_learn_03",
+                                     "test_srvpn_performance_2M"]:
+        st.log("esr_srvpn_func_hooks enter ")
+        if data.load_multi_vrf_config_done == False:
+            load_json_config("multi_vrf_ecmp")
+            data.load_multi_vrf_config_done = True
+        # load ixia config
+        if data.load_multi_vrf_ixia_conf_done == False and st.get_func_name(request) in ["test_base_config_srvpn_2kl_route_learn_02",
+                                                                                            "test_base_config_srvpn_multi_vrf_03"]:
+            ixia_load_config(ESR_MULTI_VRF_CONFIG)
+            ixia_start_all_protocols()
+            st.wait(60)
+            data.load_multi_vrf_ixia_conf_done = True
+
+    if st.get_func_name(request) in ["test_srvpn_mirror_config_05","test_srvpn_mirror_config_redistribute_vrf_06",
+                                      "test_srvpn_mirror_config_bgp_flap_07", "test_srvpn_mirror_config_underlay_link_flap_08",
+                                      "test_srvpn_mirror_config_underlay_ecmp_switch_09", "test_srvpn_mirror_16nexthops_10"]:
+        st.log("esr_srvpn_func_hooks enter ")
+        if data.load_mirror_config_done == False:
+            load_json_config('mirror_config_16nht')
+            data.load_mirror_config_done = True
+        # load ixia config
+        if st.get_func_name(request) == "test_srvpn_mirror_16nexthops_10":
+            ixia_config = os.path.join(os.getcwd(), "routing/SRv6/esr_mirror_16nexthop.json")
+            ixia_load_config(ixia_config)
+            ixia_start_all_protocols()
+            st.wait(60)
+        elif data.load_mirror_ixia_conf_done == False:
+            ixia_load_config(ESR_MIRROR_CONFIG)
+            ixia_start_all_protocols()
+            st.wait(60)
+            data.load_mirror_ixia_conf_done = True
+
+    yield
+    pass
 
 def duts_base_config():
     curr_path = os.getcwd()
@@ -103,19 +141,7 @@ def test_base_config_sr_te_config_check_01():
     st.banner("test_base_config_sr_te_config_check_01 begin")
     st.wait(30)
 
-    # step 1 : check ipv6 static route
-    route_entries = cli_show_json(dut1, "show ipv6 route json", type="vtysh")
-    # expected json
-    cwd = os.getcwd()
-    expected_route_path = cwd+"/routing/SRv6/locator_static_route_expected_01.json"
-    expected_route_json = json.loads(open(expected_route_path).read())
-    result = json_cmp(route_entries, expected_route_json)
-    if result and result.has_errors():
-        st.report_fail("step 1 test_base_config_sr_te_config_check_01_failed")
-        for e in result.errors:
-            st.log(e)
-
-    # step 2 : check bgp state
+    # step 1 : check bgp state
     def check_bgp_state():
         output=st.show(dut1,'show bgp neighbors {}'.format('2000::178'), type='vtysh')
         bgp_state = output[0]['state']
@@ -125,244 +151,325 @@ def test_base_config_sr_te_config_check_01():
             return True
 
     if not retry_api(check_bgp_state, retry_count= 10, delay= 10):
-        st.report_fail("step2 pre check bgp state failed")
+        st.report_fail("step1 pre check bgp state failed")
 
-    # step 3 :check te-policy
-    output = st.show(dut1, "show sr-te policy detail", type='vtysh')
-    if len(output) == 0:
-        st.error("Output is Empty")
-        return False
-    for a in output:
-        for key in a:
-            output[output.index(a)][key]=output[output.index(a)][key].lstrip()
-            output[output.index(a)][key]=output[output.index(a)][key].rstrip()
-            if key in data.te_policy_key:
-                if (output[output.index(a)][key] != data.dut1_policy[output.index(a)][key]):
-                    print("output:{} != data:{}".format(output[output.index(a)][key],data.dut1_policy[output.index(a)][key]))
-                    st.report_fail("step3 check te-policy failed")
-
-    # step 4 : add vpn route
+    # step 3 : add vpn route
     vrf = 'PUBLIC-TC11'
     check_fields = ['rdroute', 'sid', 'color', 'peerv6', 'secetced', 'policy']
     bgp_as = 100
     st.config(dut1, 'vtysh -c "config t" -c "vrf {}" -c "ip route 192.100.1.0/24 blackhole"'.format(vrf))
     st.config(dut1, 'vtysh -c "config t" -c "router bgp {} vrf {}" -c "address-family ipv4 unicast" -c "redistribute static"'.format(bgp_as, vrf))
-    st.config(dut1, 'vtysh -c "config t" -c "vrf {}" -c "ip route 192:100:1::0/64 blackhole"'.format(vrf))
+    st.config(dut1, 'vtysh -c "config t" -c "vrf {}" -c "ipv6 route 192:100:1::/64 blackhole"'.format(vrf))
     st.config(dut1, 'vtysh -c "config t" -c "router bgp {} vrf {}" -c "address-family ipv6 unicast" -c "redistribute static"'.format(bgp_as, vrf))
 
-    cmd = "cli -c 'no page' -c 'show bgp ipv4 vpn 192.100.1.0/24'"
-    records = st.show(dut2, cmd)
-    st.log(records)
+    show_cmd = "cli -c 'no page' -c 'show bgp ipv4 vpn 192.100.1.0/24'"
 
-    expected_vpn = {
-        'rdroute':'2:2:192.100.1.0/24',
-        'sid':'fd00:201:201:fff1:11::',
-        'color':'1',
-        'peerv6':'',
-        'policy':'2000::179|1',
-        'secetced':'1 available, best #1',
-    }
+    result = st.show(dut2, show_cmd, skip_tmpl=True)
+    if 'fd00:201:201:fff1:11::' not in result:
+        st.report_fail("step 3 test_base_config_sr_te_config_check_01_failed, check sid")
+    if 'srv6-tunnel:1000::179|1(endpoint|color)' not in result:
+        st.report_fail("step 3 test_base_config_sr_te_config_check_01_failed, check policy")
+    if 'srv6-tunnel:2000::179|1(endpoint|color)' not in result:
+        st.report_fail("step 3 test_base_config_sr_te_config_check_01_failed, check policy")
 
-    if not records or len(records)==0:
-        st.report_fail("step 4 test_base_config_sr_te_config_check_01_failed")
+    cmd = "cli -c 'no page' -c 'show bgp ipv6 vpn  192:100:1::'"
 
-    check = False
-    for re in records:
-        match_cnt = 0
-        st.log(re)
-        for it in check_fields:
-            st.log(re[it])
-            if re[it] ==  expected_vpn[it]:
-                match_cnt +=1
+    result = st.show(dut2, show_cmd, skip_tmpl=True)
+    if 'fd00:201:201:fff1:11::' not in result:
+        st.report_fail("step 3 test_base_config_sr_te_config_check_01_failed, check sid")
+    if 'srv6-tunnel:1000::179|1(endpoint|color)' not in result:
+        st.report_fail("step 3 test_base_config_sr_te_config_check_01_failed, check policy")
+    if 'srv6-tunnel:2000::179|1(endpoint|color)' not in result:
+        st.report_fail("step 3 test_base_config_sr_te_config_check_01_failed, check policy")
 
-        if match_cnt == len(check_fields):
-            check = True
-            break
-
-    if not check:
-        st.log(records)
-        st.report_fail("step 4 test_base_config_sr_te_config_check_01_failed")
-
-    cmd = "cli -c 'no page' -c 'show bgp ipv6 vpn 192:100:1::/64'"
-    records = st.show(dut2, cmd)
-    st.log(records)
-
-    expected_vpn = {
-        'rdroute':'2:2:192:100:1::/64',
-        'sid':'fd00:201:201:fff1:11::',
-        'color':'2',
-        'peerv6':'',
-        'policy':'2000::179|2',
-        'secetced':'1 available, best #1',
-    }
-
-    if not records or len(records)==0:
-        st.report_fail("step 4 test_base_config_sr_te_config_check_01_ipv6_failed")
-
-    check = False
-    for re in records:
-        match_cnt = 0
-        st.log(re)
-        for it in check_fields:
-            st.log(re[it])
-            if re[it] ==  expected_vpn[it]:
-                match_cnt +=1
-
-        if match_cnt == len(check_fields):
-            check = True
-            break
-
-    if not check:
-        st.log(records)
-        st.report_fail("step 4 test_base_config_sr_te_config_check_01_ipv6_failed")
-
-    # step 5 : check vpn route
+    # step 4 : check vpn route
     show_cmd = "cli -c 'show ip route vrf PUBLIC-TC11 192.100.1.0/24'"
     result = st.show(dut2, show_cmd, skip_tmpl=True)
-    if 'seg6 fd00:201:201:fff1:11::' not in result:
-        st.report_fail("step 5 test_base_config_sr_te_config_check_01_failed, check sid")
 
+    if 'srv6tunnel(endpoint|color):1000::179|1' not in result:
+        st.report_fail("step 4 test_base_config_sr_te_config_check_01_failed, check policy")
     if 'srv6tunnel(endpoint|color):2000::179|1' not in result:
-        st.report_fail("step 5 test_base_config_sr_te_config_check_01_failed, check policy")
+        st.report_fail("step 4 test_base_config_sr_te_config_check_01_failed, check policy")
 
     show_cmd = "cli -c 'show ipv6 route vrf PUBLIC-TC11 192:100:1::/64'"
     result = st.show(dut2, show_cmd, skip_tmpl=True)
-    if 'seg6 fd00:201:201:fff1:11::' not in result:
-        st.report_fail("step 5 test_base_config_sr_te_config_check_01_ipv6_failed, check sid")
 
-    if 'srv6tunnel(endpoint|color):2000::179|2' not in result:
-        st.report_fail("step 5 test_base_config_sr_te_config_check_01_ipv6_failed, check policy")
+    if 'srv6tunnel(endpoint|color):1000::179|1' not in result:
+        st.report_fail("step 4 test_base_config_sr_te_config_check_01_failed, check policy")
+    if 'srv6tunnel(endpoint|color):2000::179|1' not in result:
+        st.report_fail("step 4 test_base_config_sr_te_config_check_01_failed, check policy")
 
-    # step 6 : check app db
+    # step 5 : check app db
     key = 'ROUTE_TABLE:' + 'Vrf10000' + ':192.100.1.0/24'
-    nexthop_val = appdb_get_onefield(dut2, key, "nexthop")
-    if nexthop_val != "2000::179":
-        st.report_fail("step 6 test_base_config_sr_te_config_check_01_failed, check nexthop")
+    nhg_id = appdb_get_onefield(dut2, key, "nexthop_group")
+    group_table_key = 'NEXTHOP_GROUP_TABLE:' + nhg_id
 
-    vpn_sid_val = appdb_get_onefield(dut2, key, "vpn_sid")
-    if vpn_sid_val != "fd00:201:201:fff1:11::":
-        st.report_fail("step 6 test_base_config_sr_te_config_check_01_failed, check vpn sid")
+    nexthop_val = appdb_get_onefield(dut2, group_table_key, "nexthop")
+    if "1000::179" not in nexthop_val:
+        st.report_fail("step 5 test_base_config_sr_te_config_check_01_ipv6_failed, check nexthop")
+    if "2000::179" not in nexthop_val:
+        st.report_fail("step 5 test_base_config_sr_te_config_check_01_ipv6_failed, check nexthop")
 
-    seg_src_val = appdb_get_onefield(dut2, key, "seg_src")
-    if seg_src_val != "2000::178":
-        st.report_fail("step 6 test_base_config_sr_te_config_check_01_failed, check seg")
+    segment_val = appdb_get_onefield(dut2, group_table_key, "segment")
+    if "a" not in segment_val:
+        st.report_fail("step 5 test_base_config_sr_te_config_check_01_ipv6_failed, check segment")
+    if "b" not in segment_val:
+        st.report_fail("step 5 test_base_config_sr_te_config_check_01_ipv6_failed, check segment")
 
-    policy_val = appdb_get_onefield(dut2, key, "policy")
-    if policy_val != "2000::179_1":
-        st.report_fail("step 6 test_base_config_sr_te_config_check_01_failed, check policy")
+    pic_id = appdb_get_onefield(dut2, key, "pic_context_id")
+    pic_table_key = 'PIC_CONTEXT_TABLE:' + pic_id
+
+    vpn_sid_val = appdb_get_onefield(dut2, pic_table_key, "vpn_sid")
+    if "fd00:201:201:fff1:11::" not in vpn_sid_val:
+        st.report_fail("step 5 test_base_config_sr_te_config_check_01_failed, check vpn sid")
 
     key = 'ROUTE_TABLE:' + 'Vrf10000' + ':192:100:1::/64'
-    nexthop_val = appdb_get_onefield(dut2, key, "nexthop")
-    if nexthop_val != "2000::179":
-        st.report_fail("step 6 test_base_config_sr_te_config_check_01_ipv6_failed, check nexthop")
+    nhg_id = appdb_get_onefield(dut2, key, "nexthop_group")
+    group_table_key = 'NEXTHOP_GROUP_TABLE:' + nhg_id
 
-    vpn_sid_val = appdb_get_onefield(dut2, key, "vpn_sid")
-    if vpn_sid_val != "fd00:201:201:fff1:11::":
-        st.report_fail("step 6 test_base_config_sr_te_config_check_01_ipv6_failed, check vpn sid")
+    nexthop_val = appdb_get_onefield(dut2, group_table_key, "nexthop")
+    if "1000::179" not in nexthop_val:
+        st.report_fail("step 5 test_base_config_sr_te_config_check_01_ipv6_failed, check nexthop")
+    if "2000::179" not in nexthop_val:
+        st.report_fail("step 5 test_base_config_sr_te_config_check_01_ipv6_failed, check nexthop")
 
-    seg_src_val = appdb_get_onefield(dut2, key, "seg_src")
-    if seg_src_val != "2000::178":
-        st.report_fail("step 6 test_base_config_sr_te_config_check_01_ipv6_failed, check seg")
+    segment_val = appdb_get_onefield(dut2, group_table_key, "segment")
+    if "a" not in segment_val:
+        st.report_fail("step 5 test_base_config_sr_te_config_check_01_ipv6_failed, check segment")
+    if "b" not in segment_val:
+        st.report_fail("step 5 test_base_config_sr_te_config_check_01_ipv6_failed, check segment")
 
-    policy_val = appdb_get_onefield(dut2, key, "policy")
-    if policy_val != "2000::179_2":
-        st.report_fail("step 6 test_base_config_sr_te_config_check_01_ipv6_failed, check policy")
+    pic_id = appdb_get_onefield(dut2, key, "pic_context_id")
+    pic_table_key = 'PIC_CONTEXT_TABLE:' + pic_id
 
-    # step 7 : check app db
-    vrf_name = 'PUBLIC-TC11'
-    st.config(dut1, 'cli -c "config t" -c "router bgp {} vrf {}" -c "address-family ipv4 unicast" -c "no route-map vpn export sr1"'.format(bgp_as, vrf_name))
-    st.config(dut1, 'cli -c "config t" -c "router bgp {} vrf {}" -c "address-family ipv6 unicast" -c "no route-map vpn export sr2"'.format(bgp_as, vrf_name))
-    st.wait(10)
-    cmd = "cli -c 'no page' -c 'show bgp ipv4 vpn 192.100.1.0/24'"
-    records = st.show(dut2, cmd)
-    st.log(records)
+    vpn_sid_val = appdb_get_onefield(dut2, pic_table_key, "vpn_sid")
+    if "fd00:201:201:fff1:11::" not in vpn_sid_val:
+        st.report_fail("step 5 test_base_config_sr_te_config_check_01_failed, check vpn sid")
 
-    expected_vpn = {
-        'rdroute':'2:2:192.100.1.0/24',
-        'sid':'fd00:201:201:fff1:11::',
-        'color':'',
-        'peerv6':'',
-        'policy':'',
-        'secetced':'1 available, best #1',
-    }
+    st.report_pass("test_case_passed")
 
-    if not records or len(records)==0:
-        st.report_fail("step 7 test_base_config_sr_te_config_check_01_failed, len = 0")
+@pytest.mark.community
+@pytest.mark.community_pass
+def test_base_config_sr_te_config_check_02():
 
-    check = False
-    for re in records:
-        match_cnt = 0
-        st.log(re)
-        for it in check_fields:
-            st.log(re[it])
-            if re[it] ==  expected_vpn[it]:
-                match_cnt +=1
+    st.banner("test_base_config_sr_te_config_check_02 begin")
+    #shutdown interface, test one policy
+    st.config(dut1, 'cli -c "configure terminal" -c "interface Ethernet4" -c "shutdown"')
+    st.wait(30)
 
-        if match_cnt == len(check_fields):
-            check = True
-            break
+    # step 2 : check bgp state
+    def check_bgp_state():
+        output=st.show(dut1,'show bgp neighbors {}'.format('2000::178'), type='vtysh')
+        bgp_state = output[0]['state']
+        if bgp_state != 'Active':
+            return False
+        else:    
+            return True
 
-    if not check:
-        st.log(records)
-        st.report_fail("step 7 test_base_config_sr_te_config_check_01_failed, check failed")
+    if not retry_api(check_bgp_state, retry_count= 5, delay= 10):
+        st.report_fail("step2 pre check bgp state failed")
 
-    cmd = "cli -c 'no page' -c 'show bgp ipv6 vpn 192:100:1::0/64'"
-    records = st.show(dut2, cmd)
-    st.log(records)
+   # step 3 : check vpn route
+    show_cmd = "cli -c 'show ip route vrf PUBLIC-TC11 192.100.1.0/24'"
+    result = st.show(dut2, show_cmd, skip_tmpl=True)
 
-    expected_vpn = {
-        'rdroute':'2:2:192:100:1::/64',
-        'sid':'fd00:201:201:fff1:11::',
-        'color':'',
-        'peerv6':'',
-        'policy':'',
-        'secetced':'1 available, best #1',
-    }
+    if 'srv6tunnel(endpoint|color):1000::179|1' not in result:
+        st.report_fail("step 3 test_base_config_sr_te_config_check_02_failed, check policy")
+    if 'srv6tunnel(endpoint|color):2000::179|1' in result:
+        st.report_fail("step 3 test_base_config_sr_te_config_check_02_failed, check policy")
 
-    if not records or len(records)==0:
-        st.report_fail("step 7 test_base_config_sr_te_config_check_01_ipv6_failed, len = 0")
+    show_cmd = "cli -c 'show ipv6 route vrf PUBLIC-TC11 192:100:1::/64'"
+    result = st.show(dut2, show_cmd, skip_tmpl=True)
 
-    check = False
-    for re in records:
-        match_cnt = 0
-        st.log(re)
-        for it in check_fields:
-            st.log(re[it])
-            if re[it] ==  expected_vpn[it]:
-                match_cnt +=1
+    if 'srv6tunnel(endpoint|color):1000::179|1' not in result:
+        st.report_fail("step 3 test_base_config_sr_te_config_check_02_failed, check policy")
+    if 'srv6tunnel(endpoint|color):2000::179|1' in result:
+        st.report_fail("step 3 test_base_config_sr_te_config_check_02_failed, check policy")
 
-        if match_cnt == len(check_fields):
-            check = True
-            break
-
-    if not check:
-        st.log(records)
-        st.report_fail("step 7 test_base_config_sr_te_config_check_01_ipv6_failed, check failed")
-
-    # step 8 : check app db
+    # step 4 : check app db
     key = 'ROUTE_TABLE:' + 'Vrf10000' + ':192.100.1.0/24'
-    policy_val = appdb_get_onefield(dut2, key, "policy")
-    if policy_val != "na":
-        st.report_fail("step 8 test_base_config_sr_te_config_check_01_failed, check policy")
+    nhg_id = appdb_get_onefield(dut2, key, "nexthop_group")
+    group_table_key = 'NEXTHOP_GROUP_TABLE:' + nhg_id
+
+    nexthop_val = appdb_get_onefield(dut2, group_table_key, "nexthop")
+    if "1000::179" not in nexthop_val:
+        st.report_fail("step 4 test_base_config_sr_te_config_check_02_ipv6_failed, check nexthop")
+    if "2000::179" in nexthop_val:
+        st.report_fail("step 4 test_base_config_sr_te_config_check_02_ipv6_failed, check nexthop")
+
+    segment_val = appdb_get_onefield(dut2, group_table_key, "segment")
+    if "a" not in segment_val:
+        st.report_fail("step 4 test_base_config_sr_te_config_check_02_ipv6_failed, check segment")
+    if "b" in segment_val:
+        st.report_fail("step 4 test_base_config_sr_te_config_check_02_ipv6_failed, check segment")
+
+    pic_id = appdb_get_onefield(dut2, key, "pic_context_id")
+    pic_table_key = 'PIC_CONTEXT_TABLE:' + pic_id
+
+    vpn_sid_val = appdb_get_onefield(dut2, pic_table_key, "vpn_sid")
+    if "fd00:201:201:fff1:11::" not in vpn_sid_val:
+        st.report_fail("step 4 test_base_config_sr_te_config_check_02_failed, check vpn sid")
 
     key = 'ROUTE_TABLE:' + 'Vrf10000' + ':192:100:1::/64'
-    policy_val = appdb_get_onefield(dut2, key, "policy")
-    if policy_val != "na":
-        st.report_fail("step 8 test_base_config_sr_te_config_check_01_ipv6_failed, check policy")
+    nhg_id = appdb_get_onefield(dut2, key, "nexthop_group")
+    group_table_key = 'NEXTHOP_GROUP_TABLE:' + nhg_id
 
-    # step 9 : recover srv6 config
-    st.config(dut1, 'cli -c "config t" -c "router bgp {} vrf {}" -c "address-family ipv4 unicast" -c "route-map vpn export sr1"'.format(bgp_as, vrf_name))
-    st.config(dut1, 'cli -c "config t" -c "router bgp {} vrf {}" -c "address-family ipv6 unicast" -c "route-map vpn export sr2"'.format(bgp_as, vrf_name))
-    st.wait(10)
+    nexthop_val = appdb_get_onefield(dut2, group_table_key, "nexthop")
+    if "1000::179" not in nexthop_val:
+        st.report_fail("step 4 test_base_config_sr_te_config_check_02_ipv6_failed, check nexthop")
+    if "2000::179" in nexthop_val:
+        st.report_fail("step 4 test_base_config_sr_te_config_check_02_ipv6_failed, check nexthop")
+
+    segment_val = appdb_get_onefield(dut2, group_table_key, "segment")
+    if "a" not in segment_val:
+        st.report_fail("step 4 test_base_config_sr_te_config_check_02_ipv6_failed, check segment")
+    if "b" in segment_val:
+        st.report_fail("step 4 test_base_config_sr_te_config_check_02_ipv6_failed, check segment")
+
+    pic_id = appdb_get_onefield(dut2, key, "pic_context_id")
+    pic_table_key = 'PIC_CONTEXT_TABLE:' + pic_id
+
+    vpn_sid_val = appdb_get_onefield(dut2, pic_table_key, "vpn_sid")
+    if "fd00:201:201:fff1:11::" not in vpn_sid_val:
+        st.report_fail("step 4 test_base_config_sr_te_config_check_02_failed, check vpn sid")
+
+    # setp 5: add cpath
+    st.config(dut1, 'vtysh -c "config t" -c "segment-routing" -c "traffic-eng" -c "policy color 1 endpoint 1000::179" -c "candidate-path preference 1 name b explicit segment-list b weight 1"')
+
+    group_table_key = 'NEXTHOP_GROUP_TABLE:' + nhg_id
+    nexthop_val = appdb_get_onefield(dut2, group_table_key, "nexthop")
+    if "1000::179" not in nexthop_val:
+        st.report_fail("step 5 test_base_config_sr_te_config_check_02_ipv6_failed, check nexthop")
+
+    segment_val = appdb_get_onefield(dut2, group_table_key, "segment")
+    if "a" not in segment_val:
+        st.report_fail("step 5 test_base_config_sr_te_config_check_02_ipv6_failed, check segment")
+    if "b" not in segment_val:
+        st.report_fail("step 5 test_base_config_sr_te_config_check_02_ipv6_failed, check segment")
+
+    # setp 6: del cpath
+    st.config(dut1, 'vtysh -c "config t" -c "segment-routing" -c "traffic-eng" -c "policy color 1 endpoint 1000::179" -c "no candidate-path preference 1 name b explicit segment-list b"')
+
+    group_table_key = 'NEXTHOP_GROUP_TABLE:' + nhg_id
+    nexthop_val = appdb_get_onefield(dut2, group_table_key, "nexthop")
+    if "1000::179" not in nexthop_val:
+        st.report_fail("step 6 test_base_config_sr_te_config_check_02_ipv6_failed, check nexthop")
+
+    segment_val = appdb_get_onefield(dut2, group_table_key, "segment")
+    if "a" not in segment_val:
+        st.report_fail("step 6 test_base_config_sr_te_config_check_02_ipv6_failed, check segment")
+    if "b" in segment_val:
+        st.report_fail("step 6 test_base_config_sr_te_config_check_02_ipv6_failed, check segment")
+
+    # setp 7: add high preference cpath
+    st.config(dut1, 'vtysh -c "config t" -c "segment-routing" -c "traffic-eng" -c "policy color 1 endpoint 1000::179" -c "candidate-path preference 2 name b explicit segment-list b weight 2"')
+
+    group_table_key = 'NEXTHOP_GROUP_TABLE:' + nhg_id
+    nexthop_val = appdb_get_onefield(dut2, group_table_key, "nexthop")
+    if "1000::179" not in nexthop_val:
+        st.report_fail("step 7 test_base_config_sr_te_config_check_02_ipv6_failed, check nexthop")
+
+    segment_val = appdb_get_onefield(dut2, group_table_key, "segment")
+    if "a" in segment_val:
+        st.report_fail("step 7 test_base_config_sr_te_config_check_02_ipv6_failed, check segment")
+    if "b" not in segment_val:
+        st.report_fail("step 7 test_base_config_sr_te_config_check_02_ipv6_failed, check segment")
+
+    # setp 8: add high preference cpath
+    st.config(dut1, 'vtysh -c "config t" -c "segment-routing" -c "traffic-eng" -c "policy color 1 endpoint 1000::179" -c "no candidate-path preference 2 name b explicit segment-list b"')
+
+    group_table_key = 'NEXTHOP_GROUP_TABLE:' + nhg_id
+    nexthop_val = appdb_get_onefield(dut2, group_table_key, "nexthop")
+    if "1000::179" not in nexthop_val:
+        st.report_fail("step 8 test_base_config_sr_te_config_check_02_ipv6_failed, check nexthop")
+
+    segment_val = appdb_get_onefield(dut2, group_table_key, "segment")
+    if "a" not in segment_val:
+        st.report_fail("step 8 test_base_config_sr_te_config_check_02_ipv6_failed, check segment")
+    if "b" in segment_val:
+        st.report_fail("step 8 test_base_config_sr_te_config_check_02_ipv6_failed, check segment")
+
+    pic_table_key = 'PIC_CONTEXT_TABLE:' + pic_id
+
+    vpn_sid_val = appdb_get_onefield(dut2, pic_table_key, "vpn_sid")
+    if "fd00:201:201:fff1:11::" not in vpn_sid_val:
+        st.report_fail("step 4 test_base_config_sr_te_config_check_02_failed, check vpn sid")
+
+    #no shutdown interface, test one policy
+    st.config(dut1, 'cli -c "configure terminal" -c "interface Ethernet4" -c "shutdown"')
+    st.wait(30)
+
+    # step 9 : check bgp state
+    def check_bgp_state():
+        output=st.show(dut1,'show bgp neighbors {}'.format('2000::178'), type='vtysh')
+        bgp_state = output[0]['state']
+        if bgp_state != 'Established':
+            return False
+        else:    
+            return True
+
+    if not retry_api(check_bgp_state, retry_count= 5, delay= 10):
+        st.report_fail("step9 pre check bgp state failed")
+
+    # step 10 :check db
     key = 'ROUTE_TABLE:' + 'Vrf10000' + ':192.100.1.0/24'
-    policy_val = appdb_get_onefield(dut2, key, "policy")
-    if policy_val != "2000::179_1":
-        st.report_fail("step 9 test_base_config_sr_te_config_check_01_failed, check policy")
+    nhg_id = appdb_get_onefield(dut2, key, "nexthop_group")
+    group_table_key = 'NEXTHOP_GROUP_TABLE:' + nhg_id
 
-    key = 'ROUTE_TABLE:' + 'Vrf10000' + ':192:100:1::/64'
-    policy_val = appdb_get_onefield(dut2, key, "policy")
-    if policy_val != "2000::179_2":
-        st.report_fail("step 9 test_base_config_sr_te_config_check_01_ipv6_failed, check policy")
+    nexthop_val = appdb_get_onefield(dut2, group_table_key, "nexthop")
+    if "1000::179" not in nexthop_val:
+        st.report_fail("step 10 test_base_config_sr_te_config_check_02_ipv6_failed, check nexthop")
+    if "2000::179" not in nexthop_val:
+        st.report_fail("step 10 test_base_config_sr_te_config_check_02_ipv6_failed, check nexthop")
+
+    segment_val = appdb_get_onefield(dut2, group_table_key, "segment")
+    if "a" not in segment_val:
+        st.report_fail("step 10 test_base_config_sr_te_config_check_02_ipv6_failed, check segment")
+    if "b" not in segment_val:
+        st.report_fail("step 10 test_base_config_sr_te_config_check_02_ipv6_failed, check segment")
+
+    pic_id = appdb_get_onefield(dut2, key, "pic_context_id")
+    pic_table_key = 'PIC_CONTEXT_TABLE:' + pic_id
+
+    vpn_sid_val = appdb_get_onefield(dut2, pic_table_key, "vpn_sid")
+    if "fd00:201:201:fff1:11::" not in vpn_sid_val:
+        st.report_fail("step 10 test_base_config_sr_te_config_check_02_failed, check vpn sid")
+
+    # step 11 :two policy add cpath
+    st.config(dut1, 'vtysh -c "config t" -c "segment-routing" -c "traffic-eng" -c "policy color 1 endpoint 1000::179" -c "candidate-path preference 1 name c explicit segment-list c weight 1"')
+    group_table_key = 'NEXTHOP_GROUP_TABLE:' + nhg_id
+
+    nexthop_val = appdb_get_onefield(dut2, group_table_key, "nexthop")
+    if "1000::179" not in nexthop_val:
+        st.report_fail("step 11 test_base_config_sr_te_config_check_02_ipv6_failed, check nexthop")
+    if "2000::179" not in nexthop_val:
+        st.report_fail("step 11 test_base_config_sr_te_config_check_02_ipv6_failed, check nexthop")
+
+    segment_val = appdb_get_onefield(dut2, group_table_key, "segment")
+    if "a" not in segment_val:
+        st.report_fail("step 11 test_base_config_sr_te_config_check_02_ipv6_failed, check segment")
+    if "b" not in segment_val:
+        st.report_fail("step 11 test_base_config_sr_te_config_check_02_ipv6_failed, check segment")
+    if "c" not in segment_val:
+        st.report_fail("step 11 test_base_config_sr_te_config_check_02_ipv6_failed, check segment")
+
+    # step 12 :two policy del cpath
+    st.config(dut1, 'vtysh -c "config t" -c "segment-routing" -c "traffic-eng" -c "policy color 1 endpoint 1000::179" -c "no candidate-path preference 1 name a explicit segment-list a"')
+    group_table_key = 'NEXTHOP_GROUP_TABLE:' + nhg_id
+
+    nexthop_val = appdb_get_onefield(dut2, group_table_key, "nexthop")
+    if "1000::179" not in nexthop_val:
+        st.report_fail("step 12 test_base_config_sr_te_config_check_02_ipv6_failed, check nexthop")
+    if "2000::179" not in nexthop_val:
+        st.report_fail("step 12 test_base_config_sr_te_config_check_02_ipv6_failed, check nexthop")
+
+    segment_val = appdb_get_onefield(dut2, group_table_key, "segment")
+    if "a" in segment_val:
+        st.report_fail("step 12 test_base_config_sr_te_config_check_02_ipv6_failed, check segment")
+    if "b" not in segment_val:
+        st.report_fail("step 12 test_base_config_sr_te_config_check_02_ipv6_failed, check segment")
+    if "c" not in segment_val:
+        st.report_fail("step 12 test_base_config_sr_te_config_check_02_ipv6_failed, check segment")
 
     st.report_pass("test_case_passed")
 
@@ -401,8 +508,8 @@ def get_kernel_ipv6_route(dut, number):
 
 @pytest.mark.community
 @pytest.mark.community_pass
-def test_base_config_sr_te_2kl_route_learn_02():
-    st.banner("test_base_config_sr_te_2kl_route_learn_02 begin")
+def test_base_config_sr_te_2kl_route_learn_03():
+    st.banner("test_base_config_sr_te_2kl_route_learn_03 begin")
 
     # load full config
     if data.load_multi_vrf_config_done == False:
@@ -474,13 +581,17 @@ def test_base_config_sr_te_2kl_route_learn_02():
         vrf_name = data.vrf_list[num]
         prefix = data.vrf_prefix[vrf_name]
         key = "ROUTE_TABLE:Vrf{}:{}".format(10000+num, prefix)
-        policy_val = appdb_get_onefield(dut2, key, "policy")
-        if policy_val == "na":
+        nhg_id = appdb_get_onefield(dut2, key, "nexthop_group")
+        group_table_key = 'NEXTHOP_GROUP_TABLE:' + nhg_id
+
+        segment_val = appdb_get_onefield(dut2, group_table_key, "segment")
+        if segment_val == "na":
             cmd ='cli -c "no page" -c "show ip route vrf {} {}"'.format(vrf_name, prefix)
             st.show(dut2, cmd, skip_tmpl=True, skip_error_check=True)
             st.report_fail("test_base_config_sr_te_2kl_route_learn_02_failed, vrf {} prefix {}".format(vrf_name, prefix))
 
     st.report_pass("test_case_passed")
+
 
 def duts_load_config(dut1_config, dut2_config):
     dut_list = st.get_dut_names()

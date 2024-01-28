@@ -1,16 +1,24 @@
 {
+    "ASPATH_ACCESS_LIST": {
+        "as_list": {
+            "permit": [
+                "200"
+            ]
+        }
+    },
     "BGP_NEIGHBOR": {
-        "100.1.0.2|global|PUBLIC-TC11": {
-            "asn": "999"
+        "1000::179|global": {
+            "asn": "100", 
+            "extnh": "true", 
+            "update_source": "1000::178"
         }, 
-        "100.1.0.2|ipv4|PUBLIC-TC11": {
-            "activate": "true"
-        }, 
-        "100.2.0.2|global|PUBLIC-TC11": {
-            "asn": "998"
-        }, 
-        "100.2.0.2|ipv4|PUBLIC-TC11": {
-            "activate": "true"
+        "1000::179|ipv4_vpn": {
+            "activate": "true",
+            "route_map_out": "as-map"
+        },
+        "1000::179|ipv6_vpn": {
+            "activate": "true",
+            "route_map_out": "as-map"
         }, 
         "2000::179|global": {
             "asn": "100", 
@@ -18,45 +26,64 @@
             "update_source": "2000::178"
         }, 
         "2000::179|ipv4_vpn": {
-            "activate": "true"
+            "activate": "true",
+            "route_map_out": "as-map"
         },
         "2000::179|ipv6_vpn": {
-            "activate": "true"
+            "activate": "true",
+            "route_map_out": "as-map"
         }, 
         "2033::179|global": {
             "asn": "100"
         }, 
         "2033::179|ipv6": {
-            "activate": "true"
+            "activate": "true",
+            "route_map_out": "1"
         }, 
         "2044::179|global": {
             "asn": "100"
         }, 
         "2044::179|ipv6": {
-            "activate": "true"
+            "activate": "true",
+            "route_map_out": "2"
         }
     }, 
     "BGP_NETWORK": {
+        "1000::178/128|ipv6": {},
         "2000::178/128|ipv6": {}
     }, 
     "BGP_PARAMETERS": {
         "100|global": {
-            "bgp_router_id": "1.1.1.178",
+            "bgp_router_id": "2.1.0.178",
             "bgp_timers": "10 30"
         }, 
         "100|global|PUBLIC-TC11": {
-            "bgp_router_id": "2.2.2.178",
+            "bgp_router_id": "2.1.1.178",
             "bgp_timers": "10 30"
         }, 
         "100|ipv4|PUBLIC-TC11": {
             "import_vpn": "true", 
-            "rd": "2:2", 
-            "rt_import": "3:3"
+            "rd": "1:1", 
+            "rt_import": "1:1"
         },
         "100|ipv6|PUBLIC-TC11": {
             "import_vpn": "true", 
+            "rd": "1:1", 
+            "rt_import": "1:1"
+        },
+        "100|global|PUBLIC-TC12": {
+            "bgp_router_id": "2.1.2.178",
+            "bgp_timers": "10 30"
+        }, 
+        "100|ipv4|PUBLIC-TC12": {
+            "import_vpn": "true", 
             "rd": "2:2", 
-            "rt_import": "3:3"
+            "rt_import": "2:2"
+        },
+        "100|ipv6|PUBLIC-TC12": {
+            "import_vpn": "true", 
+            "rd": "2:2", 
+            "rt_import": "2:2"
         }
     }, 
     "DEVICE_METADATA": {
@@ -77,8 +104,23 @@
             "family": "IPv6", 
             "scope": "global"
         }
-    }, 
+    },
+    "IPV6_PREFIX_LIST": {
+        "1|seq|10": {
+            "permit": "1000::178/128"
+        },
+        "1|seq|15": {
+            "permit": "fd00:202:2021:fff0:3::/80"
+        },
+        "2|seq|10": {
+            "permit": "2000::178/128"
+        },
+        "2|seq|15": {
+            "permit": "fd00:202:2021:fff0:4::/80"
+        }
+    },
     "LOOPBACK_INTERFACE": {
+        "Loopback1|1000::178/128": {},
         "Loopback1|2000::178/128": {}
     }, 
     "MGMT_INTERFACE": {
@@ -484,10 +526,46 @@
             "alias": "Ethernet99"
         }
     },
-    "SRV6_POLICY": {                                           
-        "1|2000::179": {
+    "ROUTE_MAP": {
+        "1|deny|20": {},
+        "1|permit|10": {
+            "match_ipv6_address_prefix_list": "1"
+        },
+        "2|deny|20": {},
+        "2|permit|10": {
+            "match_ipv6_address_prefix_list": "2"
+        },
+        "as-map|deny|10": {
+            "match_as_path": "as_list"
+        }
+    },
+    "SRV6_LOCATOR": {
+        "aaa": {
+            "argu_len": "48",
+            "block_len": "32",
+            "func_len": "32",
+            "node_len": "16",
+            "opcode": [
+                "::fff0:3:0:0:0|end-x|Ethernet3|2033::178",
+                "::fff0:4:0:0:0|end-x|Ethernet4|2044::178"
+            ],
+            "prefix": "fd00:202:2021::/48"
+        }
+    },
+    "SRV6_POLICY": {
+        "1|1000::179": {
             "cpath": [
                 "1|a|a|1"
+            ]
+        },
+        "1|2000::179": {
+            "cpath": [
+                "1|b|b|1"
+            ]
+        },
+        "2|1000::179": {
+            "cpath": [
+                "2|a|a|2"
             ]
         },
         "2|2000::179": {
@@ -498,10 +576,13 @@
     },
     "SRV6_SID_LIST": {
         "a": {
-            "1": "2000::178"
+            "forwarding-ignore-first-sid": "fd00:202:2021:fff0:3::"
         },
         "b": {
-            "2": "2000::178"
+            "forwarding-ignore-first-sid": "fd00:202:2021:fff0:4::"
+        },
+        "c": {
+            "forwarding-ignore-first-sid": "fd00:202:2021:fff0:5::"
         }
     },
     "SWITCH": {
@@ -521,6 +602,7 @@
         }
     },
     "VRF_ALIAS": {
-        "PUBLIC-TC11": {}
+        "PUBLIC-TC11": {},
+        "PUBLIC-TC12": {}
     }
 }

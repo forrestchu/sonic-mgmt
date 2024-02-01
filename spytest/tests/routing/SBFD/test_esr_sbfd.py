@@ -80,6 +80,10 @@ def config_sbfd(dut, policy, sbfd_cli):
 
 def get_bfd_uptime_sec(output):
     uptime = 0
+    uptime_day = 0
+    uptime_hour = 0
+    uptime_min = 0
+    uptime_sec = 0
     if 'status' in output and output['status'] == 'up':
         uptime_day = 0 if output.get('uptimeday') == '' else int(output.get('uptimeday'))
         uptime_hour= 0 if output.get('uptimehr') == '' else int(output.get('uptimehr'))
@@ -203,9 +207,9 @@ def sbfd_module_hooks(request):
 def sbfd_func_hooks(request):
     # add things at the start every test case
 
-    if st.get_func_name(request) in  ["test_sbfd_echo_single_endx_case1","test_sbfd_echo_two_endx_case2",
-                                      "test_sbfd_echo_ms_path_case3", "test_sbfd_echo_loadbalancing_case4",
-                                      "test_sbfd_mspath_case5", "test_sbfd_reboot_recover_case6",
+    if st.get_func_name(request) in  ["test_sbfd_initiator_single_endx_case1","test_sbfd_echo_two_endx_case2",
+                                      "test_sbfd_initiator_multiple_case3", "test_sbfd_echo_multiple_case4",
+                                      "test_sbfd_initiator_single_case5", "test_sbfd_reboot_recover_case6",
                                       "test_sbfd_flapping_case7"]:
         st.log("sbfd_base_config case enter ")
         if data.load_base_config_done == False:
@@ -216,7 +220,7 @@ def sbfd_func_hooks(request):
         # ping each other to learn nd and arp 
         learn_arp_by_ping()
     
-        st.show(dut1, "vtysh -c 'show bfd nd infos'", skip_tmpl=True)
+        #st.show(dut1, "vtysh -c 'show bfd nd infos'", skip_tmpl=True)
         # check
         st.show(dut1, "vtysh -c 'show bfd sr endx infos'", skip_tmpl=True)
         # check
@@ -241,32 +245,32 @@ def sbfd_func_hooks(request):
 
 @pytest.mark.community
 @pytest.mark.community_pass
-def test_sbfd_echo_single_endx_case1():
+def test_sbfd_initiator_single_endx_case1():
 
-    st.banner("test_sbfd_echo_single_endx_case1 begin")
+    st.banner("test_sbfd_initiator_single_endx_case1 begin")
     
     police_v4 = 'policy color 1 endpoint 2000::59'
     police_v6 = 'policy color 2 endpoint 2000::59'
     # step 1 : config sbfd echo
-    config_sbfd(dut1, police_v4, 'sbfd echo source-address 20.20.20.58')
+    #config_sbfd(dut1, police_v4, 'sbfd echo source-address 20.20.20.58')
+    config_sbfd(dut1, police_v4, 'sbfd enable remote 10086 source-address 2000::58')
 
     # step 2 : check sbfd echo    
     check_filed = {
         'status':'up',
-        'peer_type' : 'echo',
-        'multiplier': '3',
-        'echo_tx_interval' : '300' 
+        'peer_type' : 'sbfd initiator',
+        'multiplier': '3'
     }
     for key in data['policy_sbfd'][police_v4]:
         ret = double_check_sbfd(dut1, key, check_filed, False, False)
         if not ret:
-            st.report_fail("step 2 test_sbfd_echo_single_endx_case1 failed")
+            st.report_fail("step 2 test_sbfd_initiator_single_endx_case1 failed")
 
     # check configdb
     configdb_key = "SRV6_POLICY|1|2000::59"
     checkpoint_msg = "test_base_config_srvpn_locator_01 config {} check failed.".format(configdb_key)
-    configdb_onefield_checkpoint(dut1, configdb_key, "sbfd_type", "echo", expect = True, checkpoint = checkpoint_msg)
-    configdb_onefield_checkpoint(dut1, configdb_key, "sbfd_update_source", "20.20.20.58", expect = True, checkpoint = checkpoint_msg)
+    configdb_onefield_checkpoint(dut1, configdb_key, "sbfd_type", "enable", expect = True, checkpoint = checkpoint_msg)
+    configdb_onefield_checkpoint(dut1, configdb_key, "sbfd_update_source", "2000::58", expect = True, checkpoint = checkpoint_msg)
     expected_cpath = '100|cp1_ipv4|sl1_ipv4|1'
     configdb_checkarray(dut1, configdb_key, "cpath@", expected_cpath, expect = True, checkpoint = checkpoint_msg)
 
@@ -289,24 +293,23 @@ def test_sbfd_echo_single_endx_case1():
 # 127.0.0.1:6379[4]>
 
     # step 4 : modify interval
-    config_sbfd(dut1, police_v4, 'sbfd echo source-address 20.20.20.58 3 100 100')   
+    config_sbfd(dut1, police_v4, 'sbfd enable remote 10086 source-address 2000::58 3 100 100')   
     check_filed = {
         'status':'up',
-        'peer_type' : 'echo',
-        'multiplier': '3',
-        'echo_tx_interval' : '100' 
+        'peer_type' : 'sbfd initiator',
+        'multiplier': '3'
     }
     for key in data['policy_sbfd'][police_v4]:
         ret = double_check_sbfd(dut1, key, check_filed, False, False) 
         if not ret:
-            st.report_fail("step 4 test_sbfd_echo_single_endx_case1 failed")
+            st.report_fail("step 4 test_sbfd_initiator_single_endx_case1 failed")
 
     # check configdb
     # check configdb
     configdb_key = "SRV6_POLICY|1|2000::59"
     checkpoint_msg = "test_base_config_srvpn_locator_01 config {} check failed.".format(configdb_key)
-    configdb_onefield_checkpoint(dut1, configdb_key, "sbfd_type", "echo", expect = True, checkpoint = checkpoint_msg)
-    configdb_onefield_checkpoint(dut1, configdb_key, "sbfd_update_source", "20.20.20.58", expect = True, checkpoint = checkpoint_msg)
+    configdb_onefield_checkpoint(dut1, configdb_key, "sbfd_type", "enable", expect = True, checkpoint = checkpoint_msg)
+    configdb_onefield_checkpoint(dut1, configdb_key, "sbfd_update_source", "2000::58", expect = True, checkpoint = checkpoint_msg)
     configdb_onefield_checkpoint(dut1, configdb_key, "sbfd_detect_multiplier", "3", expect = True, checkpoint = checkpoint_msg)
     configdb_onefield_checkpoint(dut1, configdb_key, "sbfd_rx_timer", "100", expect = True, checkpoint = checkpoint_msg)
     configdb_onefield_checkpoint(dut1, configdb_key, "sbfd_tx_timer", "100", expect = True, checkpoint = checkpoint_msg)
@@ -317,33 +320,32 @@ def test_sbfd_echo_single_endx_case1():
     st.log(output)
 
     # step 5 : check del sbfd echo 
-    config_sbfd(dut1, police_v4, 'no sbfd echo')
+    config_sbfd(dut1, police_v4, 'no sbfd enable')
     check_filed = {}
     for key in data['policy_sbfd'][police_v4]:
         ret = double_check_sbfd(dut1, key, check_filed, False, True) 
         if not ret:
-            st.report_fail("step 5 test_sbfd_echo_single_endx_case1 failed")
+            st.report_fail("step 5 test_sbfd_initiator_single_endx_case1 failed")
 
 
     # step 6 : config ipv6 single endx sbfd echo
-    config_sbfd(dut1, police_v6, 'sbfd echo source-address 2000::58')
+    config_sbfd(dut1, police_v6, 'sbfd enable remote 10086 source-address 2000::58')
 
     # step 7 : check sbfd echo
     check_filed = {
         'status':'up',
-        'peer_type' : 'echo',
-        'multiplier': '3',
-        'echo_tx_interval' : '300' 
+        'peer_type' : 'sbfd initiator',
+        'multiplier': '3' 
     }
     for key in data['policy_sbfd'][police_v6]:
         ret = double_check_sbfd(dut1, key, check_filed, True, False)
         if not ret:
-            st.report_fail("step 7 test_sbfd_echo_single_endx_case1 failed")
+            st.report_fail("step 7 test_sbfd_initiator_single_endx_case1 failed")
 
     # step 8 : check configdb and appdb
     configdb_key = "SRV6_POLICY|2|2000::59"
     checkpoint_msg = "test_base_config_srvpn_locator_01 config {} check failed.".format(configdb_key)
-    configdb_onefield_checkpoint(dut1, configdb_key, "sbfd_type", "echo", expect = True, checkpoint = checkpoint_msg)
+    configdb_onefield_checkpoint(dut1, configdb_key, "sbfd_type", "enable", expect = True, checkpoint = checkpoint_msg)
     configdb_onefield_checkpoint(dut1, configdb_key, "sbfd_update_source", "2000::58", expect = True, checkpoint = checkpoint_msg)
     expected_cpath = '100|cp1_ipv6|sl2_ipv6|1'
     configdb_checkarray(dut1, configdb_key, "cpath@", expected_cpath, expect = True, checkpoint = checkpoint_msg)
@@ -396,22 +398,21 @@ def test_sbfd_echo_single_endx_case1():
 # 28) "sl5"
 
     # step 9 : modify interval
-    config_sbfd(dut1, police_v6, 'sbfd echo source-address 2000::58 3 100 100')   
+    config_sbfd(dut1, police_v6, 'sbfd enable remote 10086 source-address 2000::58 3 100 100')   
     check_filed = {
         'status':'up',
-        'peer_type' : 'echo',
-        'multiplier': '3',
-        'echo_tx_interval' : '100' 
+        'peer_type' : 'sbfd initiator',
+        'multiplier': '3'
     }
     for key in data['policy_sbfd'][police_v6]:
         ret = double_check_sbfd(dut1, key, check_filed, True, False) 
         if not ret:
-            st.report_fail("step 9 test_sbfd_echo_single_endx_case1 failed")
+            st.report_fail("step 9 test_sbfd_initiator_single_endx_case1 failed")
 
     # check configdb
     configdb_key = "SRV6_POLICY|2|2000::59"
     checkpoint_msg = "test_base_config_srvpn_locator_01 config {} check failed.".format(configdb_key)
-    configdb_onefield_checkpoint(dut1, configdb_key, "sbfd_type", "echo", expect = True, checkpoint = checkpoint_msg)
+    configdb_onefield_checkpoint(dut1, configdb_key, "sbfd_type", "enable", expect = True, checkpoint = checkpoint_msg)
     configdb_onefield_checkpoint(dut1, configdb_key, "sbfd_update_source", "2000::58", expect = True, checkpoint = checkpoint_msg)
     configdb_onefield_checkpoint(dut1, configdb_key, "sbfd_detect_multiplier", "3", expect = True, checkpoint = checkpoint_msg)
     configdb_onefield_checkpoint(dut1, configdb_key, "sbfd_rx_timer", "100", expect = True, checkpoint = checkpoint_msg)
@@ -423,12 +424,12 @@ def test_sbfd_echo_single_endx_case1():
     st.log(output)
 
     # step 10 : check del sbfd echo 
-    config_sbfd(dut1, police_v6, 'no sbfd echo')
+    config_sbfd(dut1, police_v6, 'no sbfd enable')
     check_filed = {}
     for key in data['policy_sbfd'][police_v6]:
         ret = double_check_sbfd(dut1, key, check_filed, True, True) 
         if not ret:
-            st.report_fail("step 10 test_sbfd_echo_single_endx_case1 failed")
+            st.report_fail("step 10 test_sbfd_initiator_single_endx_case1 failed")
         
     # step 11 : check appdb is clear
 
@@ -501,34 +502,33 @@ def test_sbfd_echo_two_endx_case2():
 
 @pytest.mark.community
 @pytest.mark.community_pass
-def test_sbfd_echo_mspath_case3():
+def test_sbfd_initiator_multiple_case3():
 
-    st.banner("test_sbfd_echo_ms_path_case3 begin")
+    st.banner("test_sbfd_initiator_multiple_case3 begin")
 
     policy_v4 = 'policy color 6 endpoint 2000::59'
     policy_v6 = 'policy color 7 endpoint 2000::59'
 
     # step 1 : config sbfd echo
-    config_sbfd(dut1, policy_v4, 'sbfd echo source-address 20.20.20.58')
-    config_sbfd(dut1, policy_v6, 'sbfd echo source-address 2000::58')
+    config_sbfd(dut1, policy_v4, 'sbfd enable remote 10086 source-address 2000::58')
+    config_sbfd(dut1, policy_v6, 'sbfd enable remote 10086 source-address 2000::58')
 
     # step 2 : check sbfd echo
     check_filed = {
         'status':'up',
-        'peer_type' : 'echo',
-        'multiplier': '3',
-        'echo_tx_interval' : '300' 
+        'peer_type' : 'sbfd initiator',
+        'multiplier': '3'
     }
 
     for key in data['policy_sbfd'][policy_v4] :
         ret = double_check_sbfd(dut1, key, check_filed, False, False)
         if not ret:
-            st.report_fail("step 2 test_sbfd_echo_mspath_case3 failed")
+            st.report_fail("step 2 test_sbfd_initiator_multiple_case3 failed")
 
     for key in data['policy_sbfd'][policy_v6] :
         ret = double_check_sbfd(dut1, key, check_filed, True, False)
         if not ret:
-            st.report_fail("step 2 test_sbfd_echo_mspath_case3 failed")
+            st.report_fail("step 2 test_sbfd_initiator_multiple_case3 failed")
 
     # step 3 : simulate fault
     output = st.show(dut1, "show sr-te policy color 6 endpoint 2000::59 detail", type="vtysh")
@@ -538,13 +538,13 @@ def test_sbfd_echo_mspath_case3():
     st.log(output)
 
     # step 4 : check del sbfd echo 
-    config_sbfd(dut1, policy_v4, 'no sbfd echo')
-    config_sbfd(dut1, policy_v6, 'no sbfd echo')
+    config_sbfd(dut1, policy_v4, 'no sbfd enable')
+    config_sbfd(dut1, policy_v6, 'no sbfd enable')
     check_filed = {}
     for key in data['policy_sbfd'][policy_v4] + data['policy_sbfd'][policy_v6] :
         ret = double_check_sbfd(dut1, key, check_filed, True, True)
         if not ret:
-            st.report_fail("step 4 test_sbfd_echo_mspath_case3 failed")   
+            st.report_fail("step 4 test_sbfd_initiator_multiple_case3 failed")
 
     # step 5 : check appdb is clear
 
@@ -552,9 +552,9 @@ def test_sbfd_echo_mspath_case3():
 
 @pytest.mark.community
 @pytest.mark.community_pass
-def test_sbfd_echo_loadbalancing_case4():
+def test_sbfd_echo_multiple_case4():
 
-    st.banner("test_sbfd_loadbalancing_case4 begin")
+    st.banner("test_sbfd_echo_multiple_case4 begin")
 
     policy_v4 = 'policy color 3 endpoint 2000::59'
     policy_v6 = 'policy color 4 endpoint 2000::59'
@@ -573,12 +573,12 @@ def test_sbfd_echo_loadbalancing_case4():
     for key in data['policy_sbfd'][policy_v4] :
         ret = double_check_sbfd(dut1, key, check_filed, False, False)
         if not ret:
-            st.report_fail("step 2 test_sbfd_loadbalancing_case4 failed")
+            st.report_fail("step 2 test_sbfd_echo_multiple_case4 failed")
 
     for key in data['policy_sbfd'][policy_v6] :
         ret = double_check_sbfd(dut1, key, check_filed, True, False)
         if not ret:
-            st.report_fail("step 2 test_sbfd_loadbalancing_case4 failed")
+            st.report_fail("step 2 test_sbfd_echo_multiple_case4 failed")
 
 
     # step 3 : simulate fault
@@ -596,7 +596,7 @@ def test_sbfd_echo_loadbalancing_case4():
     for key in data['policy_sbfd'][policy_v4] + data['policy_sbfd'][policy_v6] :
         ret = double_check_sbfd(dut1, key, check_filed, True, True)
         if not ret:
-            st.report_fail("step 4 test_sbfd_loadbalancing_case4 failed")   
+            st.report_fail("step 4 test_sbfd_echo_multiple_case4 failed")
 
     # step 5 : check appdb is clear
 
@@ -604,9 +604,9 @@ def test_sbfd_echo_loadbalancing_case4():
 
 @pytest.mark.community
 @pytest.mark.community_pass
-def test_sbfd_mspath_case5():
+def test_sbfd_initiator_single_case5():
 
-    st.banner("test_sbfd_mspath_case5 begin")
+    st.banner("test_sbfd_initiator_single_case5 begin")
 
     policy = 'policy color 9 endpoint 2000::59'
 
@@ -626,7 +626,7 @@ def test_sbfd_mspath_case5():
     for key in data['policy_sbfd'][policy] :
         ret = double_check_sbfd(dut1, key, check_filed, True, False)
         if not ret:
-            st.report_fail("step 2 test_sbfd_mspath_case5 failed")
+            st.report_fail("step 2 test_sbfd_initiator_single_case5 failed")
 
     # step 3 : simulate fault
     
@@ -639,7 +639,7 @@ def test_sbfd_mspath_case5():
     for key in data['policy_sbfd'][policy] :
         ret = double_check_sbfd(dut1, key, check_filed, True, True)
         if not ret:
-            st.report_fail("step 4 test_sbfd_mspath_case5 failed")   
+            st.report_fail("step 4 test_sbfd_initiator_single_case5 failed")
 
     # step 5 : check appdb is clear
 
@@ -651,17 +651,10 @@ def test_sbfd_reboot_recover_case6():
 
     st.banner("test_sbfd_reboot_recover_case6 begin")
     
-    policy_1 = 'policy color 1 endpoint 2000::59'
-    policy_2 = 'policy color 3 endpoint 2000::59'
-    policy_3 = 'policy color 4 endpoint 2000::59'
-    policy_4 = 'policy color 7 endpoint 2000::59'
+
     policy_5 = 'policy color 8 endpoint 2000::59'
     policy_6 = 'policy color 9 endpoint 2000::59'
     # step 1 : config sbfd
-    config_sbfd(dut1, policy_1, 'sbfd echo source-address 20.20.20.58')
-    config_sbfd(dut1, policy_2, 'sbfd echo source-address 20.20.20.58')
-    config_sbfd(dut1, policy_3, 'sbfd echo source-address 2000::58')
-    config_sbfd(dut1, policy_4, 'sbfd echo source-address 2000::58')
     config_sbfd(dut1, policy_5, 'sbfd echo source-address 20.20.20.58')
     config_sbfd(dut1, policy_6, 'sbfd enable remote 10086 source-address 2000::58')
 
@@ -669,11 +662,7 @@ def test_sbfd_reboot_recover_case6():
     check_filed = {
         'status':'up'
     }
-    combined_list = data['policy_sbfd'][policy_1] \
-                + data['policy_sbfd'][policy_2] \
-                + data['policy_sbfd'][policy_3] \
-                + data['policy_sbfd'][policy_4] \
-                + data['policy_sbfd'][policy_5] \
+    combined_list = data['policy_sbfd'][policy_5] \
                 + data['policy_sbfd'][policy_6] 
 
     for key in combined_list:
@@ -693,10 +682,6 @@ def test_sbfd_reboot_recover_case6():
     st.log("after reboot offload check finish")
 
     # step 4 : clear sbfd config
-    config_sbfd(dut1, policy_1, 'no sbfd echo')
-    config_sbfd(dut1, policy_2, 'no sbfd echo')
-    config_sbfd(dut1, policy_3, 'no sbfd echo')
-    config_sbfd(dut1, policy_4, 'no sbfd echo')
     config_sbfd(dut1, policy_5, 'no sbfd echo')
     config_sbfd(dut1, policy_6, 'no sbfd enable')    
 
@@ -708,15 +693,9 @@ def test_sbfd_flapping_case7():
 
     st.banner("test_sbfd_flapping_case7 begin")
 
-    policy_1 = 'policy color 2 endpoint 2000::59'
-    policy_2 = 'policy color 6 endpoint 2000::59'
-    policy_3 = 'policy color 7 endpoint 2000::59'
     policy_4 = 'policy color 8 endpoint 2000::59'
     policy_5 = 'policy color 9 endpoint 2000::59'
     # step 1 : config sbfd
-    config_sbfd(dut1, policy_1, 'sbfd echo source-address 2000::58')
-    config_sbfd(dut1, policy_2, 'sbfd echo source-address 20.20.20.58')
-    config_sbfd(dut1, policy_3, 'sbfd echo source-address 2000::58')
     config_sbfd(dut1, policy_4, 'sbfd echo source-address 20.20.20.58')
     config_sbfd(dut1, policy_5, 'sbfd enable remote 10086 source-address 2000::58')
 
@@ -725,10 +704,7 @@ def test_sbfd_flapping_case7():
         'status':'up'
     }
 
-    combined_list = data['policy_sbfd'][policy_1] \
-                + data['policy_sbfd'][policy_2] \
-                + data['policy_sbfd'][policy_3] \
-                + data['policy_sbfd'][policy_4] \
+    combined_list = data['policy_sbfd'][policy_4] \
                 + data['policy_sbfd'][policy_5]
 
     for key in combined_list:
@@ -754,7 +730,7 @@ def test_sbfd_flapping_case7():
     st.config(dut1, 'ping -c2 20.20.20.59')
     st.config(dut2, 'ping -c2 20.20.20.58')
     
-    st.show(dut1, "vtysh -c 'show bfd nd infos'", skip_tmpl=True)
+    #st.show(dut1, "vtysh -c 'show bfd nd infos'", skip_tmpl=True)
     # check
     st.show(dut1, "vtysh -c 'show bfd sr endx infos'", skip_tmpl=True)
     # check
@@ -782,9 +758,6 @@ def test_sbfd_flapping_case7():
 
 
     # step 6 : clear sbfd config
-    config_sbfd(dut1, policy_1, 'no sbfd echo')
-    config_sbfd(dut1, policy_2, 'no sbfd echo')
-    config_sbfd(dut1, policy_3, 'no sbfd echo')
     config_sbfd(dut1, policy_4, 'no sbfd echo')
     config_sbfd(dut1, policy_5, 'no sbfd enable')
 
@@ -873,3 +846,4 @@ def test_bfd_for_static_route_case8():
         st.report_fail("test_bfd_for_static_route_case8 3 check static route Vrf10000:20.20.20.20/32 failed")
 
     st.report_pass("test_case_passed")
+

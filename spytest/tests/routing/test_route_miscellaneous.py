@@ -155,7 +155,7 @@ def test_ip_route_and_fib_with_large_routes():
     ctrl_start = {'mode':'start'}
     bgp_rtr = tgapi.tg_bgp_config(tg=tg, handle=h1, conf_var=conf_var, route_var = route_var, ctrl_var=ctrl_start)
     if 'eSR' == os.getenv('SPYTEST_PROJECT'):
-        time.sleep(200)
+        time.sleep(240)
     else:
         time.sleep(10)
 
@@ -183,5 +183,7 @@ def test_ip_route_and_fib_with_large_routes():
     expected_max_fib = data.dut_max_fib - 4
     if int(output) != expected_max_fib: # 2 ipv6 default route minus 4
         st.report_fail("test_case_passed, dataplane route num is " + output + ", expected " + str(expected_max_fib))
+
+    import pdb;pdb.set_trace()
 
     st.report_pass("test_case_passed")

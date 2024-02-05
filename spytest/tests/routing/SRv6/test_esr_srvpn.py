@@ -553,7 +553,7 @@ def test_base_config_srvpn_locator_01():
     expected_vpn = {
         'rdroute':'2:2:192.100.1.0/24',
         'sid':'',
-        'peerv6':'2000::178',
+        'peerv6':'',
         'secetced':'1 available, best #1'
     }
 

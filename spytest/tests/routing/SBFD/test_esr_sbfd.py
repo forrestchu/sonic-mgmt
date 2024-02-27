@@ -220,9 +220,6 @@ def sbfd_func_hooks(request):
         # ping each other to learn nd and arp 
         learn_arp_by_ping()
     
-        #st.show(dut1, "vtysh -c 'show bfd nd infos'", skip_tmpl=True)
-        # check
-        st.show(dut1, "vtysh -c 'show bfd sr endx infos'", skip_tmpl=True)
         # check
         st.show(dut1, "vtysh -c 'show sr-te policy detail'", skip_tmpl=True)
         # check
@@ -730,9 +727,6 @@ def test_sbfd_flapping_case7():
     st.config(dut1, 'ping -c2 20.20.20.59')
     st.config(dut2, 'ping -c2 20.20.20.58')
     
-    #st.show(dut1, "vtysh -c 'show bfd nd infos'", skip_tmpl=True)
-    # check
-    st.show(dut1, "vtysh -c 'show bfd sr endx infos'", skip_tmpl=True)
     # check
     st.show(dut1, "vtysh -c 'show sr-te policy detail'", skip_tmpl=True)
     # check

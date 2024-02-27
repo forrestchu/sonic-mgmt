@@ -45375,13 +45375,10 @@
     },
     "SRV6_SID_LIST": {
         "a": {
-            "forwarding-ignore-first-sid": "fd00:202:2021:fff0:3::"
         },
         "b": {
-            "forwarding-ignore-first-sid": "fd00:202:2021:fff0:4::"
         },
         "c": {
-            "forwarding-ignore-first-sid": "fd00:202:2021:fff0:5::"
         }
     },
     "SWITCH": {

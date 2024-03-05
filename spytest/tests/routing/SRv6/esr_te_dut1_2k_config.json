@@ -3984,7 +3984,7 @@
         },
         "100|global|Vrf201":{
             "bgp_router_id":"1.1.201.179",
-            "srv6_locator":"lsid2"
+            "srv6_locator":"lsid3"
         },
         "100|ipv4|Vrf201":{
             "export_vpn":"true",
@@ -5354,7 +5354,7 @@
         },
         "100|global|Vrf301":{
             "bgp_router_id":"1.2.47.179",
-            "srv6_locator":"lsid3"
+            "srv6_locator":"lsid4"
         },
         "100|ipv4|Vrf301":{
             "export_vpn":"true",
@@ -5365,7 +5365,7 @@
         },
         "100|global|Vrf302":{
             "bgp_router_id":"1.2.48.179",
-            "srv6_locator":"lsid3"
+            "srv6_locator":"lsid4"
         },
         "100|ipv4|Vrf302":{
             "export_vpn":"true",
@@ -6724,7 +6724,7 @@
         },
         "100|global|Vrf401":{
             "bgp_router_id":"1.2.147.179",
-            "srv6_locator":"lsid4"
+            "srv6_locator":"lsid5"
         },
         "100|ipv4|Vrf401":{
             "export_vpn":"true",
@@ -6735,7 +6735,7 @@
         },
         "100|global|Vrf402":{
             "bgp_router_id":"1.2.148.179",
-            "srv6_locator":"lsid4"
+            "srv6_locator":"lsid5"
         },
         "100|ipv4|Vrf402":{
             "export_vpn":"true",
@@ -6749,7 +6749,7 @@
         },
         "100|global|Vrf403":{
             "bgp_router_id":"1.2.149.179",
-            "srv6_locator":"lsid4"
+            "srv6_locator":"lsid5"
         },
         "100|ipv4|Vrf403":{
             "export_vpn":"true",
@@ -8094,7 +8094,7 @@
         },
         "100|global|Vrf501":{
             "bgp_router_id":"1.2.247.179",
-            "srv6_locator":"lsid5"
+            "srv6_locator":"lsid6"
         },
         "100|ipv4|Vrf501":{
             "export_vpn":"true",
@@ -8105,7 +8105,7 @@
         },
         "100|global|Vrf502":{
             "bgp_router_id":"1.2.248.179",
-            "srv6_locator":"lsid5"
+            "srv6_locator":"lsid6"
         },
         "100|ipv4|Vrf502":{
             "export_vpn":"true",
@@ -8119,7 +8119,7 @@
         },
         "100|global|Vrf503":{
             "bgp_router_id":"1.2.249.179",
-            "srv6_locator":"lsid5"
+            "srv6_locator":"lsid6"
         },
         "100|ipv4|Vrf503":{
             "export_vpn":"true",
@@ -8133,7 +8133,7 @@
         },
         "100|global|Vrf504":{
             "bgp_router_id":"1.2.250.179",
-            "srv6_locator":"lsid5"
+            "srv6_locator":"lsid6"
         },
         "100|ipv4|Vrf504":{
             "export_vpn":"true",
@@ -9464,7 +9464,7 @@
         },
         "100|global|Vrf601":{
             "bgp_router_id":"1.3.93.179",
-            "srv6_locator":"lsid6"
+            "srv6_locator":"lsid7"
         },
         "100|ipv4|Vrf601":{
             "export_vpn":"true",
@@ -9475,7 +9475,7 @@
         },
         "100|global|Vrf602":{
             "bgp_router_id":"1.3.94.179",
-            "srv6_locator":"lsid6"
+            "srv6_locator":"lsid7"
         },
         "100|ipv4|Vrf602":{
             "export_vpn":"true",
@@ -9489,7 +9489,7 @@
         },
         "100|global|Vrf603":{
             "bgp_router_id":"1.3.95.179",
-            "srv6_locator":"lsid6"
+            "srv6_locator":"lsid7"
         },
         "100|ipv4|Vrf603":{
             "export_vpn":"true",
@@ -9503,7 +9503,7 @@
         },
         "100|global|Vrf604":{
             "bgp_router_id":"1.3.96.179",
-            "srv6_locator":"lsid6"
+            "srv6_locator":"lsid7"
         },
         "100|ipv4|Vrf604":{
             "export_vpn":"true",
@@ -9517,7 +9517,7 @@
         },
         "100|global|Vrf605":{
             "bgp_router_id":"1.3.97.179",
-            "srv6_locator":"lsid6"
+            "srv6_locator":"lsid7"
         },
         "100|ipv4|Vrf605":{
             "export_vpn":"true",
@@ -10834,7 +10834,7 @@
         },
         "100|global|Vrf701":{
             "bgp_router_id":"1.3.193.179",
-            "srv6_locator":"lsid7"
+            "srv6_locator":"lsid8"
         },
         "100|ipv4|Vrf701":{
             "export_vpn":"true",
@@ -10845,7 +10845,7 @@
         },
         "100|global|Vrf702":{
             "bgp_router_id":"1.3.194.179",
-            "srv6_locator":"lsid7"
+            "srv6_locator":"lsid8"
         },
         "100|ipv4|Vrf702":{
             "export_vpn":"true",
@@ -10859,7 +10859,7 @@
         },
         "100|global|Vrf703":{
             "bgp_router_id":"1.3.195.179",
-            "srv6_locator":"lsid7"
+            "srv6_locator":"lsid8"
         },
         "100|ipv4|Vrf703":{
             "export_vpn":"true",
@@ -10873,7 +10873,7 @@
         },
         "100|global|Vrf704":{
             "bgp_router_id":"1.3.196.179",
-            "srv6_locator":"lsid7"
+            "srv6_locator":"lsid8"
         },
         "100|ipv4|Vrf704":{
             "export_vpn":"true",
@@ -10887,7 +10887,7 @@
         },
         "100|global|Vrf705":{
             "bgp_router_id":"1.3.197.179",
-            "srv6_locator":"lsid7"
+            "srv6_locator":"lsid8"
         },
         "100|ipv4|Vrf705":{
             "export_vpn":"true",
@@ -10901,7 +10901,7 @@
         },
         "100|global|Vrf706":{
             "bgp_router_id":"1.3.198.179",
-            "srv6_locator":"lsid7"
+            "srv6_locator":"lsid8"
         },
         "100|ipv4|Vrf706":{
             "export_vpn":"true",
@@ -12204,7 +12204,7 @@
         },
         "100|global|Vrf801":{
             "bgp_router_id":"1.4.39.179",
-            "srv6_locator":"lsid8"
+            "srv6_locator":"lsid9"
         },
         "100|ipv4|Vrf801":{
             "export_vpn":"true",
@@ -12215,7 +12215,7 @@
         },
         "100|global|Vrf802":{
             "bgp_router_id":"1.4.40.179",
-            "srv6_locator":"lsid8"
+            "srv6_locator":"lsid9"
         },
         "100|ipv4|Vrf802":{
             "export_vpn":"true",
@@ -12229,7 +12229,7 @@
         },
         "100|global|Vrf803":{
             "bgp_router_id":"1.4.41.179",
-            "srv6_locator":"lsid8"
+            "srv6_locator":"lsid9"
         },
         "100|ipv4|Vrf803":{
             "export_vpn":"true",
@@ -12243,7 +12243,7 @@
         },
         "100|global|Vrf804":{
             "bgp_router_id":"1.4.42.179",
-            "srv6_locator":"lsid8"
+            "srv6_locator":"lsid9"
         },
         "100|ipv4|Vrf804":{
             "export_vpn":"true",
@@ -12257,7 +12257,7 @@
         },
         "100|global|Vrf805":{
             "bgp_router_id":"1.4.43.179",
-            "srv6_locator":"lsid8"
+            "srv6_locator":"lsid9"
         },
         "100|ipv4|Vrf805":{
             "export_vpn":"true",
@@ -12271,7 +12271,7 @@
         },
         "100|global|Vrf806":{
             "bgp_router_id":"1.4.44.179",
-            "srv6_locator":"lsid8"
+            "srv6_locator":"lsid9"
         },
         "100|ipv4|Vrf806":{
             "export_vpn":"true",
@@ -12285,7 +12285,7 @@
         },
         "100|global|Vrf807":{
             "bgp_router_id":"1.4.45.179",
-            "srv6_locator":"lsid8"
+            "srv6_locator":"lsid9"
         },
         "100|ipv4|Vrf807":{
             "export_vpn":"true",
@@ -13574,7 +13574,7 @@
         },
         "100|global|Vrf901":{
             "bgp_router_id":"1.4.139.179",
-            "srv6_locator":"lsid9"
+            "srv6_locator":"lsid10"
         },
         "100|ipv4|Vrf901":{
             "export_vpn":"true",
@@ -13585,7 +13585,7 @@
         },
         "100|global|Vrf902":{
             "bgp_router_id":"1.4.140.179",
-            "srv6_locator":"lsid9"
+            "srv6_locator":"lsid10"
         },
         "100|ipv4|Vrf902":{
             "export_vpn":"true",
@@ -13599,7 +13599,7 @@
         },
         "100|global|Vrf903":{
             "bgp_router_id":"1.4.141.179",
-            "srv6_locator":"lsid9"
+            "srv6_locator":"lsid10"
         },
         "100|ipv4|Vrf903":{
             "export_vpn":"true",
@@ -13613,7 +13613,7 @@
         },
         "100|global|Vrf904":{
             "bgp_router_id":"1.4.142.179",
-            "srv6_locator":"lsid9"
+            "srv6_locator":"lsid10"
         },
         "100|ipv4|Vrf904":{
             "export_vpn":"true",
@@ -13627,7 +13627,7 @@
         },
         "100|global|Vrf905":{
             "bgp_router_id":"1.4.143.179",
-            "srv6_locator":"lsid9"
+            "srv6_locator":"lsid10"
         },
         "100|ipv4|Vrf905":{
             "export_vpn":"true",
@@ -13641,7 +13641,7 @@
         },
         "100|global|Vrf906":{
             "bgp_router_id":"1.4.144.179",
-            "srv6_locator":"lsid9"
+            "srv6_locator":"lsid10"
         },
         "100|ipv4|Vrf906":{
             "export_vpn":"true",
@@ -13655,7 +13655,7 @@
         },
         "100|global|Vrf907":{
             "bgp_router_id":"1.4.145.179",
-            "srv6_locator":"lsid9"
+            "srv6_locator":"lsid10"
         },
         "100|ipv4|Vrf907":{
             "export_vpn":"true",
@@ -13669,7 +13669,7 @@
         },
         "100|global|Vrf908":{
             "bgp_router_id":"1.4.146.179",
-            "srv6_locator":"lsid9"
+            "srv6_locator":"lsid10"
         },
         "100|ipv4|Vrf908":{
             "export_vpn":"true",
@@ -14944,7 +14944,7 @@
         },
         "100|global|Vrf1001":{
             "bgp_router_id":"1.4.239.179",
-            "srv6_locator":"lsid10"
+            "srv6_locator":"lsid11"
         },
         "100|ipv4|Vrf1001":{
             "export_vpn":"true",
@@ -14955,7 +14955,7 @@
         },
         "100|global|Vrf1002":{
             "bgp_router_id":"1.4.240.179",
-            "srv6_locator":"lsid10"
+            "srv6_locator":"lsid11"
         },
         "100|ipv4|Vrf1002":{
             "export_vpn":"true",
@@ -14969,7 +14969,7 @@
         },
         "100|global|Vrf1003":{
             "bgp_router_id":"1.4.241.179",
-            "srv6_locator":"lsid10"
+            "srv6_locator":"lsid11"
         },
         "100|ipv4|Vrf1003":{
             "export_vpn":"true",
@@ -14983,7 +14983,7 @@
         },
         "100|global|Vrf1004":{
             "bgp_router_id":"1.4.242.179",
-            "srv6_locator":"lsid10"
+            "srv6_locator":"lsid11"
         },
         "100|ipv4|Vrf1004":{
             "export_vpn":"true",
@@ -14997,7 +14997,7 @@
         },
         "100|global|Vrf1005":{
             "bgp_router_id":"1.4.243.179",
-            "srv6_locator":"lsid10"
+            "srv6_locator":"lsid11"
         },
         "100|ipv4|Vrf1005":{
             "export_vpn":"true",
@@ -15011,7 +15011,7 @@
         },
         "100|global|Vrf1006":{
             "bgp_router_id":"1.4.244.179",
-            "srv6_locator":"lsid10"
+            "srv6_locator":"lsid11"
         },
         "100|ipv4|Vrf1006":{
             "export_vpn":"true",
@@ -15025,7 +15025,7 @@
         },
         "100|global|Vrf1007":{
             "bgp_router_id":"1.4.245.179",
-            "srv6_locator":"lsid10"
+            "srv6_locator":"lsid11"
         },
         "100|ipv4|Vrf1007":{
             "export_vpn":"true",
@@ -15039,7 +15039,7 @@
         },
         "100|global|Vrf1008":{
             "bgp_router_id":"1.4.246.179",
-            "srv6_locator":"lsid10"
+            "srv6_locator":"lsid11"
         },
         "100|ipv4|Vrf1008":{
             "export_vpn":"true",
@@ -15053,7 +15053,7 @@
         },
         "100|global|Vrf1009":{
             "bgp_router_id":"1.4.247.179",
-            "srv6_locator":"lsid10"
+            "srv6_locator":"lsid11"
         },
         "100|ipv4|Vrf1009":{
             "export_vpn":"true",
@@ -16314,7 +16314,7 @@
         },
         "100|global|Vrf1101":{
             "bgp_router_id":"1.5.85.179",
-            "srv6_locator":"lsid11"
+            "srv6_locator":"lsid12"
         },
         "100|ipv4|Vrf1101":{
             "export_vpn":"true",
@@ -16325,7 +16325,7 @@
         },
         "100|global|Vrf1102":{
             "bgp_router_id":"1.5.86.179",
-            "srv6_locator":"lsid11"
+            "srv6_locator":"lsid12"
         },
         "100|ipv4|Vrf1102":{
             "export_vpn":"true",
@@ -16339,7 +16339,7 @@
         },
         "100|global|Vrf1103":{
             "bgp_router_id":"1.5.87.179",
-            "srv6_locator":"lsid11"
+            "srv6_locator":"lsid12"
         },
         "100|ipv4|Vrf1103":{
             "export_vpn":"true",
@@ -16353,7 +16353,7 @@
         },
         "100|global|Vrf1104":{
             "bgp_router_id":"1.5.88.179",
-            "srv6_locator":"lsid11"
+            "srv6_locator":"lsid12"
         },
         "100|ipv4|Vrf1104":{
             "export_vpn":"true",
@@ -16367,7 +16367,7 @@
         },
         "100|global|Vrf1105":{
             "bgp_router_id":"1.5.89.179",
-            "srv6_locator":"lsid11"
+            "srv6_locator":"lsid12"
         },
         "100|ipv4|Vrf1105":{
             "export_vpn":"true",
@@ -16381,7 +16381,7 @@
         },
         "100|global|Vrf1106":{
             "bgp_router_id":"1.5.90.179",
-            "srv6_locator":"lsid11"
+            "srv6_locator":"lsid12"
         },
         "100|ipv4|Vrf1106":{
             "export_vpn":"true",
@@ -16395,7 +16395,7 @@
         },
         "100|global|Vrf1107":{
             "bgp_router_id":"1.5.91.179",
-            "srv6_locator":"lsid11"
+            "srv6_locator":"lsid12"
         },
         "100|ipv4|Vrf1107":{
             "export_vpn":"true",
@@ -16409,7 +16409,7 @@
         },
         "100|global|Vrf1108":{
             "bgp_router_id":"1.5.92.179",
-            "srv6_locator":"lsid11"
+            "srv6_locator":"lsid12"
         },
         "100|ipv4|Vrf1108":{
             "export_vpn":"true",
@@ -16423,7 +16423,7 @@
         },
         "100|global|Vrf1109":{
             "bgp_router_id":"1.5.93.179",
-            "srv6_locator":"lsid11"
+            "srv6_locator":"lsid12"
         },
         "100|ipv4|Vrf1109":{
             "export_vpn":"true",
@@ -16437,7 +16437,7 @@
         },
         "100|global|Vrf1110":{
             "bgp_router_id":"1.5.94.179",
-            "srv6_locator":"lsid11"
+            "srv6_locator":"lsid12"
         },
         "100|ipv4|Vrf1110":{
             "export_vpn":"true",
@@ -17684,7 +17684,7 @@
         },
         "100|global|Vrf1201":{
             "bgp_router_id":"1.5.185.179",
-            "srv6_locator":"lsid12"
+            "srv6_locator":"lsid13"
         },
         "100|ipv4|Vrf1201":{
             "export_vpn":"true",
@@ -17695,7 +17695,7 @@
         },
         "100|global|Vrf1202":{
             "bgp_router_id":"1.5.186.179",
-            "srv6_locator":"lsid12"
+            "srv6_locator":"lsid13"
         },
         "100|ipv4|Vrf1202":{
             "export_vpn":"true",
@@ -17709,7 +17709,7 @@
         },
         "100|global|Vrf1203":{
             "bgp_router_id":"1.5.187.179",
-            "srv6_locator":"lsid12"
+            "srv6_locator":"lsid13"
         },
         "100|ipv4|Vrf1203":{
             "export_vpn":"true",
@@ -17723,7 +17723,7 @@
         },
         "100|global|Vrf1204":{
             "bgp_router_id":"1.5.188.179",
-            "srv6_locator":"lsid12"
+            "srv6_locator":"lsid13"
         },
         "100|ipv4|Vrf1204":{
             "export_vpn":"true",
@@ -17737,7 +17737,7 @@
         },
         "100|global|Vrf1205":{
             "bgp_router_id":"1.5.189.179",
-            "srv6_locator":"lsid12"
+            "srv6_locator":"lsid13"
         },
         "100|ipv4|Vrf1205":{
             "export_vpn":"true",
@@ -17751,7 +17751,7 @@
         },
         "100|global|Vrf1206":{
             "bgp_router_id":"1.5.190.179",
-            "srv6_locator":"lsid12"
+            "srv6_locator":"lsid13"
         },
         "100|ipv4|Vrf1206":{
             "export_vpn":"true",
@@ -17765,7 +17765,7 @@
         },
         "100|global|Vrf1207":{
             "bgp_router_id":"1.5.191.179",
-            "srv6_locator":"lsid12"
+            "srv6_locator":"lsid13"
         },
         "100|ipv4|Vrf1207":{
             "export_vpn":"true",
@@ -17779,7 +17779,7 @@
         },
         "100|global|Vrf1208":{
             "bgp_router_id":"1.5.192.179",
-            "srv6_locator":"lsid12"
+            "srv6_locator":"lsid13"
         },
         "100|ipv4|Vrf1208":{
             "export_vpn":"true",
@@ -17793,7 +17793,7 @@
         },
         "100|global|Vrf1209":{
             "bgp_router_id":"1.5.193.179",
-            "srv6_locator":"lsid12"
+            "srv6_locator":"lsid13"
         },
         "100|ipv4|Vrf1209":{
             "export_vpn":"true",
@@ -17807,7 +17807,7 @@
         },
         "100|global|Vrf1210":{
             "bgp_router_id":"1.5.194.179",
-            "srv6_locator":"lsid12"
+            "srv6_locator":"lsid13"
         },
         "100|ipv4|Vrf1210":{
             "export_vpn":"true",
@@ -17821,7 +17821,7 @@
         },
         "100|global|Vrf1211":{
             "bgp_router_id":"1.5.195.179",
-            "srv6_locator":"lsid12"
+            "srv6_locator":"lsid13"
         },
         "100|ipv4|Vrf1211":{
             "export_vpn":"true",
@@ -19054,7 +19054,7 @@
         },
         "100|global|Vrf1301":{
             "bgp_router_id":"1.6.31.179",
-            "srv6_locator":"lsid13"
+            "srv6_locator":"lsid14"
         },
         "100|ipv4|Vrf1301":{
             "export_vpn":"true",
@@ -19065,7 +19065,7 @@
         },
         "100|global|Vrf1302":{
             "bgp_router_id":"1.6.32.179",
-            "srv6_locator":"lsid13"
+            "srv6_locator":"lsid14"
         },
         "100|ipv4|Vrf1302":{
             "export_vpn":"true",
@@ -19079,7 +19079,7 @@
         },
         "100|global|Vrf1303":{
             "bgp_router_id":"1.6.33.179",
-            "srv6_locator":"lsid13"
+            "srv6_locator":"lsid14"
         },
         "100|ipv4|Vrf1303":{
             "export_vpn":"true",
@@ -19093,7 +19093,7 @@
         },
         "100|global|Vrf1304":{
             "bgp_router_id":"1.6.34.179",
-            "srv6_locator":"lsid13"
+            "srv6_locator":"lsid14"
         },
         "100|ipv4|Vrf1304":{
             "export_vpn":"true",
@@ -19107,7 +19107,7 @@
         },
         "100|global|Vrf1305":{
             "bgp_router_id":"1.6.35.179",
-            "srv6_locator":"lsid13"
+            "srv6_locator":"lsid14"
         },
         "100|ipv4|Vrf1305":{
             "export_vpn":"true",
@@ -19121,7 +19121,7 @@
         },
         "100|global|Vrf1306":{
             "bgp_router_id":"1.6.36.179",
-            "srv6_locator":"lsid13"
+            "srv6_locator":"lsid14"
         },
         "100|ipv4|Vrf1306":{
             "export_vpn":"true",
@@ -19135,7 +19135,7 @@
         },
         "100|global|Vrf1307":{
             "bgp_router_id":"1.6.37.179",
-            "srv6_locator":"lsid13"
+            "srv6_locator":"lsid14"
         },
         "100|ipv4|Vrf1307":{
             "export_vpn":"true",
@@ -19149,7 +19149,7 @@
         },
         "100|global|Vrf1308":{
             "bgp_router_id":"1.6.38.179",
-            "srv6_locator":"lsid13"
+            "srv6_locator":"lsid14"
         },
         "100|ipv4|Vrf1308":{
             "export_vpn":"true",
@@ -19163,7 +19163,7 @@
         },
         "100|global|Vrf1309":{
             "bgp_router_id":"1.6.39.179",
-            "srv6_locator":"lsid13"
+            "srv6_locator":"lsid14"
         },
         "100|ipv4|Vrf1309":{
             "export_vpn":"true",
@@ -19177,7 +19177,7 @@
         },
         "100|global|Vrf1310":{
             "bgp_router_id":"1.6.40.179",
-            "srv6_locator":"lsid13"
+            "srv6_locator":"lsid14"
         },
         "100|ipv4|Vrf1310":{
             "export_vpn":"true",
@@ -19191,7 +19191,7 @@
         },
         "100|global|Vrf1311":{
             "bgp_router_id":"1.6.41.179",
-            "srv6_locator":"lsid13"
+            "srv6_locator":"lsid14"
         },
         "100|ipv4|Vrf1311":{
             "export_vpn":"true",
@@ -19202,7 +19202,7 @@
         },
         "100|global|Vrf1312":{
             "bgp_router_id":"1.6.42.179",
-            "srv6_locator":"lsid13"
+            "srv6_locator":"lsid14"
         },
         "100|ipv4|Vrf1312":{
             "export_vpn":"true",
@@ -20424,7 +20424,7 @@
         },
         "100|global|Vrf1401":{
             "bgp_router_id":"1.6.131.179",
-            "srv6_locator":"lsid14"
+            "srv6_locator":"lsid15"
         },
         "100|ipv4|Vrf1401":{
             "export_vpn":"true",
@@ -20435,7 +20435,7 @@
         },
         "100|global|Vrf1402":{
             "bgp_router_id":"1.6.132.179",
-            "srv6_locator":"lsid14"
+            "srv6_locator":"lsid15"
         },
         "100|ipv4|Vrf1402":{
             "export_vpn":"true",
@@ -20449,7 +20449,7 @@
         },
         "100|global|Vrf1403":{
             "bgp_router_id":"1.6.133.179",
-            "srv6_locator":"lsid14"
+            "srv6_locator":"lsid15"
         },
         "100|ipv4|Vrf1403":{
             "export_vpn":"true",
@@ -20463,7 +20463,7 @@
         },
         "100|global|Vrf1404":{
             "bgp_router_id":"1.6.134.179",
-            "srv6_locator":"lsid14"
+            "srv6_locator":"lsid15"
         },
         "100|ipv4|Vrf1404":{
             "export_vpn":"true",
@@ -20477,7 +20477,7 @@
         },
         "100|global|Vrf1405":{
             "bgp_router_id":"1.6.135.179",
-            "srv6_locator":"lsid14"
+            "srv6_locator":"lsid15"
         },
         "100|ipv4|Vrf1405":{
             "export_vpn":"true",
@@ -20491,7 +20491,7 @@
         },
         "100|global|Vrf1406":{
             "bgp_router_id":"1.6.136.179",
-            "srv6_locator":"lsid14"
+            "srv6_locator":"lsid15"
         },
         "100|ipv4|Vrf1406":{
             "export_vpn":"true",
@@ -20505,7 +20505,7 @@
         },
         "100|global|Vrf1407":{
             "bgp_router_id":"1.6.137.179",
-            "srv6_locator":"lsid14"
+            "srv6_locator":"lsid15"
         },
         "100|ipv4|Vrf1407":{
             "export_vpn":"true",
@@ -20519,7 +20519,7 @@
         },
         "100|global|Vrf1408":{
             "bgp_router_id":"1.6.138.179",
-            "srv6_locator":"lsid14"
+            "srv6_locator":"lsid15"
         },
         "100|ipv4|Vrf1408":{
             "export_vpn":"true",
@@ -20533,7 +20533,7 @@
         },
         "100|global|Vrf1409":{
             "bgp_router_id":"1.6.139.179",
-            "srv6_locator":"lsid14"
+            "srv6_locator":"lsid15"
         },
         "100|ipv4|Vrf1409":{
             "export_vpn":"true",
@@ -20547,7 +20547,7 @@
         },
         "100|global|Vrf1410":{
             "bgp_router_id":"1.6.140.179",
-            "srv6_locator":"lsid14"
+            "srv6_locator":"lsid15"
         },
         "100|ipv4|Vrf1410":{
             "export_vpn":"true",
@@ -20561,7 +20561,7 @@
         },
         "100|global|Vrf1411":{
             "bgp_router_id":"1.6.141.179",
-            "srv6_locator":"lsid14"
+            "srv6_locator":"lsid15"
         },
         "100|ipv4|Vrf1411":{
             "export_vpn":"true",
@@ -20572,7 +20572,7 @@
         },
         "100|global|Vrf1412":{
             "bgp_router_id":"1.6.142.179",
-            "srv6_locator":"lsid14"
+            "srv6_locator":"lsid15"
         },
         "100|ipv4|Vrf1412":{
             "export_vpn":"true",
@@ -20586,7 +20586,7 @@
         },
         "100|global|Vrf1413":{
             "bgp_router_id":"1.6.143.179",
-            "srv6_locator":"lsid14"
+            "srv6_locator":"lsid15"
         },
         "100|ipv4|Vrf1413":{
             "export_vpn":"true",
@@ -21794,7 +21794,7 @@
         },
         "100|global|Vrf1501":{
             "bgp_router_id":"1.6.231.179",
-            "srv6_locator":"lsid15"
+            "srv6_locator":"lsid16"
         },
         "100|ipv4|Vrf1501":{
             "export_vpn":"true",
@@ -21805,7 +21805,7 @@
         },
         "100|global|Vrf1502":{
             "bgp_router_id":"1.6.232.179",
-            "srv6_locator":"lsid15"
+            "srv6_locator":"lsid16"
         },
         "100|ipv4|Vrf1502":{
             "export_vpn":"true",
@@ -21819,7 +21819,7 @@
         },
         "100|global|Vrf1503":{
             "bgp_router_id":"1.6.233.179",
-            "srv6_locator":"lsid15"
+            "srv6_locator":"lsid16"
         },
         "100|ipv4|Vrf1503":{
             "export_vpn":"true",
@@ -21833,7 +21833,7 @@
         },
         "100|global|Vrf1504":{
             "bgp_router_id":"1.6.234.179",
-            "srv6_locator":"lsid15"
+            "srv6_locator":"lsid16"
         },
         "100|ipv4|Vrf1504":{
             "export_vpn":"true",
@@ -21847,7 +21847,7 @@
         },
         "100|global|Vrf1505":{
             "bgp_router_id":"1.6.235.179",
-            "srv6_locator":"lsid15"
+            "srv6_locator":"lsid16"
         },
         "100|ipv4|Vrf1505":{
             "export_vpn":"true",
@@ -21861,7 +21861,7 @@
         },
         "100|global|Vrf1506":{
             "bgp_router_id":"1.6.236.179",
-            "srv6_locator":"lsid15"
+            "srv6_locator":"lsid16"
         },
         "100|ipv4|Vrf1506":{
             "export_vpn":"true",
@@ -21875,7 +21875,7 @@
         },
         "100|global|Vrf1507":{
             "bgp_router_id":"1.6.237.179",
-            "srv6_locator":"lsid15"
+            "srv6_locator":"lsid16"
         },
         "100|ipv4|Vrf1507":{
             "export_vpn":"true",
@@ -21889,7 +21889,7 @@
         },
         "100|global|Vrf1508":{
             "bgp_router_id":"1.6.238.179",
-            "srv6_locator":"lsid15"
+            "srv6_locator":"lsid16"
         },
         "100|ipv4|Vrf1508":{
             "export_vpn":"true",
@@ -21903,7 +21903,7 @@
         },
         "100|global|Vrf1509":{
             "bgp_router_id":"1.6.239.179",
-            "srv6_locator":"lsid15"
+            "srv6_locator":"lsid16"
         },
         "100|ipv4|Vrf1509":{
             "export_vpn":"true",
@@ -21917,7 +21917,7 @@
         },
         "100|global|Vrf1510":{
             "bgp_router_id":"1.6.240.179",
-            "srv6_locator":"lsid15"
+            "srv6_locator":"lsid16"
         },
         "100|ipv4|Vrf1510":{
             "export_vpn":"true",
@@ -21931,7 +21931,7 @@
         },
         "100|global|Vrf1511":{
             "bgp_router_id":"1.6.241.179",
-            "srv6_locator":"lsid15"
+            "srv6_locator":"lsid16"
         },
         "100|ipv4|Vrf1511":{
             "export_vpn":"true",
@@ -21942,7 +21942,7 @@
         },
         "100|global|Vrf1512":{
             "bgp_router_id":"1.6.242.179",
-            "srv6_locator":"lsid15"
+            "srv6_locator":"lsid16"
         },
         "100|ipv4|Vrf1512":{
             "export_vpn":"true",
@@ -21956,7 +21956,7 @@
         },
         "100|global|Vrf1513":{
             "bgp_router_id":"1.6.243.179",
-            "srv6_locator":"lsid15"
+            "srv6_locator":"lsid16"
         },
         "100|ipv4|Vrf1513":{
             "export_vpn":"true",
@@ -21970,7 +21970,7 @@
         },
         "100|global|Vrf1514":{
             "bgp_router_id":"1.6.244.179",
-            "srv6_locator":"lsid15"
+            "srv6_locator":"lsid16"
         },
         "100|ipv4|Vrf1514":{
             "export_vpn":"true",
@@ -23164,7 +23164,7 @@
         },
         "100|global|Vrf1601":{
             "bgp_router_id":"1.7.77.179",
-            "srv6_locator":"lsid16"
+            "srv6_locator":"lsid17"
         },
         "100|ipv4|Vrf1601":{
             "export_vpn":"true",
@@ -23175,7 +23175,7 @@
         },
         "100|global|Vrf1602":{
             "bgp_router_id":"1.7.78.179",
-            "srv6_locator":"lsid16"
+            "srv6_locator":"lsid17"
         },
         "100|ipv4|Vrf1602":{
             "export_vpn":"true",
@@ -23189,7 +23189,7 @@
         },
         "100|global|Vrf1603":{
             "bgp_router_id":"1.7.79.179",
-            "srv6_locator":"lsid16"
+            "srv6_locator":"lsid17"
         },
         "100|ipv4|Vrf1603":{
             "export_vpn":"true",
@@ -23203,7 +23203,7 @@
         },
         "100|global|Vrf1604":{
             "bgp_router_id":"1.7.80.179",
-            "srv6_locator":"lsid16"
+            "srv6_locator":"lsid17"
         },
         "100|ipv4|Vrf1604":{
             "export_vpn":"true",
@@ -23217,7 +23217,7 @@
         },
         "100|global|Vrf1605":{
             "bgp_router_id":"1.7.81.179",
-            "srv6_locator":"lsid16"
+            "srv6_locator":"lsid17"
         },
         "100|ipv4|Vrf1605":{
             "export_vpn":"true",
@@ -23231,7 +23231,7 @@
         },
         "100|global|Vrf1606":{
             "bgp_router_id":"1.7.82.179",
-            "srv6_locator":"lsid16"
+            "srv6_locator":"lsid17"
         },
         "100|ipv4|Vrf1606":{
             "export_vpn":"true",
@@ -23245,7 +23245,7 @@
         },
         "100|global|Vrf1607":{
             "bgp_router_id":"1.7.83.179",
-            "srv6_locator":"lsid16"
+            "srv6_locator":"lsid17"
         },
         "100|ipv4|Vrf1607":{
             "export_vpn":"true",
@@ -23259,7 +23259,7 @@
         },
         "100|global|Vrf1608":{
             "bgp_router_id":"1.7.84.179",
-            "srv6_locator":"lsid16"
+            "srv6_locator":"lsid17"
         },
         "100|ipv4|Vrf1608":{
             "export_vpn":"true",
@@ -23273,7 +23273,7 @@
         },
         "100|global|Vrf1609":{
             "bgp_router_id":"1.7.85.179",
-            "srv6_locator":"lsid16"
+            "srv6_locator":"lsid17"
         },
         "100|ipv4|Vrf1609":{
             "export_vpn":"true",
@@ -23287,7 +23287,7 @@
         },
         "100|global|Vrf1610":{
             "bgp_router_id":"1.7.86.179",
-            "srv6_locator":"lsid16"
+            "srv6_locator":"lsid17"
         },
         "100|ipv4|Vrf1610":{
             "export_vpn":"true",
@@ -23301,7 +23301,7 @@
         },
         "100|global|Vrf1611":{
             "bgp_router_id":"1.7.87.179",
-            "srv6_locator":"lsid16"
+            "srv6_locator":"lsid17"
         },
         "100|ipv4|Vrf1611":{
             "export_vpn":"true",
@@ -23312,7 +23312,7 @@
         },
         "100|global|Vrf1612":{
             "bgp_router_id":"1.7.88.179",
-            "srv6_locator":"lsid16"
+            "srv6_locator":"lsid17"
         },
         "100|ipv4|Vrf1612":{
             "export_vpn":"true",
@@ -23326,7 +23326,7 @@
         },
         "100|global|Vrf1613":{
             "bgp_router_id":"1.7.89.179",
-            "srv6_locator":"lsid16"
+            "srv6_locator":"lsid17"
         },
         "100|ipv4|Vrf1613":{
             "export_vpn":"true",
@@ -23340,7 +23340,7 @@
         },
         "100|global|Vrf1614":{
             "bgp_router_id":"1.7.90.179",
-            "srv6_locator":"lsid16"
+            "srv6_locator":"lsid17"
         },
         "100|ipv4|Vrf1614":{
             "export_vpn":"true",
@@ -23354,7 +23354,7 @@
         },
         "100|global|Vrf1615":{
             "bgp_router_id":"1.7.91.179",
-            "srv6_locator":"lsid16"
+            "srv6_locator":"lsid17"
         },
         "100|ipv4|Vrf1615":{
             "export_vpn":"true",
@@ -24534,7 +24534,7 @@
         },
         "100|global|Vrf1701":{
             "bgp_router_id":"1.7.177.179",
-            "srv6_locator":"lsid17"
+            "srv6_locator":"lsid18"
         },
         "100|ipv4|Vrf1701":{
             "export_vpn":"true",
@@ -24545,7 +24545,7 @@
         },
         "100|global|Vrf1702":{
             "bgp_router_id":"1.7.178.179",
-            "srv6_locator":"lsid17"
+            "srv6_locator":"lsid18"
         },
         "100|ipv4|Vrf1702":{
             "export_vpn":"true",
@@ -24559,7 +24559,7 @@
         },
         "100|global|Vrf1703":{
             "bgp_router_id":"1.7.179.179",
-            "srv6_locator":"lsid17"
+            "srv6_locator":"lsid18"
         },
         "100|ipv4|Vrf1703":{
             "export_vpn":"true",
@@ -24573,7 +24573,7 @@
         },
         "100|global|Vrf1704":{
             "bgp_router_id":"1.7.180.179",
-            "srv6_locator":"lsid17"
+            "srv6_locator":"lsid18"
         },
         "100|ipv4|Vrf1704":{
             "export_vpn":"true",
@@ -24587,7 +24587,7 @@
         },
         "100|global|Vrf1705":{
             "bgp_router_id":"1.7.181.179",
-            "srv6_locator":"lsid17"
+            "srv6_locator":"lsid18"
         },
         "100|ipv4|Vrf1705":{
             "export_vpn":"true",
@@ -24601,7 +24601,7 @@
         },
         "100|global|Vrf1706":{
             "bgp_router_id":"1.7.182.179",
-            "srv6_locator":"lsid17"
+            "srv6_locator":"lsid18"
         },
         "100|ipv4|Vrf1706":{
             "export_vpn":"true",
@@ -24615,7 +24615,7 @@
         },
         "100|global|Vrf1707":{
             "bgp_router_id":"1.7.183.179",
-            "srv6_locator":"lsid17"
+            "srv6_locator":"lsid18"
         },
         "100|ipv4|Vrf1707":{
             "export_vpn":"true",
@@ -24629,7 +24629,7 @@
         },
         "100|global|Vrf1708":{
             "bgp_router_id":"1.7.184.179",
-            "srv6_locator":"lsid17"
+            "srv6_locator":"lsid18"
         },
         "100|ipv4|Vrf1708":{
             "export_vpn":"true",
@@ -24643,7 +24643,7 @@
         },
         "100|global|Vrf1709":{
             "bgp_router_id":"1.7.185.179",
-            "srv6_locator":"lsid17"
+            "srv6_locator":"lsid18"
         },
         "100|ipv4|Vrf1709":{
             "export_vpn":"true",
@@ -24657,7 +24657,7 @@
         },
         "100|global|Vrf1710":{
             "bgp_router_id":"1.7.186.179",
-            "srv6_locator":"lsid17"
+            "srv6_locator":"lsid18"
         },
         "100|ipv4|Vrf1710":{
             "export_vpn":"true",
@@ -24671,7 +24671,7 @@
         },
         "100|global|Vrf1711":{
             "bgp_router_id":"1.7.187.179",
-            "srv6_locator":"lsid17"
+            "srv6_locator":"lsid18"
         },
         "100|ipv4|Vrf1711":{
             "export_vpn":"true",
@@ -24682,7 +24682,7 @@
         },
         "100|global|Vrf1712":{
             "bgp_router_id":"1.7.188.179",
-            "srv6_locator":"lsid17"
+            "srv6_locator":"lsid18"
         },
         "100|ipv4|Vrf1712":{
             "export_vpn":"true",
@@ -24696,7 +24696,7 @@
         },
         "100|global|Vrf1713":{
             "bgp_router_id":"1.7.189.179",
-            "srv6_locator":"lsid17"
+            "srv6_locator":"lsid18"
         },
         "100|ipv4|Vrf1713":{
             "export_vpn":"true",
@@ -24710,7 +24710,7 @@
         },
         "100|global|Vrf1714":{
             "bgp_router_id":"1.7.190.179",
-            "srv6_locator":"lsid17"
+            "srv6_locator":"lsid18"
         },
         "100|ipv4|Vrf1714":{
             "export_vpn":"true",
@@ -24724,7 +24724,7 @@
         },
         "100|global|Vrf1715":{
             "bgp_router_id":"1.7.191.179",
-            "srv6_locator":"lsid17"
+            "srv6_locator":"lsid18"
         },
         "100|ipv4|Vrf1715":{
             "export_vpn":"true",
@@ -24738,7 +24738,7 @@
         },
         "100|global|Vrf1716":{
             "bgp_router_id":"1.7.192.179",
-            "srv6_locator":"lsid17"
+            "srv6_locator":"lsid18"
         },
         "100|ipv4|Vrf1716":{
             "export_vpn":"true",
@@ -25904,7 +25904,7 @@
         },
         "100|global|Vrf1801":{
             "bgp_router_id":"1.8.23.179",
-            "srv6_locator":"lsid18"
+            "srv6_locator":"lsid19"
         },
         "100|ipv4|Vrf1801":{
             "export_vpn":"true",
@@ -25915,7 +25915,7 @@
         },
         "100|global|Vrf1802":{
             "bgp_router_id":"1.8.24.179",
-            "srv6_locator":"lsid18"
+            "srv6_locator":"lsid19"
         },
         "100|ipv4|Vrf1802":{
             "export_vpn":"true",
@@ -25929,7 +25929,7 @@
         },
         "100|global|Vrf1803":{
             "bgp_router_id":"1.8.25.179",
-            "srv6_locator":"lsid18"
+            "srv6_locator":"lsid19"
         },
         "100|ipv4|Vrf1803":{
             "export_vpn":"true",
@@ -25943,7 +25943,7 @@
         },
         "100|global|Vrf1804":{
             "bgp_router_id":"1.8.26.179",
-            "srv6_locator":"lsid18"
+            "srv6_locator":"lsid19"
         },
         "100|ipv4|Vrf1804":{
             "export_vpn":"true",
@@ -25957,7 +25957,7 @@
         },
         "100|global|Vrf1805":{
             "bgp_router_id":"1.8.27.179",
-            "srv6_locator":"lsid18"
+            "srv6_locator":"lsid19"
         },
         "100|ipv4|Vrf1805":{
             "export_vpn":"true",
@@ -25971,7 +25971,7 @@
         },
         "100|global|Vrf1806":{
             "bgp_router_id":"1.8.28.179",
-            "srv6_locator":"lsid18"
+            "srv6_locator":"lsid19"
         },
         "100|ipv4|Vrf1806":{
             "export_vpn":"true",
@@ -25985,7 +25985,7 @@
         },
         "100|global|Vrf1807":{
             "bgp_router_id":"1.8.29.179",
-            "srv6_locator":"lsid18"
+            "srv6_locator":"lsid19"
         },
         "100|ipv4|Vrf1807":{
             "export_vpn":"true",
@@ -25999,7 +25999,7 @@
         },
         "100|global|Vrf1808":{
             "bgp_router_id":"1.8.30.179",
-            "srv6_locator":"lsid18"
+            "srv6_locator":"lsid19"
         },
         "100|ipv4|Vrf1808":{
             "export_vpn":"true",
@@ -26013,7 +26013,7 @@
         },
         "100|global|Vrf1809":{
             "bgp_router_id":"1.8.31.179",
-            "srv6_locator":"lsid18"
+            "srv6_locator":"lsid19"
         },
         "100|ipv4|Vrf1809":{
             "export_vpn":"true",
@@ -26027,7 +26027,7 @@
         },
         "100|global|Vrf1810":{
             "bgp_router_id":"1.8.32.179",
-            "srv6_locator":"lsid18"
+            "srv6_locator":"lsid19"
         },
         "100|ipv4|Vrf1810":{
             "export_vpn":"true",
@@ -26041,7 +26041,7 @@
         },
         "100|global|Vrf1811":{
             "bgp_router_id":"1.8.33.179",
-            "srv6_locator":"lsid18"
+            "srv6_locator":"lsid19"
         },
         "100|ipv4|Vrf1811":{
             "export_vpn":"true",
@@ -26052,7 +26052,7 @@
         },
         "100|global|Vrf1812":{
             "bgp_router_id":"1.8.34.179",
-            "srv6_locator":"lsid18"
+            "srv6_locator":"lsid19"
         },
         "100|ipv4|Vrf1812":{
             "export_vpn":"true",
@@ -26066,7 +26066,7 @@
         },
         "100|global|Vrf1813":{
             "bgp_router_id":"1.8.35.179",
-            "srv6_locator":"lsid18"
+            "srv6_locator":"lsid19"
         },
         "100|ipv4|Vrf1813":{
             "export_vpn":"true",
@@ -26080,7 +26080,7 @@
         },
         "100|global|Vrf1814":{
             "bgp_router_id":"1.8.36.179",
-            "srv6_locator":"lsid18"
+            "srv6_locator":"lsid19"
         },
         "100|ipv4|Vrf1814":{
             "export_vpn":"true",
@@ -26094,7 +26094,7 @@
         },
         "100|global|Vrf1815":{
             "bgp_router_id":"1.8.37.179",
-            "srv6_locator":"lsid18"
+            "srv6_locator":"lsid19"
         },
         "100|ipv4|Vrf1815":{
             "export_vpn":"true",
@@ -26108,7 +26108,7 @@
         },
         "100|global|Vrf1816":{
             "bgp_router_id":"1.8.38.179",
-            "srv6_locator":"lsid18"
+            "srv6_locator":"lsid19"
         },
         "100|ipv4|Vrf1816":{
             "export_vpn":"true",
@@ -26122,7 +26122,7 @@
         },
         "100|global|Vrf1817":{
             "bgp_router_id":"1.8.39.179",
-            "srv6_locator":"lsid18"
+            "srv6_locator":"lsid19"
         },
         "100|ipv4|Vrf1817":{
             "export_vpn":"true",
@@ -27274,7 +27274,7 @@
         },
         "100|global|Vrf1901":{
             "bgp_router_id":"1.8.123.179",
-            "srv6_locator":"lsid19"
+            "srv6_locator":"lsid20"
         },
         "100|ipv4|Vrf1901":{
             "export_vpn":"true",
@@ -27285,7 +27285,7 @@
         },
         "100|global|Vrf1902":{
             "bgp_router_id":"1.8.124.179",
-            "srv6_locator":"lsid19"
+            "srv6_locator":"lsid20"
         },
         "100|ipv4|Vrf1902":{
             "export_vpn":"true",
@@ -27299,7 +27299,7 @@
         },
         "100|global|Vrf1903":{
             "bgp_router_id":"1.8.125.179",
-            "srv6_locator":"lsid19"
+            "srv6_locator":"lsid20"
         },
         "100|ipv4|Vrf1903":{
             "export_vpn":"true",
@@ -27313,7 +27313,7 @@
         },
         "100|global|Vrf1904":{
             "bgp_router_id":"1.8.126.179",
-            "srv6_locator":"lsid19"
+            "srv6_locator":"lsid20"
         },
         "100|ipv4|Vrf1904":{
             "export_vpn":"true",
@@ -27327,7 +27327,7 @@
         },
         "100|global|Vrf1905":{
             "bgp_router_id":"1.8.127.179",
-            "srv6_locator":"lsid19"
+            "srv6_locator":"lsid20"
         },
         "100|ipv4|Vrf1905":{
             "export_vpn":"true",
@@ -27341,7 +27341,7 @@
         },
         "100|global|Vrf1906":{
             "bgp_router_id":"1.8.128.179",
-            "srv6_locator":"lsid19"
+            "srv6_locator":"lsid20"
         },
         "100|ipv4|Vrf1906":{
             "export_vpn":"true",
@@ -27355,7 +27355,7 @@
         },
         "100|global|Vrf1907":{
             "bgp_router_id":"1.8.129.179",
-            "srv6_locator":"lsid19"
+            "srv6_locator":"lsid20"
         },
         "100|ipv4|Vrf1907":{
             "export_vpn":"true",
@@ -27369,7 +27369,7 @@
         },
         "100|global|Vrf1908":{
             "bgp_router_id":"1.8.130.179",
-            "srv6_locator":"lsid19"
+            "srv6_locator":"lsid20"
         },
         "100|ipv4|Vrf1908":{
             "export_vpn":"true",
@@ -27383,7 +27383,7 @@
         },
         "100|global|Vrf1909":{
             "bgp_router_id":"1.8.131.179",
-            "srv6_locator":"lsid19"
+            "srv6_locator":"lsid20"
         },
         "100|ipv4|Vrf1909":{
             "export_vpn":"true",
@@ -27397,7 +27397,7 @@
         },
         "100|global|Vrf1910":{
             "bgp_router_id":"1.8.132.179",
-            "srv6_locator":"lsid19"
+            "srv6_locator":"lsid20"
         },
         "100|ipv4|Vrf1910":{
             "export_vpn":"true",
@@ -27411,7 +27411,7 @@
         },
         "100|global|Vrf1911":{
             "bgp_router_id":"1.8.133.179",
-            "srv6_locator":"lsid19"
+            "srv6_locator":"lsid20"
         },
         "100|ipv4|Vrf1911":{
             "export_vpn":"true",
@@ -27422,7 +27422,7 @@
         },
         "100|global|Vrf1912":{
             "bgp_router_id":"1.8.134.179",
-            "srv6_locator":"lsid19"
+            "srv6_locator":"lsid20"
         },
         "100|ipv4|Vrf1912":{
             "export_vpn":"true",
@@ -27436,7 +27436,7 @@
         },
         "100|global|Vrf1913":{
             "bgp_router_id":"1.8.135.179",
-            "srv6_locator":"lsid19"
+            "srv6_locator":"lsid20"
         },
         "100|ipv4|Vrf1913":{
             "export_vpn":"true",
@@ -27450,7 +27450,7 @@
         },
         "100|global|Vrf1914":{
             "bgp_router_id":"1.8.136.179",
-            "srv6_locator":"lsid19"
+            "srv6_locator":"lsid20"
         },
         "100|ipv4|Vrf1914":{
             "export_vpn":"true",
@@ -27464,7 +27464,7 @@
         },
         "100|global|Vrf1915":{
             "bgp_router_id":"1.8.137.179",
-            "srv6_locator":"lsid19"
+            "srv6_locator":"lsid20"
         },
         "100|ipv4|Vrf1915":{
             "export_vpn":"true",
@@ -27478,7 +27478,7 @@
         },
         "100|global|Vrf1916":{
             "bgp_router_id":"1.8.138.179",
-            "srv6_locator":"lsid19"
+            "srv6_locator":"lsid20"
         },
         "100|ipv4|Vrf1916":{
             "export_vpn":"true",
@@ -27492,7 +27492,7 @@
         },
         "100|global|Vrf1917":{
             "bgp_router_id":"1.8.139.179",
-            "srv6_locator":"lsid19"
+            "srv6_locator":"lsid20"
         },
         "100|ipv4|Vrf1917":{
             "export_vpn":"true",
@@ -27506,7 +27506,7 @@
         },
         "100|global|Vrf1918":{
             "bgp_router_id":"1.8.140.179",
-            "srv6_locator":"lsid19"
+            "srv6_locator":"lsid20"
         },
         "100|ipv4|Vrf1918":{
             "export_vpn":"true",
@@ -30725,6 +30725,9 @@
         "1|seq|20": {
             "permit": "fd00:201:201:fff1:12::/80"
         },
+        "1|seq|25": {
+            "permit": "fd00:201:201:fff2:3::/80"
+        },
         "2|seq|10": {
             "permit": "2000::179/128"
         },
@@ -30733,6 +30736,9 @@
         },
         "2|seq|20": {
             "permit": "fd00:202:202:fff1:12::/80"
+        },
+        "2|seq|25": {
+            "permit": "fd00:201:201:fff2:4::/80"
         }
     },
     "ROUTE_MAP": {
@@ -36859,7 +36865,9 @@
                 "::fff0:99:0:0:0|end-dt46|Vrf99",
                 "::fff0:100:0:0:0|end-dt46|Vrf100",
                 "::fff1:11:0:0:0|end-dt46|PUBLIC-TC11", 
-                "::fff1:12:0:0:0|end-dt46|PUBLIC-TC12"
+                "::fff1:12:0:0:0|end-dt46|PUBLIC-TC12",
+                "::fff2:3:0:0:0|end-x|Eth33.1001|103.1.0.2",
+                "::fff2:4:0:0:0|end-x|Eth34.1001|104.1.0.2"
             ],
             "prefix": "fd00:201:201::/48"
         },

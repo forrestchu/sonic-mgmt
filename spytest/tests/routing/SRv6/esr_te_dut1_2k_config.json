@@ -1222,19 +1222,37 @@
         "2000::178|ipv6_vpn": {
             "activate": "true"
         },
-        "2033::178|global": {
-            "asn": "100"
+        "2011::178|global": {
+            "asn": "100",
+            "update_source": "2011::179"
         },                                                     
-        "2033::178|ipv6": {
+        "2011::178|ipv6": {
             "activate": "true",
             "route_map_out": "1"
         }, 
+        "2022::178|global": {
+            "asn": "100",
+            "update_source": "2022::179"
+        }, 
+        "2022::178|ipv6": {
+            "activate": "true",
+            "route_map_out": "2"
+        },
+        "2033::178|global": {
+            "asn": "100",
+            "update_source": "2033::179"
+        },                                                     
+        "2033::178|ipv6": {
+            "activate": "true",
+            "route_map_out": "3"
+        }, 
         "2044::178|global": {
-            "asn": "100"
+            "asn": "100",
+            "update_source": "2044::179"
         }, 
         "2044::178|ipv6": {
             "activate": "true",
-            "route_map_out": "2"
+            "route_map_out": "4"
         }
     }, 
     "BGP_PARAMETERS": {
@@ -28681,20 +28699,31 @@
             "rt_export": "2:2"
         }
     },
+    "BGP_NETWORK": {
+        "1000::179/128|ipv6": {},
+        "2000::179/128|ipv6": {}
+    },
     "BGP_REDIST": {
-        "static|ipv6": {},
-        "connected|ipv6": {}
+        "static|ipv6": {}
     },
     "DEVICE_METADATA": {
         "localhost": {
             "asic": "cisco", 
             "docker_routing_config_mode": "separated", 
-            "hostname": "MC-58", 
+            "hostname": "MC-56",
             "port_form": "64x100G+32x200G+4x10G", 
             "type": "MetroCoreRouter"
         }
     },
     "INTERFACE": {
+        "Ethernet1|2011::179/64": {
+            "family": "IPv6", 
+            "scope": "global"
+        }, 
+        "Ethernet2|2022::179/64": {
+            "family": "IPv6", 
+            "scope": "global"
+        },
         "Ethernet3|2033::179/64": {
             "family": "IPv6", 
             "scope": "global"
@@ -28709,7 +28738,7 @@
         "Loopback2|2000::179/128": {}
     },
     "MGMT_INTERFACE": {
-        "eth0|21.135.163.58/26": {
+        "eth0|21.135.163.56/26": {
             "gwaddr": "21.135.163.62"
         }
     },
@@ -29112,1632 +29141,1644 @@
         }
     },
     "SUB_INTERFACE":{
-        "Eth33.1001|103.1.0.1/24":{
+        "Eth7.1001|103.1.0.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1011|103.1.1.1/24":{
+        "Eth7.1011|103.1.1.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1021|103.1.2.1/24":{
+        "Eth7.1021|103.1.2.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1031|103.1.3.1/24":{
+        "Eth7.1031|103.1.3.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1041|103.1.4.1/24":{
+        "Eth7.1041|103.1.4.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1051|103.1.5.1/24":{
+        "Eth7.1051|103.1.5.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1061|103.1.6.1/24":{
+        "Eth7.1061|103.1.6.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1071|103.1.7.1/24":{
+        "Eth7.1071|103.1.7.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1081|103.1.8.1/24":{
+        "Eth7.1081|103.1.8.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1091|103.1.9.1/24":{
+        "Eth7.1091|103.1.9.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1101|103.1.10.1/24":{
+        "Eth7.1101|103.1.10.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1111|103.1.11.1/24":{
+        "Eth7.1111|103.1.11.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1121|103.1.12.1/24":{
+        "Eth7.1121|103.1.12.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1131|103.1.13.1/24":{
+        "Eth7.1131|103.1.13.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1141|103.1.14.1/24":{
+        "Eth7.1141|103.1.14.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1151|103.1.15.1/24":{
+        "Eth7.1151|103.1.15.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1161|103.1.16.1/24":{
+        "Eth7.1161|103.1.16.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1171|103.1.17.1/24":{
+        "Eth7.1171|103.1.17.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1181|103.1.18.1/24":{
+        "Eth7.1181|103.1.18.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1191|103.1.19.1/24":{
+        "Eth7.1191|103.1.19.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1201|103.1.20.1/24":{
+        "Eth7.1201|103.1.20.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1211|103.1.21.1/24":{
+        "Eth7.1211|103.1.21.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1221|103.1.22.1/24":{
+        "Eth7.1221|103.1.22.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1231|103.1.23.1/24":{
+        "Eth7.1231|103.1.23.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1241|103.1.24.1/24":{
+        "Eth7.1241|103.1.24.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1251|103.1.25.1/24":{
+        "Eth7.1251|103.1.25.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1261|103.1.26.1/24":{
+        "Eth7.1261|103.1.26.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1271|103.1.27.1/24":{
+        "Eth7.1271|103.1.27.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1281|103.1.28.1/24":{
+        "Eth7.1281|103.1.28.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1291|103.1.29.1/24":{
+        "Eth7.1291|103.1.29.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1301|103.1.30.1/24":{
+        "Eth7.1301|103.1.30.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1311|103.1.31.1/24":{
+        "Eth7.1311|103.1.31.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1321|103.1.32.1/24":{
+        "Eth7.1321|103.1.32.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1331|103.1.33.1/24":{
+        "Eth7.1331|103.1.33.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1341|103.1.34.1/24":{
+        "Eth7.1341|103.1.34.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1351|103.1.35.1/24":{
+        "Eth7.1351|103.1.35.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1361|103.1.36.1/24":{
+        "Eth7.1361|103.1.36.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1371|103.1.37.1/24":{
+        "Eth7.1371|103.1.37.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1381|103.1.38.1/24":{
+        "Eth7.1381|103.1.38.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1391|103.1.39.1/24":{
+        "Eth7.1391|103.1.39.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1401|103.1.40.1/24":{
+        "Eth7.1401|103.1.40.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1411|103.1.41.1/24":{
+        "Eth7.1411|103.1.41.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1421|103.1.42.1/24":{
+        "Eth7.1421|103.1.42.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1431|103.1.43.1/24":{
+        "Eth7.1431|103.1.43.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1441|103.1.44.1/24":{
+        "Eth7.1441|103.1.44.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1451|103.1.45.1/24":{
+        "Eth7.1451|103.1.45.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1461|103.1.46.1/24":{
+        "Eth7.1461|103.1.46.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1471|103.1.47.1/24":{
+        "Eth7.1471|103.1.47.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1481|103.1.48.1/24":{
+        "Eth7.1481|103.1.48.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1491|103.1.49.1/24":{
+        "Eth7.1491|103.1.49.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1501|103.1.50.1/24":{
+        "Eth7.1501|103.1.50.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1511|103.1.51.1/24":{
+        "Eth7.1511|103.1.51.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1521|103.1.52.1/24":{
+        "Eth7.1521|103.1.52.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1531|103.1.53.1/24":{
+        "Eth7.1531|103.1.53.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1541|103.1.54.1/24":{
+        "Eth7.1541|103.1.54.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1551|103.1.55.1/24":{
+        "Eth7.1551|103.1.55.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1561|103.1.56.1/24":{
+        "Eth7.1561|103.1.56.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1571|103.1.57.1/24":{
+        "Eth7.1571|103.1.57.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1581|103.1.58.1/24":{
+        "Eth7.1581|103.1.58.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1591|103.1.59.1/24":{
+        "Eth7.1591|103.1.59.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1601|103.1.60.1/24":{
+        "Eth7.1601|103.1.60.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1611|103.1.61.1/24":{
+        "Eth7.1611|103.1.61.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1621|103.1.62.1/24":{
+        "Eth7.1621|103.1.62.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1631|103.1.63.1/24":{
+        "Eth7.1631|103.1.63.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1641|103.1.64.1/24":{
+        "Eth7.1641|103.1.64.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1651|103.1.65.1/24":{
+        "Eth7.1651|103.1.65.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1661|103.1.66.1/24":{
+        "Eth7.1661|103.1.66.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1671|103.1.67.1/24":{
+        "Eth7.1671|103.1.67.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1681|103.1.68.1/24":{
+        "Eth7.1681|103.1.68.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1691|103.1.69.1/24":{
+        "Eth7.1691|103.1.69.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1701|103.1.70.1/24":{
+        "Eth7.1701|103.1.70.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1711|103.1.71.1/24":{
+        "Eth7.1711|103.1.71.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1721|103.1.72.1/24":{
+        "Eth7.1721|103.1.72.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1731|103.1.73.1/24":{
+        "Eth7.1731|103.1.73.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1741|103.1.74.1/24":{
+        "Eth7.1741|103.1.74.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1751|103.1.75.1/24":{
+        "Eth7.1751|103.1.75.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1761|103.1.76.1/24":{
+        "Eth7.1761|103.1.76.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1771|103.1.77.1/24":{
+        "Eth7.1771|103.1.77.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1781|103.1.78.1/24":{
+        "Eth7.1781|103.1.78.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1791|103.1.79.1/24":{
+        "Eth7.1791|103.1.79.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1801|103.1.80.1/24":{
+        "Eth7.1801|103.1.80.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1811|103.1.81.1/24":{
+        "Eth7.1811|103.1.81.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1821|103.1.82.1/24":{
+        "Eth7.1821|103.1.82.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1831|103.1.83.1/24":{
+        "Eth7.1831|103.1.83.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1841|103.1.84.1/24":{
+        "Eth7.1841|103.1.84.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1851|103.1.85.1/24":{
+        "Eth7.1851|103.1.85.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1861|103.1.86.1/24":{
+        "Eth7.1861|103.1.86.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1871|103.1.87.1/24":{
+        "Eth7.1871|103.1.87.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1881|103.1.88.1/24":{
+        "Eth7.1881|103.1.88.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1891|103.1.89.1/24":{
+        "Eth7.1891|103.1.89.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1901|103.1.90.1/24":{
+        "Eth7.1901|103.1.90.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1911|103.1.91.1/24":{
+        "Eth7.1911|103.1.91.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1921|103.1.92.1/24":{
+        "Eth7.1921|103.1.92.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1931|103.1.93.1/24":{
+        "Eth7.1931|103.1.93.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1941|103.1.94.1/24":{
+        "Eth7.1941|103.1.94.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1951|103.1.95.1/24":{
+        "Eth7.1951|103.1.95.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1961|103.1.96.1/24":{
+        "Eth7.1961|103.1.96.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1971|103.1.97.1/24":{
+        "Eth7.1971|103.1.97.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1981|103.1.98.1/24":{
+        "Eth7.1981|103.1.98.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth33.1991|103.1.99.1/24":{
+        "Eth7.1991|103.1.99.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1001|104.1.0.1/24":{
+        "Eth8.1001|104.1.0.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1011|104.1.1.1/24":{
+        "Eth8.1011|104.1.1.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1021|104.1.2.1/24":{
+        "Eth8.1021|104.1.2.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1031|104.1.3.1/24":{
+        "Eth8.1031|104.1.3.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1041|104.1.4.1/24":{
+        "Eth8.1041|104.1.4.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1051|104.1.5.1/24":{
+        "Eth8.1051|104.1.5.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1061|104.1.6.1/24":{
+        "Eth8.1061|104.1.6.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1071|104.1.7.1/24":{
+        "Eth8.1071|104.1.7.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1081|104.1.8.1/24":{
+        "Eth8.1081|104.1.8.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1091|104.1.9.1/24":{
+        "Eth8.1091|104.1.9.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1101|104.1.10.1/24":{
+        "Eth8.1101|104.1.10.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1111|104.1.11.1/24":{
+        "Eth8.1111|104.1.11.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1121|104.1.12.1/24":{
+        "Eth8.1121|104.1.12.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1131|104.1.13.1/24":{
+        "Eth8.1131|104.1.13.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1141|104.1.14.1/24":{
+        "Eth8.1141|104.1.14.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1151|104.1.15.1/24":{
+        "Eth8.1151|104.1.15.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1161|104.1.16.1/24":{
+        "Eth8.1161|104.1.16.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1171|104.1.17.1/24":{
+        "Eth8.1171|104.1.17.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1181|104.1.18.1/24":{
+        "Eth8.1181|104.1.18.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1191|104.1.19.1/24":{
+        "Eth8.1191|104.1.19.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1201|104.1.20.1/24":{
+        "Eth8.1201|104.1.20.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1211|104.1.21.1/24":{
+        "Eth8.1211|104.1.21.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1221|104.1.22.1/24":{
+        "Eth8.1221|104.1.22.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1231|104.1.23.1/24":{
+        "Eth8.1231|104.1.23.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1241|104.1.24.1/24":{
+        "Eth8.1241|104.1.24.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1251|104.1.25.1/24":{
+        "Eth8.1251|104.1.25.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1261|104.1.26.1/24":{
+        "Eth8.1261|104.1.26.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1271|104.1.27.1/24":{
+        "Eth8.1271|104.1.27.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1281|104.1.28.1/24":{
+        "Eth8.1281|104.1.28.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1291|104.1.29.1/24":{
+        "Eth8.1291|104.1.29.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1301|104.1.30.1/24":{
+        "Eth8.1301|104.1.30.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1311|104.1.31.1/24":{
+        "Eth8.1311|104.1.31.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1321|104.1.32.1/24":{
+        "Eth8.1321|104.1.32.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1331|104.1.33.1/24":{
+        "Eth8.1331|104.1.33.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1341|104.1.34.1/24":{
+        "Eth8.1341|104.1.34.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1351|104.1.35.1/24":{
+        "Eth8.1351|104.1.35.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1361|104.1.36.1/24":{
+        "Eth8.1361|104.1.36.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1371|104.1.37.1/24":{
+        "Eth8.1371|104.1.37.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1381|104.1.38.1/24":{
+        "Eth8.1381|104.1.38.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1391|104.1.39.1/24":{
+        "Eth8.1391|104.1.39.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1401|104.1.40.1/24":{
+        "Eth8.1401|104.1.40.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1411|104.1.41.1/24":{
+        "Eth8.1411|104.1.41.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1421|104.1.42.1/24":{
+        "Eth8.1421|104.1.42.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1431|104.1.43.1/24":{
+        "Eth8.1431|104.1.43.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1441|104.1.44.1/24":{
+        "Eth8.1441|104.1.44.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1451|104.1.45.1/24":{
+        "Eth8.1451|104.1.45.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1461|104.1.46.1/24":{
+        "Eth8.1461|104.1.46.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1471|104.1.47.1/24":{
+        "Eth8.1471|104.1.47.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1481|104.1.48.1/24":{
+        "Eth8.1481|104.1.48.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1491|104.1.49.1/24":{
+        "Eth8.1491|104.1.49.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1501|104.1.50.1/24":{
+        "Eth8.1501|104.1.50.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1511|104.1.51.1/24":{
+        "Eth8.1511|104.1.51.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1521|104.1.52.1/24":{
+        "Eth8.1521|104.1.52.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1531|104.1.53.1/24":{
+        "Eth8.1531|104.1.53.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1541|104.1.54.1/24":{
+        "Eth8.1541|104.1.54.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1551|104.1.55.1/24":{
+        "Eth8.1551|104.1.55.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1561|104.1.56.1/24":{
+        "Eth8.1561|104.1.56.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1571|104.1.57.1/24":{
+        "Eth8.1571|104.1.57.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1581|104.1.58.1/24":{
+        "Eth8.1581|104.1.58.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1591|104.1.59.1/24":{
+        "Eth8.1591|104.1.59.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1601|104.1.60.1/24":{
+        "Eth8.1601|104.1.60.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1611|104.1.61.1/24":{
+        "Eth8.1611|104.1.61.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1621|104.1.62.1/24":{
+        "Eth8.1621|104.1.62.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1631|104.1.63.1/24":{
+        "Eth8.1631|104.1.63.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1641|104.1.64.1/24":{
+        "Eth8.1641|104.1.64.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1651|104.1.65.1/24":{
+        "Eth8.1651|104.1.65.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1661|104.1.66.1/24":{
+        "Eth8.1661|104.1.66.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1671|104.1.67.1/24":{
+        "Eth8.1671|104.1.67.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1681|104.1.68.1/24":{
+        "Eth8.1681|104.1.68.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1691|104.1.69.1/24":{
+        "Eth8.1691|104.1.69.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1701|104.1.70.1/24":{
+        "Eth8.1701|104.1.70.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1711|104.1.71.1/24":{
+        "Eth8.1711|104.1.71.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1721|104.1.72.1/24":{
+        "Eth8.1721|104.1.72.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1731|104.1.73.1/24":{
+        "Eth8.1731|104.1.73.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1741|104.1.74.1/24":{
+        "Eth8.1741|104.1.74.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1751|104.1.75.1/24":{
+        "Eth8.1751|104.1.75.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1761|104.1.76.1/24":{
+        "Eth8.1761|104.1.76.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1771|104.1.77.1/24":{
+        "Eth8.1771|104.1.77.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1781|104.1.78.1/24":{
+        "Eth8.1781|104.1.78.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1791|104.1.79.1/24":{
+        "Eth8.1791|104.1.79.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1801|104.1.80.1/24":{
+        "Eth8.1801|104.1.80.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1811|104.1.81.1/24":{
+        "Eth8.1811|104.1.81.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1821|104.1.82.1/24":{
+        "Eth8.1821|104.1.82.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1831|104.1.83.1/24":{
+        "Eth8.1831|104.1.83.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1841|104.1.84.1/24":{
+        "Eth8.1841|104.1.84.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1851|104.1.85.1/24":{
+        "Eth8.1851|104.1.85.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1861|104.1.86.1/24":{
+        "Eth8.1861|104.1.86.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1871|104.1.87.1/24":{
+        "Eth8.1871|104.1.87.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1881|104.1.88.1/24":{
+        "Eth8.1881|104.1.88.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1891|104.1.89.1/24":{
+        "Eth8.1891|104.1.89.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1901|104.1.90.1/24":{
+        "Eth8.1901|104.1.90.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1911|104.1.91.1/24":{
+        "Eth8.1911|104.1.91.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1921|104.1.92.1/24":{
+        "Eth8.1921|104.1.92.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1931|104.1.93.1/24":{
+        "Eth8.1931|104.1.93.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1941|104.1.94.1/24":{
+        "Eth8.1941|104.1.94.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1951|104.1.95.1/24":{
+        "Eth8.1951|104.1.95.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1961|104.1.96.1/24":{
+        "Eth8.1961|104.1.96.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1971|104.1.97.1/24":{
+        "Eth8.1971|104.1.97.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1981|104.1.98.1/24":{
+        "Eth8.1981|104.1.98.1/24":{
             "family":"IPv4",
             "scope":"global"
         },
-        "Eth34.1991|104.1.99.1/24":{
+        "Eth8.1991|104.1.99.1/24":{
             "family":"IPv4",
             "scope":"global"
         }
     },
     "SUB_PORT":{
-        "Eth33.1001":{
+        "Eth7.1001":{
             "admin_status":"up",
             "vrf_name":"Vrf1"
         },
-        "Eth33.1011":{
+        "Eth7.1011":{
             "admin_status":"up",
             "vrf_name":"Vrf11"
         },
-        "Eth33.1021":{
+        "Eth7.1021":{
             "admin_status":"up",
             "vrf_name":"Vrf21"
         },
-        "Eth33.1031":{
+        "Eth7.1031":{
             "admin_status":"up",
             "vrf_name":"Vrf31"
         },
-        "Eth33.1041":{
+        "Eth7.1041":{
             "admin_status":"up",
             "vrf_name":"Vrf41"
         },
-        "Eth33.1051":{
+        "Eth7.1051":{
             "admin_status":"up",
             "vrf_name":"Vrf51"
         },
-        "Eth33.1061":{
+        "Eth7.1061":{
             "admin_status":"up",
             "vrf_name":"Vrf61"
         },
-        "Eth33.1071":{
+        "Eth7.1071":{
             "admin_status":"up",
             "vrf_name":"Vrf71"
         },
-        "Eth33.1081":{
+        "Eth7.1081":{
             "admin_status":"up",
             "vrf_name":"Vrf81"
         },
-        "Eth33.1091":{
+        "Eth7.1091":{
             "admin_status":"up",
             "vrf_name":"Vrf91"
         },
-        "Eth33.1101":{
+        "Eth7.1101":{
             "admin_status":"up",
             "vrf_name":"Vrf101"
         },
-        "Eth33.1111":{
+        "Eth7.1111":{
             "admin_status":"up",
             "vrf_name":"Vrf111"
         },
-        "Eth33.1121":{
+        "Eth7.1121":{
             "admin_status":"up",
             "vrf_name":"Vrf121"
         },
-        "Eth33.1131":{
+        "Eth7.1131":{
             "admin_status":"up",
             "vrf_name":"Vrf131"
         },
-        "Eth33.1141":{
+        "Eth7.1141":{
             "admin_status":"up",
             "vrf_name":"Vrf141"
         },
-        "Eth33.1151":{
+        "Eth7.1151":{
             "admin_status":"up",
             "vrf_name":"Vrf151"
         },
-        "Eth33.1161":{
+        "Eth7.1161":{
             "admin_status":"up",
             "vrf_name":"Vrf161"
         },
-        "Eth33.1171":{
+        "Eth7.1171":{
             "admin_status":"up",
             "vrf_name":"Vrf171"
         },
-        "Eth33.1181":{
+        "Eth7.1181":{
             "admin_status":"up",
             "vrf_name":"Vrf181"
         },
-        "Eth33.1191":{
+        "Eth7.1191":{
             "admin_status":"up",
             "vrf_name":"Vrf191"
         },
-        "Eth33.1201":{
+        "Eth7.1201":{
             "admin_status":"up",
             "vrf_name":"Vrf201"
         },
-        "Eth33.1211":{
+        "Eth7.1211":{
             "admin_status":"up",
             "vrf_name":"Vrf211"
         },
-        "Eth33.1221":{
+        "Eth7.1221":{
             "admin_status":"up",
             "vrf_name":"Vrf221"
         },
-        "Eth33.1231":{
+        "Eth7.1231":{
             "admin_status":"up",
             "vrf_name":"Vrf231"
         },
-        "Eth33.1241":{
+        "Eth7.1241":{
             "admin_status":"up",
             "vrf_name":"Vrf241"
         },
-        "Eth33.1251":{
+        "Eth7.1251":{
             "admin_status":"up",
             "vrf_name":"Vrf251"
         },
-        "Eth33.1261":{
+        "Eth7.1261":{
             "admin_status":"up",
             "vrf_name":"Vrf261"
         },
-        "Eth33.1271":{
+        "Eth7.1271":{
             "admin_status":"up",
             "vrf_name":"Vrf271"
         },
-        "Eth33.1281":{
+        "Eth7.1281":{
             "admin_status":"up",
             "vrf_name":"Vrf281"
         },
-        "Eth33.1291":{
+        "Eth7.1291":{
             "admin_status":"up",
             "vrf_name":"Vrf291"
         },
-        "Eth33.1301":{
+        "Eth7.1301":{
             "admin_status":"up",
             "vrf_name":"Vrf301"
         },
-        "Eth33.1311":{
+        "Eth7.1311":{
             "admin_status":"up",
             "vrf_name":"Vrf311"
         },
-        "Eth33.1321":{
+        "Eth7.1321":{
             "admin_status":"up",
             "vrf_name":"Vrf321"
         },
-        "Eth33.1331":{
+        "Eth7.1331":{
             "admin_status":"up",
             "vrf_name":"Vrf331"
         },
-        "Eth33.1341":{
+        "Eth7.1341":{
             "admin_status":"up",
             "vrf_name":"Vrf341"
         },
-        "Eth33.1351":{
+        "Eth7.1351":{
             "admin_status":"up",
             "vrf_name":"Vrf351"
         },
-        "Eth33.1361":{
+        "Eth7.1361":{
             "admin_status":"up",
             "vrf_name":"Vrf361"
         },
-        "Eth33.1371":{
+        "Eth7.1371":{
             "admin_status":"up",
             "vrf_name":"Vrf371"
         },
-        "Eth33.1381":{
+        "Eth7.1381":{
             "admin_status":"up",
             "vrf_name":"Vrf381"
         },
-        "Eth33.1391":{
+        "Eth7.1391":{
             "admin_status":"up",
             "vrf_name":"Vrf391"
         },
-        "Eth33.1401":{
+        "Eth7.1401":{
             "admin_status":"up",
             "vrf_name":"Vrf401"
         },
-        "Eth33.1411":{
+        "Eth7.1411":{
             "admin_status":"up",
             "vrf_name":"Vrf411"
         },
-        "Eth33.1421":{
+        "Eth7.1421":{
             "admin_status":"up",
             "vrf_name":"Vrf421"
         },
-        "Eth33.1431":{
+        "Eth7.1431":{
             "admin_status":"up",
             "vrf_name":"Vrf431"
         },
-        "Eth33.1441":{
+        "Eth7.1441":{
             "admin_status":"up",
             "vrf_name":"Vrf441"
         },
-        "Eth33.1451":{
+        "Eth7.1451":{
             "admin_status":"up",
             "vrf_name":"Vrf451"
         },
-        "Eth33.1461":{
+        "Eth7.1461":{
             "admin_status":"up",
             "vrf_name":"Vrf461"
         },
-        "Eth33.1471":{
+        "Eth7.1471":{
             "admin_status":"up",
             "vrf_name":"Vrf471"
         },
-        "Eth33.1481":{
+        "Eth7.1481":{
             "admin_status":"up",
             "vrf_name":"Vrf481"
         },
-        "Eth33.1491":{
+        "Eth7.1491":{
             "admin_status":"up",
             "vrf_name":"Vrf491"
         },
-        "Eth33.1501":{
+        "Eth7.1501":{
             "admin_status":"up",
             "vrf_name":"Vrf501"
         },
-        "Eth33.1511":{
+        "Eth7.1511":{
             "admin_status":"up",
             "vrf_name":"Vrf511"
         },
-        "Eth33.1521":{
+        "Eth7.1521":{
             "admin_status":"up",
             "vrf_name":"Vrf521"
         },
-        "Eth33.1531":{
+        "Eth7.1531":{
             "admin_status":"up",
             "vrf_name":"Vrf531"
         },
-        "Eth33.1541":{
+        "Eth7.1541":{
             "admin_status":"up",
             "vrf_name":"Vrf541"
         },
-        "Eth33.1551":{
+        "Eth7.1551":{
             "admin_status":"up",
             "vrf_name":"Vrf551"
         },
-        "Eth33.1561":{
+        "Eth7.1561":{
             "admin_status":"up",
             "vrf_name":"Vrf561"
         },
-        "Eth33.1571":{
+        "Eth7.1571":{
             "admin_status":"up",
             "vrf_name":"Vrf571"
         },
-        "Eth33.1581":{
+        "Eth7.1581":{
             "admin_status":"up",
             "vrf_name":"Vrf581"
         },
-        "Eth33.1591":{
+        "Eth7.1591":{
             "admin_status":"up",
             "vrf_name":"Vrf591"
         },
-        "Eth33.1601":{
+        "Eth7.1601":{
             "admin_status":"up",
             "vrf_name":"Vrf601"
         },
-        "Eth33.1611":{
+        "Eth7.1611":{
             "admin_status":"up",
             "vrf_name":"Vrf611"
         },
-        "Eth33.1621":{
+        "Eth7.1621":{
             "admin_status":"up",
             "vrf_name":"Vrf621"
         },
-        "Eth33.1631":{
+        "Eth7.1631":{
             "admin_status":"up",
             "vrf_name":"Vrf631"
         },
-        "Eth33.1641":{
+        "Eth7.1641":{
             "admin_status":"up",
             "vrf_name":"Vrf641"
         },
-        "Eth33.1651":{
+        "Eth7.1651":{
             "admin_status":"up",
             "vrf_name":"Vrf651"
         },
-        "Eth33.1661":{
+        "Eth7.1661":{
             "admin_status":"up",
             "vrf_name":"Vrf661"
         },
-        "Eth33.1671":{
+        "Eth7.1671":{
             "admin_status":"up",
             "vrf_name":"Vrf671"
         },
-        "Eth33.1681":{
+        "Eth7.1681":{
             "admin_status":"up",
             "vrf_name":"Vrf681"
         },
-        "Eth33.1691":{
+        "Eth7.1691":{
             "admin_status":"up",
             "vrf_name":"Vrf691"
         },
-        "Eth33.1701":{
+        "Eth7.1701":{
             "admin_status":"up",
             "vrf_name":"Vrf701"
         },
-        "Eth33.1711":{
+        "Eth7.1711":{
             "admin_status":"up",
             "vrf_name":"Vrf711"
         },
-        "Eth33.1721":{
+        "Eth7.1721":{
             "admin_status":"up",
             "vrf_name":"Vrf721"
         },
-        "Eth33.1731":{
+        "Eth7.1731":{
             "admin_status":"up",
             "vrf_name":"Vrf731"
         },
-        "Eth33.1741":{
+        "Eth7.1741":{
             "admin_status":"up",
             "vrf_name":"Vrf741"
         },
-        "Eth33.1751":{
+        "Eth7.1751":{
             "admin_status":"up",
             "vrf_name":"Vrf751"
         },
-        "Eth33.1761":{
+        "Eth7.1761":{
             "admin_status":"up",
             "vrf_name":"Vrf761"
         },
-        "Eth33.1771":{
+        "Eth7.1771":{
             "admin_status":"up",
             "vrf_name":"Vrf771"
         },
-        "Eth33.1781":{
+        "Eth7.1781":{
             "admin_status":"up",
             "vrf_name":"Vrf781"
         },
-        "Eth33.1791":{
+        "Eth7.1791":{
             "admin_status":"up",
             "vrf_name":"Vrf791"
         },
-        "Eth33.1801":{
+        "Eth7.1801":{
             "admin_status":"up",
             "vrf_name":"Vrf801"
         },
-        "Eth33.1811":{
+        "Eth7.1811":{
             "admin_status":"up",
             "vrf_name":"Vrf811"
         },
-        "Eth33.1821":{
+        "Eth7.1821":{
             "admin_status":"up",
             "vrf_name":"Vrf821"
         },
-        "Eth33.1831":{
+        "Eth7.1831":{
             "admin_status":"up",
             "vrf_name":"Vrf831"
         },
-        "Eth33.1841":{
+        "Eth7.1841":{
             "admin_status":"up",
             "vrf_name":"Vrf841"
         },
-        "Eth33.1851":{
+        "Eth7.1851":{
             "admin_status":"up",
             "vrf_name":"Vrf851"
         },
-        "Eth33.1861":{
+        "Eth7.1861":{
             "admin_status":"up",
             "vrf_name":"Vrf861"
         },
-        "Eth33.1871":{
+        "Eth7.1871":{
             "admin_status":"up",
             "vrf_name":"Vrf871"
         },
-        "Eth33.1881":{
+        "Eth7.1881":{
             "admin_status":"up",
             "vrf_name":"Vrf881"
         },
-        "Eth33.1891":{
+        "Eth7.1891":{
             "admin_status":"up",
             "vrf_name":"Vrf891"
         },
-        "Eth33.1901":{
+        "Eth7.1901":{
             "admin_status":"up",
             "vrf_name":"Vrf901"
         },
-        "Eth33.1911":{
+        "Eth7.1911":{
             "admin_status":"up",
             "vrf_name":"Vrf911"
         },
-        "Eth33.1921":{
+        "Eth7.1921":{
             "admin_status":"up",
             "vrf_name":"Vrf921"
         },
-        "Eth33.1931":{
+        "Eth7.1931":{
             "admin_status":"up",
             "vrf_name":"Vrf931"
         },
-        "Eth33.1941":{
+        "Eth7.1941":{
             "admin_status":"up",
             "vrf_name":"Vrf941"
         },
-        "Eth33.1951":{
+        "Eth7.1951":{
             "admin_status":"up",
             "vrf_name":"Vrf951"
         },
-        "Eth33.1961":{
+        "Eth7.1961":{
             "admin_status":"up",
             "vrf_name":"Vrf961"
         },
-        "Eth33.1971":{
+        "Eth7.1971":{
             "admin_status":"up",
             "vrf_name":"Vrf971"
         },
-        "Eth33.1981":{
+        "Eth7.1981":{
             "admin_status":"up",
             "vrf_name":"Vrf981"
         },
-        "Eth33.1991":{
+        "Eth7.1991":{
             "admin_status":"up",
             "vrf_name":"Vrf991"
         },
-        "Eth34.1001":{
+        "Eth8.1001":{
             "admin_status":"up",
             "vrf_name":"Vrf1001"
         },
-        "Eth34.1011":{
+        "Eth8.1011":{
             "admin_status":"up",
             "vrf_name":"Vrf1011"
         },
-        "Eth34.1021":{
+        "Eth8.1021":{
             "admin_status":"up",
             "vrf_name":"Vrf1021"
         },
-        "Eth34.1031":{
+        "Eth8.1031":{
             "admin_status":"up",
             "vrf_name":"Vrf1031"
         },
-        "Eth34.1041":{
+        "Eth8.1041":{
             "admin_status":"up",
             "vrf_name":"Vrf1041"
         },
-        "Eth34.1051":{
+        "Eth8.1051":{
             "admin_status":"up",
             "vrf_name":"Vrf1051"
         },
-        "Eth34.1061":{
+        "Eth8.1061":{
             "admin_status":"up",
             "vrf_name":"Vrf1061"
         },
-        "Eth34.1071":{
+        "Eth8.1071":{
             "admin_status":"up",
             "vrf_name":"Vrf1071"
         },
-        "Eth34.1081":{
+        "Eth8.1081":{
             "admin_status":"up",
             "vrf_name":"Vrf1081"
         },
-        "Eth34.1091":{
+        "Eth8.1091":{
             "admin_status":"up",
             "vrf_name":"Vrf1091"
         },
-        "Eth34.1101":{
+        "Eth8.1101":{
             "admin_status":"up",
             "vrf_name":"Vrf1101"
         },
-        "Eth34.1111":{
+        "Eth8.1111":{
             "admin_status":"up",
             "vrf_name":"Vrf1111"
         },
-        "Eth34.1121":{
+        "Eth8.1121":{
             "admin_status":"up",
             "vrf_name":"Vrf1121"
         },
-        "Eth34.1131":{
+        "Eth8.1131":{
             "admin_status":"up",
             "vrf_name":"Vrf1131"
         },
-        "Eth34.1141":{
+        "Eth8.1141":{
             "admin_status":"up",
             "vrf_name":"Vrf1141"
         },
-        "Eth34.1151":{
+        "Eth8.1151":{
             "admin_status":"up",
             "vrf_name":"Vrf1151"
         },
-        "Eth34.1161":{
+        "Eth8.1161":{
             "admin_status":"up",
             "vrf_name":"Vrf1161"
         },
-        "Eth34.1171":{
+        "Eth8.1171":{
             "admin_status":"up",
             "vrf_name":"Vrf1171"
         },
-        "Eth34.1181":{
+        "Eth8.1181":{
             "admin_status":"up",
             "vrf_name":"Vrf1181"
         },
-        "Eth34.1191":{
+        "Eth8.1191":{
             "admin_status":"up",
             "vrf_name":"Vrf1191"
         },
-        "Eth34.1201":{
+        "Eth8.1201":{
             "admin_status":"up",
             "vrf_name":"Vrf1201"
         },
-        "Eth34.1211":{
+        "Eth8.1211":{
             "admin_status":"up",
             "vrf_name":"Vrf1211"
         },
-        "Eth34.1221":{
+        "Eth8.1221":{
             "admin_status":"up",
             "vrf_name":"Vrf1221"
         },
-        "Eth34.1231":{
+        "Eth8.1231":{
             "admin_status":"up",
             "vrf_name":"Vrf1231"
         },
-        "Eth34.1241":{
+        "Eth8.1241":{
             "admin_status":"up",
             "vrf_name":"Vrf1241"
         },
-        "Eth34.1251":{
+        "Eth8.1251":{
             "admin_status":"up",
             "vrf_name":"Vrf1251"
         },
-        "Eth34.1261":{
+        "Eth8.1261":{
             "admin_status":"up",
             "vrf_name":"Vrf1261"
         },
-        "Eth34.1271":{
+        "Eth8.1271":{
             "admin_status":"up",
             "vrf_name":"Vrf1271"
         },
-        "Eth34.1281":{
+        "Eth8.1281":{
             "admin_status":"up",
             "vrf_name":"Vrf1281"
         },
-        "Eth34.1291":{
+        "Eth8.1291":{
             "admin_status":"up",
             "vrf_name":"Vrf1291"
         },
-        "Eth34.1301":{
+        "Eth8.1301":{
             "admin_status":"up",
             "vrf_name":"Vrf1301"
         },
-        "Eth34.1311":{
+        "Eth8.1311":{
             "admin_status":"up",
             "vrf_name":"Vrf1311"
         },
-        "Eth34.1321":{
+        "Eth8.1321":{
             "admin_status":"up",
             "vrf_name":"Vrf1321"
         },
-        "Eth34.1331":{
+        "Eth8.1331":{
             "admin_status":"up",
             "vrf_name":"Vrf1331"
         },
-        "Eth34.1341":{
+        "Eth8.1341":{
             "admin_status":"up",
             "vrf_name":"Vrf1341"
         },
-        "Eth34.1351":{
+        "Eth8.1351":{
             "admin_status":"up",
             "vrf_name":"Vrf1351"
         },
-        "Eth34.1361":{
+        "Eth8.1361":{
             "admin_status":"up",
             "vrf_name":"Vrf1361"
         },
-        "Eth34.1371":{
+        "Eth8.1371":{
             "admin_status":"up",
             "vrf_name":"Vrf1371"
         },
-        "Eth34.1381":{
+        "Eth8.1381":{
             "admin_status":"up",
             "vrf_name":"Vrf1381"
         },
-        "Eth34.1391":{
+        "Eth8.1391":{
             "admin_status":"up",
             "vrf_name":"Vrf1391"
         },
-        "Eth34.1401":{
+        "Eth8.1401":{
             "admin_status":"up",
             "vrf_name":"Vrf1401"
         },
-        "Eth34.1411":{
+        "Eth8.1411":{
             "admin_status":"up",
             "vrf_name":"Vrf1411"
         },
-        "Eth34.1421":{
+        "Eth8.1421":{
             "admin_status":"up",
             "vrf_name":"Vrf1421"
         },
-        "Eth34.1431":{
+        "Eth8.1431":{
             "admin_status":"up",
             "vrf_name":"Vrf1431"
         },
-        "Eth34.1441":{
+        "Eth8.1441":{
             "admin_status":"up",
             "vrf_name":"Vrf1441"
         },
-        "Eth34.1451":{
+        "Eth8.1451":{
             "admin_status":"up",
             "vrf_name":"Vrf1451"
         },
-        "Eth34.1461":{
+        "Eth8.1461":{
             "admin_status":"up",
             "vrf_name":"Vrf1461"
         },
-        "Eth34.1471":{
+        "Eth8.1471":{
             "admin_status":"up",
             "vrf_name":"Vrf1471"
         },
-        "Eth34.1481":{
+        "Eth8.1481":{
             "admin_status":"up",
             "vrf_name":"Vrf1481"
         },
-        "Eth34.1491":{
+        "Eth8.1491":{
             "admin_status":"up",
             "vrf_name":"Vrf1491"
         },
-        "Eth34.1501":{
+        "Eth8.1501":{
             "admin_status":"up",
             "vrf_name":"Vrf1501"
         },
-        "Eth34.1511":{
+        "Eth8.1511":{
             "admin_status":"up",
             "vrf_name":"Vrf1511"
         },
-        "Eth34.1521":{
+        "Eth8.1521":{
             "admin_status":"up",
             "vrf_name":"Vrf1521"
         },
-        "Eth34.1531":{
+        "Eth8.1531":{
             "admin_status":"up",
             "vrf_name":"Vrf1531"
         },
-        "Eth34.1541":{
+        "Eth8.1541":{
             "admin_status":"up",
             "vrf_name":"Vrf1541"
         },
-        "Eth34.1551":{
+        "Eth8.1551":{
             "admin_status":"up",
             "vrf_name":"Vrf1551"
         },
-        "Eth34.1561":{
+        "Eth8.1561":{
             "admin_status":"up",
             "vrf_name":"Vrf1561"
         },
-        "Eth34.1571":{
+        "Eth8.1571":{
             "admin_status":"up",
             "vrf_name":"Vrf1571"
         },
-        "Eth34.1581":{
+        "Eth8.1581":{
             "admin_status":"up",
             "vrf_name":"Vrf1581"
         },
-        "Eth34.1591":{
+        "Eth8.1591":{
             "admin_status":"up",
             "vrf_name":"Vrf1591"
         },
-        "Eth34.1601":{
+        "Eth8.1601":{
             "admin_status":"up",
             "vrf_name":"Vrf1601"
         },
-        "Eth34.1611":{
+        "Eth8.1611":{
             "admin_status":"up",
             "vrf_name":"Vrf1611"
         },
-        "Eth34.1621":{
+        "Eth8.1621":{
             "admin_status":"up",
             "vrf_name":"Vrf1621"
         },
-        "Eth34.1631":{
+        "Eth8.1631":{
             "admin_status":"up",
             "vrf_name":"Vrf1631"
         },
-        "Eth34.1641":{
+        "Eth8.1641":{
             "admin_status":"up",
             "vrf_name":"Vrf1641"
         },
-        "Eth34.1651":{
+        "Eth8.1651":{
             "admin_status":"up",
             "vrf_name":"Vrf1651"
         },
-        "Eth34.1661":{
+        "Eth8.1661":{
             "admin_status":"up",
             "vrf_name":"Vrf1661"
         },
-        "Eth34.1671":{
+        "Eth8.1671":{
             "admin_status":"up",
             "vrf_name":"Vrf1671"
         },
-        "Eth34.1681":{
+        "Eth8.1681":{
             "admin_status":"up",
             "vrf_name":"Vrf1681"
         },
-        "Eth34.1691":{
+        "Eth8.1691":{
             "admin_status":"up",
             "vrf_name":"Vrf1691"
         },
-        "Eth34.1701":{
+        "Eth8.1701":{
             "admin_status":"up",
             "vrf_name":"Vrf1701"
         },
-        "Eth34.1711":{
+        "Eth8.1711":{
             "admin_status":"up",
             "vrf_name":"Vrf1711"
         },
-        "Eth34.1721":{
+        "Eth8.1721":{
             "admin_status":"up",
             "vrf_name":"Vrf1721"
         },
-        "Eth34.1731":{
+        "Eth8.1731":{
             "admin_status":"up",
             "vrf_name":"Vrf1731"
         },
-        "Eth34.1741":{
+        "Eth8.1741":{
             "admin_status":"up",
             "vrf_name":"Vrf1741"
         },
-        "Eth34.1751":{
+        "Eth8.1751":{
             "admin_status":"up",
             "vrf_name":"Vrf1751"
         },
-        "Eth34.1761":{
+        "Eth8.1761":{
             "admin_status":"up",
             "vrf_name":"Vrf1761"
         },
-        "Eth34.1771":{
+        "Eth8.1771":{
             "admin_status":"up",
             "vrf_name":"Vrf1771"
         },
-        "Eth34.1781":{
+        "Eth8.1781":{
             "admin_status":"up",
             "vrf_name":"Vrf1781"
         },
-        "Eth34.1791":{
+        "Eth8.1791":{
             "admin_status":"up",
             "vrf_name":"Vrf1791"
         },
-        "Eth34.1801":{
+        "Eth8.1801":{
             "admin_status":"up",
             "vrf_name":"Vrf1801"
         },
-        "Eth34.1811":{
+        "Eth8.1811":{
             "admin_status":"up",
             "vrf_name":"Vrf1811"
         },
-        "Eth34.1821":{
+        "Eth8.1821":{
             "admin_status":"up",
             "vrf_name":"Vrf1821"
         },
-        "Eth34.1831":{
+        "Eth8.1831":{
             "admin_status":"up",
             "vrf_name":"Vrf1831"
         },
-        "Eth34.1841":{
+        "Eth8.1841":{
             "admin_status":"up",
             "vrf_name":"Vrf1841"
         },
-        "Eth34.1851":{
+        "Eth8.1851":{
             "admin_status":"up",
             "vrf_name":"Vrf1851"
         },
-        "Eth34.1861":{
+        "Eth8.1861":{
             "admin_status":"up",
             "vrf_name":"Vrf1861"
         },
-        "Eth34.1871":{
+        "Eth8.1871":{
             "admin_status":"up",
             "vrf_name":"Vrf1871"
         },
-        "Eth34.1881":{
+        "Eth8.1881":{
             "admin_status":"up",
             "vrf_name":"Vrf1881"
         },
-        "Eth34.1891":{
+        "Eth8.1891":{
             "admin_status":"up",
             "vrf_name":"Vrf1891"
         },
-        "Eth34.1901":{
+        "Eth8.1901":{
             "admin_status":"up",
             "vrf_name":"Vrf1901"
         },
-        "Eth34.1911":{
+        "Eth8.1911":{
             "admin_status":"up",
             "vrf_name":"Vrf1911"
         },
-        "Eth34.1921":{
+        "Eth8.1921":{
             "admin_status":"up",
             "vrf_name":"Vrf1921"
         },
-        "Eth34.1931":{
+        "Eth8.1931":{
             "admin_status":"up",
             "vrf_name":"Vrf1931"
         },
-        "Eth34.1941":{
+        "Eth8.1941":{
             "admin_status":"up",
             "vrf_name":"Vrf1941"
         },
-        "Eth34.1951":{
+        "Eth8.1951":{
             "admin_status":"up",
             "vrf_name":"Vrf1951"
         },
-        "Eth34.1961":{
+        "Eth8.1961":{
             "admin_status":"up",
             "vrf_name":"Vrf1961"
         },
-        "Eth34.1971":{
+        "Eth8.1971":{
             "admin_status":"up",
             "vrf_name":"Vrf1971"
         },
-        "Eth34.1981":{
+        "Eth8.1981":{
             "admin_status":"up",
             "vrf_name":"Vrf1981"
         },
-        "Eth34.1991":{
+        "Eth8.1991":{
             "admin_status":"up",
             "vrf_name":"Vrf1991"
         }
     },
     "IPV6_PREFIX_LIST": {
-        "1|seq|10": {
-            "permit": "1000::179/128"
-        },
         "1|seq|15": {
-            "permit": "fd00:201:201:fff1:11::/80"
-        },
-        "1|seq|20": {
-            "permit": "fd00:201:201:fff1:12::/80"
-        },
-        "1|seq|25": {
-            "permit": "fd00:201:201:fff2:3::/80"
-        },
-        "2|seq|10": {
-            "permit": "2000::179/128"
+            "permit": "fd00:202:202:fff1:111::/80"
         },
         "2|seq|15": {
+            "permit": "fd00:202:202:fff1:112::/80"
+        },
+        "3|seq|10": {
+            "permit": "1000::179/128"
+        },
+        "3|seq|15": {
+            "permit": "fd00:201:201:fff1:11::/80"
+        },
+        "3|seq|20": {
+            "permit": "fd00:201:201:fff1:12::/80"
+        },
+        "3|seq|25": {
+            "permit": "fd00:201:201:fff2:3::/80"
+        },
+        "3|seq|30": {
+            "permit": "fd00:201:201:fff2:4::/80"
+        },
+        "4|seq|10": {
+            "permit": "2000::179/128"
+        },
+        "4|seq|15": {
             "permit": "fd00:202:202:fff1:11::/80"
         },
-        "2|seq|20": {
+        "4|seq|20": {
             "permit": "fd00:202:202:fff1:12::/80"
         },
-        "2|seq|25": {
+        "4|seq|25": {
+            "permit": "fd00:201:201:fff2:3::/80"
+        },
+        "4|seq|30": {
             "permit": "fd00:201:201:fff2:4::/80"
         }
     },
@@ -30749,6 +30790,14 @@
         "2|deny|20": {},
         "2|permit|10": {
             "match_ipv6_address_prefix_list": "2"
+        },
+        "3|deny|20": {},
+        "3|permit|10": {
+            "match_ipv6_address_prefix_list": "3"
+        },
+        "4|deny|20": {},
+        "4|permit|10": {
+            "match_ipv6_address_prefix_list": "4"
         },
         "sr1|permit|10": {
             "extcommunity_color": "1"
@@ -36866,8 +36915,8 @@
                 "::fff0:100:0:0:0|end-dt46|Vrf100",
                 "::fff1:11:0:0:0|end-dt46|PUBLIC-TC11", 
                 "::fff1:12:0:0:0|end-dt46|PUBLIC-TC12",
-                "::fff2:3:0:0:0|end-x|Eth33.1001|103.1.0.2",
-                "::fff2:4:0:0:0|end-x|Eth34.1001|104.1.0.2"
+                "::fff2:3:0:0:0|end-x|Eth7.1001|103.1.0.2",
+                "::fff2:4:0:0:0|end-x|Eth8.1001|104.1.0.2"
             ],
             "prefix": "fd00:201:201::/48"
         },
@@ -38979,6 +39028,17 @@
                 "::fff1:12:0:0:0|end-dt46|PUBLIC-TC12"
             ],
             "prefix": "fd00:201:2020::/48"
+        },
+        "lsid21": {
+            "argu_len": "48", 
+            "block_len": "32", 
+            "func_len": "32", 
+            "node_len": "16", 
+            "opcode": [
+                "::fff1:111:0:0:0|end-x|Ethernet1|2011::178",
+                "::fff1:112:0:0:0|end-x|Ethernet2|2022::178"
+            ],
+            "prefix": "fd00:202:202::/48"
         }
     }, 
     "SWITCH": {

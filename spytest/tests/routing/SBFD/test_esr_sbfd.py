@@ -763,14 +763,14 @@ def test_bfd_for_static_route_case8():
     st.banner("test_bfd_for_static_route_case8 begin")
 
     # config bfd
-    cmd = "bfd peer 192.10.1.59 bfd-name static_bfd_default status enable local-address 192.10.1.58"
-    st.config(dut1, 'cli -c "config t" -c "{}"'.format(cmd))
-    cmd = "bfd peer 192.20.1.59 bfd-name static_bfd_test1 status enable local-address 192.20.1.58 vrf Test1"
-    st.config(dut1, 'cli -c "config t" -c "{}"'.format(cmd))
-    cmd = "bfd peer 192.10.1.58 bfd-name static_bfd_default status enable local-address 192.10.1.59"
-    st.config(dut2, 'cli -c "config t" -c "{}"'.format(cmd))
-    cmd = "bfd peer 192.20.1.58 bfd-name static_bfd_test1 status enable local-address 192.20.1.59 vrf Test1"
-    st.config(dut2, 'cli -c "config t" -c "{}"'.format(cmd))
+    cmd = "peer 192.10.1.59 bfd-name static_bfd_default bfd-mode bfd local-address 192.10.1.58"
+    st.config(dut1, 'vtysh -c "config t" -c "bfd" -c "{}"'.format(cmd))
+    cmd = "peer 192.20.1.59 bfd-name static_bfd_test1 bfd-mode bfd local-address 192.20.1.58 vrf Test1"
+    st.config(dut1, 'vtysh -c "config t" -c "bfd" -c "{}"'.format(cmd))
+    cmd = "peer 192.10.1.58 bfd-name static_bfd_default bfd-mode bfd local-address 192.10.1.59"
+    st.config(dut2, 'vtysh -c "config t" -c "bfd" -c "{}"'.format(cmd))
+    cmd = "peer 192.20.1.58 bfd-name static_bfd_test1 bfd-mode bfd local-address 192.20.1.59 vrf Test1"
+    st.config(dut2, 'vtysh -c "config t" -c "bfd" -c "{}"'.format(cmd))
     
     st.wait(5)
     # show bfd 
@@ -794,11 +794,11 @@ def test_bfd_for_static_route_case8():
 
     # set bfd down
     st.config(dut2, 'vtysh -c "config t" -c "bfd" -c \
-              "peer 192.10.1.58 bfd-name static_bfd_default local-address 192.10.1.59" -c \
+              "peer 192.10.1.58 bfd-name static_bfd_default bfd-mode bfd local-address 192.10.1.59" -c \
               "shutdown"'.format(cmd))
 
     st.config(dut2, 'vtysh -c "config t" -c "bfd" -c \
-              "peer 192.20.1.58 bfd-name statc_bfd_test1 local-address 192.20.1.59 vrf Test1" -c \
+              "peer 192.20.1.58 bfd-name statc_bfd_test1 bfd-mode bfd local-address 192.20.1.59 vrf Test1" -c \
               "shutdown"'.format(cmd))
     
     st.wait(10)
@@ -819,11 +819,11 @@ def test_bfd_for_static_route_case8():
 
     # recover bfd
     st.config(dut2, 'vtysh -c "config t" -c "bfd" -c \
-              "peer 192.10.1.58 bfd-name static_bfd_default local-address 192.10.1.59" -c \
+              "peer 192.10.1.58 bfd-name static_bfd_default bfd-mode bfd local-address 192.10.1.59" -c \
               "no shutdown"'.format(cmd))
 
     st.config(dut2, 'vtysh -c "config t" -c "bfd" -c \
-              "peer 192.20.1.58 bfd-name statc_bfd_test1 local-address 192.20.1.59 vrf Test1" -c \
+              "peer 192.20.1.58 bfd-name statc_bfd_test1 bfd-mode bfd local-address 192.20.1.59 vrf Test1" -c \
               "no shutdown"'.format(cmd))
     st.wait(10)
 

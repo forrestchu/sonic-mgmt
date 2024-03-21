@@ -885,11 +885,11 @@ def test_base_config_srvpn_multi_vrf_03():
 
     # check vrf ipv4 uni route and sid
     to_check_prefix_sid = {
-        '200.10.0.1':'fd00:201:202:fff1:10::',
+        '200.10.0.1':'fd00:201:201:fff1:10::',
         '200.30.0.1':'fd00:201:201:fff1:30::',
         '200.50.0.1':'fd00:201:201:fff1:50::',
-        '201.20.0.1':'fd00:201:201:fff2:6::',
-        '201.40.0.1':'fd00:201:201:fff2:26::'
+        '201.20.0.1':'fd00:201:202:fff2:6::',
+        '201.40.0.1':'fd00:201:202:fff2:26::'
     }
 
     for (k, v) in to_check_prefix_sid.items():
@@ -916,11 +916,11 @@ def test_base_config_srvpn_multi_vrf_03():
     # 1:70 101|ipv4|VPN6
     cmd = "cli -c 'configure terminal' -c 'router bgp 101 vrf SX-XIAN-CM-TC30' -c 'no srv6-locator lsid1'"
     st.config(dut1, cmd)
-    cmd = "cli -c 'configure terminal' -c 'router bgp 101 vrf SX-XIAN-CM-TC30' -c 'srv6-locator lsid2'"
+    cmd = "cli -c 'configure terminal' -c 'router bgp 101 vrf SX-XIAN-CM-TC30' -c 'srv6-locator lsid3'"
     st.config(dut1, cmd)
-    cmd = "cli -c 'configure terminal' -c 'router bgp 101 vrf VPN6' -c 'no srv6-locator lsid1'"
+    cmd = "cli -c 'configure terminal' -c 'router bgp 101 vrf VPN6' -c 'no srv6-locator lsid2'"
     st.config(dut1, cmd)
-    cmd = "cli -c 'configure terminal' -c 'router bgp 101 vrf VPN6' -c 'srv6-locator lsid3'"
+    cmd = "cli -c 'configure terminal' -c 'router bgp 101 vrf VPN6' -c 'srv6-locator lsid4'"
     st.config(dut1, cmd)
 
     st.wait(10)
@@ -937,11 +937,11 @@ def test_base_config_srvpn_multi_vrf_03():
 
     # check vrf ipv4 uni route and sid
     to_check_prefix_sid = {
-        '200.10.0.1':'fd00:201:202:fff1:10::',
-        '200.30.0.1':'fd00:201:202:fff1:30::',
+        '200.10.0.1':'fd00:201:201:fff1:10::',
+        '200.30.0.1':'fd00:201:203:fff1:30::',
         '200.50.0.1':'fd00:201:201:fff1:50::',
-        '201.20.0.1':'fd00:201:203:fff2:6::',
-        '201.40.0.1':'fd00:201:201:fff2:26::'
+        '201.20.0.1':'fd00:201:204:fff2:6::',
+        '201.40.0.1':'fd00:201:202:fff2:26::'
     }
 
     for (k, v) in to_check_prefix_sid.items():

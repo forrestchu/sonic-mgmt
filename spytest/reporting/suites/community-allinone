@@ -47,8 +47,6 @@
 -test:test_ft_lldp_lldplocportdesc
 -test:test_ft_lldp_rem_man_addr_table
 -test:test_srvpn_performance_1M
-# temporarily disable
--test:test_bfd_for_static_route_case8
 # test cases for traffic verification with Ruijie
 -test:test_subintf_501_502_traffic
 

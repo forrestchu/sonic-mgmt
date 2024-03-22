@@ -1,0 +1,16 @@
+Value Name (\S+)
+Value Status (active|inactive)
+Value Sender (\S+)
+Value Reflector (\S+)
+Value PacketCount (-|\d+)
+Value MonitorTime (-|\d+)
+Value TxInterval (\d+)
+Value Timeout (\d+)
+
+Start
+  ^TWAMP-Light Sender Sessions$$
+  ^TWAMP-Light Reflector Sessions$$
+  ^Name\s+Status\s+.*$$
+  ^(-+\s*)*$$
+  ^${Name}\s+${Status}\s+${Reflector}$$ -> Record
+  ^${Name}\s+${Status}\s+${Sender}\s+${Reflector}\s+${PacketCount}\s+${MonitorTime}\s+${TxInterval}\s+${Timeout}$$ -> Record

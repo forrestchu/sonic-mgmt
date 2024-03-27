@@ -20,9 +20,9 @@ def twamp_light_func_hooks(request):
 
 def init_vars():
     twamp_data.clear()
-    twamp_data.ip1 = "10.10.10.1"
-    twamp_data.ip2 = "10.10.10.2"
-    twamp_data.mask = "24"
+    twamp_data.ip1 = "fd00::1"
+    twamp_data.ip2 = "fd00::2"
+    twamp_data.mask = "64"
     twamp_data.rfl1_name = "rfl1"
     twamp_data.snd1_name = "snd1"
     twamp_data.snd2_name = "snd2"
@@ -59,10 +59,10 @@ def check_twamp_statistics_pkts(dut, session_name, check_val, compare):
 
 def test_twamp_light():
     if not ipapi.config_ip_addr_interface(vars.D1, interface_name=vars.D1D2P1, ip_address=twamp_data.ip1,
-                                          subnet=twamp_data.mask, family="ipv4", config='add'):
+                                          subnet=twamp_data.mask, family="ipv6", config='add'):
         st.report_fail("config ip for DUT1 failed")
     if not ipapi.config_ip_addr_interface(vars.D2, interface_name=vars.D2D1P1, ip_address=twamp_data.ip2,
-                                          subnet=twamp_data.mask, family="ipv4", config='add'):
+                                          subnet=twamp_data.mask, family="ipv6", config='add'):
         st.report_fail("config ip for DUT2 failed")
 
     # config twamp reflector rfl1

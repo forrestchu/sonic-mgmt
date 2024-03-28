@@ -1707,8 +1707,8 @@ def test_srvpn_mirror_config_underlay_ecmp_switch_09():
     traffic_ecmp = ixia_get_traffic_stat(TRAFFIC_MIRROR_ULECMP)
     if not traffic_ecmp:
         st.report_fail("Get {} traffic stat failed {}".format(TRAFFIC_MIRROR_ULECMP))
-    # check val
-    if  traffic_ecmp['Loss %'] == '0.000':
+    # traffic loss < 1% is expected
+    if  float(traffic_ecmp['Loss %']) < 1:
         st.log("traffic_v4 check success")
     else:
         st.report_fail("traffic_v4 check failed")

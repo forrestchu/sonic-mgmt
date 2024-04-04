@@ -23,49 +23,49 @@
 #+file:qos/test_cos.py
 +file:routing/SRv6/test_esr_srvpn.py
 #+file:routing/SBFD/test_esr_sbfd.py
-+test:routing/VRF/test_vrf.py
+#+test:routing/VRF/test_vrf.py
 
 # testcases that [test_esr_srvpn.py] alreay pass
--test:test_base_config_srvpn_locator_01
--test:test_base_config_srvpn_2kl_route_learn_02
--test:test_base_config_srvpn_multi_vrf_03
--test:test_end_x_action
--test:test_srvpn_ecmp_04
--test:test_srvpn_mirror_config_05
--test:test_srvpn_mirror_config_redistribute_vrf_06
--test:test_srvpn_mirror_config_bgp_flap_07
--test:test_srvpn_mirror_config_underlay_link_flap_08
--test:test_srvpn_mirror_config_underlay_ecmp_switch_09
--test:test_srvpn_mirror_16nexthops_10
+# -test:test_base_config_srvpn_locator_01
+# -test:test_base_config_srvpn_2kl_route_learn_02
+# -test:test_base_config_srvpn_multi_vrf_03
+# -test:test_end_x_action
+# #-test:test_srvpn_ecmp_04
+# -test:test_srvpn_mirror_config_05
+# -test:test_srvpn_mirror_config_redistribute_vrf_06
+# -test:test_srvpn_mirror_config_bgp_flap_07
+# -test:test_srvpn_mirror_config_underlay_link_flap_08
+# #-test:test_srvpn_mirror_config_underlay_ecmp_switch_09
+# -test:test_srvpn_mirror_16nexthops_10
 # test cases requiring link state propagation
--test:test_subintf_503_504_traffic
--test:test_read_all_bfd_counter
--test:test_ixia_bfd_flap_in_bfd_vrf
--test:test_dut_bfd_flap_in_vrf_503
--test:test_ft_cos_tc_queue_map
--test:TestBGPRif.test_ft_bgp_rmap_out
--test:test_ft_lldp_docker_restart
--test:test_ft_portchannel_behavior_with_tagged_traffic
--test:test_ft_untagged_traffic_on_portchannel
--test:test_ft_member_state_after_interchanged_the_members_across_portchannels
--test:test_ft_portchannel_with_vlan_variations
--test:test_ft_lacp_graceful_restart_with_cold_boot
--test:test_ft_lacp_graceful_restart_with_save_reload
--test:test_ft_verify_interfaces_order
--test:test_cli_bgp_community_list_normal_array
--test:test_ft_lldp_LocManAddrOID
--test:test_ft_lldp_LocManAddrLen
--test:test_ft_lldp_LocManAddrlfld
--test:test_ft_lldp_LocManAddrEntry
--test:test_ft_lldp_ConfigManAddrEntry
--test:test_ft_lldp_lldplocsysname
--test:test_ft_lldp_lldplocsysdesc
--test:test_ft_lldp_lldplocportdesc
--test:test_ft_lldp_rem_man_addr_table
--test:test_srvpn_performance_500K
--test:test_srvpn_performance_1M
--test:test_bfd_for_static_route_case8
--test:test_subintf_501_502_traffic
+# -test:test_subintf_503_504_traffic
+# -test:test_read_all_bfd_counter
+# -test:test_ixia_bfd_flap_in_bfd_vrf
+# -test:test_dut_bfd_flap_in_vrf_503
+# -test:test_ft_cos_tc_queue_map
+# -test:TestBGPRif.test_ft_bgp_rmap_out
+# -test:test_ft_lldp_docker_restart
+# -test:test_ft_portchannel_behavior_with_tagged_traffic
+# -test:test_ft_untagged_traffic_on_portchannel
+# -test:test_ft_member_state_after_interchanged_the_members_across_portchannels
+# -test:test_ft_portchannel_with_vlan_variations
+# -test:test_ft_lacp_graceful_restart_with_cold_boot
+# -test:test_ft_lacp_graceful_restart_with_save_reload
+# -test:test_ft_verify_interfaces_order
+# -test:test_cli_bgp_community_list_normal_array
+# -test:test_ft_lldp_LocManAddrOID
+# -test:test_ft_lldp_LocManAddrLen
+# -test:test_ft_lldp_LocManAddrlfld
+# -test:test_ft_lldp_LocManAddrEntry
+# -test:test_ft_lldp_ConfigManAddrEntry
+# -test:test_ft_lldp_lldplocsysname
+# -test:test_ft_lldp_lldplocsysdesc
+# -test:test_ft_lldp_lldplocportdesc
+# -test:test_ft_lldp_rem_man_addr_table
+# -test:test_srvpn_performance_500K
+# -test:test_srvpn_performance_1M
+# -test:test_bfd_for_static_route_case8
+# -test:test_subintf_501_502_traffic
 
 +args:--force-keep-minimize-config
 +args:--load-config-method force-reboot

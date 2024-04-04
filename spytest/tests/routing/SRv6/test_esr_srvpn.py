@@ -1,4 +1,5 @@
 import csv
+import inspect
 import os
 import pytest
 import sys
@@ -7,7 +8,6 @@ import netaddr
 import re
 import time,datetime
 from collections import OrderedDict, defaultdict
-from spytest.spytest.infra import download_file_from_dut
 from utilities import parallel
 import apis.routing.bgp as bgpfeature
 
@@ -1190,10 +1190,10 @@ def get_route_convergence_time(cursor, csv_file, scale=10000):
 
     for i in range(len(x) - 1, 0, -1):
         # when rx rate < scale, we assume the routes have converged
-        if y[i] < scale and stop_time == cursor:
-            stop_time = x[i] - 1
+        if y[i] > scale and stop_time == cursor:
+            stop_time = x[i] + 1
         # when rx rate drops dramastically, we assume the routes start to converge
-        if max_rx_rate - y[i] > scale and start_time == cursor:
+        if max_rx_rate - y[i] < scale and start_time == cursor:
             start_time = x[i] - 1
             break
 
@@ -1205,6 +1205,47 @@ def get_log_dir_path():
     logs_path = env.get("SPYTEST_LOGS_PATH", user_root)
     return logs_path
 
+def write_perf_data_to_csv(file, lvl="NOTICE"):
+    lines = []
+    with open(file, "r") as f:
+        lines = f.readlines()
+
+    print("=" * 17 + " Performance CSV Parsing " + "=" * 17)
+    data = defaultdict(list)
+    max_count = 1
+    for line in lines:
+        msg = line.split(lvl)[1]
+
+        try:
+            msg = '{' + msg.split("{")[1]
+            hash = json.loads(msg)
+        except Exception:
+            continue
+
+        fn = hash["name"]
+        del hash["name"]
+        del hash["threshold"]
+        if hash["calls"] > max_count:
+            max_count=  hash["calls"]
+        zipped = list(zip(hash["m_gaps"], hash["m_intervals"], hash["m_incs"]))
+        data[fn].extend(zipped)
+    fieldnames = ["gaps", "intervals", "incs"]
+    for func_name, msg in data.items():
+        output_file = os.path.join(os.getcwd(), "../", get_log_dir_path(), func_name + ".csv")
+        with open(output_file, 'w', newline='') as csvfile:
+            writer = csv.writer(csvfile)
+            writer.writerow(fieldnames) 
+            writer.writerows(msg)
+    return data
+
+@pytest.fixture(scope="function")
+def collect_syslog(fname):
+    yield fname
+    timer_txt = os.path.join(os.getcwd(), "../", get_log_dir_path(), "1_" + fname)
+    st.download_file_from_dut(dut1, "/etc/spytest/" + fname, timer_txt)
+    timer_txt = os.path.join(os.getcwd(), "../", get_log_dir_path(), "2_" + fname)
+    st.download_file_from_dut(dut2, "/etc/spytest/" + fname, timer_txt)
+    write_perf_data_to_csv(timer_txt)
 
 @pytest.mark.community
 @pytest.mark.community_pass
@@ -1297,7 +1338,10 @@ def test_srvpn_performance_500K():
 
 @pytest.mark.community
 @pytest.mark.community_pass
-def test_srvpn_performance_1M():
+@pytest.mark.parametrize("dut, fname", [
+    ("srvpn_performance_1M"),
+])
+def test_srvpn_performance_1M(collect_syslog, fname):
     st.banner("test_srvpn_performance_1M begin")
     dut_list = st.get_dut_names()
     dut1 = dut_list[0]
@@ -1376,42 +1420,12 @@ def test_srvpn_performance_1M():
     ixia_stop_all_traffic()
     st.report_pass("msg", "LoadPerf: {} rps, CovergePerf: {} rps".format(route_count / load_t, route_count / covergen_t))
 
-def write_perf_data_to_csv(file, lvl="NOTICE"):
-    lines = []
-    with open(file, "r") as f:
-        lines = f.readlines()
-
-    print("=" * 17 + " Performance CSV Parsing " + "=" * 17)
-    data = defaultdict(list)
-    max_count = 1
-    for line in lines:
-        msg = line.split(lvl)[1]
-
-        try:
-            msg = '{' + msg.split("{")[1]
-            hash = json.loads(msg)
-        except Exception:
-            continue
-
-        fn = hash["name"]
-        del hash["name"]
-        del hash["threshold"]
-        if hash["calls"] > max_count:
-            max_count=  hash["calls"]
-        zipped = list(zip(hash["m_gaps"], hash["m_intervals"], hash["m_incs"]))
-        data[fn].extend(zipped)
-    fieldnames = ["gaps", "intervals", "incs"]
-    for func_name, msg in data.items():
-        output_file = os.path.join(os.getcwd(), "../", get_log_dir_path(), func_name + ".csv")
-        with open(output_file, 'w', newline='') as csvfile:
-            writer = csv.writer(csvfile)
-            writer.writerow(fieldnames) 
-            writer.writerows(msg)
-    return data
-
 @pytest.mark.community
 @pytest.mark.community_pass
-def test_srvpn_performance_2M():
+@pytest.mark.parametrize("fname", [
+    ("srvpn_performance_2M"),
+])
+def test_srvpn_performance_2M(collect_syslog, fname):
     st.banner("test_srvpn_performance_2M begin")
     dut_list = st.get_dut_names()
     dut1 = dut_list[0]
@@ -1485,10 +1499,6 @@ def test_srvpn_performance_2M():
 
     st.log("======== {} Route Convergence Time =======".format(route_count))
     st.log("Convergence Time: {} s, Rate: {} rps".format(covergen_t, route_count / covergen_t))
-
-    timer_txt = os.path.join(os.getcwd(), "../", get_log_dir_path(), "PerformanceTimer.txt")
-    download_file_from_dut(dut2, "/etc/spytest/PerformanceTimer.txt", timer_txt)
-    write_perf_data_to_csv(timer_txt)
 
     # 9. stop traffic
     ixia_stop_all_traffic()

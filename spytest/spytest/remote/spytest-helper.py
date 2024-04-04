@@ -36,21 +36,21 @@ rsyslog_conf_file = "/etc/rsyslog.d/99-default.conf"
 tmp_rsyslog_conf_file = "/tmp/rsyslog-default.conf"
 pim_config_file = "/etc/sonic/frr/pimd.conf"
 
-var_log_dir = "/var/log"
-spytest_dir = "/etc/spytest"
-init_config_file = spytest_dir + "/init_config_db.json"
-base_config_file = spytest_dir + "/base_config_db.json"
-module_config_file = spytest_dir + "/module_config_db.json"
-init_frr_config_file = spytest_dir + "/init_frr.conf"
-base_frr_config_file = spytest_dir + "/base_frr.conf"
-module_frr_config_file = spytest_dir + "/module_frr.conf"
-init_copp_config_file = spytest_dir + "/init_copp.json"
-base_copp_config_file = spytest_dir + "/base_copp.json"
-module_copp_config_file = spytest_dir + "/module_copp.json"
-init_minigraph_file = spytest_dir + "/init_minigraph.xml"
-base_minigraph_file = spytest_dir + "/base_minigraph.xml"
-module_minigraph_file = spytest_dir + "/module_minigraph.xml"
-tech_support_timestamp = spytest_dir + "/tech_support_timestamp.txt"
+VAR_LOG = "/var/log"
+ETC_SPYTEST = "/etc/spytest"
+init_config_file = ETC_SPYTEST + "/init_config_db.json"
+base_config_file = ETC_SPYTEST + "/base_config_db.json"
+module_config_file = ETC_SPYTEST + "/module_config_db.json"
+init_frr_config_file = ETC_SPYTEST + "/init_frr.conf"
+base_frr_config_file = ETC_SPYTEST + "/base_frr.conf"
+module_frr_config_file = ETC_SPYTEST + "/module_frr.conf"
+init_copp_config_file = ETC_SPYTEST + "/init_copp.json"
+base_copp_config_file = ETC_SPYTEST + "/base_copp.json"
+module_copp_config_file = ETC_SPYTEST + "/module_copp.json"
+init_minigraph_file = ETC_SPYTEST + "/init_minigraph.xml"
+base_minigraph_file = ETC_SPYTEST + "/base_minigraph.xml"
+module_minigraph_file = ETC_SPYTEST + "/module_minigraph.xml"
+tech_support_timestamp = ETC_SPYTEST + "/tech_support_timestamp.txt"
 
 port_config_file = "/usr/share/sonic/device"
 
@@ -119,22 +119,22 @@ def write_file(filename, data, mode="w"):
     fh.close()
     return data
 
-def read_offset(offset_file):
+def read_offset(offset_file_path):
 
     """Return a tuple of file_path, offset, inode."""
 
-    lines = read_lines(offset_file, [])
-    if not lines: return (offset_file, 0, "")
+    lines = read_lines(offset_file_path, [])
+    if not lines: return (offset_file_path, 0, "")
     offset, inode = lines[0].split()
-    return (offset_file, int(offset), inode)
+    return (offset_file_path, int(offset), inode)
 
-def write_offset(offset_file, lines, offset, inode=""):
+def write_offset(offset_file_path, lines, offset, inode=""):
 
     """Overwrite the file with a single line:
     offset inode."""
     try:
         offset += int(lines.split()[0].split()[0])
-        with open(offset_file, "w") as infile:
+        with open(offset_file_path, "w") as infile:
             infile.write("{} {}".format(offset, inode))
     except Exception: pass
 
@@ -286,16 +286,16 @@ def json_fix(filepath):
 
 def backup_file(file_path):
     file_name = os.path.basename(file_path)
-    golden_file = spytest_dir + "/{}.golden".format(file_name)
-    backup_filepath = spytest_dir + "/{}.backup".format(file_name)
+    golden_file = ETC_SPYTEST + "/{}.golden".format(file_name)
+    backup_filepath = ETC_SPYTEST + "/{}.backup".format(file_name)
     if not os.path.exists(golden_file):
         execute_check_cmd("cp {} {}".format(file_path, golden_file))
     execute_check_cmd("cp {} {}".format(file_path, backup_filepath))
 
 def backup_swss_docker_file(file_path):
     file_name = os.path.basename(file_path)
-    golden_file = spytest_dir + "/{}.golden".format(file_name)
-    backup_filepath = spytest_dir + "/{}.backup".format(file_name)
+    golden_file = ETC_SPYTEST + "/{}.golden".format(file_name)
+    backup_filepath = ETC_SPYTEST + "/{}.backup".format(file_name)
     if not os.path.exists(golden_file):
         execute_check_cmd("docker cp swss:{} {}".format(file_path, golden_file))
     execute_check_cmd("docker cp swss:{} {}".format(file_path, backup_filepath))
@@ -397,8 +397,8 @@ def init_clean(flags):
 
     # clear syslog messages
     execute_check_cmd("logrotate -f /etc/logrotate.conf", skip_error=True)
-    execute_check_cmd("rm -f {}/syslog.*".format(spytest_dir))
-    execute_check_cmd("rm -f {}/sairedis.*".format(spytest_dir))
+    execute_check_cmd("rm -f {}/syslog.*".format(ETC_SPYTEST))
+    execute_check_cmd("rm -f {}/sairedis.*".format(ETC_SPYTEST))
 
 def init_ta_config(flags, profile):
     init_clean(flags)
@@ -416,11 +416,11 @@ def init_ta_config(flags, profile):
     execute_check_cmd("logrotate -f /etc/logrotate.conf", skip_error=True)
     clear = os.getenv("SPYTEST_ONINIT_CLEAR", "syslog,sairedis")
     if "syslog" in clear:
-        #execute_check_cmd("rm -f {}/syslog.*".format(var_log_dir))
-        execute_check_cmd("rm -f {}/syslog.*".format(spytest_dir))
+        #execute_check_cmd("rm -f {}/syslog.*".format(VAR_LOG))
+        execute_check_cmd("rm -f {}/syslog.*".format(ETC_SPYTEST))
     if "redis" in clear:
-        #execute_check_cmd("rm -f {}/swss/sairedis.rec.*".format(var_log_dir))
-        execute_check_cmd("rm -f {}/sairedis.*".format(spytest_dir))
+        #execute_check_cmd("rm -f {}/swss/sairedis.rec.*".format(VAR_LOG))
+        execute_check_cmd("rm -f {}/sairedis.*".format(ETC_SPYTEST))
 
     print("DONE")
 
@@ -452,7 +452,7 @@ def create_default_base_config():
     print("default base config")
     # Clean the spytest directory - copp files are also saved as json
     for extn in ["json", "conf", "xml"]:
-        execute_check_cmd("rm -f {}/*.{}".format(spytest_dir, extn))
+        execute_check_cmd("rm -f {}/*.{}".format(ETC_SPYTEST, extn))
 
     # remove init configs
     for filename in [init_copp_config_file, init_minigraph_file, \
@@ -848,37 +848,37 @@ def enable_disable_debug(flag):
 
     print("NOCHANGE")
 
-def read_messages(offset_file, all_file, var_log_file, our_file):
-    (_, offset, old_inode) = read_offset(offset_file)
-    var_log_file_1 = "{}.1".format(var_log_file)
+def fread_with_offset(offset_file_path, global_syslog, test_case_syslog):
+    (_, offset, old_inode) = read_offset(offset_file_path)
+    var_log_file_1 = "{}.1".format(global_syslog)
 
     # -tr sorts by modification time, oldest first, -i option displays the inode number
-    retval = execute_check_cmd("ls -ltir {} {}".format(var_log_file, var_log_file_1), skip_error=True)
+    retval = execute_check_cmd("ls -ltir {} {}".format(global_syslog, var_log_file_1), skip_error=True)
     # example: 167 -rw-r----- 1 root adm 13128033 Apr  1 20:10 /var/log/syslog.1
     #          177 -rw-r----- 1 root adm  5636878 Apr  1 20:52 /var/log/syslog
 
     fname_inode_pairs, var_log_inode = [], ""
     for line in retval.split("\n"):
         inode, fname = line.split()[0], line.split()[-1]
-        if fname not in [var_log_file, var_log_file_1]:
+        if fname not in [global_syslog, var_log_file_1]:
             continue
         if fname_inode_pairs or old_inode == inode:
             fname_inode_pairs.append([fname, inode])
 
-        if fname == var_log_file:
+        if fname == global_syslog:
             var_log_inode = inode
 
     if not fname_inode_pairs:
         # if there is no log before, consider offset as 0.
-        fname_inode_pairs.append([var_log_file, var_log_inode])
+        fname_inode_pairs.append([global_syslog, var_log_inode])
         offset = 0
 
     for fname, inode in fname_inode_pairs:
-        # extract the lines starting from the specified offset and write into our_file
-        execute_check_cmd("tail --lines=+{} {} > {}".format(offset, fname, our_file))
-        retval = execute_check_cmd("wc -l {}".format(our_file))
+        # extract the lines starting from the specified offset and write into test_case_syslog
+        execute_check_cmd("tail --lines=+{} {} > {}".format(offset, fname, test_case_syslog))
+        retval = execute_check_cmd("wc -l {}".format(test_case_syslog))
         # example: 6 /etc/spytest/syslog.txt
-        write_offset(offset_file, retval, offset, inode)
+        write_offset(offset_file_path, retval, offset, inode)
         offset = 0
     return retval
 
@@ -905,55 +905,66 @@ def do_process_status_check(lvl):
         if 'EXITED' in retval:
             raise Exception("Process Crash !!!")
 
-def syslog_read_msgs(lvl, phase):
-    if phase: execute_check_cmd("sudo echo {}".format(phase))
-    offset_file = "{}/syslog.offset".format(spytest_dir)
-    varlog_file = "{}/syslog".format(var_log_dir)
-    our_file = "{}/syslog.txt".format(spytest_dir)
-    lines_count = read_messages(offset_file, varlog_file, varlog_file, our_file)
+def parse_syslog(lvl, phase):
 
-    # check if there is data
+    # Example: 'pre-test test_base_config_srvpn_locator_01' -> 'base_config_srvpn_locator_01'
+    # Example: 'post-module-prolog routing/SRv6/test_esr_srvpn.py' -> 'esr_srvpn'
+    test_name = phase.split()[1].split("/")[-1].split(".")[0][5:]
+
+    if phase:
+        execute_check_cmd("sudo echo {}".format(phase))
+
+    offset_file_path = "{}/syslog.offset".format(ETC_SPYTEST)
+    global_syslog = "{}/syslog".format(VAR_LOG)
+    test_case_syslog = "{}/syslog.txt".format(ETC_SPYTEST)
+    ret = fread_with_offset(offset_file_path, global_syslog, test_case_syslog)
+    # 6 /etc/spytest/syslog.txt
+
+    # check if there is syslog generated for this phase
     try:
-        lines = lines_count.split()
-        syslog_lines = int(lines[0].split()[0])
-    except Exception: syslog_lines = 0
+        ret = ret.split()[0] # wc returns a list of strings even if there's only a single line
+        num_lines = int(ret.split()[0])
+    except Exception:
+        num_lines = 0
 
     #save syslog after module test
     if phase.startswith("pre-module ") or phase.startswith("post-module "):
-        save_syslog_file = "{}/syslog{}.txt".format(spytest_dir, phase.split()[1].split(".")[0][4:])
-        module_log_offset = "{}/module_syslog.offset".format(spytest_dir)
-        read_messages(module_log_offset, varlog_file, varlog_file, save_syslog_file)
+        module_syslog = "{}/syslog_{}.txt".format(ETC_SPYTEST, test_name)
+        module_offset = "{}/module_syslog.offset".format(ETC_SPYTEST)
+        fread_with_offset(module_offset, global_syslog, module_syslog)
 
-    if not syslog_lines:
+    if not num_lines:
         print("NO-SYSLOGS-CAPTURED")
-        return # no data
+        return
 
     if lvl == "none" or lvl not in syslog_levels:
-        return # no need to give any data
+        # no need to parse syslog
+        return
 
+    if "performance" in  test_name:
+        pattern = r"""grep -E "^\S*\s+\S+\s+\S+\s+\S+[0-9]+:[0-9]+:[0-9]+(\.[0-9]+){{0,1}}\s+\S+\s+.*inc:.*{{" {}"""
+        # Capture from local syslog lines containing "inc:" and "{" "}""
+        cmd_retval = execute_check_cmd(pattern.format(test_case_syslog), trace_cmd=False, trace_out=False, skip_error=True)
+        outfile = "{}/{}_PerformanceTimer.txt".format(ETC_SPYTEST, test_name)
+        write_file(outfile, cmd_retval)
+        print("PERFORMACE_TIMER_SYSLOGS_CAPTURED_FILE: {}".format(outfile))
+
+    # capture SWSS_LOG_*** which has levels higher than lvl
     index = syslog_levels.index(lvl)
     needed = "|".join(syslog_levels[:index+1])
     cmd = r"""grep -E "^\S*\s+\S+\s+\S+\s+\S+[0-9]+:[0-9]+:[0-9]+(\.[0-9]+){{0,1}}\s+\S+\s+({})" {}"""
-    retval = execute_check_cmd(cmd.format(needed.upper(), our_file), trace_cmd=False, trace_out=False, skip_error=True)
-    lines = retval.split("\n")
-    syslog_lines = len(lines)
+    cmd_retval = execute_check_cmd(cmd.format(needed.upper(), test_case_syslog), trace_cmd=False, trace_out=False, skip_error=True)
+    lines = cmd_retval.split("\n")
 
-    if "performance_" in phase.split()[1]:
-        pattern = r"""grep -E "^\S*\s+\S+\s+\S+\s+\S+[0-9]+:[0-9]+:[0-9]+(\.[0-9]+){{0,1}}\s+\S+\s+.*inc:.*{{" {}"""
-        filtered = execute_check_cmd(pattern.format(our_file), trace_cmd=False, trace_out=False, skip_error=True)
-        timer_file = "{}/PerformanceTimer.txt".format(spytest_dir)
-        write_file(timer_file, filtered)
-        print("PERFORMACE_TIMER_SYSLOGS_CAPTURED_FILE: {}".format(timer_file))
-
-    max_syslog_count = 1000
-    if syslog_lines > max_syslog_count:
-        write_file(our_file, retval)
+    MAX_LINES = 1000
+    if len(lines) > MAX_LINES:
+        write_file(test_case_syslog, cmd_retval)
         msg = "Syslog count is more than the max limit '{}'. Capturing to file '{}' "
-        print(msg.format(max_syslog_count, our_file))
-        print("SYSLOGS_CAPTURED_FILE: {}".format(our_file))
+        print(msg.format(MAX_LINES, test_case_syslog))
+        print("SYSLOGS_CAPTURED_FILE: {}".format(test_case_syslog))
     else:
         print("=" * 17 + " MATCHED SYSLOG " + "=" * 17)
-        print(retval)
+        print(cmd_retval)
         print("=" * 50)
 
     #add process check after syslog read
@@ -961,14 +972,14 @@ def syslog_read_msgs(lvl, phase):
 
 def do_sairedis(op):
     if op == "clean":
-        execute_check_cmd("rm -f {}/sairedis.*".format(spytest_dir))
-        execute_check_cmd("rm -f {}/swss/sairedis.rec.*".format(var_log_dir))
-    file_path = "{}/sairedis.offset".format(spytest_dir)
-    var_file = "{}/swss/sairedis.rec".format(var_log_dir)
-    our_file = "{}/sairedis.txt".format(spytest_dir)
-    all_file = "{}/sairedis.all".format(spytest_dir)
+        execute_check_cmd("rm -f {}/sairedis.*".format(ETC_SPYTEST))
+        execute_check_cmd("rm -f {}/swss/sairedis.rec.*".format(VAR_LOG))
+    offset_file_path = "{}/sairedis.offset".format(ETC_SPYTEST)
+    var_file = "{}/swss/sairedis.rec".format(VAR_LOG)
+    our_file = "{}/sairedis.txt".format(ETC_SPYTEST)
+    all_file = "{}/sairedis.all".format(ETC_SPYTEST)
     execute_check_cmd("rm -f {0};ls -1tr {1}* | xargs zcat -f >> {0}".format(all_file, var_file))
-    read_messages(file_path, all_file, var_file, our_file)
+    fread_with_offset(offset_file_path, var_file, our_file)
     if op == "read":
         print("SAI-REDIS-FILE: /etc/spytest/sairedis.txt")
 
@@ -1081,7 +1092,7 @@ def fetch_kdump_files():
 def do_asan_config(cfg):
     src = "/etc/spytest/remote/asan.bashrc"
     dst = "/etc/asan.bashrc"
-    execute_check_cmd("mkdir -p {}/asan".format(var_log_dir))
+    execute_check_cmd("mkdir -p {}/asan".format(VAR_LOG))
     execute_check_cmd("cp -f {} {}".format(src, dst))
     show_file_content(dst, "ASAN-CONFIG", True)
 
@@ -1107,9 +1118,9 @@ Type=idle
 
 def do_service_start(name):
     service = "/lib/systemd/system/spytest-{}.service".format(name)
-    script = "{}/service-{}.py".format(spytest_dir, name)
-    logfile = "{}/service-{}.log".format(spytest_dir, name)
-    errfile = "{}/service-{}.err".format(spytest_dir, name)
+    script = "{}/service-{}.py".format(ETC_SPYTEST, name)
+    logfile = "{}/service-{}.log".format(ETC_SPYTEST, name)
+    errfile = "{}/service-{}.err".format(ETC_SPYTEST, name)
     data = service_template.format(name, script, logfile, errfile)
     write_file(service, data)
     execute_check_cmd("chmod 644 {}".format(service))
@@ -1122,7 +1133,7 @@ def do_service_stop(name):
     execute_check_cmd("systemctl status spytest-{}.service".format(name))
 
 def do_service_get(name, clear=True):
-    logfile = "{}/service-{}.log".format(spytest_dir, name)
+    logfile = "{}/service-{}.log".format(ETC_SPYTEST, name)
     rv = execute_check_cmd("cat {}".format(logfile))
     print(rv)
     if clear:
@@ -1261,7 +1272,7 @@ if __name__ == "__main__":
     elif args.disable_debug:
         enable_disable_debug(False)
     elif args.syslog_check:
-        syslog_read_msgs(args.syslog_check, args.phase)
+        parse_syslog(args.syslog_check, args.phase)
     elif args.sairedis != "none":
         do_sairedis(args.sairedis)
     elif args.execute_from_file:

@@ -6,6 +6,8 @@ This fiel will be uploaded to DUT and executed there.
 Please be sure before changing the file.
 """
 
+from collections import defaultdict
+import csv
 import os
 import re
 import glob
@@ -15,6 +17,7 @@ import filecmp
 import argparse
 import subprocess
 import sys
+
 
 g_breakout_native = False
 g_breakout_file = None
@@ -101,6 +104,7 @@ def iterdict(d):
     return new_dict
 
 def read_lines(file_path, default=None):
+    """return [] if exception catched"""
     try:
         with open(file_path, "r") as infile:
             return infile.readlines()
@@ -115,18 +119,23 @@ def write_file(filename, data, mode="w"):
     fh.close()
     return data
 
-def read_offset(file_path):
-    lines = read_lines(file_path, [])
-    if not lines: return (file_path, 0, "")
-    parts = lines[0].split()
-    return (file_path, int(parts[0]), parts[1])
+def read_offset(offset_file):
 
-def write_offset(file_path, retval, add, append=""):
+    """Return a tuple of file_path, offset, inode."""
+
+    lines = read_lines(offset_file, [])
+    if not lines: return (offset_file, 0, "")
+    offset, inode = lines[0].split()
+    return (offset_file, int(offset), inode)
+
+def write_offset(offset_file, lines, offset, inode=""):
+
+    """Overwrite the file with a single line:
+    offset inode."""
     try:
-        lines = retval.split()
-        offset = add + int(lines[0].split()[0])
-        with open(file_path, "w") as infile:
-            infile.write("{} {}".format(offset, append))
+        offset += int(lines.split()[0].split()[0])
+        with open(offset_file, "w") as infile:
+            infile.write("{} {}".format(offset, inode))
     except Exception: pass
 
 def execute_from_file(file_path):
@@ -839,27 +848,37 @@ def enable_disable_debug(flag):
 
     print("NOCHANGE")
 
-def read_messages(file_path, all_file, var_file, our_file):
-    (_, offset, old_inode) = read_offset(file_path)
-    var_file_1 = "{}.1".format(var_file)
-    retval = execute_check_cmd("ls -ltir {} {}".format(var_file, var_file_1), skip_error=True)
-    read_files, matched_inode = [], ""
+def read_messages(offset_file, all_file, var_log_file, our_file):
+    (_, offset, old_inode) = read_offset(offset_file)
+    var_log_file_1 = "{}.1".format(var_log_file)
+
+    # -tr sorts by modification time, oldest first, -i option displays the inode number
+    retval = execute_check_cmd("ls -ltir {} {}".format(var_log_file, var_log_file_1), skip_error=True)
+    # example: 167 -rw-r----- 1 root adm 13128033 Apr  1 20:10 /var/log/syslog.1
+    #          177 -rw-r----- 1 root adm  5636878 Apr  1 20:52 /var/log/syslog
+
+    fname_inode_pairs, var_log_inode = [], ""
     for line in retval.split("\n"):
-        parts = line.split()
-        inode, fname = parts[0], parts[-1]
-        if fname not in [var_file, var_file_1]:
+        inode, fname = line.split()[0], line.split()[-1]
+        if fname not in [var_log_file, var_log_file_1]:
             continue
-        if read_files or old_inode == inode:
-            read_files.append([fname, inode])
-        if fname == var_file:
-            matched_inode = inode
-    if not read_files:
-        read_files.append([var_file, matched_inode])
+        if fname_inode_pairs or old_inode == inode:
+            fname_inode_pairs.append([fname, inode])
+
+        if fname == var_log_file:
+            var_log_inode = inode
+
+    if not fname_inode_pairs:
+        # if there is no log before, consider offset as 0.
+        fname_inode_pairs.append([var_log_file, var_log_inode])
         offset = 0
-    for fname, inode in read_files:
+
+    for fname, inode in fname_inode_pairs:
+        # extract the lines starting from the specified offset and write into our_file
         execute_check_cmd("tail --lines=+{} {} > {}".format(offset, fname, our_file))
         retval = execute_check_cmd("wc -l {}".format(our_file))
-        write_offset(file_path, retval, offset, inode)
+        # example: 6 /etc/spytest/syslog.txt
+        write_offset(offset_file, retval, offset, inode)
         offset = 0
     return retval
 
@@ -888,10 +907,10 @@ def do_process_status_check(lvl):
 
 def syslog_read_msgs(lvl, phase):
     if phase: execute_check_cmd("sudo echo {}".format(phase))
-    file_path = "{}/syslog.offset".format(spytest_dir)
-    var_file = "{}/syslog".format(var_log_dir)
+    offset_file = "{}/syslog.offset".format(spytest_dir)
+    varlog_file = "{}/syslog".format(var_log_dir)
     our_file = "{}/syslog.txt".format(spytest_dir)
-    lines_count = read_messages(file_path, var_file, var_file, our_file)
+    lines_count = read_messages(offset_file, varlog_file, varlog_file, our_file)
 
     # check if there is data
     try:
@@ -903,7 +922,7 @@ def syslog_read_msgs(lvl, phase):
     if phase.startswith("pre-module ") or phase.startswith("post-module "):
         save_syslog_file = "{}/syslog{}.txt".format(spytest_dir, phase.split()[1].split(".")[0][4:])
         module_log_offset = "{}/module_syslog.offset".format(spytest_dir)
-        read_messages(module_log_offset, var_file, var_file, save_syslog_file)
+        read_messages(module_log_offset, varlog_file, varlog_file, save_syslog_file)
 
     if not syslog_lines:
         print("NO-SYSLOGS-CAPTURED")
@@ -918,6 +937,13 @@ def syslog_read_msgs(lvl, phase):
     retval = execute_check_cmd(cmd.format(needed.upper(), our_file), trace_cmd=False, trace_out=False, skip_error=True)
     lines = retval.split("\n")
     syslog_lines = len(lines)
+
+    if "performance_" in phase.split()[1]:
+        pattern = r"""grep -E "^\S*\s+\S+\s+\S+\s+\S+[0-9]+:[0-9]+:[0-9]+(\.[0-9]+){{0,1}}\s+\S+\s+.*inc:.*{{" {}"""
+        filtered = execute_check_cmd(pattern.format(our_file), trace_cmd=False, trace_out=False, skip_error=True)
+        timer_file = "{}/PerformanceTimer.txt".format(spytest_dir)
+        write_file(timer_file, filtered)
+        print("PERFORMACE_TIMER_SYSLOGS_CAPTURED_FILE: {}".format(timer_file))
 
     max_syslog_count = 1000
     if syslog_lines > max_syslog_count:

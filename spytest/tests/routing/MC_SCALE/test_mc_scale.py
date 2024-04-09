@@ -114,17 +114,17 @@ def check_dut_intf_tx_traffic_counters(dut, portlist, expect_val):
         tx_bps = intf_traffic_stats(filter_and_select(output, ["tx_bps"], {'iface': port}))
         tx_bps_list.append(tx_bps)
 
-    st.log("Inter Dut port stats  tx_ok xounter value on DUT Egress ports : {} expect: {}".format(tx_bps_list,expect_val))
+    st.log("Inter Dut port: {}, stats tx_ok counter value on DUT Egress ports: {} expect: {}".format(portlist, tx_bps_list,expect_val))
 
-    for tx_bps in tx_bps_list:
+    for idx, tx_bps in enumerate(tx_bps_list):
         if tx_bps == 0:
-            st.error("Error:Inter Dut port stats tx_ok xounter value on DUT Egress port: {}".format(tx_bps))
+            st.error("Error being zero: Inter Dut port {} stats tx_ok counter value on DUT Egress port: {}".format(portlist[idx], tx_bps))
             return False
         else:
             deviation = abs(expect_val - tx_bps)
             percent = (float(deviation)/expect_val)*100
             if percent > 10:
-                st.log("Inter Dut port stats tx_ok xounter value on DUT Egress ports {}".format(tx_bps))
+                st.log("Error diff 10%: Inter Dut port {} stats tx_ok counter value on DUT Egress port: {}".format(portlist[idx], tx_bps))
                 return False
 
     st.log("All ECMP paths are utilized")

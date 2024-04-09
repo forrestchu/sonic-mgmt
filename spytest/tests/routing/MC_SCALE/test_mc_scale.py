@@ -939,6 +939,13 @@ def l3_base_unconfig():
     #command = "show arp"
     #st.show(dut1, command)
 
+def show_debug_info():
+    dut1 = data.my_dut_list[0]
+    dut2 = data.my_dut_list[1]
+    cmd = "show ip bgp vrf all summary"
+    st.show(dut1,cmd,type='vtysh')
+    st.show(dut2,cmd,type='vtysh')
+
 @pytest.mark.community
 @pytest.mark.community_pass
 def test_subintf_503_504_traffic():
@@ -965,12 +972,12 @@ def test_subintf_503_504_traffic():
 
     st.wait(10)
     if not check_dut_intf_tx_traffic_counters(dut2,data.ecmp_503_504_dut1_dut2_portlist,ecmp_member_Mbps):
-        st.log("dut2 dut-to-dut ecmp members rate check failed")
-        result=1
+        show_debug_info()
+        st.report_fail("dut2 dut-to-dut ecmp members rate check failed")
 
     if not check_dut_intf_tx_traffic_counters(dut1,data.ecmp_503_504_dut1_dut2_portlist,ecmp_member_Mbps):
-        st.log("dut1 dut-to-dut ecmp members rate check failed")
-        result=1
+        show_debug_info()
+        st.report_fail("dut1 dut-to-dut ecmp members rate check failed")
 
     st.wait(10)
     tg.tg_traffic_control(action='stop', stream_handle=traffic_vrf_503_list)
@@ -996,8 +1003,8 @@ def test_subintf_503_504_traffic():
     }
     #check ecmp port
     if not tgapi.validate_tgen_traffic(traffic_details=traffic_details, mode='streamblock', comp_type='packet_count'):
-        st.log("validate_tgen_traffic failed")
-        result=1
+        show_debug_info()
+        st.report_fail("validate_tgen_traffic failed")
 
     traffic_vrf_503_v6_list = [data.streams['port5_to_port1_vrf_503_v6'], data.streams['port1_to_port5_vrf_503_v6']]
 
@@ -1008,12 +1015,12 @@ def test_subintf_503_504_traffic():
 
     st.wait(10)
     if not check_dut_intf_tx_traffic_counters(dut2,data.ecmp_503_504_dut1_dut2_portlist,ecmp_member_Mbps):
-        st.log("dut2 dut-to-dut ecmp members rate check failed")
-        result=1
+        show_debug_info()
+        st.report_fail("dut2 dut-to-dut ecmp members rate check failed")
 
     if not check_dut_intf_tx_traffic_counters(dut1,data.ecmp_503_504_dut1_dut2_portlist,ecmp_member_Mbps):
-        st.log("dut1 dut-to-dut ecmp members rate check failed")
-        result=1
+        show_debug_info()
+        st.report_fail("dut1 dut-to-dut ecmp members rate check failed")
 
     st.wait(10)
     tg.tg_traffic_control(action='stop', stream_handle=traffic_vrf_503_v6_list)
@@ -1038,8 +1045,8 @@ def test_subintf_503_504_traffic():
     }
     #check ecmp port
     if not tgapi.validate_tgen_traffic(traffic_details=traffic_details, mode='streamblock', comp_type='packet_count'):
-        st.log("validate_tgen_traffic failed")
-        result=1
+        show_debug_info()
+        st.report_fail("validate_tgen_traffic failed")
 
     #step2: shutdown/no shutdown ecmp_503_504_dut1_dut2_portlist in vrf 504
     st.banner("step2: test traffic in vrf_504")
@@ -1112,8 +1119,8 @@ def test_subintf_503_504_traffic():
 
     st.banner("step2.1: check dut<-->ixia ecmp member")
     if not check_dut_intf_tx_traffic_counters(dut2,data.ecmp_503_504_dut_tg_portlist,ixia_ecmp_Gbps):
-        st.log("dut2 dut-to-ixia ecmp members rate check failed")
-        result=1
+        show_debug_info()
+        st.report_fail("dut2 dut-to-ixia ecmp members rate check failed")
 
     if not check_dut_intf_tx_traffic_counters(dut1,data.ecmp_503_504_dut_tg_portlist,ixia_ecmp_Gbps):
         st.log("dut1 dut-to-ixia ecmp members rate check failed")
@@ -1149,16 +1156,10 @@ def test_subintf_503_504_traffic():
         }
     }
     if not tgapi.validate_tgen_traffic(traffic_details=traffic_details, mode='streamblock', comp_type='packet_count'):
-        st.log("validate_tgen_traffic port2 port6 failed")
-        result=1
+        show_debug_info()
+        st.report_fail("validate_tgen_traffic port2 port6 failed")
     
-    if result == 0:
-        st.report_pass("test_case_passed")
-    else:
-        cmd = "show ip bgp vrf all summary"
-        st.show(dut1,cmd,type='vtysh')
-        st.show(dut2,cmd,type='vtysh')
-        st.report_fail("traffic_verification_failed")
+    st.report_pass("test_case_passed")
 
 @pytest.mark.community
 @pytest.mark.community_pass

@@ -1338,7 +1338,7 @@ def test_srvpn_performance_500K():
 
 @pytest.mark.community
 @pytest.mark.community_pass
-@pytest.mark.parametrize("dut, fname", [
+@pytest.mark.parametrize("fname", [
     ("srvpn_performance_1M"),
 ])
 def test_srvpn_performance_1M(collect_syslog, fname):

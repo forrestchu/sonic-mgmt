@@ -1,0 +1,27 @@
+Value SrcIP (\S+)
+Value DstIP (\S+)
+Value Protocol (\S+)
+Value SrcPort (\[\]|\d+)
+Value DstPort (\[\]|\d+)
+Value DSCP (\S+)
+Value InPort (\S+)
+Value InnerSrcIP (\S+)
+Value InnerDstIP (\S+)
+Value InnerProtocol (\S+)
+Value InnerSrcPort (\[\]|\d+)
+Value InnerDstPort (\[\]|\d+)
+Value InnerDSCP (\S+)
+
+Start
+  ^index\s+datapath\s+srcip\s+$$
+  ^(-+\s*)*$$
+  # IPinIP parsed by smartflow
+  ^\d+\s+Underlay\s+${SrcIP}\s+${DstIP}\s+(IPv4|IPv6)\s+${SrcPort}\s+${DstPort}\s+${DSCP}\s+\S+\s+${InPort}.*$$ -> Overlay
+  # VxLAN parsed by gopacket
+  ^\d+\s+Underlay\s+${SrcIP}\s+${DstIP}\s+UDP\s+${SrcPort}\s+4789\s+${DSCP}\s+\S+\s+${InPort}.*$$ -> Overlay
+  ^\d+\s+Underlay\s+${SrcIP}\s+${DstIP}\s+UDP\s+4789\s+${DstPort}\s+${DSCP}\s+\S+\s+${InPort}.*$$ -> Overlay
+  ^\d+\s+Underlay\s+${SrcIP}\s+${DstIP}\s+${Protocol}\s+${SrcPort}\s+${DstPort}\s+${DSCP}\s+\S+\s+${InPort}.*$$ -> Record
+
+Overlay
+  ^\s+Overlay\s+${InnerSrcIP}\s+${InnerDstIP}\s+${InnerProtocol}\s+${InnerSrcPort}\s+${InnerDstPort}\s+${InnerDSCP}.*$$ -> Record Start
+  ^.*$$ -> Start

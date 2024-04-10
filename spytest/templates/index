@@ -608,6 +608,7 @@ show_isolated_bgp.tmpl, .*, sonic, cli .* 'show isolated_bgp'
 show_link_delay.tmpl, .*, sonic, show link delay .*
 show_twamp_session.tmpl, .*, sonic, show twamp-light session.*
 show_twamp_statistics.tmpl, .*, sonic, show twamp-light statistics.*
+show_smartflow_flow_drop_counter.tmpl, .*, sonic, show smartflow flow drop counter
 show_macsec_connections.tmpl, .*, sonic, cli .* 'show macsec connections interface .*'
 show_srte_policy.tmpl, .*, sonic, show sr-te policy .*
 show_bgp_ipv6_vpn_stat.tmpl, .*, sonic, show bgp ipv6 vpn statistics

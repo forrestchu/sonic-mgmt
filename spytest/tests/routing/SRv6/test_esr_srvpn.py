@@ -33,7 +33,7 @@ import apis.routing.bgp as bgp_api
 import apis.routing.arp as arp_obj
 import apis.routing.bfd as bfdapi
 import apis.routing.ip_bgp as ip_bgp
-from esr_lib import cli_show_json, json_cmp, configdb_checkpoint, configdb_checkarray, appdb_checkpoint, configdb_onefield_checkpoint,appdb_onefield_checkpoint,check_vrf_route_nums, get_random_array, check_vpn_route_nums, check_bgp_vrf_ipv4_uni_sid,appdb_get_onefield,get_vrf_realname,compare_redistribute_vrf_route, flap_lag_member,show_hw_route_count
+from esr_lib import *
 import esr_lib as loc_lib
 from esr_vars import * #all the variables used for vrf testcase
 from esr_vars import data
@@ -725,24 +725,6 @@ def load_json_config(filesuffix):
 
     st.banner("%s json config loaded completed" % (filesuffix))
 
-def get_kernel_ip_route(dut, number):
-    command = "ip route show vrf Vrf{}| wc -l".format(number)
-    output = st.show(dut, command, skip_tmpl=True, skip_error_check=True)
-    x = re.findall(r"\d+", output)
-    if x:
-        return int(x[0])
-    else:
-        return 0
-
-def get_kernel_ipv6_route(dut, number):
-    command = "ip -6 route show vrf Vrf{}| wc -l".format(number)
-    output = st.show(dut, command, skip_tmpl=True, skip_error_check=True)
-    x = re.findall(r"\d+", output)
-    if x:
-        return int(x[0])
-    else:
-        return 0
-    
 ## 2k locator , base traffic and route learning
 @pytest.mark.community
 @pytest.mark.community_pass

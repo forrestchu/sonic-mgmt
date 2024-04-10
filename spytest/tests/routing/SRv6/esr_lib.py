@@ -1,6 +1,7 @@
 import os
 import copy
 import pytest
+import re
 import json
 import difflib
 import string
@@ -632,3 +633,21 @@ def show_hw_route_count(dut):
     st.log("{} v4 route : {}".format(dut, def_v4_route_count))
     def_v6_route_count = asicapi.get_ipv6_route_count(dut)
     st.log("{} v6 route : {}".format(dut, def_v6_route_count))
+
+def get_kernel_ip_route(dut, number):
+    command = "ip route show vrf Vrf{}| wc -l".format(number)
+    output = st.show(dut, command, skip_tmpl=True, skip_error_check=True)
+    x = re.findall(r"\d+", output)
+    if x:
+        return int(x[0])
+    else:
+        return 0
+
+def get_kernel_ipv6_route(dut, number):
+    command = "ip -6 route show vrf Vrf{}| wc -l".format(number)
+    output = st.show(dut, command, skip_tmpl=True, skip_error_check=True)
+    x = re.findall(r"\d+", output)
+    if x:
+        return int(x[0])
+    else:
+        return 0

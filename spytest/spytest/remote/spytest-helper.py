@@ -905,7 +905,11 @@ def do_process_status_check(lvl):
         if 'EXITED' in retval:
             raise Exception("Process Crash !!!")
 
-def parse_syslog(lvl, phase):
+def sanitize_file_by_pattern(pattern, infile_path, outfile_path):
+    cmd_retval = execute_check_cmd(pattern.format(infile_path), trace_cmd=False, trace_out=False, skip_error=True)
+    write_file(outfile_path, cmd_retval)
+
+def parse_testcase_syslog(lvl, phase):
 
     # Example: 'pre-test test_base_config_srvpn_locator_01' -> 'base_config_srvpn_locator_01'
     # Example: 'post-module-prolog routing/SRv6/test_esr_srvpn.py' -> 'esr_srvpn'
@@ -942,11 +946,17 @@ def parse_syslog(lvl, phase):
         return
 
     if "performance" in  test_name:
-        pattern = r"""grep -E "^\S*\s+\S+\s+\S+\s+\S+[0-9]+:[0-9]+:[0-9]+(\.[0-9]+){{0,1}}\s+\S+\s+.*inc:.*{{" {}"""
         # Capture from local syslog lines containing "inc:" and "{" "}""
-        cmd_retval = execute_check_cmd(pattern.format(test_case_syslog), trace_cmd=False, trace_out=False, skip_error=True)
+        pattern = r"""grep -E "^\S*\s+\S+\s+\S+\s+\S+[0-9]+:[0-9]+:[0-9]+(\.[0-9]+){{0,1}}\s+\S+\s+.*inc:.*{{" {}"""
         outfile = "{}/{}_PerformanceTimer.txt".format(ETC_SPYTEST, test_name)
+        sanitize_file_by_pattern(pattern, test_case_syslog, outfile)
+ 
+        # Capture from local syslog lines containing '{"calls"...}', starting from the line containing 'Consumer::pops'
+        cmd = "grep -E -o '\{\"calls\"[^}]+}' " + test_case_syslog + " | sed -n -e '/Consumer::pops/,$p'"
+        outfile = "{}/{}_PerformanceTimer.json".format(ETC_SPYTEST, test_name)
+        cmd_retval = execute_check_cmd(cmd, trace_cmd=False, trace_out=False, skip_error=True)
         write_file(outfile, cmd_retval)
+
         print("PERFORMACE_TIMER_SYSLOGS_CAPTURED_FILE: {}".format(outfile))
 
     # capture SWSS_LOG_*** which has levels higher than lvl
@@ -1272,7 +1282,7 @@ if __name__ == "__main__":
     elif args.disable_debug:
         enable_disable_debug(False)
     elif args.syslog_check:
-        parse_syslog(args.syslog_check, args.phase)
+        parse_testcase_syslog(args.syslog_check, args.phase)
     elif args.sairedis != "none":
         do_sairedis(args.sairedis)
     elif args.execute_from_file:

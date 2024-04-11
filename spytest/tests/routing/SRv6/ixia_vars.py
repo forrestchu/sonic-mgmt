@@ -44,4 +44,5 @@ ECMP_TRAFFIC_NAME = "traffic_ecmp"
 TRAFFIC_MIRROR_V4 = "TI-IPv4"
 TRAFFIC_MIRROR_V6 = "TI-IPv6"
 TRAFFIC_MIRROR_ULECMP = "ul-ecmp"
+TRAFFIC_2K_TE_POLICY = "Te_policy_2k_traffic"
 

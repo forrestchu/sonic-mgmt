@@ -1,6 +1,7 @@
 import csv
 import inspect
 import os
+import subprocess
 import pytest
 import sys
 import json
@@ -1187,47 +1188,54 @@ def get_log_dir_path():
     logs_path = env.get("SPYTEST_LOGS_PATH", user_root)
     return logs_path
 
-def write_perf_data_to_csv(file, lvl="NOTICE"):
-    lines = []
+def write_perf_data_to_csv(file, dir):
+
     with open(file, "r") as f:
         lines = f.readlines()
 
+    functions = ["Consumer::pops", "Consumer::drain", "Syncd::pushRingBuffer", "Syncd::processBulkCreateEntry", "Syncd::processBulkRemoveEntry"]
+
+    for fn in functions:
+        with open(fn + ".json", "a") as f:
+            f.truncate(0)
+            for line in lines:
+                if fn in line:
+                    _ = f.write(line)
+
     print("=" * 17 + " Performance CSV Parsing " + "=" * 17)
-    data = defaultdict(list)
-    max_count = 1
-    for line in lines:
-        msg = line.split(lvl)[1]
 
-        try:
-            msg = '{' + msg.split("{")[1]
-            hash = json.loads(msg)
-        except Exception:
-            continue
+    for fn in functions:
+        lines = []
+        with open(fn + ".json", "r") as f:
+            lines = f.readlines()
 
-        fn = hash["name"]
-        del hash["name"]
-        del hash["threshold"]
-        if hash["calls"] > max_count:
-            max_count=  hash["calls"]
-        zipped = list(zip(hash["m_gaps"], hash["m_intervals"], hash["m_incs"]))
-        data[fn].extend(zipped)
-    fieldnames = ["gaps", "intervals", "incs"]
-    for func_name, msg in data.items():
-        output_file = os.path.join(os.getcwd(), "../", get_log_dir_path(), func_name + ".csv")
+        fieldnames = ["Gap", "Interval", "Duration", "#Routes", "#Speed[k]"]
+        output_file = os.path.join(os.getcwd(), "../", get_log_dir_path(), dir, fn + ".csv")
         with open(output_file, 'w', newline='') as csvfile:
             writer = csv.writer(csvfile)
             writer.writerow(fieldnames) 
-            writer.writerows(msg)
-    return data
+
+            for line in lines:
+                try:
+                    data = json.loads(line)
+                except Exception:
+                    continue
+                for i in range(len(data['m_gaps'])):
+                    gap = data['m_gaps'][i]
+                    interval = data['m_intervals'][i]
+                    duration = gap + interval
+                    inc = data['m_incs'][i]
+                    if duration == 0:
+                        continue
+                    writer.writerow([gap, interval, duration, inc, '{:.2f}'.format(inc/duration)]) 
 
 @pytest.fixture(scope="function")
 def collect_syslog(fname):
     yield fname
-    timer_txt = os.path.join(os.getcwd(), "../", get_log_dir_path(), "1_" + fname)
-    st.download_file_from_dut(dut1, "/etc/spytest/" + fname, timer_txt)
-    timer_txt = os.path.join(os.getcwd(), "../", get_log_dir_path(), "2_" + fname)
-    st.download_file_from_dut(dut2, "/etc/spytest/" + fname, timer_txt)
-    write_perf_data_to_csv(timer_txt)
+    st.download_file_from_dut(dut2, "/etc/spytest/syslog", os.path.join(os.getcwd(), "../", get_log_dir_path(), fname + "syslog"))
+    timer_txt = os.path.join(os.getcwd(), "../", get_log_dir_path(), fname + "_PerformanceTimer.json")
+    st.download_file_from_dut(dut2, "/etc/spytest/" + fname + "_PerformanceTimer.json", timer_txt)
+    write_perf_data_to_csv(timer_txt, fname)
 
 @pytest.mark.community
 @pytest.mark.community_pass

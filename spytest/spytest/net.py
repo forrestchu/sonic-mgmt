@@ -1033,6 +1033,11 @@ class Net(object):
                 self.do_post_reboot(devname, phase=0, max_ready_wait=max_ready_wait)
             else:
                 self.set_login_timeout(devname)
+                #
+                # trigger read_vtysh_hostname to update prompt match patterns in Prompts
+                #
+                if self.is_sonic_device(devname):
+                    self.read_vtysh_hostname(devname)
 
             # open ssh connection to switch execution to
             self._tryssh_init(devname)

@@ -651,3 +651,193 @@ def get_kernel_ipv6_route(dut, number):
         return int(x[0])
     else:
         return 0
+
+def intf_traffic_stats(entry_tx):
+    for i in entry_tx:
+        p_txmt = i['tx_bps']
+        p_txmt = p_txmt.replace(" Gb/s","")
+        p_txmt = p_txmt.replace(" Mb/s","")
+        p_txmt = p_txmt.replace(" Kb/s","")
+        p_txmt = p_txmt.replace(" b/s","")
+
+    p_tx = abs(int(float(p_txmt)))
+    return p_tx
+def check_dut_intf_tx_traffic_counters(dut, portlist, expect_val):
+    papi.clear_interface_counters(dut)
+    st.wait(5)
+    output = papi.get_interface_counters_all(dut)
+    retry = 0
+    while len(output) == 0 and retry < 10:
+        output = papi.get_interface_counters_all(dut)
+        retry += 1
+        st.wait(2)
+    if retry == 10:
+        st.error("Error: Dut port stats")
+        return False
+
+    tx_bps_list = []
+    for port in portlist:
+        tx_bps = intf_traffic_stats(filter_and_select(output, ["tx_bps"], {'iface': port}))
+        tx_bps_list.append(tx_bps)
+
+    st.log("Inter Dut port stats  tx_ok counter value on DUT Egress ports : {} expect: {}".format(tx_bps_list,expect_val))
+
+    for tx_bps in tx_bps_list:
+        if tx_bps == 0:
+            st.error("Error:Inter Dut port stats tx_ok counter value on DUT Egress port: {}".format(tx_bps))
+            return False
+        else:
+            deviation = abs(expect_val - tx_bps)
+            percent = (float(deviation)/expect_val)*100
+            if percent > 10:
+                st.log("Inter Dut port stats tx_ok counter value on DUT Egress ports {}".format(tx_bps))
+                return False
+
+    st.log("All ECMP paths are utilized")
+    return True
+
+def intf_traffic_stats_percentage(entry_tx):
+    for i in entry_tx:
+        p_txmt = i['tx_util']
+        p_txmt = p_txmt.replace("%","")
+
+    p_tx = abs(int(float(p_txmt)))
+    return p_tx
+
+def check_dut_intf_tx_traffic_percentage(dut, portlist, expect_val):
+    papi.clear_interface_counters(dut)
+    st.wait(5)
+    output = papi.get_interface_counters_all(dut)
+    retry = 0
+    while len(output) == 0 and retry < 10:
+        output = papi.get_interface_counters_all(dut)
+        retry += 1
+        st.wait(2)
+    if retry == 10:
+        st.error("Error: Dut port stats")
+        return False
+
+    tx_util_list = []
+    for port in portlist:
+        tx_util = intf_traffic_stats_percentage(filter_and_select(output, ["tx_util"], {'iface': port}))
+        tx_util_list.append(tx_util)
+
+    st.log("Inter Dut port stats tx_util counter value on DUT Egress ports : {} expect: {}".format(tx_util_list,expect_val))
+
+    for tx_util in tx_util_list:
+        if expect_val <= 10:
+            deviation = abs(expect_val - tx_util)
+            if deviation > 1:
+                st.log("Inter Dut port stats tx_util counter value on DUT Egress ports {}".format(tx_util))
+                return False
+        else:
+            deviation = abs(expect_val - tx_util)
+            percent = (float(deviation)/expect_val)*100
+            if percent > 10:
+                st.log("Inter Dut port stats tx_util counter value on DUT Egress ports {}".format(tx_util))
+                return False
+
+    return True
+
+
+def get_bfd_uptime_sec(output):
+    uptime = 0
+    uptime_day = 0
+    uptime_hour = 0
+    uptime_min = 0
+    uptime_sec = 0
+    if 'status' in output and output['status'] == 'up':
+        uptime_day = 0 if output.get('uptimeday') == '' else int(output.get('uptimeday'))
+        uptime_hour= 0 if output.get('uptimehr') == '' else int(output.get('uptimehr'))
+        uptime_min= 0 if output.get('uptimemin') == '' else int(output.get('uptimemin'))
+        uptime_sec= 0 if output.get('uptimesec') == '' else int(output.get('uptimesec'))
+        uptime =  uptime_day * 86400 +  uptime_hour * 3600 + uptime_min * 60 + uptime_sec
+    st.log("get bfd uptime {} , day {}, hour {}, min {}, sec {}".format(uptime, uptime_day, uptime_hour, uptime_min, uptime_sec))
+    return uptime
+
+def double_check_sbfd(dut, sbfd_key, sbfd_check_filed, offload=True, delete=False):
+    # show bfd peers | grep 'peer 20.20.20.58 (endpoint 20.20.20.58 color 1 sidlist sl1_ipv4) local-address 20.20.20.58' -A 20
+    create_by_hardware = False
+    cmd = 'cli -c "no page" -c "show bfd peers" | grep {} -A 20'.format('"'+sbfd_key+'"')
+    output = st.show(dut, cmd)
+    st.log (output)
+    if type(output) != list:
+        st.log ("output is not list type")
+        return False
+
+    if len(output)>0:
+        output = output[0]
+    st.log (output)
+
+    if delete:
+        if len(output) == 0:
+            return True
+        if output.get('peer', '') == '':
+            return True
+        else:
+            return False
+
+    uptime1 = get_bfd_uptime_sec(output)
+    st.log (sbfd_check_filed)
+    for filed, val in sbfd_check_filed.items():
+        st.log (filed)
+        st.log (val)
+        if filed in output :
+            if type(output[filed]) == list:
+                checkval = output[filed][0]
+            else:
+                checkval = output[filed]
+            if val != checkval:
+                st.log("{} 's {} is not match, expect {}".format(sbfd_key, filed, val))
+                return False
+
+    st.wait(10)
+
+    output = st.show(dut, cmd)
+    if type(output) == list and len(output)>0:
+        output = output[0]
+    st.log (output)
+    uptime2 = get_bfd_uptime_sec(output)
+    for filed, val in sbfd_check_filed.items():
+        if filed in output :
+            if type(output[filed]) == list:
+                checkval = output[filed][0]
+            else:
+                checkval = output[filed]
+            if val != checkval:
+                st.log("{} 's {} is not match, expect {}".format(sbfd_key, filed, val))
+                return False
+
+    if uptime2 - uptime1 < 10:
+        st.log("{} not up continuously".format(sbfd_key))
+        return False
+
+    if 'local_id' in output:
+        data.current_discr = output['local_id']
+
+    if 'hardware' in output:
+        if output['hardware'] == 'hardware':
+            create_by_hardware = True
+
+    # show bfd peers counters | grep 'peer 20.20.20.58 (endpoint 20.20.20.58 color 1 sidlist sl1_ipv4) local-address 20.20.20.58' -A 7
+    count_cmd = 'cli -c "no page" -c "show bfd peers counters" | grep {} -A 7'.format('"'+sbfd_key+'"')
+    output = st.show(dut, count_cmd)
+    if type(output) == list and len(output)>0:
+        output = output[0]
+    st.log (output)
+
+    if offload:
+        # check appdb ,check hardware flag
+        if create_by_hardware == False:
+            st.log("{} not offload".format(sbfd_key))
+            return False
+
+    return True
+
+def check_bgp_state(dut, neighbor_ip):
+    output = st.show(dut, 'show bgp neighbors {}'.format(neighbor_ip), type='vtysh')
+    bgp_state = output[0]['state'] if output else "NotEstablished"
+    return bgp_state == 'Established'
+
+def check_bfd_state(dut, key, check_field):
+    return double_check_sbfd(dut, key, check_field, True, False)

@@ -491,3 +491,11 @@ data.vrf_prefix = {
     "VPN35":"201.49.19.136/32",
     "VPN36":"201.50.19.136/32"
 }
+
+
+data.dut2_config = {
+    "test_srte_policy_2k_vrf_2k_policy_03":"2k_config",
+    "test_srte_policy_2k_vrf_2k_policy_color_only_04":"2k_config_only",
+    "test_srte_policy_2k_vrf_4k_policy_05":"4k_config",
+    "test_srte_policy_2k_vrf_4k_policy_color_only_06":"4k_config_only"
+}

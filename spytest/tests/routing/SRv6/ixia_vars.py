@@ -6,7 +6,9 @@ ESR_MULTI_VRF_CONFIG = "esr_multi_vrf.ixncfg"
 ESR_MULTI_VRF_ECMP_CONFIG = "esr_multi_vrf_ecmp.ixncfg"
 ESR_ECMP_CONFIG = "esr_ecmp_04.ixncfg"
 ESR_MIRROR_CONFIG = "esr_mirror.ixncfg"
-ESR_2K_VRF_CONFIG = "esr_2k_vrf.ixncfg"
+ESR_1K_POLICY_CONFIG = "esr_1k_policy.ixncfg"
+ESR_2K_POLICY_CONFIG = "esr_2k_policy.ixncfg"
+
 
 # IXIA_PORT connected to 179
 PORT_NAME_1 = "1/1/15"
@@ -44,5 +46,5 @@ ECMP_TRAFFIC_NAME = "traffic_ecmp"
 TRAFFIC_MIRROR_V4 = "TI-IPv4"
 TRAFFIC_MIRROR_V6 = "TI-IPv6"
 TRAFFIC_MIRROR_ULECMP = "ul-ecmp"
+TRAFFIC_1K_TE_POLICY = "Te_policy_1k_traffic"
 TRAFFIC_2K_TE_POLICY = "Te_policy_2k_traffic"
-

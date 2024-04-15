@@ -167,95 +167,6 @@ def check_end_to_end_intf_traffic_counters(dut, port):
     else:
         st.error("End to End traffic is not fine")
         return False
-
-def intf_traffic_stats(entry_tx):
-    for i in entry_tx:
-        p_txmt = i['tx_bps']
-        p_txmt = p_txmt.replace(" Gb/s","")
-        p_txmt = p_txmt.replace(" Mb/s","")
-        p_txmt = p_txmt.replace(" Kb/s","")
-        p_txmt = p_txmt.replace(" b/s","")
-
-    p_tx = abs(int(float(p_txmt)))
-    return p_tx
-
-def intf_traffic_stats_percentage(entry_tx):
-    for i in entry_tx:
-        p_txmt = i['tx_util']
-        p_txmt = p_txmt.replace("%","")
-
-    p_tx = abs(int(float(p_txmt)))
-    return p_tx
-
-def check_dut_intf_tx_traffic_counters(dut, portlist, expect_val):
-    papi.clear_interface_counters(dut)
-    st.wait(5)
-    output = papi.get_interface_counters_all(dut)
-    retry = 0
-    while len(output) == 0 and retry < 10:
-        output = papi.get_interface_counters_all(dut)
-        retry += 1
-        st.wait(2)
-    if retry == 10:
-        st.error("Error: Dut port stats")
-        return False
-
-    tx_bps_list = []
-    for port in portlist:
-        tx_bps = intf_traffic_stats(filter_and_select(output, ["tx_bps"], {'iface': port}))
-        tx_bps_list.append(tx_bps)
-
-    st.log("Inter Dut port stats  tx_ok counter value on DUT Egress ports : {} expect: {}".format(tx_bps_list,expect_val))
-
-    for tx_bps in tx_bps_list:
-        if tx_bps == 0:
-            st.error("Error:Inter Dut port stats tx_ok counter value on DUT Egress port: {}".format(tx_bps))
-            return False
-        else:
-            deviation = abs(expect_val - tx_bps)
-            percent = (float(deviation)/expect_val)*100
-            if percent > 10:
-                st.log("Inter Dut port stats tx_ok counter value on DUT Egress ports {}".format(tx_bps))
-                return False
-
-    st.log("All ECMP paths are utilized")
-    return True
-
-def check_dut_intf_tx_traffic_percentage(dut, portlist, expect_val):
-    papi.clear_interface_counters(dut)
-    st.wait(5)
-    output = papi.get_interface_counters_all(dut)
-    retry = 0
-    while len(output) == 0 and retry < 10:
-        output = papi.get_interface_counters_all(dut)
-        retry += 1
-        st.wait(2)
-    if retry == 10:
-        st.error("Error: Dut port stats")
-        return False
-
-    tx_util_list = []
-    for port in portlist:
-        tx_util = intf_traffic_stats_percentage(filter_and_select(output, ["tx_util"], {'iface': port}))
-        tx_util_list.append(tx_util)
-
-    st.log("Inter Dut port stats tx_util counter value on DUT Egress ports : {} expect: {}".format(tx_util_list,expect_val))
-
-    for tx_util in tx_util_list:
-        if expect_val <= 10:
-            deviation = abs(expect_val - tx_util)
-            if deviation > 1:
-                st.log("Inter Dut port stats tx_util counter value on DUT Egress ports {}".format(tx_util))
-                return False
-        else:
-            deviation = abs(expect_val - tx_util)
-            percent = (float(deviation)/expect_val)*100
-            if percent > 10:
-                st.log("Inter Dut port stats tx_util counter value on DUT Egress ports {}".format(tx_util))
-                return False
-
-    return True
-
 def get_handles():
     tg1, tg_ph_1 = tgapi.get_handle_byname("T1D1P1") # ixia - 179 Eth109
     tg2, tg_ph_2 = tgapi.get_handle_byname("T1D1P2") # ixia - 179 Eth110
@@ -851,7 +762,7 @@ def test_base_config_srvpn_multi_vrf_03():
     st.wait(30)
 
     # check traffic
-    ret = ixia_check_traffic(VRF_TRAFFIC_NAME, key="Rx frame", value=120000)
+    ret = ixia_check_traffic(VRF_TRAFFIC_NAME, key="Rx Frames", value=120000)
     if not ret:
         st.report_fail("Check traffic item {} rx frame failed".format(VRF_TRAFFIC_NAME))
 
@@ -935,7 +846,7 @@ def test_base_config_srvpn_multi_vrf_03():
             st.report_fail("step3 check_bgp_vrf_ipv4_uni_sid failed ")
 
     # check vrf traffic
-    ret = ixia_check_traffic(VRF_TRAFFIC_NAME, key='Rx frame', value=120000)
+    ret = ixia_check_traffic(VRF_TRAFFIC_NAME, key="Rx Frames", value=120000)
     if not ret:
         st.report_fail("Check traffic item {} rx frame failed".format(SPECIFIC_VRF_TRAFFIC_NAME))
 

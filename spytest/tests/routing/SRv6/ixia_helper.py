@@ -1,5 +1,6 @@
 import os
 import gc
+import re
 
 from spytest import st, tgapi, SpyTestDict
 from ixia_vars import *
@@ -73,7 +74,7 @@ def ixia_check_port_rx_frame(port_name, rx_count):
     return False
 
 
-def ixia_check_traffic_item_rx_frame(traffic_item_name, rx_count):
+def ixia_check_traffic_item_rx_frame(traffic_item_name, key, rx_count):
     st.log("check traffic item rx frame begin")
     traffic_item_stats = ixia_controller.get_traffic_item_statistics(traffic_item_name)
     if traffic_item_stats is None:
@@ -82,9 +83,16 @@ def ixia_check_traffic_item_rx_frame(traffic_item_name, rx_count):
     st.log("\n")
     st.log(traffic_item_stats)
 
-    tmp_rx_count = traffic_item_stats['Rx Frames']
+    tmp_rx_count = traffic_item_stats[key]
     st.log("Get traffic item {} Rx Frames count {},  expect count {}".format(traffic_item_name, tmp_rx_count, rx_count))
-    if int(tmp_rx_count) == int(rx_count):
+
+    match = re.match("\d+", tmp_rx_count)
+    if match:
+        tmp_rx_count_int = int(match.group())
+    else:
+        raise ValueError("Invalid integer format")
+
+    if int(tmp_rx_count_int) == int(rx_count):
         return True
     return False
 
@@ -127,7 +135,7 @@ def ixia_stop_all_protocols():
     return True
 
 
-def ixia_check_traffic(traffic_item_name, key="Rx frame", value="0"):
+def ixia_check_traffic(traffic_item_name, key="Rx Frames", value="0"):
     st.wait(10)
     st.log("Get traffic item {}".format(traffic_item_name))
     st.log("Apply traffic item {}".format(traffic_item_name))
@@ -146,8 +154,8 @@ def ixia_check_traffic(traffic_item_name, key="Rx frame", value="0"):
         st.error("Start traffic item {} failed".format(traffic_item_name))
         return False
 
-    if key == "Rx frame":
-        return ixia_check_traffic_item_rx_frame(traffic_item_name, value)
+    if key == "Rx Frames" or key == "Rx Frame Rate":
+        return ixia_check_traffic_item_rx_frame(traffic_item_name, key, value)
     else:
         st.error("Unsupported check key for traffic: {}".format(key))
         return False

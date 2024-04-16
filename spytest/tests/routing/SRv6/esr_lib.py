@@ -840,4 +840,4 @@ def check_bgp_state(dut, neighbor_ip):
     return bgp_state == 'Established'
 
 def check_bfd_state(dut, key, check_field):
-    return double_check_sbfd(dut, key, check_field, True, False)
+    return double_check_sbfd(dut, key, check_field, False, False)

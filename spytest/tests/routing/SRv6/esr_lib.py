@@ -808,7 +808,7 @@ def double_check_sbfd(dut, sbfd_key, sbfd_check_filed, offload=True, delete=Fals
                 st.log("{} 's {} is not match, expect {}".format(sbfd_key, filed, val))
                 return False
 
-    if uptime2 - uptime1 < 10:
+    if (output['status'] == 'up') and (uptime2 - uptime1 < 10):
         st.log("{} not up continuously".format(sbfd_key))
         return False
 

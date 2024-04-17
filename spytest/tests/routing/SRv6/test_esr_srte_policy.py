@@ -99,6 +99,11 @@ def one_dut_load_config(dut, filesuffix):
 @pytest.mark.community
 @pytest.mark.community_pass
 def test_srte_policy_2k_vrf_1k_policy_01():
+
+    if not retry_api(check_bgp_state, dut2, "2000::179", retry_count= 6, delay= 10):
+        st.report_fail("Step0: Check bgp state failed")
+    st.wait(5)
+
     ret = ixia_start_traffic(TRAFFIC_1K_TE_POLICY)
     if not ret:
         st.report_fail("Step1: Start traffic item {} rx frame failed".format(TRAFFIC_1K_TE_POLICY))
@@ -163,6 +168,11 @@ def test_srte_policy_2k_vrf_1k_policy_01():
 @pytest.mark.community
 @pytest.mark.community_pass
 def test_srte_policy_2k_vrf_1k_policy_color_only_02():
+
+    if not retry_api(check_bgp_state, dut2, "2000::179", retry_count= 6, delay= 10):
+        st.report_fail("Step0: Check bgp state failed")
+    st.wait(5)
+
     ret = ixia_start_traffic(TRAFFIC_1K_TE_POLICY)
     if not ret:
         st.report_fail("Step1: Start traffic item {} rx frame failed".format(TRAFFIC_1K_TE_POLICY))
@@ -306,6 +316,10 @@ def test_srte_policy_2k_vrf_1k_policy_color_only_02():
 @pytest.mark.community_pass
 def test_srte_policy_2k_vrf_2k_policy_03():
 
+    if not retry_api(check_bgp_state, dut2, "2000::179", retry_count= 6, delay= 10):
+        st.report_fail("Step0: Check bgp state failed")
+    st.wait(5)
+
     ret = ixia_start_traffic(TRAFFIC_2K_TE_POLICY)
     if not ret:
         st.report_fail("Step1: Start traffic item {} rx frame failed".format(TRAFFIC_2K_TE_POLICY))
@@ -366,6 +380,10 @@ def test_srte_policy_2k_vrf_2k_policy_03():
 @pytest.mark.community_pass
 def test_srte_policy_2k_vrf_2k_policy_color_only_04():
 
+    if not retry_api(check_bgp_state, dut2, "2000::179", retry_count= 6, delay= 10):
+        st.report_fail("Step0: Check bgp state failed")
+    st.wait(5)
+
     ret = ixia_start_traffic(TRAFFIC_2K_TE_POLICY)
     if not ret:
         st.report_fail("Step1: Start traffic item {} rx frame failed".format(TRAFFIC_2K_TE_POLICY))
@@ -425,6 +443,10 @@ def test_srte_policy_2k_vrf_2k_policy_color_only_04():
 @pytest.mark.community
 @pytest.mark.community_pass
 def test_srte_policy_2k_vrf_4k_policy_05():
+
+    if not retry_api(check_bgp_state, dut2, "2000::179", retry_count= 6, delay= 10):
+        st.report_fail("Step0: Check bgp state failed")
+    st.wait(5)
 
     ret = ixia_start_traffic(TRAFFIC_2K_TE_POLICY)
     if not ret:

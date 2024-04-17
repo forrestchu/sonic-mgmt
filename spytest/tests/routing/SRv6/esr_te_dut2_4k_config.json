@@ -51,7 +51,7 @@
             "update_source": "1000::178"
         }, 
         "1000::179|ipv4_vpn": {
-            "activate": "true",
+            "activate": "false",
             "route_map_out": "as-map"
         },
         "1000::179|ipv6_vpn": {

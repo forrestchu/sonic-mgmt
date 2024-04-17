@@ -433,8 +433,8 @@ def test_srte_policy_2k_vrf_2k_policy_color_only_04():
     if not ret:
         st.report_fail("Step7: Stop traffic item {} rx frame failed".format(TRAFFIC_2K_TE_POLICY))
 
-    #check Tx Frame Rate
-    ret = ixia_check_traffic(TRAFFIC_2K_TE_POLICY, key="Tx Frame Rate", value=100000)
+    #check Rx Frame Rate
+    ret = ixia_check_traffic(TRAFFIC_2K_TE_POLICY, key="Rx Frame Rate", value=100000)
     if not ret:
         st.report_fail("Step8: Check traffic item {} rx frame failed".format(TRAFFIC_2K_TE_POLICY))
 
@@ -511,8 +511,8 @@ def test_srte_policy_2k_vrf_4k_policy_05():
     if not ret:
         st.report_fail("Step5: Stop traffic item {} rx frame failed".format(TRAFFIC_2K_TE_POLICY))
 
-    #check Tx Frame Rate
-    ret = ixia_check_traffic(TRAFFIC_2K_TE_POLICY, key="Tx Frame Rate", value=100000)
+    #check Rx Frame Rate
+    ret = ixia_check_traffic(TRAFFIC_2K_TE_POLICY, key="Rx Frame Rate", value=100000)
     if not ret:
         st.report_fail("Step6: Check traffic item {} rx frame failed".format(TRAFFIC_2K_TE_POLICY))
 

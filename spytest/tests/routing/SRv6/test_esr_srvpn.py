@@ -1104,7 +1104,7 @@ def write_perf_data_to_csv(file, dir):
     with open(file, "r") as f:
         lines = f.readlines()
 
-    functions = ["Consumer::pops", "Consumer::drain", "Syncd::pushRingBuffer", "Syncd::processBulkCreateEntry", "Syncd::processBulkRemoveEntry"]
+    functions = ["Consumer::execute", "Consumer::popRingBuffer", "Syncd::pushRingBuffer", "Syncd::processBulkCreateEntry", "Syncd::processBulkRemoveEntry"]
 
     for fn in functions:
         with open(fn + ".json", "a") as f:

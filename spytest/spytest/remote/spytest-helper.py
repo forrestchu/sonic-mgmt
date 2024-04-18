@@ -951,8 +951,8 @@ def parse_testcase_syslog(lvl, phase):
         outfile = "{}/{}_PerformanceTimer.txt".format(ETC_SPYTEST, test_name)
         sanitize_file_by_pattern(pattern, test_case_syslog, outfile)
  
-        # Capture from local syslog lines containing '{"calls"...}', starting from the line containing 'Consumer::pops'
-        cmd = "grep -E -o '\{\"calls\"[^}]+}' " + test_case_syslog + " | sed -n -e '/Consumer::pops/,$p'"
+        # Capture from local syslog lines containing '{"calls"...}', starting from the line containing 'Consumer::execute'
+        cmd = "grep -E -o '\{\"calls\"[^}]+}' " + test_case_syslog + " | sed -n -e '/Consumer::execute/,$p'"
         outfile = "{}/{}_PerformanceTimer.json".format(ETC_SPYTEST, test_name)
         cmd_retval = execute_check_cmd(cmd, trace_cmd=False, trace_out=False, skip_error=True)
         write_file(outfile, cmd_retval)

@@ -114,6 +114,8 @@ def read_lines(file_path, default=None):
     return default
 
 def write_file(filename, data, mode="w"):
+    if not data:
+        return data
     fh = open(filename, mode)
     fh.write(data)
     fh.close()
@@ -945,15 +947,18 @@ def parse_testcase_syslog(lvl, phase):
         # no need to parse syslog
         return
 
-    if "performance" in  test_name:
+    if "srvpn_performance" in test_name:
+        name = test_name
+        if "[" in test_name:
+            name = test_name.split("[")[1].split("]")[0]
         # Capture from local syslog lines containing "inc:" and "{" "}""
         pattern = r"""grep -E "^\S*\s+\S+\s+\S+\s+\S+[0-9]+:[0-9]+:[0-9]+(\.[0-9]+){{0,1}}\s+\S+\s+.*inc:.*{{" {}"""
-        outfile = "{}/{}_PerformanceTimer.txt".format(ETC_SPYTEST, test_name)
+        outfile = "{}/{}_PerformanceTimer.txt".format(ETC_SPYTEST, name)
         sanitize_file_by_pattern(pattern, test_case_syslog, outfile)
  
         # Capture from local syslog lines containing '{"calls"...}', starting from the line containing 'Consumer::execute'
         cmd = "grep -E -o '\{\"calls\"[^}]+}' " + test_case_syslog + " | sed -n -e '/Consumer::execute/,$p'"
-        outfile = "{}/{}_PerformanceTimer.json".format(ETC_SPYTEST, test_name)
+        outfile = "{}/{}_PerformanceTimer.json".format(ETC_SPYTEST, name)
         cmd_retval = execute_check_cmd(cmd, trace_cmd=False, trace_out=False, skip_error=True)
         write_file(outfile, cmd_retval)
 

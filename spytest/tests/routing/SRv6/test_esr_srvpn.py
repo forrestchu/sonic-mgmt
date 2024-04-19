@@ -1100,9 +1100,12 @@ def get_log_dir_path():
     return logs_path
 
 def write_perf_data_to_csv(file, dir):
-
-    with open(file, "r") as f:
-        lines = f.readlines()
+    try:
+        with open(file, "r") as f:
+            lines = f.readlines()
+    except IOError:
+        print(file + " not exists")
+        return
 
     functions = ["Consumer::execute", "Consumer::popRingBuffer", "Syncd::pushRingBuffer", "Syncd::processBulkCreateEntry", "Syncd::processBulkRemoveEntry"]
 
@@ -1143,10 +1146,15 @@ def write_perf_data_to_csv(file, dir):
 @pytest.fixture(scope="function")
 def collect_syslog(fname):
     yield fname
-    st.download_file_from_dut(dut2, "/etc/spytest/syslog", os.path.join(os.getcwd(), "../", get_log_dir_path(), fname + "syslog"))
-    timer_txt = os.path.join(os.getcwd(), "../", get_log_dir_path(), fname + "_PerformanceTimer.json")
-    st.download_file_from_dut(dut2, "/etc/spytest/" + fname + "_PerformanceTimer.json", timer_txt)
-    write_perf_data_to_csv(timer_txt, fname)
+    name = fname
+    if "[" in fname:
+        name = fname.split("[")[1].split("]")[0]
+    try:
+        timer_txt = os.path.join(os.getcwd(), "../", get_log_dir_path(), name + "_PerformanceTimer.json")
+        st.download_file_from_dut(dut2, "/etc/spytest/" + name + "_PerformanceTimer.json", timer_txt)
+        write_perf_data_to_csv(timer_txt, name)
+    except Exception:
+        return
 
 @pytest.mark.community
 @pytest.mark.community_pass

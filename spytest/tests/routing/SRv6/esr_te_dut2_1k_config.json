@@ -10397,17 +10397,8 @@
             "match_ipv6_address_prefix_list": "1"
         },
         "2|deny|20": {},
-        "2|permit|10": {
-            "match_ipv6_address_prefix_list": "2"
-        },
         "3|deny|20": {},
-        "3|permit|10": {
-            "match_ipv6_address_prefix_list": "3"
-        },
         "4|deny|20": {},
-        "4|permit|10": {
-            "match_ipv6_address_prefix_list": "4"
-        },
         "as-map|deny|10": {
             "match_as_path": "as_list"
         }

@@ -945,10 +945,10 @@ def show_debug_info():
 
     st.show(dut1, "vtysh -c 'show ip bgp vrf all summary'",skip_tmpl=True)
     st.show(dut2, "vtysh -c 'show ip bgp vrf all summary'",skip_tmpl=True)
-    st.show(dut1, "vtysh -c 'show ip route vrf long-vrf-503'",skip_tmpl=True)
-    st.show(dut2, "vtysh -c 'show ip route vrf long-vrf-503'",skip_tmpl=True)
-    st.show(dut1, "vtysh -c 'show ip route vrf long-vrf-504'",skip_tmpl=True)
-    st.show(dut2, "vtysh -c 'show ip route vrf long-vrf-504'",skip_tmpl=True)
+    # st.show(dut1, "vtysh -c 'show ip route vrf long-vrf-503'",skip_tmpl=True)
+    # st.show(dut2, "vtysh -c 'show ip route vrf long-vrf-503'",skip_tmpl=True)
+    # st.show(dut1, "vtysh -c 'show ip route vrf long-vrf-504'",skip_tmpl=True)
+    # st.show(dut2, "vtysh -c 'show ip route vrf long-vrf-504'",skip_tmpl=True)
 
 
 @pytest.mark.community

@@ -653,7 +653,7 @@ def test_bfd_ipv6_attr_set():
         st.log("bfd status check ok, set dut bfd params: multiplier=3, rx_intv=50, tx_intv=50")
         bfdapi.configure_bfd(dut1, local_asn=data.as_num, neighbor_ip=neigh_ipv6_addr, 
                             config="yes",vrf_name=data.vrf, cli_type='alicli', multiplier=3, rx_intv=new_interval, tx_intv=new_interval)
-        st.wait(10)
+        st.wait(20)
         
         key = "BFD_PEER:{}*".format(neigh_ipv6_addr)
         command = redis.build(dut1, redis.APPL_DB, "keys '{}' ".format(key))

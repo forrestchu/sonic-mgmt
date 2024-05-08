@@ -594,13 +594,13 @@ def compare_redistribute_vrf_route(vrf1, vrf2, info1, info2):
     infos_2 = info2.splitlines()
     if len(infos_1) != len(infos_2):
         return False
-    if len(infos_1) < 3:
+    if len(infos_1) < 4:
         return False
-    for i in range(len(infos_1)):
+    for i in range(len(infos_1) - 3):
         st.log(i)
         st.log(infos_1[i])
         st.log(infos_2[i])
-        if i == 0 or i == (len(infos_1)-1) or i == (len(infos_1)-2):
+        if i == 0 :
             continue
         elif i == 1 :
             infos_2_new = infos_2[i].replace(vrf2, vrf1)

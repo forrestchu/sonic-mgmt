@@ -1,0 +1,16 @@
++file:routing/test_bfd.py
++file:routing/MC_SCALE/test_mc_scale.py
+
+
+
+-test:test_subintf_501_502_traffic
+
+#+args:--skip-init-config
+#+args:--skip-load-config base
++args:--force-keep-minimize-config
++args:--load-config-method force-reboot
++args:--get-tech-support none
++args:--fetch-core-files none
+# +args:--build-url http://21.135.167.180:8888/dailybuild/SONiC-dev-master/cisco/q200/latest/sonic-cisco.bin
++args:--load-image installer
++args:--tc-max-timeout 1200

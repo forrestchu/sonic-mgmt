@@ -942,7 +942,7 @@ def test_srvpn_ecmp_04():
         show_hw_route_count(dut)
 
         # show ip route
-        show_cmd = "cli -c 'show ip route vrf {} {}'".format(vrf_name, "200.10.0.1/32")
+        show_cmd = "cli -c 'show ip route vrf {} {}'".format(to_check_vrf, "200.10.0.1/32")
         st.show(dut, show_cmd, skip_tmpl=True)
 
         nexthop_group = appdb_get_onefield(dut, key, "nexthop_group")

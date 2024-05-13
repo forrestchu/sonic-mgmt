@@ -1,0 +1,1046 @@
+{
+    "ACL_RULE": {
+        "DSCP|RULE_1": {
+            "DSCP": "0",
+            "PACKET_ACTION": "FORWARDING-CLASS:0",
+            "PRIORITY": "9999"
+        },
+        "DSCP|RULE_10": {
+            "DSCP": "9",
+            "PACKET_ACTION": "FORWARDING-CLASS:9",
+            "PRIORITY": "9990"
+        },
+        "DSCP|RULE_11": {
+            "DSCP": "10",
+            "PACKET_ACTION": "FORWARDING-CLASS:10",
+            "PRIORITY": "9989"
+        },
+        "DSCP|RULE_12": {
+            "DSCP": "11",
+            "PACKET_ACTION": "FORWARDING-CLASS:11",
+            "PRIORITY": "9988"
+        },
+        "DSCP|RULE_13": {
+            "DSCP": "12",
+            "PACKET_ACTION": "FORWARDING-CLASS:12",
+            "PRIORITY": "9987"
+        },
+        "DSCP|RULE_14": {
+            "DSCP": "13",
+            "PACKET_ACTION": "FORWARDING-CLASS:13",
+            "PRIORITY": "9986"
+        },
+        "DSCP|RULE_15": {
+            "DSCP": "14",
+            "PACKET_ACTION": "FORWARDING-CLASS:14",
+            "PRIORITY": "9985"
+        },
+        "DSCP|RULE_16": {
+            "DSCP": "15",
+            "PACKET_ACTION": "FORWARDING-CLASS:15",
+            "PRIORITY": "9984"
+        },
+        "DSCP|RULE_17": {
+            "DSCP": "16",
+            "PACKET_ACTION": "FORWARDING-CLASS:0",
+            "PRIORITY": "9983"
+        },
+        "DSCP|RULE_18": {
+            "DSCP": "17",
+            "PACKET_ACTION": "FORWARDING-CLASS:1",
+            "PRIORITY": "9982"
+        },
+        "DSCP|RULE_19": {
+            "DSCP": "18",
+            "PACKET_ACTION": "FORWARDING-CLASS:2",
+            "PRIORITY": "9981"
+        },
+        "DSCP|RULE_2": {
+            "DSCP": "1",
+            "PACKET_ACTION": "FORWARDING-CLASS:1",
+            "PRIORITY": "9998"
+        },
+        "DSCP|RULE_20": {
+            "DSCP": "19",
+            "PACKET_ACTION": "FORWARDING-CLASS:3",
+            "PRIORITY": "9980"
+        },
+        "DSCP|RULE_21": {
+            "DSCP": "20",
+            "PACKET_ACTION": "FORWARDING-CLASS:4",
+            "PRIORITY": "9979"
+        },
+        "DSCP|RULE_22": {
+            "DSCP": "21",
+            "PACKET_ACTION": "FORWARDING-CLASS:5",
+            "PRIORITY": "9978"
+        },
+        "DSCP|RULE_23": {
+            "DSCP": "22",
+            "PACKET_ACTION": "FORWARDING-CLASS:6",
+            "PRIORITY": "9977"
+        },
+        "DSCP|RULE_24": {
+            "DSCP": "23",
+            "PACKET_ACTION": "FORWARDING-CLASS:7",
+            "PRIORITY": "9976"
+        },
+        "DSCP|RULE_25": {
+            "DSCP": "24",
+            "PACKET_ACTION": "FORWARDING-CLASS:8",
+            "PRIORITY": "9975"
+        },
+        "DSCP|RULE_26": {
+            "DSCP": "25",
+            "PACKET_ACTION": "FORWARDING-CLASS:9",
+            "PRIORITY": "9974"
+        },
+        "DSCP|RULE_27": {
+            "DSCP": "26",
+            "PACKET_ACTION": "FORWARDING-CLASS:10",
+            "PRIORITY": "9973"
+        },
+        "DSCP|RULE_28": {
+            "DSCP": "27",
+            "PACKET_ACTION": "FORWARDING-CLASS:11",
+            "PRIORITY": "9972"
+        },
+        "DSCP|RULE_29": {
+            "DSCP": "28",
+            "PACKET_ACTION": "FORWARDING-CLASS:12",
+            "PRIORITY": "9971"
+        },
+        "DSCP|RULE_3": {
+            "DSCP": "2",
+            "PACKET_ACTION": "FORWARDING-CLASS:2",
+            "PRIORITY": "9997"
+        },
+        "DSCP|RULE_30": {
+            "DSCP": "29",
+            "PACKET_ACTION": "FORWARDING-CLASS:13",
+            "PRIORITY": "9970"
+        },
+        "DSCP|RULE_31": {
+            "DSCP": "30",
+            "PACKET_ACTION": "FORWARDING-CLASS:14",
+            "PRIORITY": "9969"
+        },
+        "DSCP|RULE_32": {
+            "DSCP": "31",
+            "PACKET_ACTION": "FORWARDING-CLASS:15",
+            "PRIORITY": "9968"
+        },
+        "DSCP|RULE_33": {
+            "DSCP": "32",
+            "PACKET_ACTION": "FORWARDING-CLASS:0",
+            "PRIORITY": "9967"
+        },
+        "DSCP|RULE_34": {
+            "DSCP": "33",
+            "PACKET_ACTION": "FORWARDING-CLASS:1",
+            "PRIORITY": "9966"
+        },
+        "DSCP|RULE_35": {
+            "DSCP": "34",
+            "PACKET_ACTION": "FORWARDING-CLASS:2",
+            "PRIORITY": "9965"
+        },
+        "DSCP|RULE_36": {
+            "DSCP": "35",
+            "PACKET_ACTION": "FORWARDING-CLASS:3",
+            "PRIORITY": "9964"
+        },
+        "DSCP|RULE_37": {
+            "DSCP": "36",
+            "PACKET_ACTION": "FORWARDING-CLASS:4",
+            "PRIORITY": "9963"
+        },
+        "DSCP|RULE_38": {
+            "DSCP": "37",
+            "PACKET_ACTION": "FORWARDING-CLASS:5",
+            "PRIORITY": "9962"
+        },
+        "DSCP|RULE_39": {
+            "DSCP": "38",
+            "PACKET_ACTION": "FORWARDING-CLASS:6",
+            "PRIORITY": "9961"
+        },
+        "DSCP|RULE_4": {
+            "DSCP": "3",
+            "PACKET_ACTION": "FORWARDING-CLASS:3",
+            "PRIORITY": "9996"
+        },
+        "DSCP|RULE_40": {
+            "DSCP": "39",
+            "PACKET_ACTION": "FORWARDING-CLASS:7",
+            "PRIORITY": "9960"
+        },
+        "DSCP|RULE_41": {
+            "DSCP": "40",
+            "PACKET_ACTION": "FORWARDING-CLASS:8",
+            "PRIORITY": "9959"
+        },
+        "DSCP|RULE_42": {
+            "DSCP": "41",
+            "PACKET_ACTION": "FORWARDING-CLASS:9",
+            "PRIORITY": "9958"
+        },
+        "DSCP|RULE_43": {
+            "DSCP": "42",
+            "PACKET_ACTION": "FORWARDING-CLASS:10",
+            "PRIORITY": "9957"
+        },
+        "DSCP|RULE_44": {
+            "DSCP": "43",
+            "PACKET_ACTION": "FORWARDING-CLASS:11",
+            "PRIORITY": "9956"
+        },
+        "DSCP|RULE_45": {
+            "DSCP": "44",
+            "PACKET_ACTION": "FORWARDING-CLASS:12",
+            "PRIORITY": "9955"
+        },
+        "DSCP|RULE_46": {
+            "DSCP": "45",
+            "PACKET_ACTION": "FORWARDING-CLASS:13",
+            "PRIORITY": "9954"
+        },
+        "DSCP|RULE_47": {
+            "DSCP": "46",
+            "PACKET_ACTION": "FORWARDING-CLASS:14",
+            "PRIORITY": "9953"
+        },
+        "DSCP|RULE_48": {
+            "DSCP": "47",
+            "PACKET_ACTION": "FORWARDING-CLASS:15",
+            "PRIORITY": "9952"
+        },
+        "DSCP|RULE_49": {
+            "DSCP": "48",
+            "PACKET_ACTION": "FORWARDING-CLASS:0",
+            "PRIORITY": "9951"
+        },
+        "DSCP|RULE_5": {
+            "DSCP": "4",
+            "PACKET_ACTION": "FORWARDING-CLASS:4",
+            "PRIORITY": "9995"
+        },
+        "DSCP|RULE_50": {
+            "DSCP": "49",
+            "PACKET_ACTION": "FORWARDING-CLASS:1",
+            "PRIORITY": "9950"
+        },
+        "DSCP|RULE_51": {
+            "DSCP": "50",
+            "PACKET_ACTION": "FORWARDING-CLASS:2",
+            "PRIORITY": "9949"
+        },
+        "DSCP|RULE_52": {
+            "DSCP": "51",
+            "PACKET_ACTION": "FORWARDING-CLASS:3",
+            "PRIORITY": "9948"
+        },
+        "DSCP|RULE_53": {
+            "DSCP": "52",
+            "PACKET_ACTION": "FORWARDING-CLASS:4",
+            "PRIORITY": "9947"
+        },
+        "DSCP|RULE_54": {
+            "DSCP": "53",
+            "PACKET_ACTION": "FORWARDING-CLASS:5",
+            "PRIORITY": "9946"
+        },
+        "DSCP|RULE_55": {
+            "DSCP": "54",
+            "PACKET_ACTION": "FORWARDING-CLASS:6",
+            "PRIORITY": "9945"
+        },
+        "DSCP|RULE_56": {
+            "DSCP": "55",
+            "PACKET_ACTION": "FORWARDING-CLASS:7",
+            "PRIORITY": "9944"
+        },
+        "DSCP|RULE_57": {
+            "DSCP": "56",
+            "PACKET_ACTION": "FORWARDING-CLASS:8",
+            "PRIORITY": "9943"
+        },
+        "DSCP|RULE_58": {
+            "DSCP": "57",
+            "PACKET_ACTION": "FORWARDING-CLASS:9",
+            "PRIORITY": "9942"
+        },
+        "DSCP|RULE_59": {
+            "DSCP": "58",
+            "PACKET_ACTION": "FORWARDING-CLASS:10",
+            "PRIORITY": "9941"
+        },
+        "DSCP|RULE_6": {
+            "DSCP": "5",
+            "PACKET_ACTION": "FORWARDING-CLASS:5",
+            "PRIORITY": "9994"
+        },
+        "DSCP|RULE_60": {
+            "DSCP": "59",
+            "PACKET_ACTION": "FORWARDING-CLASS:11",
+            "PRIORITY": "9940"
+        },
+        "DSCP|RULE_61": {
+            "DSCP": "60",
+            "PACKET_ACTION": "FORWARDING-CLASS:12",
+            "PRIORITY": "9939"
+        },
+        "DSCP|RULE_62": {
+            "DSCP": "61",
+            "PACKET_ACTION": "FORWARDING-CLASS:13",
+            "PRIORITY": "9938"
+        },
+        "DSCP|RULE_63": {
+            "DSCP": "62",
+            "PACKET_ACTION": "FORWARDING-CLASS:14",
+            "PRIORITY": "9937"
+        },
+        "DSCP|RULE_64": {
+            "DSCP": "63",
+            "PACKET_ACTION": "FORWARDING-CLASS:15",
+            "PRIORITY": "9936"
+        },
+        "DSCP|RULE_7": {
+            "DSCP": "6",
+            "PACKET_ACTION": "FORWARDING-CLASS:6",
+            "PRIORITY": "9993"
+        },
+        "DSCP|RULE_8": {
+            "DSCP": "7",
+            "PACKET_ACTION": "FORWARDING-CLASS:7",
+            "PRIORITY": "9992"
+        },
+        "DSCP|RULE_9": {
+            "DSCP": "8",
+            "PACKET_ACTION": "FORWARDING-CLASS:8",
+            "PRIORITY": "9991"
+        },
+        "TCBITS|RULE_1": {
+            "DST_IPV6_TC": "0",
+            "PACKET_ACTION": "FORWARDING-CLASS:0",
+            "PRIORITY": "9999"
+        },
+        "TCBITS|RULE_10": {
+            "DST_IPV6_TC": "9",
+            "PACKET_ACTION": "FORWARDING-CLASS:8",
+            "PRIORITY": "9990"
+        },
+        "TCBITS|RULE_11": {
+            "DST_IPV6_TC": "10",
+            "PACKET_ACTION": "FORWARDING-CLASS:10",
+            "PRIORITY": "9989"
+        },
+        "TCBITS|RULE_12": {
+            "DST_IPV6_TC": "11",
+            "PACKET_ACTION": "FORWARDING-CLASS:10",
+            "PRIORITY": "9988"
+        },
+        "TCBITS|RULE_13": {
+            "DST_IPV6_TC": "12",
+            "PACKET_ACTION": "FORWARDING-CLASS:12",
+            "PRIORITY": "9987"
+        },
+        "TCBITS|RULE_14": {
+            "DST_IPV6_TC": "13",
+            "PACKET_ACTION": "FORWARDING-CLASS:12",
+            "PRIORITY": "9986"
+        },
+        "TCBITS|RULE_15": {
+            "DST_IPV6_TC": "14",
+            "PACKET_ACTION": "FORWARDING-CLASS:14",
+            "PRIORITY": "9985"
+        },
+        "TCBITS|RULE_16": {
+            "DST_IPV6_TC": "15",
+            "PACKET_ACTION": "FORWARDING-CLASS:14",
+            "PRIORITY": "9984"
+        },
+        "TCBITS|RULE_2": {
+            "DST_IPV6_TC": "1",
+            "PACKET_ACTION": "FORWARDING-CLASS:0",
+            "PRIORITY": "9998"
+        },
+        "TCBITS|RULE_3": {
+            "DST_IPV6_TC": "2",
+            "PACKET_ACTION": "FORWARDING-CLASS:2",
+            "PRIORITY": "9997"
+        },
+        "TCBITS|RULE_4": {
+            "DST_IPV6_TC": "3",
+            "PACKET_ACTION": "FORWARDING-CLASS:2",
+            "PRIORITY": "9996"
+        },
+        "TCBITS|RULE_5": {
+            "DST_IPV6_TC": "4",
+            "PACKET_ACTION": "FORWARDING-CLASS:4",
+            "PRIORITY": "9995"
+        },
+        "TCBITS|RULE_6": {
+            "DST_IPV6_TC": "5",
+            "PACKET_ACTION": "FORWARDING-CLASS:4",
+            "PRIORITY": "9994"
+        },
+        "TCBITS|RULE_7": {
+            "DST_IPV6_TC": "6",
+            "PACKET_ACTION": "FORWARDING-CLASS:6",
+            "PRIORITY": "9993"
+        },
+        "TCBITS|RULE_8": {
+            "DST_IPV6_TC": "7",
+            "PACKET_ACTION": "FORWARDING-CLASS:6",
+            "PRIORITY": "9992"
+        },
+        "TCBITS|RULE_9": {
+            "DST_IPV6_TC": "8",
+            "PACKET_ACTION": "FORWARDING-CLASS:8",
+            "PRIORITY": "9991"
+        }
+    },
+    "ACL_TABLE": {
+        "DSCP": {
+            "policy_desc": "dscp",
+            "ports": [
+                "Ethernet33"
+            ],
+            "stage": "ingress",
+            "type": "L3"
+        },
+        "TCBITS": {
+            "policy_desc": "tcbits",
+            "ports": [
+                "Ethernet34"
+            ],
+            "stage": "ingress",
+            "type": "L3V6"
+        }
+    },
+    "BGP_NEIGHBOR": {
+        "100.1.0.2|global|Vrf1": {
+            "asn": "999",
+            "connect": "10"
+        },
+        "100.1.0.2|ipv4|Vrf1": {
+            "activate": "true"
+        },
+        "100.2.0.2|global|Vrf1": {
+            "asn": "998",
+            "connect": "10"
+        },
+        "100.2.0.2|ipv4|Vrf1": {
+            "activate": "true"
+        },
+        "2000::179|global": {
+            "asn": "100",
+            "connect": "10",
+            "extnh": "true",
+            "update_source": "2000::178"
+        },
+        "2000::179|ipv4_vpn": {
+            "activate": "true"
+        },
+        "2033::179|global": {
+            "asn": "100",
+            "connect": "10"
+        },
+        "2033::179|ipv6": {
+            "activate": "true"
+        },
+        "2044::179|global": {
+            "asn": "100",
+            "connect": "10"
+        },
+        "2044::179|ipv6": {
+            "activate": "true"
+        },
+        "3000::179|global": {
+            "asn": "100",
+            "connect": "10",
+            "extnh": "true",
+            "update_source": "3000::178"
+        },
+        "3000::179|ipv4_vpn": {
+            "activate": "true"
+        },
+        "3000::179|ipv6_vpn": {
+            "activate": "true"
+        }
+    },
+    "BGP_NETWORK": {
+        "2000::178/128|ipv6": {},
+        "3000::178/128|ipv6": {}
+    },
+    "BGP_PARAMETERS": {
+        "100|global": {
+            "bgp_router_id": "1.1.1.178",
+            "bgp_start_timer": "1",
+            "bgp_timers": "10 30"
+        },
+        "100|global|Vrf1": {
+            "bgp_router_id": "2.2.2.178",
+            "bgp_start_timer": "1",
+            "bgp_timers": "10 30"
+        },
+        "100|ipv4|Vrf1": {
+            "import_vpn": "true",
+            "rd": "2:2",
+            "rt_import": "3:3"
+        },
+        "100|ipv6|Vrf1": {
+            "import_vpn": "true",
+            "rd": "2:2",
+            "rt_import": "3:3"
+        }
+    },
+    "DEVICE_METADATA": {
+        "localhost": {
+            "asic": "cisco",
+            "hostname": "MC-59",
+            "port_form": "64x100G+32x200G+4x10G",
+            "sid_marking": "enable",
+            "type": "MetroCoreRouter"
+        }
+    },
+    "DSCP_TO_FC_MAP": {
+        "ALI": {
+            "0": "0",
+            "1": "1",
+            "2": "2",
+            "3": "3",
+            "4": "4",
+            "5": "5",
+            "6": "6",
+            "7": "7",
+            "8": "8",
+            "9": "9",
+            "10": "10",
+            "11": "11",
+            "12": "12",
+            "13": "13",
+            "14": "14",
+            "15": "15",
+            "16": "0",
+            "17": "1",
+            "18": "2",
+            "19": "3",
+            "20": "4",
+            "21": "5",
+            "22": "6",
+            "23": "7",
+            "24": "8",
+            "25": "9",
+            "26": "10",
+            "27": "11",
+            "28": "12",
+            "29": "13",
+            "30": "14",
+            "31": "15",
+            "32": "0",
+            "33": "1",
+            "34": "2",
+            "35": "3",
+            "36": "4",
+            "37": "5",
+            "38": "6",
+            "39": "7",
+            "40": "8",
+            "41": "9",
+            "42": "10",
+            "43": "11",
+            "44": "12",
+            "45": "13",
+            "46": "14",
+            "47": "15",
+            "48": "0",
+            "49": "1",
+            "50": "2",
+            "51": "3",
+            "52": "4",
+            "53": "5",
+            "54": "6",
+            "55": "7",
+            "56": "8",
+            "57": "9",
+            "58": "10",
+            "59": "11",
+            "60": "12",
+            "61": "13",
+            "62": "14",
+            "63": "15"
+        }
+    },
+    "INTERFACE": {
+        "Ethernet3|2033::178/64": {
+            "family": "IPv6",
+            "scope": "global"
+        },
+        "Ethernet4|2044::178/64": {
+            "family": "IPv6",
+            "scope": "global"
+        },
+        "Ethernet33": {
+            "vrf_name": "Vrf1"
+        },
+        "Ethernet33|100.1.0.1/24": {
+            "family": "IPv4",
+            "scope": "global"
+        },
+        "Ethernet33|2000:0:0:1::1/64": {
+            "family": "IPv6",
+            "scope": "global"
+        },
+        "Ethernet34": {
+            "vrf_name": "Vrf1"
+        },
+        "Ethernet34|100.2.0.1/24": {
+            "family": "IPv4",
+            "scope": "global"
+        },
+        "Ethernet34|2000:0:0:2::1/64": {
+            "family": "IPv6",
+            "scope": "global"
+        }
+    },
+    "LOOPBACK_INTERFACE": {
+        "Loopback1|2000::178/128": {},
+        "Loopback2|3000::178/128": {}
+    },
+    "MGMT_INTERFACE": {
+        "eth0|21.135.163.59/26": {
+            "gwaddr": "21.135.163.62"
+        }
+    },
+    "PORT": {
+        "Ethernet1": {
+            "admin_status": "up",
+            "alias": "Ethernet1"
+        },
+        "Ethernet10": {
+            "admin_status": "up",
+            "alias": "Ethernet10"
+        },
+        "Ethernet100": {
+            "admin_status": "up",
+            "alias": "Ethernet100"
+        },
+        "Ethernet101": {
+            "admin_status": "up",
+            "alias": "Ethernet101"
+        },
+        "Ethernet102": {
+            "admin_status": "up",
+            "alias": "Ethernet102"
+        },
+        "Ethernet103": {
+            "admin_status": "up",
+            "alias": "Ethernet103"
+        },
+        "Ethernet104": {
+            "admin_status": "up",
+            "alias": "Ethernet104"
+        },
+        "Ethernet105": {
+            "admin_status": "up",
+            "alias": "Ethernet105"
+        },
+        "Ethernet106": {
+            "admin_status": "up",
+            "alias": "Ethernet106"
+        },
+        "Ethernet107": {
+            "admin_status": "up",
+            "alias": "Ethernet107"
+        },
+        "Ethernet108": {
+            "admin_status": "up",
+            "alias": "Ethernet108"
+        },
+        "Ethernet109": {
+            "admin_status": "up",
+            "alias": "Ethernet109"
+        },
+        "Ethernet11": {
+            "admin_status": "up",
+            "alias": "Ethernet11"
+        },
+        "Ethernet110": {
+            "admin_status": "up",
+            "alias": "Ethernet110"
+        },
+        "Ethernet111": {
+            "admin_status": "up",
+            "alias": "Ethernet111"
+        },
+        "Ethernet112": {
+            "admin_status": "up",
+            "alias": "Ethernet112"
+        },
+        "Ethernet12": {
+            "admin_status": "up",
+            "alias": "Ethernet12"
+        },
+        "Ethernet13": {
+            "admin_status": "up",
+            "alias": "Ethernet13"
+        },
+        "Ethernet14": {
+            "admin_status": "up",
+            "alias": "Ethernet14"
+        },
+        "Ethernet15": {
+            "admin_status": "up",
+            "alias": "Ethernet15"
+        },
+        "Ethernet16": {
+            "admin_status": "up",
+            "alias": "Ethernet16"
+        },
+        "Ethernet17": {
+            "admin_status": "up",
+            "alias": "Ethernet17"
+        },
+        "Ethernet18": {
+            "admin_status": "up",
+            "alias": "Ethernet18"
+        },
+        "Ethernet19": {
+            "admin_status": "up",
+            "alias": "Ethernet19"
+        },
+        "Ethernet2": {
+            "admin_status": "up",
+            "alias": "Ethernet2"
+        },
+        "Ethernet20": {
+            "admin_status": "up",
+            "alias": "Ethernet20"
+        },
+        "Ethernet21": {
+            "admin_status": "up",
+            "alias": "Ethernet21"
+        },
+        "Ethernet22": {
+            "admin_status": "up",
+            "alias": "Ethernet22"
+        },
+        "Ethernet23": {
+            "admin_status": "up",
+            "alias": "Ethernet23"
+        },
+        "Ethernet24": {
+            "admin_status": "up",
+            "alias": "Ethernet24"
+        },
+        "Ethernet25": {
+            "admin_status": "up",
+            "alias": "Ethernet25"
+        },
+        "Ethernet26": {
+            "admin_status": "up",
+            "alias": "Ethernet26"
+        },
+        "Ethernet27": {
+            "admin_status": "up",
+            "alias": "Ethernet27"
+        },
+        "Ethernet28": {
+            "admin_status": "up",
+            "alias": "Ethernet28"
+        },
+        "Ethernet29": {
+            "admin_status": "up",
+            "alias": "Ethernet29"
+        },
+        "Ethernet3": {
+            "admin_status": "up",
+            "alias": "Ethernet3"
+        },
+        "Ethernet30": {
+            "admin_status": "up",
+            "alias": "Ethernet30"
+        },
+        "Ethernet31": {
+            "admin_status": "up",
+            "alias": "Ethernet31"
+        },
+        "Ethernet32": {
+            "admin_status": "up",
+            "alias": "Ethernet32"
+        },
+        "Ethernet33": {
+            "admin_status": "up",
+            "alias": "Ethernet33"
+        },
+        "Ethernet34": {
+            "admin_status": "up",
+            "alias": "Ethernet34"
+        },
+        "Ethernet35": {
+            "admin_status": "up",
+            "alias": "Ethernet35"
+        },
+        "Ethernet36": {
+            "admin_status": "up",
+            "alias": "Ethernet36"
+        },
+        "Ethernet37": {
+            "admin_status": "up",
+            "alias": "Ethernet37"
+        },
+        "Ethernet38": {
+            "admin_status": "up",
+            "alias": "Ethernet38"
+        },
+        "Ethernet39": {
+            "admin_status": "up",
+            "alias": "Ethernet39"
+        },
+        "Ethernet4": {
+            "admin_status": "up",
+            "alias": "Ethernet4"
+        },
+        "Ethernet40": {
+            "admin_status": "up",
+            "alias": "Ethernet40"
+        },
+        "Ethernet41": {
+            "admin_status": "up",
+            "alias": "Ethernet41"
+        },
+        "Ethernet42": {
+            "admin_status": "up",
+            "alias": "Ethernet42"
+        },
+        "Ethernet43": {
+            "admin_status": "up",
+            "alias": "Ethernet43"
+        },
+        "Ethernet44": {
+            "admin_status": "up",
+            "alias": "Ethernet44"
+        },
+        "Ethernet45": {
+            "admin_status": "up",
+            "alias": "Ethernet45"
+        },
+        "Ethernet46": {
+            "admin_status": "up",
+            "alias": "Ethernet46"
+        },
+        "Ethernet47": {
+            "admin_status": "up",
+            "alias": "Ethernet47"
+        },
+        "Ethernet48": {
+            "admin_status": "up",
+            "alias": "Ethernet48"
+        },
+        "Ethernet49": {
+            "admin_status": "up",
+            "alias": "Ethernet49"
+        },
+        "Ethernet5": {
+            "admin_status": "up",
+            "alias": "Ethernet5"
+        },
+        "Ethernet50": {
+            "admin_status": "up",
+            "alias": "Ethernet50"
+        },
+        "Ethernet51": {
+            "admin_status": "up",
+            "alias": "Ethernet51"
+        },
+        "Ethernet52": {
+            "admin_status": "up",
+            "alias": "Ethernet52"
+        },
+        "Ethernet53": {
+            "admin_status": "up",
+            "alias": "Ethernet53"
+        },
+        "Ethernet54": {
+            "admin_status": "up",
+            "alias": "Ethernet54"
+        },
+        "Ethernet55": {
+            "admin_status": "up",
+            "alias": "Ethernet55"
+        },
+        "Ethernet56": {
+            "admin_status": "up",
+            "alias": "Ethernet56"
+        },
+        "Ethernet57": {
+            "admin_status": "up",
+            "alias": "Ethernet57"
+        },
+        "Ethernet58": {
+            "admin_status": "up",
+            "alias": "Ethernet58"
+        },
+        "Ethernet59": {
+            "admin_status": "up",
+            "alias": "Ethernet59"
+        },
+        "Ethernet6": {
+            "admin_status": "up",
+            "alias": "Ethernet6"
+        },
+        "Ethernet60": {
+            "admin_status": "up",
+            "alias": "Ethernet60"
+        },
+        "Ethernet61": {
+            "admin_status": "up",
+            "alias": "Ethernet61"
+        },
+        "Ethernet62": {
+            "admin_status": "up",
+            "alias": "Ethernet62"
+        },
+        "Ethernet63": {
+            "admin_status": "up",
+            "alias": "Ethernet63"
+        },
+        "Ethernet64": {
+            "admin_status": "up",
+            "alias": "Ethernet64"
+        },
+        "Ethernet65_1": {
+            "admin_status": "up",
+            "alias": "Ethernet65_1"
+        },
+        "Ethernet65_2": {
+            "admin_status": "up",
+            "alias": "Ethernet65_2"
+        },
+        "Ethernet65_3": {
+            "admin_status": "up",
+            "alias": "Ethernet65_3"
+        },
+        "Ethernet65_4": {
+            "admin_status": "up",
+            "alias": "Ethernet65_4"
+        },
+        "Ethernet7": {
+            "admin_status": "up",
+            "alias": "Ethernet7"
+        },
+        "Ethernet8": {
+            "admin_status": "up",
+            "alias": "Ethernet8"
+        },
+        "Ethernet81": {
+            "admin_status": "up",
+            "alias": "Ethernet81"
+        },
+        "Ethernet82": {
+            "admin_status": "up",
+            "alias": "Ethernet82"
+        },
+        "Ethernet83": {
+            "admin_status": "up",
+            "alias": "Ethernet83"
+        },
+        "Ethernet84": {
+            "admin_status": "up",
+            "alias": "Ethernet84"
+        },
+        "Ethernet85": {
+            "admin_status": "up",
+            "alias": "Ethernet85"
+        },
+        "Ethernet86": {
+            "admin_status": "up",
+            "alias": "Ethernet86"
+        },
+        "Ethernet87": {
+            "admin_status": "up",
+            "alias": "Ethernet87"
+        },
+        "Ethernet88": {
+            "admin_status": "up",
+            "alias": "Ethernet88"
+        },
+        "Ethernet89": {
+            "admin_status": "up",
+            "alias": "Ethernet89"
+        },
+        "Ethernet9": {
+            "admin_status": "up",
+            "alias": "Ethernet9"
+        },
+        "Ethernet90": {
+            "admin_status": "up",
+            "alias": "Ethernet90"
+        },
+        "Ethernet91": {
+            "admin_status": "up",
+            "alias": "Ethernet91"
+        },
+        "Ethernet92": {
+            "admin_status": "up",
+            "alias": "Ethernet92"
+        },
+        "Ethernet93": {
+            "admin_status": "up",
+            "alias": "Ethernet93"
+        },
+        "Ethernet94": {
+            "admin_status": "up",
+            "alias": "Ethernet94"
+        },
+        "Ethernet95": {
+            "admin_status": "up",
+            "alias": "Ethernet95"
+        },
+        "Ethernet96": {
+            "admin_status": "up",
+            "alias": "Ethernet96"
+        },
+        "Ethernet98": {
+            "admin_status": "up",
+            "alias": "Ethernet98"
+        },
+        "Ethernet99": {
+            "admin_status": "up",
+            "alias": "Ethernet99"
+        }
+    },
+    "PORT_QOS_MAP": {
+        "Ethernet33,Ethernet34": {
+            "dscp_to_fc_map": "[DSCP_TO_FC_MAP|ALI]"
+        }
+    },
+    "SWITCH": {
+        "FDB": {
+            "fdb_aging_time": "1800",
+            "fdb_broadcast_miss_packet_action": "forward",
+            "fdb_multicast_miss_packet_action": "forward",
+            "fdb_unicast_miss_packet_action": "forward"
+        }
+    },
+    "TELEMETRY": {
+        "gnmi": {
+            "port": "8080"
+        }
+    },
+    "USER_METADATA": {
+        "admin": {
+            "groups": "sudo,docker",
+            "role": "ADMIN",
+            "secret": "$1$WFtM/P.X$vXxpA7rUt1h7TL0WfcUuF/",
+            "shell": "/bin/bash"
+        }
+    },
+    "VRF": {
+        "Vrf1": {}
+    },
+    "VRF_ALIAS": {
+    }
+}

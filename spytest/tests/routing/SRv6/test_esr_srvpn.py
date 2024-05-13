@@ -76,6 +76,8 @@ data.load_multi_vrf_config_done = False
 data.load_multi_vrf_ixia_conf_done = False
 data.load_mirror_config_done = False
 data.load_mirror_ixia_conf_done = False
+data.load_sid_remarking_config_done = False
+data.load_sid_remarking_ixia_conf_done = False
 
 def add_bmp_config_background(dut):
     st.log("config global bmp")
@@ -240,6 +242,18 @@ def esr_srvpn_func_hooks(request):
             ixia_start_all_protocols()
             st.wait(60)
             data.load_mirror_ixia_conf_done = True
+
+    if st.get_func_name(request) in ['test_srvpn_sid_remarking_base_01']:
+        st.log("esr_srvpn_func_hooks enter")
+        if data.load_sid_remarking_config_done == False:
+            load_json_config('sid_remarking_config')
+            data.load_sid_remarking_config_done = True
+        # load ixia config
+        if data.load_sid_remarking_ixia_conf_done == False:
+            ixia_load_config(ESR_SID_REMARKING_CONFIG)
+            ixia_start_all_protocols()
+            st.wait(60)
+            data.load_sid_remarking_ixia_conf_done = True
 
     yield
     pass
@@ -1694,4 +1708,41 @@ def test_srvpn_mirror_16nexthops_10():
 # 2023-03-30 06:29:20,073 T0000: INFO  [D1-MC-58] FCMD: curl http://127.0.0.1:12346/route -s | grep ipv6
 
     #  check base checkout
+    st.report_pass("test_case_passed")
+
+def check_ixia_traffic(traffic_name, expect, compare):
+    ret = ixia_start_traffic(traffic_name)
+    if not ret:
+        st.report_fail("Start traffic item {} failed".format(traffic_name))
+        return False
+    st.wait(10)
+    ret = ixia_stop_traffic(traffic_name)
+    if not ret:
+        st.report_fail("Stop traffic item {} failed".format(traffic_name))
+        return False
+    traffic_stat = ixia_get_traffic_stat(traffic_name)
+    if not traffic_stat:
+        st.report_fail("Get {} traffic stat failed {}".format(traffic_name))
+        return False
+    
+    if compare == -1 and float(traffic_stat['Loss %']) < expect:
+        return True
+    elif compare == 1 and float(traffic_stat['Loss %']) > expect:
+        return True
+    elif compare == 0 and float(traffic_stat['Loss %']) == expect:
+        return True
+    else:
+        return False
+
+
+@pytest.mark.community
+@pytest.mark.community_pass
+def test_srvpn_sid_remarking_base_01():
+    st.banner("test_srvpn_sid_remarking_base_01 begin")
+
+    if not check_ixia_traffic(TRAFFIC_SID_REMARKING_V4, 50, 0):
+        st.report_fail("traffic {} check failed".format(TRAFFIC_SID_REMARKING_V4))
+    if not check_ixia_traffic(TRAFFIC_SID_REMARKING_V6, 50, 0):
+        st.report_fail("traffic {} check failed".format(TRAFFIC_SID_REMARKING_V6))
+
     st.report_pass("test_case_passed")

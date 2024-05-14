@@ -8,7 +8,7 @@ ESR_ECMP_CONFIG = "esr_ecmp_04.ixncfg"
 ESR_MIRROR_CONFIG = "esr_mirror.ixncfg"
 ESR_1K_POLICY_CONFIG = "esr_1k_policy.ixncfg"
 ESR_2K_POLICY_CONFIG = "esr_2k_policy.ixncfg"
-
+ESR_SID_REMARKING_CONFIG = "esr_sid_remarking.ixncfg"
 
 # IXIA_PORT connected to 179
 PORT_NAME_1 = "1/1/15"
@@ -48,3 +48,7 @@ TRAFFIC_MIRROR_V6 = "TI-IPv6"
 TRAFFIC_MIRROR_ULECMP = "ul-ecmp"
 TRAFFIC_1K_TE_POLICY = "Te_policy_1k_traffic"
 TRAFFIC_2K_TE_POLICY = "Te_policy_2k_traffic"
+TRAFFIC_SID_REMARKING_V4_SUCCESS = "Traffic_SID_remarking_v4_success"
+TRAFFIC_SID_REMARKING_V4_FAIL = "Traffic_SID_remarking_v4_fail"
+TRAFFIC_SID_REMARKING_V6_SUCCESS = "Traffic_SID_remarking_v6_success"
+TRAFFIC_SID_REMARKING_V6_FAIL = "Traffic_SID_remarking_v6_fail"

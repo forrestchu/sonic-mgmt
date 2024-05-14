@@ -1740,9 +1740,13 @@ def check_ixia_traffic(traffic_name, expect, compare):
 def test_srvpn_sid_remarking_base_01():
     st.banner("test_srvpn_sid_remarking_base_01 begin")
 
-    if not check_ixia_traffic(TRAFFIC_SID_REMARKING_V4, 50, 0):
-        st.report_fail("traffic {} check failed".format(TRAFFIC_SID_REMARKING_V4))
-    if not check_ixia_traffic(TRAFFIC_SID_REMARKING_V6, 50, 0):
-        st.report_fail("traffic {} check failed".format(TRAFFIC_SID_REMARKING_V6))
+    if not check_ixia_traffic(TRAFFIC_SID_REMARKING_V4_SUCCESS, 0, 0):
+        st.report_fail("traffic {} check failed".format(TRAFFIC_SID_REMARKING_V4_SUCCESS))
+    if not check_ixia_traffic(TRAFFIC_SID_REMARKING_V6_SUCCESS, 0, 0):
+        st.report_fail("traffic {} check failed".format(TRAFFIC_SID_REMARKING_V6_SUCCESS))
+    if not check_ixia_traffic(TRAFFIC_SID_REMARKING_V4_FAIL, 100, 0):
+        st.report_fail("traffic {} check failed".format(TRAFFIC_SID_REMARKING_V4_FAIL))
+    if not check_ixia_traffic(TRAFFIC_SID_REMARKING_V6_FAIL, 100, 0):
+        st.report_fail("traffic {} check failed".format(TRAFFIC_SID_REMARKING_V6_FAIL))
 
     st.report_pass("test_case_passed")

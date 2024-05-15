@@ -1735,6 +1735,54 @@ def check_ixia_traffic(traffic_name, expect, compare):
         return False
 
 
+#
+#                      +--------------------+                   +--------------------+
+#                      |                    |                   |                    |
+#        16 devices    |                    |     Loopback1     |                    |  1 device
+# TG ================> |Vrf[1~16]           |      ipv4_vpn     | Vrf1               | <========== TG 
+#         routes       |                    | ================  |  DUT2(MC-59)       |4 kinds of traffic
+#                      |    DUT1(MC-58)     |ipv4_vpn & ipv6_vpn|                    |
+#                      |                    |     Loopback2     |                    |
+#                      |                    |                   |                    |
+#                      |                    |                   |                    |
+#                      +--------------------+                   +--------------------+
+#DUT1:
+#   1. 16 vrfs correspond to 16 tc bits or forwarding classes
+#   2. ixia distributes routes 200.[1~16].0.0/24 & 3000:0:1:1:[0~f]::/128 to Vrf[1~16] separately
+#   3. Vrf[1~16] with lsid1 fd00:201:201::/48, export vpn, rt_export is 3:3
+#   4. In order to redirect traffic with different sid into different vrf, disable sid marking on DUT1
+#   5. opcode of lsid1 is ::fff0:f[0~f]:0:0:0, with action dt46, target vrf is Vrf[1~16]
+#   6. 2 Loopback devices, both ipv4_vpn (ECMP VPN route), and only Loopback2 establishes ipv6_vpn (non-ECMP) neighbor with DUT2
+
+#DUT2:
+#   1. Vrf1 only, imports all routes from DUT1 (200.[1~16].0.0/24 & 3000:0:1:1:[0~f]::/128)
+#   2. Ethernet33 & Ethernet34 connected to ixia
+#   3. IPv4 ACL table applies to Ethernet33, matches DSCP, set FC, fc=dscp%16
+#   4. IPv6 ACL table applies to Ethernet34, matches tc bits, set FC, fc=tc_bits/2*2
+#   5. DSCP_TO_FC_MAP applies to Ethernet33 & Ethernet35, fc=dscp%16
+#   6. enable sid marking on DUT2
+
+#ixia: 4 kinds of traffic to validate if sid marking works correctly
+# +----------------------------------+------------------------------+----------------------------+--------------------------+-----------------------------------------------+
+# |           Traffic Item           |              IP              |            DSCP            |     Ethernet on DUT2     |                What to validate               |
+# |                                  |                              |                            | receives traffic from tg |                                               |
+# +==================================+==============================+============================+==========================+===============================================+
+# |                                  |       3000:0:1:1:[0~f]       |            0~63            |        Ethernet33        |           IPv6 DSCP_TO_FC_MAP to FC           |
+# |                                  +------------------------------+----------------------------+--------------------------+-----------------------------------------------+
+# | Traffic_SID_remarking_v6_success | 3000:0:1:1:[0,2,4,6,8,a,c,e] |         [1~31,0]*2         |        Ethernet34        |             IPv6 ACL TCBits to FC             |
+# |                                  |                              | i.e. [2,4,6,8,10,...,62,0] |                          | ACL has a higher priotiry than DSCP_TO_FC_MAP |
+# +----------------------------------+------------------------------+----------------------------+--------------------------+-----------------------------------------------+
+# |                                  |       3000:0:1:1:[0~f]       |           1~63,0           |        Ethernet33        |           IPv6 DSCP_TO_FC_MAP to FC           |
+# |                                  |                              |   i.e.[1,2,3,4,...,63,0]   |                          |                                               |
+# |   Traffic_SID_remarking_v6_fail  +------------------------------+----------------------------+--------------------------+-----------------------------------------------+
+# |                                  | 3000:0:1:1:[1,3,5,7,9,b,d,f] |          [0~31]*2          |        Ethernet34        |             IPv6 ACL TCBits to FC             |
+# |                                  |                              |   i.e. [0,2,4,6,8,...,62]  |                          | ACL has a higher priotiry than DSCP_TO_FC_MAP |
+# +----------------------------------+------------------------------+----------------------------+--------------------------+-----------------------------------------------+
+# | Traffic_SID_remarking_v4_success |                              |            0~63            |                          |                                               |
+# +----------------------------------+        200.[1~16].0.1        +----------------------------+  Ethernet33 & Ethernet34 |           IPv4 DSCP_TO_FC_MAP to FC           |
+# |   Traffic_SID_remarking_v4_fail  |                              |           1~63,0           |                          |              IPv4 ACL DSCP to FC              |
+# |                                  |                              |   i.e. [1,2,3,4,...,63,0]  |                          |                                               |
+# +----------------------------------+------------------------------+----------------------------+--------------------------+-----------------------------------------------+
 @pytest.mark.community
 @pytest.mark.community_pass
 def test_srvpn_sid_remarking_base_01():

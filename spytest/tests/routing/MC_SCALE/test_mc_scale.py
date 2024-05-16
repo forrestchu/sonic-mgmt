@@ -945,11 +945,14 @@ def show_debug_info():
 
     st.show(dut1, "vtysh -c 'show ip bgp vrf all summary'",skip_tmpl=True)
     st.show(dut2, "vtysh -c 'show ip bgp vrf all summary'",skip_tmpl=True)
-    # st.show(dut1, "vtysh -c 'show ip route vrf long-vrf-503'",skip_tmpl=True)
-    # st.show(dut2, "vtysh -c 'show ip route vrf long-vrf-503'",skip_tmpl=True)
-    # st.show(dut1, "vtysh -c 'show ip route vrf long-vrf-504'",skip_tmpl=True)
-    # st.show(dut2, "vtysh -c 'show ip route vrf long-vrf-504'",skip_tmpl=True)
 
+def show_drop_packet_info():
+    dut1 = data.my_dut_list[0]
+    dut2 = data.my_dut_list[1]
+    st.show(dut1, "cli -c 'no page' -c 'show smartflow flow drop counter'",skip_tmpl=False)
+    st.show(dut1, "cli -c 'no page' -c 'show smartflow drop counter'",skip_tmpl=False)
+    st.show(dut2, "cli -c 'no page' -c 'show smartflow flow drop counter'",skip_tmpl=False)
+    st.show(dut2, "cli -c 'no page' -c 'show smartflow drop counter'",skip_tmpl=False)
 
 @pytest.mark.community
 @pytest.mark.community_pass
@@ -1009,6 +1012,7 @@ def test_subintf_503_504_traffic():
     #check ecmp port
     if not tgapi.validate_tgen_traffic(traffic_details=traffic_details, mode='streamblock', comp_type='packet_count'):
         show_debug_info()
+        show_drop_packet_info()
         st.log("validate_tgen_traffic failed")
 
     traffic_vrf_503_v6_list = [data.streams['port5_to_port1_vrf_503_v6'], data.streams['port1_to_port5_vrf_503_v6']]
@@ -1051,6 +1055,7 @@ def test_subintf_503_504_traffic():
     #check ecmp port
     if not tgapi.validate_tgen_traffic(traffic_details=traffic_details, mode='streamblock', comp_type='packet_count'):
         show_debug_info()
+        show_drop_packet_info()
         st.log("validate_tgen_traffic failed")
 
     #step2: shutdown/no shutdown ecmp_503_504_dut1_dut2_portlist in vrf 504
@@ -1229,6 +1234,7 @@ def test_subintf_501_502_traffic():
     }
     #check traffic
     if not tgapi.validate_tgen_traffic(traffic_details=traffic_details, mode='streamblock', comp_type='packet_count'):
+        show_drop_packet_info()
         st.log("validate_tgen_traffic failed")
         result=1
 
@@ -1596,6 +1602,7 @@ def test_ixia_bfd_flap_in_bfd_vrf():
     }
     #check ecmp port
     if not tgapi.validate_tgen_traffic(traffic_details=traffic_details, mode='streamblock', comp_type='packet_count'):
+        show_drop_packet_info()
         st.log("validate_tgen_traffic failed")
         result=1
 
@@ -1702,6 +1709,7 @@ def test_dut_bfd_flap_in_vrf_503():
     }
     #check ecmp port
     if not tgapi.validate_tgen_traffic(traffic_details=traffic_details, mode='streamblock', comp_type='packet_count'):
+        show_drop_packet_info()
         st.log("validate_tgen_traffic failed")
         result=2
 
@@ -1729,6 +1737,7 @@ def test_dut_bfd_flap_in_vrf_503():
     }
     #check ecmp port
     if not tgapi.validate_tgen_traffic(traffic_details=traffic_details, mode='streamblock', comp_type='packet_count'):
+        show_drop_packet_info()
         st.log("validate_tgen_traffic failed")
         result=2
     
@@ -1840,6 +1849,7 @@ def test_bgp_fast_isolate_and_recover():
 
     #check ecmp port
     if not tgapi.validate_tgen_traffic(traffic_details=traffic_details, mode='streamblock', comp_type='packet_count'):
+        show_drop_packet_info()
         st.report_fail("validate_tgen_traffic failed")
     
 
@@ -1903,6 +1913,7 @@ def test_bgp_fast_isolate_and_recover():
 
     #check ecmp port
     if not tgapi.validate_tgen_traffic(traffic_details=traffic_details, mode='streamblock', comp_type='packet_count'):
+        show_drop_packet_info()
         st.report_fail("validate_tgen_traffic failed")
 
     st.report_pass("test_case_passed")

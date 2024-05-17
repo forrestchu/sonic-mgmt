@@ -10,6 +10,8 @@
 +file:qos/acl/test_acls.py
 +file:system/test_interface.py
 +file:system/test_lldp.py
++file:system/test_smartflow.py
++file:system/test_twamp_light.py
 +file:switching/test_portchannel.py
 +file:routing/VRF/test_mgmt_vrf.py
 +file:routing/MC_SCALE/test_mc_scale.py

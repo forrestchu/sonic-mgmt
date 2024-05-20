@@ -1178,6 +1178,10 @@ def test_srvpn_performance_500K():
     dut1 = dut_list[0]
     dut2 = dut_list[1]
 
+    for dut in dut_list:
+        st.config(dut, 'swssloglevel -l INFO -c orchagent', skip_error_check=True)
+        st.config(dut, 'swssloglevel -l INFO -c syncd', skip_error_check=True)
+
     route_count = 500000
 
     # 2. load TG config
@@ -1256,6 +1260,7 @@ def test_srvpn_performance_500K():
 
     # 9. stop traffic
     ixia_stop_all_traffic()
+
     st.report_pass("msg", "LoadPerf: {} rps, CovergePerf: {} rps".format(route_count / load_t, route_count / covergen_t))
 
 
@@ -1269,6 +1274,10 @@ def test_srvpn_performance_1M(collect_syslog, fname):
     dut_list = st.get_dut_names()
     dut1 = dut_list[0]
     dut2 = dut_list[1]
+
+    for dut in dut_list:
+        st.config(dut, 'swssloglevel -l INFO -c orchagent', skip_error_check=True)
+        st.config(dut, 'swssloglevel -l INFO -c syncd', skip_error_check=True)
 
     route_count = 1000000
 
@@ -1341,6 +1350,7 @@ def test_srvpn_performance_1M(collect_syslog, fname):
 
     # 9. stop traffic
     ixia_stop_all_traffic()
+
     st.report_pass("msg", "LoadPerf: {} rps, CovergePerf: {} rps".format(route_count / load_t, route_count / covergen_t))
 
 @pytest.mark.community
@@ -1353,6 +1363,9 @@ def test_srvpn_performance_2M(collect_syslog, fname):
     dut_list = st.get_dut_names()
     dut1 = dut_list[0]
     dut2 = dut_list[1]
+    for dut in dut_list:
+        st.config(dut, 'swssloglevel -l INFO -c orchagent', skip_error_check=True)
+        st.config(dut, 'swssloglevel -l INFO -c syncd', skip_error_check=True)
 
     route_count = 2000000
 
@@ -1425,6 +1438,7 @@ def test_srvpn_performance_2M(collect_syslog, fname):
 
     # 9. stop traffic
     ixia_stop_all_traffic()
+
     st.report_pass("msg", "LoadPerf: {} rps, CovergePerf: {} rps".format(route_count / load_t, route_count / covergen_t))
 
 #

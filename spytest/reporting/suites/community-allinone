@@ -24,7 +24,7 @@
 +file:macsec/test_macsec_reboot.py
 +file:qos/test_cos.py
 +file:routing/SRv6/test_esr_srvpn.py
-#+file:routing/SRv6/test_esr_sr_te.py
++file:routing/SRv6/test_esr_srte_policy.py
 +file:routing/SBFD/test_esr_sbfd.py
 
 # test cases requiring link state propagation

@@ -696,6 +696,41 @@ def check_dut_intf_tx_traffic_counters(dut, portlist, expect_val):
     st.log("All ECMP paths are utilized")
     return True
 
+def check_mult_dut_intf_tx_traffic_counters(dut, portlist, expect_val):
+    total_tx_bps = 0
+    papi.clear_interface_counters(dut)
+    st.wait(5)
+    output = papi.get_interface_counters_all(dut)
+    retry = 0
+    while len(output) == 0 and retry < 10:
+        output = papi.get_interface_counters_all(dut)
+        retry += 1
+        st.wait(2)
+    if retry == 10:
+        st.error("Error: Dut port stats")
+        return False
+
+    tx_bps_list = []
+    for port in portlist:
+        tx_bps = intf_traffic_stats(filter_and_select(output, ["tx_bps"], {'iface': port}))
+        tx_bps_list.append(tx_bps)
+        total_tx_bps += tx_bps
+
+    st.log("Inter Dut port stats  tx_ok counter value on DUT Egress ports : {} expect: {}".format(tx_bps_list,expect_val))
+
+    if total_tx_bps == 0:
+        st.error("Error:Inter Dut port stats tx_ok counter value on DUT Egress port: {}".format(tx_bps))
+        return False
+
+    deviation = abs(expect_val - total_tx_bps)
+    percent = (float(deviation)/expect_val)*100
+    if percent > 10:
+        st.log("Inter Dut port stats tx_ok counter value on DUT Egress ports {}".format(tx_bps))
+        return False
+
+    st.log("All ECMP paths are utilized")
+    return True
+
 def intf_traffic_stats_percentage(entry_tx):
     for i in entry_tx:
         p_txmt = i['tx_util']

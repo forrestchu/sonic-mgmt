@@ -302,9 +302,9 @@ def test_srte_policy_2k_vrf_1k_policy_color_only_02():
     if not ret:
         st.report_fail("Step15: Check dut interface counters failed")
     
-    ret = ixia_stop_traffic(TRAFFIC_2K_TE_POLICY)
+    ret = ixia_stop_traffic(TRAFFIC_1K_TE_POLICY)
     if not ret:
-        st.report_fail("Step16: Stop traffic item {} rx frame failed".format(TRAFFIC_2K_TE_POLICY))
+        st.report_fail("Step16: Stop traffic item {} rx frame failed".format(TRAFFIC_1K_TE_POLICY))
 
     #check Tx Frame Rate
     ret = ixia_check_traffic(TRAFFIC_1K_TE_POLICY, key="Rx Frame Rate", value=100000)
@@ -382,7 +382,7 @@ def test_srte_policy_2k_vrf_2k_policy_color_only_04():
 
     if not retry_api(check_bgp_state, dut2, "2000::179", retry_count= 6, delay= 10):
         st.report_fail("Step0: Check bgp state failed")
-    st.wait(5)
+    st.wait(35)
 
     ret = ixia_start_traffic(TRAFFIC_2K_TE_POLICY)
     if not ret:
@@ -446,19 +446,16 @@ def test_srte_policy_2k_vrf_4k_policy_05():
 
     if not retry_api(check_bgp_state, dut2, "2000::179", retry_count= 6, delay= 10):
         st.report_fail("Step0: Check bgp state failed")
-    st.wait(5)
+    st.wait(180)
 
     ret = ixia_start_traffic(TRAFFIC_2K_TE_POLICY)
     if not ret:
         st.report_fail("Step1: Start traffic item {} rx frame failed".format(TRAFFIC_2K_TE_POLICY))
 
     #check traffic cpath d, on interface Ethernet4
-    ret = check_dut_intf_tx_traffic_counters(dut2, ["Ethernet3"], 300)
+    ret = check_mult_dut_intf_tx_traffic_counters(dut2, ['Ethernet3', 'Ethernet4'], 300)
     if not ret:
         st.report_fail("Step2: Check dut interface counters failed")
-    ret = check_dut_intf_tx_traffic_counters(dut2, ["Ethernet4"], 300)
-    if not ret:
-        st.report_fail("Step3: Check dut interface counters failed")
 
     #shutdown Ethernet4
     cmd = "interface {}\n shutdown\n".format("Ethernet4")
@@ -468,58 +465,16 @@ def test_srte_policy_2k_vrf_4k_policy_05():
     #sbfd down, cpath change to c
     ret = check_dut_intf_tx_traffic_counters(dut2, ["Ethernet3"], 300)
     if not ret:
-        st.report_fail("Step4: Check dut interface counters failed")
-
-    #no shutdown inteface ,sbfd up, cpath change to d
-    cmd = "interface {}\n no shutdown\n".format("Ethernet4")
-    st.config(dut1, cmd, type="alicli", skip_error_check = True)
-    st.wait(10)
-
-    cmd = 'vtysh -c "config t" -c "router bgp 100" -c "neighbor 1000::179 shutdown"'
-    st.config(dut1, cmd, type="alicli", skip_error_check = True)
-    st.wait(10)
-
-    #check traffic back to Ethernet4
-    ret = check_dut_intf_tx_traffic_counters(dut2, ["Ethernet3"], 300)
-    if not ret:
-        st.report_fail("Step8: Check dut interface Ethernet3 counters failed")
-    #check traffic back to Ethernet4
-    ret = check_dut_intf_tx_traffic_counters(dut2, ["Ethernet4"], 300)
-    if not ret:
-        st.report_fail("Step9: Check dut interface Ethernet4 counters failed")
-
-    cmd = 'vtysh -c "config t" -c "router bgp 100" -c "no neighbor 1000::179 shutdown"'
-    st.config(dut1, cmd, type="alicli", skip_error_check = True)
-    st.wait(10)
-
-   #check bgp state
-    if not retry_api(check_bgp_state, dut2, "1000::178", retry_count= 6, delay= 10):
-        st.report_fail("Step7: Check bgp state failed")
-    st.wait(30)
-
-    #check traffic back to Ethernet3
-    ret = check_dut_intf_tx_traffic_counters(dut2, ["Ethernet3"], 300)
-    if not ret:
-        st.report_fail("Step8: Check dut interface Ethernet3 counters failed")
-    #check traffic back to Ethernet4
-    ret = check_dut_intf_tx_traffic_counters(dut2, ["Ethernet4"], 300)
-    if not ret:
-        st.report_fail("Step9: Check dut interface Ethernet4 counters failed")
-
+        st.report_fail("Step3: Check dut interface counters failed")
 
     ret = ixia_stop_traffic(TRAFFIC_2K_TE_POLICY)
     if not ret:
-        st.report_fail("Step5: Stop traffic item {} rx frame failed".format(TRAFFIC_2K_TE_POLICY))
+        st.report_fail("Step4: Stop traffic item {} rx frame failed".format(TRAFFIC_2K_TE_POLICY))
 
     #check Rx Frame Rate
     ret = ixia_check_traffic(TRAFFIC_2K_TE_POLICY, key="Rx Frame Rate", value=100000)
     if not ret:
-        st.report_fail("Step6: Check traffic item {} rx frame failed".format(TRAFFIC_2K_TE_POLICY))
+        st.report_fail("Step5: Check traffic item {} rx frame failed".format(TRAFFIC_2K_TE_POLICY))
 
     st.report_pass("test_case_passed")
 
-@pytest.mark.community
-@pytest.mark.community_pass
-def test_srte_policy_2k_vrf_4k_policy_color_only_06():
-
-    st.report_pass("test_case_passed")

@@ -1633,12 +1633,18 @@ def test_srvpn_mirror_config_bgp_flap_07():
     st.banner("test_srvpn_mirror_config_bgp_flap_07 begin")
 
     # flap
+    TOPOLOGY = "Topology 2"
+    DEVICE_GROUP = "Device Group 2"
+    ETHERNET = "Ethernet 2"
+    IPV4_NAME = "IPv4 1"
+    BGP_PEER_NAME = "BGP Peer 1"
+
     show_hw_route_count(dut1)
     show_hw_route_count(dut2)
     st.log("start flap")
-    ixia_config_bgp_flapping(True)
+    ixia_config_bgp_flapping(TOPOLOGY, DEVICE_GROUP, ETHERNET, IPV4_NAME, BGP_PEER_NAME, True)
     st.wait(20)
-    ixia_config_bgp_flapping(False)
+    ixia_config_bgp_flapping(TOPOLOGY, DEVICE_GROUP, ETHERNET, IPV4_NAME, BGP_PEER_NAME, False)
     st.log("flap finish")
     show_hw_route_count(dut1)
     show_hw_route_count(dut2)

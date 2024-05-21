@@ -20,7 +20,7 @@ data.load_1k_policy_ixia_conf_done = False
 data.dut1_load_2k_policy_config_done = False
 data.load_2k_policy_ixia_conf_done = False
 data.test_func_name = ['test_srte_policy_2k_vrf_2k_policy_03', 'test_srte_policy_2k_vrf_2k_policy_color_only_04',
-                       'test_srte_policy_2k_vrf_4k_policy_05', 'test_srte_policy_2k_vrf_4k_policy_color_only_06']
+                       'test_srte_policy_2k_vrf_4k_policy_05', 'test_srte_policy_2k_vrf_4k_policy_falp_06']
 
 
 @pytest.fixture(scope="module", autouse=True)
@@ -40,11 +40,7 @@ def esr_srte_policy_func_hooks(request):
     st.log("esr_srte_policy_func_hooks enter {}".format(func_name))
     if func_name in data.test_func_name:
         st.log("esr_srte_policy_func_hooks enter {}".format(func_name))
-        if data.dut1_load_2k_policy_config_done == False:
-            double_dut_load_config("2k_config", data.dut2_config[func_name])
-            data.dut1_load_2k_policy_config_done = True
-        else:
-            one_dut_load_config(dut2, data.dut2_config[func_name])
+        double_dut_load_config("2k_config", data.dut2_config[func_name])
 
         if data.load_2k_policy_ixia_conf_done == False:
             ixia_load_config(ESR_2K_POLICY_CONFIG)
@@ -93,9 +89,13 @@ def load_config(duts, filesuffix1, filesuffix2):
 def double_dut_load_config(filesuffix1, filesuffix2):
     load_config([dut1, dut2], filesuffix1, filesuffix2)
 
-def one_dut_load_config(dut, filesuffix):
-    load_config([dut], filesuffix)
-
+'''
+1. Dut1/Dut2 config 1k vrfs and 1k policy 
+2. Each policy has 4 different priority cpaths
+3. Each policy has a sbfd to detect
+4. Shutdown/no shutdown interface on Dut1, sbfd flap
+5. Check traffic
+'''
 @pytest.mark.community
 @pytest.mark.community_pass
 def test_srte_policy_2k_vrf_1k_policy_01():
@@ -165,6 +165,13 @@ def test_srte_policy_2k_vrf_1k_policy_01():
 
     st.report_pass("test_case_passed")
 
+'''
+1. Dut1/Dut2 config 1k vrfs and 1k color only 
+2. Each policy has 4 different priority cpaths
+3. Each policy has a sbfd to detect
+4. Shutdown/no shutdown interface on Dut1, sbfd flap
+5. Check traffic
+'''
 @pytest.mark.community
 @pytest.mark.community_pass
 def test_srte_policy_2k_vrf_1k_policy_color_only_02():
@@ -312,6 +319,13 @@ def test_srte_policy_2k_vrf_1k_policy_color_only_02():
         st.report_fail("Step17: Check traffic item {} rx frame failed".format(TRAFFIC_1K_TE_POLICY))
     st.report_pass("test_case_passed")
 
+'''
+1. Dut1/Dut2 config 2k vrfs and 2k policy 
+2. Each policy has 2 different priority cpaths
+3. Each policy has a sbfd to detect
+4. Shutdown/no shutdown interface on Dut1, sbfd flap
+5. Check traffic
+'''
 @pytest.mark.community
 @pytest.mark.community_pass
 def test_srte_policy_2k_vrf_2k_policy_03():
@@ -323,7 +337,7 @@ def test_srte_policy_2k_vrf_2k_policy_03():
     ret = ixia_start_traffic(TRAFFIC_2K_TE_POLICY)
     if not ret:
         st.report_fail("Step1: Start traffic item {} rx frame failed".format(TRAFFIC_2K_TE_POLICY))
-
+    st.wait(30)
     #check traffic cpath d, on interface Ethernet4
     ret = check_dut_intf_tx_traffic_counters(dut2, ["Ethernet4"], 300)
     if not ret:
@@ -332,7 +346,7 @@ def test_srte_policy_2k_vrf_2k_policy_03():
     #shutdown Ethernet4
     cmd = "interface {}\n shutdown\n".format("Ethernet4")
     st.config(dut1, cmd, type="alicli", skip_error_check = True)
-    st.wait(10)
+    st.wait(20)
 
     #sbfd down, cpath change to c
     ret = check_dut_intf_tx_traffic_counters(dut2, ["Ethernet3"], 300)
@@ -345,7 +359,7 @@ def test_srte_policy_2k_vrf_2k_policy_03():
     st.wait(10)
 
     #check bgp state
-    if not retry_api(check_bgp_state, dut2, "2000::179", retry_count= 6, delay= 10):
+    if not retry_api(check_bgp_state, dut2, "2044::179", retry_count= 6, delay= 10):
         st.report_fail("Step4: Check bgp state failed")
     st.wait(10)
 
@@ -364,7 +378,7 @@ def test_srte_policy_2k_vrf_2k_policy_03():
     ret = check_dut_intf_tx_traffic_counters(dut2, ["Ethernet4"], 300)
     if not ret:
         st.report_fail("Step6: Check dut interface counters failed")
-
+    st.wait(10)
     ret = ixia_stop_traffic(TRAFFIC_2K_TE_POLICY)
     if not ret:
         st.report_fail("Step7: Stop traffic item {} rx frame failed".format(TRAFFIC_2K_TE_POLICY))
@@ -376,18 +390,25 @@ def test_srte_policy_2k_vrf_2k_policy_03():
 
     st.report_pass("test_case_passed")
 
+'''
+1. Dut1/Dut2 config 2k vrfs and 2k color only 
+2. Each policy has 2 different priority cpaths
+3. Each policy has a sbfd to detect
+4. Shutdown/no shutdown interface on Dut1, sbfd flap
+5. Check traffic
+'''
 @pytest.mark.community
 @pytest.mark.community_pass
 def test_srte_policy_2k_vrf_2k_policy_color_only_04():
 
     if not retry_api(check_bgp_state, dut2, "2000::179", retry_count= 6, delay= 10):
         st.report_fail("Step0: Check bgp state failed")
-    st.wait(35)
+    st.wait(5)
 
     ret = ixia_start_traffic(TRAFFIC_2K_TE_POLICY)
     if not ret:
         st.report_fail("Step1: Start traffic item {} rx frame failed".format(TRAFFIC_2K_TE_POLICY))
-
+    st.wait(30)
     #check traffic cpath d, on interface Ethernet4
     ret = check_dut_intf_tx_traffic_counters(dut2, ["Ethernet4"], 300)
     if not ret:
@@ -440,6 +461,13 @@ def test_srte_policy_2k_vrf_2k_policy_color_only_04():
 
     st.report_pass("test_case_passed")
 
+'''
+1. Dut1/Dut2 config 2k vrfs and 4k policy 
+2. Each policy has one cpath
+3. Each policy has a sbfd to detect
+4. Shutdown/no shutdown interface on Dut1, sbfd flap
+5. Check traffic
+'''
 @pytest.mark.community
 @pytest.mark.community_pass
 def test_srte_policy_2k_vrf_4k_policy_05():
@@ -451,7 +479,7 @@ def test_srte_policy_2k_vrf_4k_policy_05():
     ret = ixia_start_traffic(TRAFFIC_2K_TE_POLICY)
     if not ret:
         st.report_fail("Step1: Start traffic item {} rx frame failed".format(TRAFFIC_2K_TE_POLICY))
-
+    st.wait(30)
     #check traffic cpath d, on interface Ethernet4
     ret = check_mult_dut_intf_tx_traffic_counters(dut2, ['Ethernet3', 'Ethernet4'], 300)
     if not ret:
@@ -478,3 +506,43 @@ def test_srte_policy_2k_vrf_4k_policy_05():
 
     st.report_pass("test_case_passed")
 
+'''
+1. Dut1/Dut2 config 2k vrfs and 4k color only 
+2. Each policy has one cpath
+3. Each policy has a sbfd to detect
+4. bgp flap
+5. Check traffic
+'''
+@pytest.mark.community
+@pytest.mark.community_pass
+def test_srte_policy_2k_vrf_4k_policy_falp_06():
+    TOPOLOGY = "Topology 1"
+    DEVICE_GROUP = "Device Group 1"
+    ETHERNET = "Ethernet 1"
+    IPV4_NAME = "IPv4 1"
+    BGP_PEER_NAME = "BGP Peer 1"
+
+    if not retry_api(check_bgp_state, dut2, "2000::179", retry_count= 6, delay= 10):
+        st.report_fail("Step0: Check bgp state failed")
+    st.wait(180)
+
+    ret = ixia_check_traffic(TRAFFIC_2K_TE_POLICY, key="Rx Frame Rate", value=100000)
+    if not ret:
+        st.report_fail("Step1: Check traffic item {} rx frame failed".format(TRAFFIC_2K_TE_POLICY))
+    st.wait(30)
+    show_hw_route_count(dut1)
+    show_hw_route_count(dut2)
+
+    st.log("start flap")
+    ixia_config_bgp_flapping(TOPOLOGY, DEVICE_GROUP, ETHERNET, IPV4_NAME, BGP_PEER_NAME, True)
+    st.wait(20)
+    ixia_config_bgp_flapping(TOPOLOGY, DEVICE_GROUP, ETHERNET, IPV4_NAME, BGP_PEER_NAME, False)
+    st.wait(180)
+    show_hw_route_count(dut1)
+    show_hw_route_count(dut2)
+
+    ret = ixia_check_traffic(TRAFFIC_2K_TE_POLICY, key="Rx Frame Rate", value=100000)
+    if not ret:
+        st.report_fail("Step2: Check traffic item {} rx frame failed".format(TRAFFIC_2K_TE_POLICY))
+
+    st.report_pass("test_case_passed")

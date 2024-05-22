@@ -26,6 +26,7 @@
 +file:routing/SRv6/test_esr_srvpn.py
 +file:routing/SRv6/test_esr_srte_policy.py
 +file:routing/SBFD/test_esr_sbfd.py
++file:routing/SBFD/test_esr_sbfd_bfdname.py
 
 # test cases requiring link state propagation
 -test:test_ft_cos_tc_queue_map

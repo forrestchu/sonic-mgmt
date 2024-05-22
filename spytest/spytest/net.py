@@ -1560,7 +1560,7 @@ class Net(object):
                 msg = "Command '{}' failed to give prompt during module config, recovered using CTRL+C".format(cmd)
                 self.wa.report_config_fail("module_config_failed", msg)
             elif self.wa.session_init_completed:
-                self.wa.report_fail("command_failed_recovered_using_ctrlc", cmd)
+                self.dut_log("command_failed_recovered_using_ctrlc", cmd)
             else:
                 msg = "Command '{}' failed to give prompt recovered using CTRL+C".format(cmd)
                 self.dut_log(devname, msg, lvl=logging.WARNING)

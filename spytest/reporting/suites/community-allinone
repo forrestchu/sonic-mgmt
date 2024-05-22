@@ -52,6 +52,10 @@
 -test:test_srvpn_performance_1M
 # test cases for traffic verification with Ruijie
 -test:test_subintf_501_502_traffic
+-test:test_srte_policy_2k_vrf_1k_policy_color_only_02
+-test:test_srte_policy_2k_vrf_2k_policy_color_only_04
+-test:test_srte_policy_2k_vrf_4k_policy_05
+-test:test_srte_policy_2k_vrf_4k_policy_falp_06
 
 #+args:--skip-init-config
 #+args:--skip-load-config base

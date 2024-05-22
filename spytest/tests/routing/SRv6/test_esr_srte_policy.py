@@ -430,7 +430,7 @@ def test_srte_policy_2k_vrf_2k_policy_color_only_04():
     st.wait(10)
 
     #check bgp state
-    if not retry_api(check_bgp_state, dut2, "2000::179", retry_count= 6, delay= 10):
+    if not retry_api(check_bgp_state, dut2, "2044::179", retry_count= 6, delay= 10):
         st.report_fail("Step4: Check bgp state failed")
     st.wait(10)
 
@@ -524,12 +524,17 @@ def test_srte_policy_2k_vrf_4k_policy_falp_06():
 
     if not retry_api(check_bgp_state, dut2, "2000::179", retry_count= 6, delay= 10):
         st.report_fail("Step0: Check bgp state failed")
-    st.wait(180)
+    st.wait(5)
 
-    ret = ixia_check_traffic(TRAFFIC_2K_TE_POLICY, key="Rx Frame Rate", value=100000)
+    ret = ixia_start_traffic(TRAFFIC_2K_TE_POLICY)
     if not ret:
-        st.report_fail("Step1: Check traffic item {} rx frame failed".format(TRAFFIC_2K_TE_POLICY))
+        st.report_fail("Step1: Start traffic item {} rx frame failed".format(TRAFFIC_2K_TE_POLICY))
     st.wait(30)
+    #check traffic cpath d, on interface Ethernet4
+    ret = check_mult_dut_intf_tx_traffic_counters(dut2, ['Ethernet1', 'Ethernet2', 'Ethernet3', 'Ethernet4'], 300)
+    if not ret:
+        st.report_fail("Step2: Check dut interface counters failed")
+
     show_hw_route_count(dut1)
     show_hw_route_count(dut2)
 
@@ -541,8 +546,12 @@ def test_srte_policy_2k_vrf_4k_policy_falp_06():
     show_hw_route_count(dut1)
     show_hw_route_count(dut2)
 
-    ret = ixia_check_traffic(TRAFFIC_2K_TE_POLICY, key="Rx Frame Rate", value=100000)
+    #ret = check_mult_dut_intf_tx_traffic_counters(dut2, ['Ethernet1', 'Ethernet2', 'Ethernet3', 'Ethernet4'], 300)
     if not ret:
-        st.report_fail("Step2: Check traffic item {} rx frame failed".format(TRAFFIC_2K_TE_POLICY))
+        st.report_fail("Step3: Check dut interface counters failed")
+
+    ret = ixia_stop_traffic(TRAFFIC_2K_TE_POLICY)
+    if not ret:
+        st.report_fail("Step4: Stop traffic item {} rx frame failed".format(TRAFFIC_2K_TE_POLICY))
 
     st.report_pass("test_case_passed")

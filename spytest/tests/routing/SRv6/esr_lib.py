@@ -725,7 +725,7 @@ def check_mult_dut_intf_tx_traffic_counters(dut, portlist, expect_val):
     deviation = abs(expect_val - total_tx_bps)
     percent = (float(deviation)/expect_val)*100
     if percent > 10:
-        st.log("Inter Dut port stats tx_ok counter value on DUT Egress ports {}".format(tx_bps))
+        st.log("Inter Dut port stats tx_ok counter value on DUT Egress ports {}".format(total_tx_bps))
         return False
 
     st.log("All ECMP paths are utilized")

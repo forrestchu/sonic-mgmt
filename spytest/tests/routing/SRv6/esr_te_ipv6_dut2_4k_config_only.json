@@ -32028,7 +32028,7 @@
             "update_source": "2000::178"
         }, 
         "2000::179|ipv4_vpn": {
-            "activate": "true",
+            "activate": "false",
             "route_map_out": "as-map"
         },
         "2000::179|ipv6_vpn": {

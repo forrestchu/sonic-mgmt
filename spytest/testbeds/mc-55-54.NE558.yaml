@@ -28,7 +28,7 @@ devices:
     ixia-01:
         device_type: TGEN
         properties: {type: ixia, version: 9.10, 
-                     ip: 21.135.163.53, ix_server: 10.137.91.199, ix_port: 8023, ix_rest_port: 11009, params: def_tg}
+                     ip: 21.135.163.53, ix_server: 10.137.91.199, ix_port: 8025, ix_rest_port: 11009, params: def_tg}
 
 topology:
     MC-55:
@@ -46,6 +46,6 @@ topology:
             Ethernet3: {EndDevice: MC-55, EndPort: Ethernet3, params: def_link}
             Ethernet4: {EndDevice: MC-55, EndPort: Ethernet4, params: def_link}
             Ethernet7: {EndDevice: ixia-01, EndPort: 1/41, params: def_tg_link}
-            Ethernet8: {EndDevice: ixia-01, EndPort: 1/42, params: def_tg_link}
+            # Ethernet8: {EndDevice: ixia-01, EndPort: 1/42, params: def_tg_link}
 
 

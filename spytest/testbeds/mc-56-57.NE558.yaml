@@ -27,7 +27,8 @@ devices:
         properties: {config: default, build: default, services: default, params: def_dut, speed: default}
     ixia-01:
         device_type: TGEN
-        properties: {type: ixia, version: 9.10, ip: 21.135.163.53, ix_server: 10.137.91.199, params: def_tg}
+        properties: {type: ixia, version: 9.10, 
+                     ip: 21.135.163.53, ix_server: 10.137.91.199, ix_port: 8025, ix_rest_port: 11009, params: def_tg}
 
 topology:
     MC-56:

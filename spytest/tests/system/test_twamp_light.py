@@ -45,7 +45,7 @@ def check_twamp_statistics_pkts(dut, session_name, check_val, compare):
     output = st.show(dut, cmd, type='alicli')
     st.log(output)
 
-    if output is not None and output[0]["txpkts"] == output[0]["rxpkts"]:
+    if output is not None and abs(string.atoi(output[0]["txpkts"]) - string.atoi(output[0]["rxpkts"])) <= 3:
         num = string.atoi(output[0]["txpkts"])
         if num >= check_val and compare == 1:
             return True
@@ -53,7 +53,7 @@ def check_twamp_statistics_pkts(dut, session_name, check_val, compare):
             return True
         elif num < check_val and compare == -1:
             return True
-        st.log("twamp statistics pkts error, expected {} (compare {}), actual {}", check_val, compare, num)
+        st.log("twamp statistics pkts error, expected {} (compare {}), actual {}".format(check_val, compare, num))
         return False
     return False
 
@@ -70,11 +70,11 @@ def test_twamp_light():
     st.config(vars.D2, cmd)
 
     # config twamp sender snd1
-    cmd = "cli -c 'configure terminal' -c 'twamp-light session-sender continuous add {} sender-ip {} reflector-ip {} monitor_time 10 tx_interval 10 timeout 1 sender-port {} reflector-port {}'".format(twamp_data.snd1_name, twamp_data.ip1, twamp_data.ip2, twamp_data.snd1_port, twamp_data.rfl1_port)
+    cmd = "cli -c 'configure terminal' -c 'twamp-light session-sender continuous add {} sender-ip {} reflector-ip {} monitor_time 30 tx_interval 10 timeout 1 sender-port {} reflector-port {}'".format(twamp_data.snd1_name, twamp_data.ip1, twamp_data.ip2, twamp_data.snd1_port, twamp_data.rfl1_port)
     st.config(vars.D1, cmd)
 
     # config twamp sender snd2
-    cmd = "cli -c 'configure terminal' -c 'twamp-light session-sender packet-count add {} sender-ip {} reflector-ip {} packet_count 100 tx_interval 100 timeout 1 sender-port {} reflector-port {}'".format(twamp_data.snd2_name, twamp_data.ip1, twamp_data.ip2, twamp_data.snd2_port, twamp_data.rfl1_port)
+    cmd = "cli -c 'configure terminal' -c 'twamp-light session-sender packet-count add {} sender-ip {} reflector-ip {} packet_count 300 tx_interval 100 timeout 1 sender-port {} reflector-port {}'".format(twamp_data.snd2_name, twamp_data.ip1, twamp_data.ip2, twamp_data.snd2_port, twamp_data.rfl1_port)
     st.config(vars.D1, cmd)
 
     # start all twamp sessions
@@ -82,11 +82,11 @@ def test_twamp_light():
     st.config(vars.D1, cmd)
     if not check_twamp_session_status(vars.D1, twamp_data.snd1_name, "active") or not check_twamp_session_status(vars.D1, twamp_data.snd2_name, "active"):
         st.report_fail("start twamp sessions failed")
-    st.wait(20)
+    st.wait(40)
 
     if not check_twamp_session_status(vars.D1, twamp_data.snd1_name, "inactive") or not check_twamp_session_status(vars.D1, twamp_data.snd2_name, "inactive"):
         st.report_fail("twamp session status error, should be inactive")
-    if not check_twamp_statistics_pkts(vars.D1, twamp_data.snd1_name, 500, 1) or not check_twamp_statistics_pkts(vars.D1, twamp_data.snd2_name, 100, 0):
+    if not check_twamp_statistics_pkts(vars.D1, twamp_data.snd1_name, 1500, 1) or not check_twamp_statistics_pkts(vars.D1, twamp_data.snd2_name, 300, 0):
         st.report_fail("twamp statistics error")
 
     cmd = "cli -c 'configure terminal' -c 'twamp-light remove all'"

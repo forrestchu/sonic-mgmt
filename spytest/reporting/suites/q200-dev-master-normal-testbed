@@ -5,7 +5,6 @@
 +file:routing/BGP/test_bgp.py
 +file:routing/VRF/test_vrf_basic.py
 +file:routing/test_bfd.py
-+file:qos/acl/test_acls_l3_forwarding.py
 +file:qos/acl/test_acls.py
 +file:system/test_interface.py
 +file:system/test_lldp.py

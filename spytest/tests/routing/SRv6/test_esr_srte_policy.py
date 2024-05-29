@@ -16,9 +16,9 @@ from ixia_helper import *
 dut1 = 'MC-58'
 dut2 = 'MC-59'
 data.my_dut_list = [dut1, dut2]
-data.load_1k_policy_ixia_conf_done = False
+data.load_policy_ixia_conf_done = False
+data.dut1_load_1k_policy_config_done = False
 data.dut1_load_2k_policy_config_done = False
-data.load_2k_policy_ixia_conf_done = False
 data.test_func_name = ['test_srte_policy_2k_vrf_2k_policy_03', 'test_srte_policy_2k_vrf_2k_policy_color_only_04',
                        'test_srte_policy_2k_vrf_4k_policy_05', 'test_srte_policy_2k_vrf_4k_policy_falp_06']
 
@@ -38,26 +38,12 @@ def esr_srte_policy_module_hooks(request):
 def esr_srte_policy_func_hooks(request):
     func_name = st.get_func_name(request)
     st.log("esr_srte_policy_func_hooks enter {}".format(func_name))
-    if func_name in data.test_func_name:
-        st.log("esr_srte_policy_func_hooks enter {}".format(func_name))
-        double_dut_load_config("2k_config", data.dut2_config[func_name])
 
-        if data.load_2k_policy_ixia_conf_done == False:
-            ixia_load_config(ESR_2K_POLICY_CONFIG)
-            ixia_start_all_protocols()
-            st.wait(60)
-            data.load_2k_policy_ixia_conf_done = True
-    else:
-        if func_name == "test_srte_policy_2k_vrf_1k_policy_01":
-            double_dut_load_config("1k_config", "1k_config")
-        else:
-            double_dut_load_config("1k_config", "1k_config_only")
-
-        if data.load_1k_policy_ixia_conf_done == False:
-            ixia_load_config(ESR_1K_POLICY_CONFIG)
-            ixia_start_all_protocols()
-            st.wait(60)
-            data.load_1k_policy_ixia_conf_done = True
+    if data.load_policy_ixia_conf_done == False:
+        ixia_load_config(ESR_2K_POLICY_CONFIG)
+        ixia_start_all_protocols()
+        st.wait(60)
+        data.load_policy_ixia_conf_done = True
 
     yield
     pass
@@ -99,6 +85,11 @@ def double_dut_load_config(filesuffix1, filesuffix2):
 @pytest.mark.community
 @pytest.mark.community_pass
 def test_srte_policy_2k_vrf_1k_policy_01():
+
+    if data.dut1_load_1k_policy_config_done == False:
+        st.log("esr_srte_policy_func_hooks enter test_srte_policy_2k_vrf_1k_policy_01")
+        double_dut_load_config("1k_config", "1k_config")
+        data.dut1_load_2k_policy_config_done = False
 
     if not retry_api(check_bgp_state, dut2, "2000::179", retry_count= 6, delay= 10):
         st.report_fail("Step0: Check bgp state failed")
@@ -163,6 +154,10 @@ def test_srte_policy_2k_vrf_1k_policy_01():
     if not ret:
         st.report_fail("Step8: Check traffic item {} rx frame failed".format(TRAFFIC_1K_TE_POLICY))
 
+    ret = ixia_stop_traffic(TRAFFIC_1K_TE_POLICY)
+    if not ret:
+        st.report_fail("Step9: Stop traffic item {} rx frame failed".format(TRAFFIC_1K_TE_POLICY))
+
     st.report_pass("test_case_passed")
 
 '''
@@ -176,7 +171,20 @@ def test_srte_policy_2k_vrf_1k_policy_01():
 @pytest.mark.community_pass
 def test_srte_policy_2k_vrf_1k_policy_color_only_02():
 
-    if not retry_api(check_bgp_state, dut2, "2000::179", retry_count= 6, delay= 10):
+    if data.dut1_load_1k_policy_config_done == False:
+        st.log("esr_srte_policy_func_hooks enter test_srte_policy_2k_vrf_1k_policy_color_only_02")
+        double_dut_load_config("1k_config", "1k_config")
+        data.dut1_load_2k_policy_config_done = False
+
+    del_neighbor = 'vtysh -c "configure terminal" -c "router bgp 100" -c "address-family ipv4 vpn" -c "no neighbor 2000::179 activate"'
+    st.config(dut1, del_neighbor)
+    st.wait(5)
+
+    add_neighbor = 'vtysh -c "configure terminal" -c "router bgp 100" -c "address-family ipv4 vpn" -c "neighbor 1000::179 activate"'
+    st.config(dut1, add_neighbor)
+    st.wait(30)
+
+    if not retry_api(check_bgp_state, dut2, "1000::179", retry_count= 6, delay= 10):
         st.report_fail("Step0: Check bgp state failed")
     st.wait(5)
 
@@ -321,6 +329,11 @@ def test_srte_policy_2k_vrf_1k_policy_color_only_02():
     ret = ixia_check_traffic(TRAFFIC_1K_TE_POLICY, key="Rx Frame Rate", value=100000)
     if not ret:
         st.report_fail("Step20: Check traffic item {} rx frame failed".format(TRAFFIC_1K_TE_POLICY))
+
+    ret = ixia_stop_traffic(TRAFFIC_1K_TE_POLICY)
+    if not ret:
+        st.report_fail("Step21: Stop traffic item {} rx frame failed".format(TRAFFIC_1K_TE_POLICY))
+
     st.report_pass("test_case_passed")
 
 '''
@@ -333,6 +346,11 @@ def test_srte_policy_2k_vrf_1k_policy_color_only_02():
 @pytest.mark.community
 @pytest.mark.community_pass
 def test_srte_policy_2k_vrf_2k_policy_03():
+
+    if data.dut1_load_2k_policy_config_done == False:
+        st.log("esr_srte_policy_func_hooks enter test_srte_policy_2k_vrf_2k_policy_03")
+        double_dut_load_config("2k_config", "2k_config")
+        data.dut1_load_1k_policy_config_done = False
 
     if not retry_api(check_bgp_state, dut2, "2000::179", retry_count= 6, delay= 10):
         st.report_fail("Step0: Check bgp state failed")
@@ -402,6 +420,10 @@ def test_srte_policy_2k_vrf_2k_policy_03():
     if not ret:
         st.report_fail("Step9: Check traffic item {} rx frame failed".format(TRAFFIC_2K_TE_POLICY))
 
+    ret = ixia_stop_traffic(TRAFFIC_2K_TE_POLICY)
+    if not ret:
+        st.report_fail("Step10: Stop traffic item {} rx frame failed".format(TRAFFIC_2K_TE_POLICY))
+
     st.report_pass("test_case_passed")
 
 '''
@@ -414,6 +436,19 @@ def test_srte_policy_2k_vrf_2k_policy_03():
 @pytest.mark.community
 @pytest.mark.community_pass
 def test_srte_policy_2k_vrf_2k_policy_color_only_04():
+
+    if data.dut1_load_2k_policy_config_done == False:
+        st.log("esr_srte_policy_func_hooks enter test_srte_policy_2k_vrf_2k_policy_color_only_04")
+        double_dut_load_config("2k_config", "2k_config")
+        data.dut1_load_1k_policy_config_done = False
+
+    del_neighbor = 'vtysh -c "configure terminal" -c "router bgp 100" -c "address-family ipv4 vpn" -c "no neighbor 2000::179 activate"'
+    st.config(dut1, del_neighbor)
+    st.wait(5)
+
+    add_neighbor = 'vtysh -c "configure terminal" -c "router bgp 100" -c "address-family ipv4 vpn" -c "neighbor 1000::179 activate"'
+    st.config(dut1, add_neighbor)
+    st.wait(30)
 
     if not retry_api(check_bgp_state, dut2, "2000::179", retry_count= 6, delay= 10):
         st.report_fail("Step0: Check bgp state failed")
@@ -483,6 +518,10 @@ def test_srte_policy_2k_vrf_2k_policy_color_only_04():
     if not ret:
         st.report_fail("Step9: Check traffic item {} rx frame failed".format(TRAFFIC_2K_TE_POLICY))
 
+    ret = ixia_stop_traffic(TRAFFIC_2K_TE_POLICY)
+    if not ret:
+        st.report_fail("Step10: Stop traffic item {} rx frame failed".format(TRAFFIC_2K_TE_POLICY))
+
     st.report_pass("test_case_passed")
 
 '''
@@ -495,6 +534,9 @@ def test_srte_policy_2k_vrf_2k_policy_color_only_04():
 @pytest.mark.community
 @pytest.mark.community_pass
 def test_srte_policy_2k_vrf_4k_policy_05():
+
+    st.log("esr_srte_policy_func_hooks enter test_srte_policy_2k_vrf_4k_policy_05")
+    double_dut_load_config("2k_config", "4k_config")
 
     if not retry_api(check_bgp_state, dut2, "2000::179", retry_count= 6, delay= 10):
         st.report_fail("Step0: Check bgp state failed")
@@ -549,6 +591,10 @@ def test_srte_policy_2k_vrf_4k_policy_05():
 @pytest.mark.community
 @pytest.mark.community_pass
 def test_srte_policy_2k_vrf_4k_policy_falp_06():
+
+    st.log("esr_srte_policy_func_hooks enter test_srte_policy_2k_vrf_4k_policy_falp_06")
+    double_dut_load_config("2k_config", "4k_config_only")
+
     TOPOLOGY = "Topology 1"
     DEVICE_GROUP = "Device Group 1"
     ETHERNET = "Ethernet 1"

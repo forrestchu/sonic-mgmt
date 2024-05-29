@@ -6,7 +6,7 @@ ESR_MULTI_VRF_CONFIG = "esr_multi_vrf.ixncfg"
 ESR_MULTI_VRF_ECMP_CONFIG = "esr_multi_vrf_ecmp.ixncfg"
 ESR_ECMP_CONFIG = "esr_ecmp_04.ixncfg"
 ESR_MIRROR_CONFIG = "esr_mirror.ixncfg"
-ESR_2K_POLICY_CONFIG = "esr_2k_policy.ixncfg"
+ESR_2K_POLICY_CONFIG = "esr_te_policy.ixncfg"
 ESR_SID_REMARKING_CONFIG = "esr_sid_remarking.ixncfg"
 
 # IXIA_PORT connected to 179

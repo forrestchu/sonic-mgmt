@@ -876,3 +876,20 @@ def check_bgp_state(dut, neighbor_ip):
 
 def check_bfd_state(dut, key, check_field):
     return double_check_sbfd(dut, key, check_field, False, False)
+
+def check_route_count(dut, neighbor_ip, count):
+
+    bgp_cmd = "show bgp ipv4 vpn summary neighbor {} json".format(neighbor_ip)
+    data =  cli_show_json(dut, bgp_cmd, type="vtysh")
+    peer_info = data["peers"][neighbor_ip]
+
+    pfxRcd_value = peer_info["pfxRcd"]
+    st.log (pfxRcd_value)
+
+    if count == pfxRcd_value:
+        return True
+
+    return False
+
+def check_bgp_route_count(dut, neighbor_ip, count):
+    return check_route_count(dut, neighbor_ip, count)

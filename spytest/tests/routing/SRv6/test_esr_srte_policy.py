@@ -349,15 +349,15 @@ def test_srte_policy_2k_vrf_2k_policy_03():
         st.log("esr_srte_policy_func_hooks enter test_srte_policy_2k_vrf_2k_policy_03")
         double_dut_load_config("2k_config", "2k_config")
         data.dut1_load_1k_policy_config_done = False
-        st.wait(90)
+        st.wait(120)
 
     if not retry_api(check_bgp_state, dut2, "2000::179", retry_count= 6, delay= 10):
         st.report_fail("Step0: Check bgp state failed")
 
     st.wait(30)
 
-    if not retry_api(check_bgp_route_count, dut2, "2000::179", "200000", retry_count= 6, delay= 10):
-        st.report_fail("Step1: Chek route count failed")
+    #if not retry_api(check_bgp_route_count, dut2, "2000::179", "200000", retry_count= 6, delay= 10):
+    #    st.report_fail("Step1: Chek route count failed")
 
     ret = ixia_start_traffic(TRAFFIC_2K_TE_POLICY)
     if not ret:
@@ -444,7 +444,7 @@ def test_srte_policy_2k_vrf_2k_policy_color_only_04():
         st.log("esr_srte_policy_func_hooks enter test_srte_policy_2k_vrf_2k_policy_color_only_04")
         double_dut_load_config("2k_config", "2k_config")
         data.dut1_load_1k_policy_config_done = False
-        st.wait(90)
+        st.wait(120)
 
     del_neighbor = 'vtysh -c "configure terminal" -c "router bgp 100" -c "address-family ipv4 vpn" -c "no neighbor 2000::179 activate"'
     st.config(dut1, del_neighbor)

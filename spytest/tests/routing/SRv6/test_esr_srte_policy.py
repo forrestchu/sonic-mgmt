@@ -17,8 +17,10 @@ dut1 = 'MC-58'
 dut2 = 'MC-59'
 data.my_dut_list = [dut1, dut2]
 data.load_policy_ixia_conf_done = False
-data.dut1_load_1k_policy_config_done = False
 data.dut1_load_2k_policy_config_done = False
+data.dut2_load_1k_policy_config_done = False
+data.dut2_load_2k_policy_config_done = False
+data.dut2_load_4k_policy_config_done = False
 
 
 @pytest.fixture(scope="module", autouse=True)
@@ -36,6 +38,10 @@ def esr_srte_policy_module_hooks(request):
 def esr_srte_policy_func_hooks(request):
     func_name = st.get_func_name(request)
     st.log("esr_srte_policy_func_hooks enter {}".format(func_name))
+
+    if data.dut1_load_2k_policy_config_done == False:
+        dut_load_config(dut1, "esr_te_dut1_2k_config")
+        data.dut1_load_2k_policy_config_done = True
 
     if data.load_policy_ixia_conf_done == False:
         ixia_load_config(ESR_2K_POLICY_CONFIG)
@@ -70,6 +76,18 @@ def load_config(duts, filesuffix1, filesuffix2):
     st.banner("{} json config loaded completed for {}".format(filesuffix1, duts))
 
 
+def dut_load_config(dut, filesuffix):
+    curr_path = os.getcwd()
+
+    json_file_dut_multi_vrf = curr_path+"/routing/SRv6/"+filesuffix+".json"
+    st.apply_files(dut, [json_file_dut_multi_vrf], method="replace_configdb")
+
+    st.wait(10)
+
+    st.reboot([dut])
+
+    st.banner("%s json config loaded completed" % (filesuffix))
+
 def double_dut_load_config(filesuffix1, filesuffix2):
     load_config([dut1, dut2], filesuffix1, filesuffix2)
 
@@ -84,15 +102,19 @@ def double_dut_load_config(filesuffix1, filesuffix2):
 @pytest.mark.community_pass
 def test_srte_policy_2k_vrf_1k_policy_01():
 
-    if data.dut1_load_1k_policy_config_done == False:
+    if data.dut2_load_1k_policy_config_done == False:
         st.log("esr_srte_policy_func_hooks enter test_srte_policy_2k_vrf_1k_policy_01")
-        double_dut_load_config("1k_config", "1k_config")
-        data.dut1_load_2k_policy_config_done = False
+        dut_load_config(dut2, "esr_te_dut2_1k_config")
+        data.dut2_load_1k_policy_config_done = True
+        data.dut2_load_2k_policy_config_done = False
+        data.dut2_load_4k_policy_config_done = False
 
     if not retry_api(check_bgp_state, dut2, "2000::179", retry_count= 6, delay= 10):
         st.report_fail("Step0: Check bgp state failed")
     st.wait(5)
 
+    ixia_disable_traffic(TRAFFIC_2K_TE_POLICY)
+    ixia_enable_traffic(TRAFFIC_1K_TE_POLICY)
     ret = ixia_start_traffic(TRAFFIC_1K_TE_POLICY)
     if not ret:
         st.report_fail("Step1: Start traffic item {} rx frame failed".format(TRAFFIC_1K_TE_POLICY))
@@ -116,7 +138,7 @@ def test_srte_policy_2k_vrf_1k_policy_01():
     }
     key = "bfd-name d"
 
-    if not retry_api(check_bfd_state, dut2, key, check_filed, retry_count= 20, delay= 10):
+    if not retry_api(check_bfd_state, dut2, key, check_filed, retry_count= 10, delay= 10):
         st.report_fail("Step3: The cpath d: bfd-name d not down")
 
     ret = retry_api(check_dut_intf_tx_traffic_counters, dut2, ["Ethernet3"], 150, retry_count= 3, delay= 5)
@@ -136,7 +158,7 @@ def test_srte_policy_2k_vrf_1k_policy_01():
     }
     key = "bfd-name d"
 
-    if not retry_api(check_bfd_state, dut2, key, check_filed, retry_count= 20, delay= 10):
+    if not retry_api(check_bfd_state, dut2, key, check_filed, retry_count= 10, delay= 10):
         st.report_fail("Step5: The cpath d: bfd-name d not up")
 
     ret = retry_api(check_dut_intf_tx_traffic_counters, dut2, ["Ethernet4"], 150, retry_count= 3, delay= 5)
@@ -169,10 +191,12 @@ def test_srte_policy_2k_vrf_1k_policy_01():
 @pytest.mark.community_pass
 def test_srte_policy_2k_vrf_1k_policy_color_only_02():
 
-    if data.dut1_load_1k_policy_config_done == False:
+    if data.dut2_load_1k_policy_config_done == False:
         st.log("esr_srte_policy_func_hooks enter test_srte_policy_2k_vrf_1k_policy_color_only_02")
-        double_dut_load_config("1k_config", "1k_config")
-        data.dut1_load_2k_policy_config_done = False
+        dut_load_config(dut2, "esr_te_dut2_1k_config")
+        data.dut2_load_1k_policy_config_done = True
+        data.dut2_load_2k_policy_config_done = False
+        data.dut2_load_4k_policy_config_done = False
 
     del_neighbor = 'vtysh -c "configure terminal" -c "router bgp 100" -c "address-family ipv4 vpn" -c "no neighbor 2000::179 activate"'
     st.config(dut1, del_neighbor)
@@ -186,6 +210,8 @@ def test_srte_policy_2k_vrf_1k_policy_color_only_02():
         st.report_fail("Step0: Check bgp state failed")
     st.wait(5)
 
+    ixia_disable_traffic(TRAFFIC_2K_TE_POLICY)
+    ixia_enable_traffic(TRAFFIC_1K_TE_POLICY)
     ret = ixia_start_traffic(TRAFFIC_1K_TE_POLICY)
     if not ret:
         st.report_fail("Step1: Start traffic item {} rx frame failed".format(TRAFFIC_1K_TE_POLICY))
@@ -208,7 +234,7 @@ def test_srte_policy_2k_vrf_1k_policy_color_only_02():
     }
     key = "bfd-name d"
 
-    if not retry_api(check_bfd_state, dut2, key, check_filed, retry_count= 20, delay= 10):
+    if not retry_api(check_bfd_state, dut2, key, check_filed, retry_count= 10, delay= 10):
         st.report_fail("Step4: The cpath d: bfd-name d not down")
 
     ret = retry_api(check_dut_intf_tx_traffic_counters, dut2, ["Ethernet3"], 150, retry_count= 3, delay= 5)
@@ -228,7 +254,7 @@ def test_srte_policy_2k_vrf_1k_policy_color_only_02():
     }
     key = "bfd-name c"
 
-    if not retry_api(check_bfd_state, dut2, key, check_filed, retry_count= 20, delay= 10):
+    if not retry_api(check_bfd_state, dut2, key, check_filed, retry_count= 10, delay= 10):
         st.report_fail("Step6: The cpath c: bfd-name c not down")
 
     ret = retry_api(check_dut_intf_tx_traffic_counters, dut2, ["Ethernet2"], 150, retry_count= 3, delay= 5)
@@ -248,7 +274,7 @@ def test_srte_policy_2k_vrf_1k_policy_color_only_02():
     }
     key = "bfd-name b"
 
-    if not retry_api(check_bfd_state, dut2, key, check_filed, retry_count= 20, delay= 10):
+    if not retry_api(check_bfd_state, dut2, key, check_filed, retry_count= 10, delay= 10):
         st.report_fail("Step8: The cpath b: bfd-name b not down")
 
     ret = retry_api(check_dut_intf_tx_traffic_counters, dut2, ["Ethernet1"], 150, retry_count= 3, delay= 5)
@@ -269,7 +295,7 @@ def test_srte_policy_2k_vrf_1k_policy_color_only_02():
     }
     key = "bfd-name b"
 
-    if not retry_api(check_bfd_state, dut2, key, check_filed, retry_count= 20, delay= 10):
+    if not retry_api(check_bfd_state, dut2, key, check_filed, retry_count= 10, delay= 10):
         st.report_fail("Step11: The cpath b: bfd-name b not up")
 
     ret = retry_api(check_dut_intf_tx_traffic_counters, dut2, ["Ethernet2"], 150, retry_count= 3, delay= 5)
@@ -290,7 +316,7 @@ def test_srte_policy_2k_vrf_1k_policy_color_only_02():
     }
     key = "bfd-name c"
 
-    if not retry_api(check_bfd_state, dut2, key, check_filed, retry_count= 20, delay= 10):
+    if not retry_api(check_bfd_state, dut2, key, check_filed, retry_count= 10, delay= 10):
         st.report_fail("Step14: The cpath c: bfd-name c not down")
 
     ret = retry_api(check_dut_intf_tx_traffic_counters, dut2, ["Ethernet3"], 150, retry_count= 3, delay= 5)
@@ -312,7 +338,7 @@ def test_srte_policy_2k_vrf_1k_policy_color_only_02():
     }
     key = "bfd-name d"
 
-    if not retry_api(check_bfd_state, dut2, key, check_filed, retry_count= 20, delay= 10):
+    if not retry_api(check_bfd_state, dut2, key, check_filed, retry_count= 10, delay= 10):
         st.report_fail("Step17: The cpath d: bfd-name d not down")
 
     ret = retry_api(check_dut_intf_tx_traffic_counters, dut2, ["Ethernet4"], 150, retry_count= 3, delay= 5)
@@ -345,20 +371,21 @@ def test_srte_policy_2k_vrf_1k_policy_color_only_02():
 @pytest.mark.community_pass
 def test_srte_policy_2k_vrf_2k_policy_03():
 
-    if data.dut1_load_2k_policy_config_done == False:
+    if data.dut2_load_2k_policy_config_done == False:
         st.log("esr_srte_policy_func_hooks enter test_srte_policy_2k_vrf_2k_policy_03")
-        double_dut_load_config("2k_config", "2k_config")
-        data.dut1_load_1k_policy_config_done = False
-        st.wait(120)
+        dut_load_config(dut2, "esr_te_dut2_2k_config")
+        data.dut2_load_2k_policy_config_done = True
+        data.dut2_load_1k_policy_config_done = False
+        data.dut2_load_4k_policy_config_done = False
 
     if not retry_api(check_bgp_state, dut2, "2000::179", retry_count= 6, delay= 10):
         st.report_fail("Step0: Check bgp state failed")
 
-    st.wait(30)
-
-    #if not retry_api(check_bgp_route_count, dut2, "2000::179", "200000", retry_count= 6, delay= 10):
+    #if not retry_api(check_bgp_route_count, dut2, "2000::179", "200000", retry_count= 10, delay= 10):
     #    st.report_fail("Step1: Chek route count failed")
 
+    ixia_disable_traffic(TRAFFIC_1K_TE_POLICY)
+    ixia_enable_traffic(TRAFFIC_2K_TE_POLICY)
     ret = ixia_start_traffic(TRAFFIC_2K_TE_POLICY)
     if not ret:
         st.report_fail("Step2: Start traffic item {} rx frame failed".format(TRAFFIC_2K_TE_POLICY))
@@ -380,7 +407,7 @@ def test_srte_policy_2k_vrf_2k_policy_03():
     }
     key = "bfd-name d"
 
-    if not retry_api(check_bfd_state, dut2, key, check_filed, retry_count= 20, delay= 10):
+    if not retry_api(check_bfd_state, dut2, key, check_filed, retry_count= 10, delay= 10):
         st.report_fail("Step4: The cpath d: bfd-name d not down")
 
     #sbfd down, cpath change to c
@@ -406,7 +433,7 @@ def test_srte_policy_2k_vrf_2k_policy_03():
     }
     key = "bfd-name d"
 
-    if not retry_api(check_bfd_state, dut2, key, check_filed, retry_count= 20, delay= 10):
+    if not retry_api(check_bfd_state, dut2, key, check_filed, retry_count= 10, delay= 10):
         st.report_fail("Step7: The cpath d: bfd-name a not up")
 
     #check traffic back to Ethernet4
@@ -440,11 +467,12 @@ def test_srte_policy_2k_vrf_2k_policy_03():
 @pytest.mark.community_pass
 def test_srte_policy_2k_vrf_2k_policy_color_only_04():
 
-    if data.dut1_load_2k_policy_config_done == False:
-        st.log("esr_srte_policy_func_hooks enter test_srte_policy_2k_vrf_2k_policy_color_only_04")
-        double_dut_load_config("2k_config", "2k_config")
-        data.dut1_load_1k_policy_config_done = False
-        st.wait(120)
+    if data.dut2_load_2k_policy_config_done == False:
+        st.log("esr_srte_policy_func_hooks enter test_srte_policy_2k_vrf_2k_policy_03")
+        dut_load_config(dut2, "esr_te_dut2_2k_config")
+        data.dut2_load_2k_policy_config_done = True
+        data.dut2_load_1k_policy_config_done = False
+        data.dut2_load_4k_policy_config_done = False
 
     del_neighbor = 'vtysh -c "configure terminal" -c "router bgp 100" -c "address-family ipv4 vpn" -c "no neighbor 2000::179 activate"'
     st.config(dut1, del_neighbor)
@@ -456,16 +484,20 @@ def test_srte_policy_2k_vrf_2k_policy_color_only_04():
 
     if not retry_api(check_bgp_state, dut2, "2000::179", retry_count= 6, delay= 10):
         st.report_fail("Step0: Check bgp state failed")
-    st.wait(30)
 
+    #if not retry_api(check_bgp_route_count, dut2, "2000::179", "200000", retry_count= 10, delay= 10):
+    #    st.report_fail("Step1: Chek route count failed")
+
+    ixia_disable_traffic(TRAFFIC_1K_TE_POLICY)
+    ixia_enable_traffic(TRAFFIC_2K_TE_POLICY)
     ret = ixia_start_traffic(TRAFFIC_2K_TE_POLICY)
     if not ret:
-        st.report_fail("Step1: Start traffic item {} rx frame failed".format(TRAFFIC_2K_TE_POLICY))
-    st.wait(30)
+        st.report_fail("Step2: Start traffic item {} rx frame failed".format(TRAFFIC_2K_TE_POLICY))
+
     #check traffic cpath d, on interface Ethernet4
     ret = retry_api(check_dut_intf_tx_traffic_counters, dut2, ["Ethernet4"], 300, retry_count= 3, delay= 5)
     if not ret:
-        st.report_fail("Step2: Check dut interface counters failed")
+        st.report_fail("Step3: Check dut interface counters failed")
 
     #shutdown Ethernet4
     cmd = "interface {}\n shutdown\n".format("Ethernet4")
@@ -479,13 +511,13 @@ def test_srte_policy_2k_vrf_2k_policy_color_only_04():
     }
     key = "bfd-name d"
 
-    if not retry_api(check_bfd_state, dut2, key, check_filed, retry_count= 20, delay= 10):
-        st.report_fail("Step3: The cpath d: bfd-name d not down")
+    if not retry_api(check_bfd_state, dut2, key, check_filed, retry_count= 10, delay= 10):
+        st.report_fail("Step4: The cpath d: bfd-name d not down")
 
     #sbfd down, cpath change to c
     ret = retry_api(check_dut_intf_tx_traffic_counters, dut2, ["Ethernet3"], 300, retry_count= 3, delay= 5)
     if not ret:
-        st.report_fail("Step4: Check dut interface counters failed")
+        st.report_fail("Step5: Check dut interface counters failed")
 
     #no shutdown inteface ,sbfd up, cpath change to d
     cmd = "interface {}\n no shutdown\n".format("Ethernet4")
@@ -494,7 +526,7 @@ def test_srte_policy_2k_vrf_2k_policy_color_only_04():
 
     #check bgp state
     if not retry_api(check_bgp_state, dut2, "2044::179", retry_count= 6, delay= 10):
-        st.report_fail("Step5: Check bgp state failed")
+        st.report_fail("Step6: Check bgp state failed")
     st.wait(10)
 
     #check bfd state
@@ -505,26 +537,26 @@ def test_srte_policy_2k_vrf_2k_policy_color_only_04():
     }
     key = "bfd-name d"
 
-    if not retry_api(check_bfd_state, dut2, key, check_filed, retry_count= 20, delay= 10):
-        st.report_fail("Step6: The cpath d: bfd-name a not up")
+    if not retry_api(check_bfd_state, dut2, key, check_filed, retry_count= 10, delay= 10):
+        st.report_fail("Step7: The cpath d: bfd-name a not up")
 
     #check traffic back to Ethernet4
     ret = retry_api(check_dut_intf_tx_traffic_counters, dut2, ["Ethernet4"], 300, retry_count= 3, delay= 5)
     if not ret:
-        st.report_fail("Step7: Check dut interface counters failed")
+        st.report_fail("Step8: Check dut interface counters failed")
 
     ret = ixia_stop_traffic(TRAFFIC_2K_TE_POLICY)
     if not ret:
-        st.report_fail("Step8: Stop traffic item {} rx frame failed".format(TRAFFIC_2K_TE_POLICY))
+        st.report_fail("Step9: Stop traffic item {} rx frame failed".format(TRAFFIC_2K_TE_POLICY))
 
     #check Rx Frame Rate
     ret = ixia_check_traffic(TRAFFIC_2K_TE_POLICY, key="Rx Frame Rate", value=100000)
     if not ret:
-        st.report_fail("Step9: Check traffic item {} rx frame failed".format(TRAFFIC_2K_TE_POLICY))
+        st.report_fail("Step10: Check traffic item {} rx frame failed".format(TRAFFIC_2K_TE_POLICY))
 
     ret = ixia_stop_traffic(TRAFFIC_2K_TE_POLICY)
     if not ret:
-        st.report_fail("Step10: Stop traffic item {} rx frame failed".format(TRAFFIC_2K_TE_POLICY))
+        st.report_fail("Step11: Stop traffic item {} rx frame failed".format(TRAFFIC_2K_TE_POLICY))
 
     st.report_pass("test_case_passed")
 
@@ -539,13 +571,18 @@ def test_srte_policy_2k_vrf_2k_policy_color_only_04():
 @pytest.mark.community_pass
 def test_srte_policy_2k_vrf_4k_policy_05():
 
-    st.log("esr_srte_policy_func_hooks enter test_srte_policy_2k_vrf_4k_policy_05")
-    double_dut_load_config("2k_config", "4k_config")
+    if data.dut2_load_4k_policy_config_done == False:
+        st.log("esr_srte_policy_func_hooks enter test_srte_policy_2k_vrf_4k_policy_05")
+        dut_load_config(dut2, "esr_te_dut2_4k_config")
+        data.dut2_load_4k_policy_config_done = True
+        data.dut2_load_2k_policy_config_done = False
+        data.dut2_load_1k_policy_config_done = False
 
     if not retry_api(check_bgp_state, dut2, "2000::179", retry_count= 6, delay= 10):
         st.report_fail("Step0: Check bgp state failed")
-    st.wait(180)
 
+    ixia_disable_traffic(TRAFFIC_1K_TE_POLICY)
+    ixia_enable_traffic(TRAFFIC_2K_TE_POLICY)
     ret = ixia_start_traffic(TRAFFIC_2K_TE_POLICY)
     if not ret:
         st.report_fail("Step1: Start traffic item {} rx frame failed".format(TRAFFIC_2K_TE_POLICY))
@@ -567,7 +604,7 @@ def test_srte_policy_2k_vrf_4k_policy_05():
     }
     key = "bfd-name d"
 
-    if not retry_api(check_bfd_state, dut2, key, check_filed, retry_count= 20, delay= 10):
+    if not retry_api(check_bfd_state, dut2, key, check_filed, retry_count= 10, delay= 10):
         st.report_fail("Step3: The cpath d: bfd-name d not down")
     #sbfd down, cpath change to c
     ret = retry_api(check_dut_intf_tx_traffic_counters, dut2, ["Ethernet3"], 300, retry_count= 3, delay= 5)
@@ -596,8 +633,12 @@ def test_srte_policy_2k_vrf_4k_policy_05():
 @pytest.mark.community_pass
 def test_srte_policy_2k_vrf_4k_policy_falp_06():
 
-    st.log("esr_srte_policy_func_hooks enter test_srte_policy_2k_vrf_4k_policy_falp_06")
-    double_dut_load_config("2k_config", "4k_config_only")
+    if data.dut2_load_4k_policy_config_done == False:
+        st.log("esr_srte_policy_func_hooks enter test_srte_policy_2k_vrf_4k_policy_falp_06")
+        dut_load_config(dut2, "esr_te_dut2_4k_config")
+        data.dut2_load_4k_policy_config_done = True
+        data.dut2_load_2k_policy_config_done = False
+        data.dut2_load_1k_policy_config_done = False
 
     TOPOLOGY = "Topology 1"
     DEVICE_GROUP = "Device Group 1"
@@ -609,10 +650,12 @@ def test_srte_policy_2k_vrf_4k_policy_falp_06():
         st.report_fail("Step0: Check bgp state failed")
     st.wait(5)
 
+    ixia_disable_traffic(TRAFFIC_1K_TE_POLICY)
+    ixia_enable_traffic(TRAFFIC_2K_TE_POLICY)
     ret = ixia_start_traffic(TRAFFIC_2K_TE_POLICY)
     if not ret:
         st.report_fail("Step1: Start traffic item {} rx frame failed".format(TRAFFIC_2K_TE_POLICY))
-    st.wait(180)
+
     #check traffic cpath d, on interface Ethernet4
     ret = retry_api(check_mult_dut_intf_tx_traffic_counters, dut2, ['Ethernet1', 'Ethernet2', 'Ethernet3', 'Ethernet4'], 300, retry_count= 3, delay= 5)
     if not ret:
@@ -625,7 +668,7 @@ def test_srte_policy_2k_vrf_4k_policy_falp_06():
     ixia_config_bgp_flapping(TOPOLOGY, DEVICE_GROUP, ETHERNET, IPV4_NAME, BGP_PEER_NAME, True)
     st.wait(20)
     ixia_config_bgp_flapping(TOPOLOGY, DEVICE_GROUP, ETHERNET, IPV4_NAME, BGP_PEER_NAME, False)
-    st.wait(180)
+    st.wait(60)
     show_hw_route_count(dut1)
     show_hw_route_count(dut2)
 

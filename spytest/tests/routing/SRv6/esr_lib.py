@@ -880,10 +880,10 @@ def check_bfd_state(dut, key, check_field):
 def check_route_count(dut, neighbor_ip, count):
 
     bgp_cmd = "show bgp ipv4 vpn summary neighbor {} json".format(neighbor_ip)
-    data =  cli_show_json(dut, bgp_cmd, type="vtysh")
-    peer_info = data["peers"][neighbor_ip]
-
+    output = st.show(dut, bgp_cmd, type='vtysh')
+    peer_info = output["peers"][neighbor_ip]
     pfxRcd_value = peer_info["pfxRcd"]
+
     st.log (pfxRcd_value)
 
     if count == pfxRcd_value:

@@ -246,3 +246,12 @@ def ixia_get_port_view_data(local_file):
     remote_file_path = "{}/{}".format(ixia_controller.get_csv_file_path(caption="Port Statistics"), csv_file_name)
     ixia_controller.download_file(remote_file_path, local_file)
     return True
+
+def ixia_disable_traffic(traffic_item_name):
+    traffic_item = ixia_controller.get_traffic_item(traffic_item_name)
+    if traffic_item.Enabled:
+        traffic_item.Enabled = False
+def ixia_enable_traffic(traffic_item_name):
+    traffic_item = ixia_controller.get_traffic_item(traffic_item_name)
+    if not traffic_item.Enabled:
+        traffic_item.Enabled = True

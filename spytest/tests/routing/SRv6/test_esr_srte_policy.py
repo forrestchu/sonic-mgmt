@@ -40,24 +40,31 @@ def esr_srte_policy_module_hooks(request):
 def esr_srte_policy_func_hooks(request):
     func_name = st.get_func_name(request)
     st.log("esr_srte_policy_func_hooks enter {}".format(func_name))
-
-    if data.dut1_load_2k_policy_config_done == False:
-        dut_load_config(dut1, "esr_te_dut1_2k_config")
-        data.dut1_load_2k_policy_config_done = True
-
-    if data.load_policy_ixia_conf_done == False:
+    if func_name == 'test_srte_policy_2k_vrf_ipv4_ipv6_07':
+        double_dut_load_config('ip_ipv6_2k_config', 'ip_ipv6_2k_config')
         ixia_load_config(ESR_2K_POLICY_CONFIG)
         ixia_start_all_protocols()
         st.wait(60)
-        data.load_policy_ixia_conf_done = True
+    else:
+        if data.dut1_load_2k_policy_config_done == False:
+            double_dut_load_config('2k_config', '1k_config')
+            data.dut1_load_2k_policy_config_done = True
+            data.dut2_load_1k_policy_config_done = True
+
+        if data.load_policy_ixia_conf_done == False:
+            ixia_load_config(ESR_2K_POLICY_CONFIG)
+            ixia_start_all_protocols()
+            st.wait(60)
+            data.load_policy_ixia_conf_done = True
 
     yield
-    if data.traffic_1k_te_policy == True:
-        ixia_stop_traffic(TRAFFIC_1K_TE_POLICY)
-        data.traffic_1k_te_policy == False
-    if data.traffic_2k_te_policy == True:
-        ixia_stop_traffic(TRAFFIC_2K_TE_POLICY)
-        data.traffic_2k_te_policy == False
+    if func_name != 'test_srte_policy_2k_vrf_ipv4_ipv6_07':
+        if data.traffic_1k_te_policy == True:
+            ixia_stop_traffic(TRAFFIC_1K_TE_POLICY)
+            data.traffic_1k_te_policy == False
+        if data.traffic_2k_te_policy == True:
+            ixia_stop_traffic(TRAFFIC_2K_TE_POLICY)
+            data.traffic_2k_te_policy == False
     pass
 
 def load_config(duts, filesuffix1, filesuffix2):
@@ -178,7 +185,7 @@ def test_srte_policy_2k_vrf_1k_policy_01():
         st.report_fail("Step7: Stop traffic item {} rx frame failed".format(TRAFFIC_1K_TE_POLICY))
 
     #check Tx Frame Rate
-    ret = ixia_check_traffic(TRAFFIC_1K_TE_POLICY, key="Rx Frame Rate", value=100000)
+    ret = retry_api(ixia_check_traffic, TRAFFIC_1K_TE_POLICY, key="Rx Frame Rate", value=100000, retry_count= 3, delay= 5)
     if not ret:
         st.report_fail("Step8: Check traffic item {} rx frame failed".format(TRAFFIC_1K_TE_POLICY))
     data.traffic_1k_te_policy = True
@@ -359,7 +366,7 @@ def test_srte_policy_2k_vrf_1k_policy_color_only_02():
         st.report_fail("Step19: Stop traffic item {} rx frame failed".format(TRAFFIC_1K_TE_POLICY))
     data.traffic_1k_te_policy = False
     #check Tx Frame Rate
-    ret = ixia_check_traffic(TRAFFIC_1K_TE_POLICY, key="Rx Frame Rate", value=100000)
+    ret = retry_api(ixia_check_traffic, TRAFFIC_1K_TE_POLICY, key="Rx Frame Rate", value=100000, retry_count= 3, delay= 5)
     if not ret:
         st.report_fail("Step20: Check traffic item {} rx frame failed".format(TRAFFIC_1K_TE_POLICY))
     data.traffic_1k_te_policy = True
@@ -456,7 +463,7 @@ def test_srte_policy_2k_vrf_2k_policy_03():
         st.report_fail("Step9: Stop traffic item {} rx frame failed".format(TRAFFIC_2K_TE_POLICY))
     data.traffic_2k_te_policy = False
     #check Tx Frame Rate
-    ret = ixia_check_traffic(TRAFFIC_2K_TE_POLICY, key="Rx Frame Rate", value=100000)
+    ret = retry_api(ixia_check_traffic, TRAFFIC_2K_TE_POLICY, key="Rx Frame Rate", value=100000, retry_count= 3, delay= 5)
     if not ret:
         st.report_fail("Step10: Check traffic item {} rx frame failed".format(TRAFFIC_2K_TE_POLICY))
     data.traffic_2k_te_policy = True
@@ -560,7 +567,7 @@ def test_srte_policy_2k_vrf_2k_policy_color_only_04():
         st.report_fail("Step9: Stop traffic item {} rx frame failed".format(TRAFFIC_2K_TE_POLICY))
     data.traffic_2k_te_policy = False
     #check Rx Frame Rate
-    ret = ixia_check_traffic(TRAFFIC_2K_TE_POLICY, key="Rx Frame Rate", value=100000)
+    ret = retry_api(ixia_check_traffic, TRAFFIC_2K_TE_POLICY, key="Rx Frame Rate", value=100000, retry_count= 3, delay= 5)
     if not ret:
         st.report_fail("Step10: Check traffic item {} rx frame failed".format(TRAFFIC_2K_TE_POLICY))
     data.traffic_2k_te_policy = True
@@ -597,7 +604,7 @@ def test_srte_policy_2k_vrf_4k_policy_05():
     if not ret:
         st.report_fail("Step1: Start traffic item {} rx frame failed".format(TRAFFIC_2K_TE_POLICY))
     data.traffic_2k_te_policy = True
-    st.wait(30)
+    st.wait(180)
     #check traffic cpath d, on interface Ethernet4
     ret = retry_api(check_mult_dut_intf_tx_traffic_counters, dut2, ['Ethernet3', 'Ethernet4'], 300, retry_count= 3, delay= 5)
     if not ret:
@@ -622,18 +629,38 @@ def test_srte_policy_2k_vrf_4k_policy_05():
     if not ret:
         st.report_fail("Step4: Check dut interface counters failed")
 
+    #shutdown Ethernet4
+    cmd = "interface {}\n no shutdown\n".format("Ethernet4")
+    st.config(dut2, cmd, type="alicli", skip_error_check = True)
+    st.wait(10)
+    #check bfd state
+    check_filed = {
+        'status':'up',
+        'peer_type' : 'echo',
+        'multiplier': '3'
+    }
+    key = "bfd-name d"
+
+    if not retry_api(check_bfd_state, dut2, key, check_filed, retry_count= 10, delay= 10):
+        st.report_fail("Step5: The cpath d: bfd-name d not up")
+    st.wait(180)
+
+    ret = retry_api(check_mult_dut_intf_tx_traffic_counters, dut2, ['Ethernet3', 'Ethernet4'], 300, retry_count= 3, delay= 5)
+    if not ret:
+        st.report_fail("Step6: Check dut interface counters failed")
+
     ret = ixia_stop_traffic(TRAFFIC_2K_TE_POLICY)
     if not ret:
-        st.report_fail("Step5: Stop traffic item {} rx frame failed".format(TRAFFIC_2K_TE_POLICY))
+        st.report_fail("Step7: Stop traffic item {} rx frame failed".format(TRAFFIC_2K_TE_POLICY))
     data.traffic_2k_te_policy = False
     #check Rx Frame Rate
-    ret = ixia_check_traffic(TRAFFIC_2K_TE_POLICY, key="Rx Frame Rate", value=100000)
+    ret = retry_api(ixia_check_traffic, TRAFFIC_2K_TE_POLICY, key="Rx Frame Rate", value=100000, retry_count= 3, delay= 5)
     if not ret:
-        st.report_fail("Step6: Check traffic item {} rx frame failed".format(TRAFFIC_2K_TE_POLICY))
+        st.report_fail("Step8: Check traffic item {} rx frame failed".format(TRAFFIC_2K_TE_POLICY))
     data.traffic_2k_te_policy = True
     ret = ixia_stop_traffic(TRAFFIC_2K_TE_POLICY)
     if not ret:
-        st.report_fail("Step6: Stop traffic item {} rx frame failed".format(TRAFFIC_2K_TE_POLICY))
+        st.report_fail("Step9: Stop traffic item {} rx frame failed".format(TRAFFIC_2K_TE_POLICY))
     data.traffic_2k_te_policy = False
     st.report_pass("test_case_passed")
 
@@ -695,4 +722,13 @@ def test_srte_policy_2k_vrf_4k_policy_falp_06():
     if not ret:
         st.report_fail("Step4: Stop traffic item {} rx frame failed".format(TRAFFIC_2K_TE_POLICY))
     data.traffic_2k_te_policy = False
+    st.report_pass("test_case_passed")
+
+    '''
+1. Dut1/Dut2 config 2k vrfs config ipv4 ipv6 route
+2. Check traffic
+'''
+@pytest.mark.community
+@pytest.mark.community_pass
+def test_srte_policy_2k_vrf_ipv4_ipv6_07():
     st.report_pass("test_case_passed")

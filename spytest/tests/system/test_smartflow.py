@@ -3,14 +3,30 @@ import pytest
 from spytest import st, SpyTestDict
 from utilities.common import random_vlan_list
 from apis.common import redis
+import time
 
 smartflow_data = SpyTestDict()
+
+def wait_for_smartflow_up(dut, max_time=0):
+    t = time.time() + max_time
+    while 1:
+        output = st.show(dut, "ps aux | grep sbin/smartflow | grep -v grep", skip_tmpl=True)
+        if 'smartflow' in output:
+            return True
+        time.sleep(3)
+        if time.time() > t:
+            st.log("wait for smartflow up timeout({}s)", max_time)
+            return False
+        
 
 @pytest.fixture(scope="module", autouse=True)
 def smartflow_module_hooks(request):
     global vars
     vars = st.ensure_min_topology("D1D2:1")
     init_vars()
+
+    wait_for_smartflow_up(vars.D1, 60)
+    wait_for_smartflow_up(vars.D2, 60)
 
     yield
 

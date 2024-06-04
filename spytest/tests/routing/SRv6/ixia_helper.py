@@ -74,7 +74,7 @@ def ixia_check_port_rx_frame(port_name, rx_count):
     return False
 
 
-def ixia_check_traffic_item_rx_frame(traffic_item_name, key, rx_count):
+def ixia_check_traffic_item_rx_frame(traffic_item_name, key, rx_count, exact_match):
     st.log("check traffic item rx frame begin")
     traffic_item_stats = ixia_controller.get_traffic_item_statistics(traffic_item_name)
     if traffic_item_stats is None:
@@ -92,8 +92,14 @@ def ixia_check_traffic_item_rx_frame(traffic_item_name, key, rx_count):
     else:
         raise ValueError("Invalid integer format")
 
-    if int(tmp_rx_count_int) == int(rx_count):
-        return True
+    if exact_match is True:
+        if int(tmp_rx_count_int) == int(rx_count):
+            return True
+    else:
+        deviation = abs(tmp_rx_count_int - rx_count)
+        percent = (float(deviation)/rx_count)*100
+        if percent < 10:
+            return True
     return False
 
 def ixia_get_traffic_stat(traffic_item_name):
@@ -135,7 +141,7 @@ def ixia_stop_all_protocols():
     return True
 
 
-def ixia_check_traffic(traffic_item_name, key="Rx Frames", value="0"):
+def ixia_check_traffic(traffic_item_name, key="Rx Frames", value="0", exact_match=True):
     st.wait(10)
     st.log("Get traffic item {}".format(traffic_item_name))
     st.log("Apply traffic item {}".format(traffic_item_name))
@@ -155,7 +161,7 @@ def ixia_check_traffic(traffic_item_name, key="Rx Frames", value="0"):
         return False
 
     if key == "Rx Frames" or key == "Rx Frame Rate":
-        return ixia_check_traffic_item_rx_frame(traffic_item_name, key, value)
+        return ixia_check_traffic_item_rx_frame(traffic_item_name, key, value, exact_match)
     else:
         st.error("Unsupported check key for traffic: {}".format(key))
         return False

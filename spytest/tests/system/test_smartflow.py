@@ -15,7 +15,7 @@ def wait_for_smartflow_up(dut, max_time=0):
             return True
         time.sleep(3)
         if time.time() > t:
-            st.log("wait for smartflow up timeout({}s)", max_time)
+            st.log("wait for smartflow up timeout({}s)".format(max_time))
             return False
         
 

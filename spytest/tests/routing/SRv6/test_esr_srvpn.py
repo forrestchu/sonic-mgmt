@@ -1179,8 +1179,7 @@ def test_srvpn_performance_500K():
     dut2 = dut_list[1]
 
     for dut in dut_list:
-        st.config(dut, 'swssloglevel -l INFO -c orchagent', skip_error_check=True)
-        st.config(dut, 'swssloglevel -l INFO -c syncd', skip_error_check=True)
+        st.config(dut, 'touch /var/log/PerformanceTimer.Notice', skip_error_check=True)
 
     route_count = 500000
 
@@ -1261,6 +1260,9 @@ def test_srvpn_performance_500K():
     # 9. stop traffic
     ixia_stop_all_traffic()
 
+    for dut in dut_list:
+        st.config(dut, 'rm /var/log/PerformanceTimer.Notice', skip_error_check=True)
+
     st.report_pass("msg", "LoadPerf: {} rps, CovergePerf: {} rps".format(route_count / load_t, route_count / covergen_t))
 
 
@@ -1276,8 +1278,7 @@ def test_srvpn_performance_1M(collect_syslog, fname):
     dut2 = dut_list[1]
 
     for dut in dut_list:
-        st.config(dut, 'swssloglevel -l INFO -c orchagent', skip_error_check=True)
-        st.config(dut, 'swssloglevel -l INFO -c syncd', skip_error_check=True)
+        st.config(dut, 'touch /var/log/PerformanceTimer.Notice', skip_error_check=True)
 
     route_count = 1000000
 
@@ -1351,6 +1352,9 @@ def test_srvpn_performance_1M(collect_syslog, fname):
     # 9. stop traffic
     ixia_stop_all_traffic()
 
+    for dut in dut_list:
+        st.config(dut, 'rm /var/log/PerformanceTimer.Notice', skip_error_check=True)
+
     st.report_pass("msg", "LoadPerf: {} rps, CovergePerf: {} rps".format(route_count / load_t, route_count / covergen_t))
 
 @pytest.mark.community
@@ -1364,8 +1368,7 @@ def test_srvpn_performance_2M(collect_syslog, fname):
     dut1 = dut_list[0]
     dut2 = dut_list[1]
     for dut in dut_list:
-        st.config(dut, 'swssloglevel -l INFO -c orchagent', skip_error_check=True)
-        st.config(dut, 'swssloglevel -l INFO -c syncd', skip_error_check=True)
+        st.config(dut, 'touch /var/log/PerformanceTimer.Notice', skip_error_check=True)
 
     route_count = 2000000
 
@@ -1438,6 +1441,9 @@ def test_srvpn_performance_2M(collect_syslog, fname):
 
     # 9. stop traffic
     ixia_stop_all_traffic()
+
+    for dut in dut_list:
+        st.config(dut, 'rm /var/log/PerformanceTimer.Notice', skip_error_check=True)
 
     st.report_pass("msg", "LoadPerf: {} rps, CovergePerf: {} rps".format(route_count / load_t, route_count / covergen_t))
 

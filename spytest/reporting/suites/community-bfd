@@ -1,10 +1,10 @@
++file:routing/test_bfd.py
 +file:routing/MC_SCALE/test_mc_scale.py
 
 
 
 -test:test_subintf_501_502_traffic
--test:test_subintf_503_504_traffic
--test:test_bfd_attr_set
+
 #+args:--skip-init-config
 #+args:--skip-load-config base
 +args:--force-keep-minimize-config

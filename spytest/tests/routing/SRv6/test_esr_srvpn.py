@@ -1113,7 +1113,6 @@ def get_log_dir_path():
     logs_path = env.get("SPYTEST_LOGS_PATH", user_root)
     return logs_path
 
-def write_perf_data_to_csv(file, dir):
     try:
         with open(file, "r") as f:
             lines = f.readlines()
@@ -1164,9 +1163,8 @@ def collect_syslog(fname):
     if "[" in fname:
         name = fname.split("[")[1].split("]")[0]
     try:
-        timer_txt = os.path.join(os.getcwd(), "../", get_log_dir_path(), name + "_PerformanceTimer.json")
-        st.download_file_from_dut(dut2, "/etc/spytest/" + name + "_PerformanceTimer.json", timer_txt)
-        write_perf_data_to_csv(timer_txt, name)
+        log = os.path.join(os.getcwd(), "../", get_log_dir_path(), name + "_PerformanceTimer.json")
+        st.download_file_from_dut(dut2, "/etc/spytest/" + name + "_PerformanceTimer.json", log)
     except Exception:
         return
 

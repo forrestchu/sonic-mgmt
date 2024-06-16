@@ -929,6 +929,29 @@ def sanitize_file_by_pattern(pattern, infile_path, outfile_path):
     cmd_retval = execute_check_cmd(pattern.format(infile_path), trace_cmd=False, trace_out=False, skip_error=True)
     write_file(outfile_path, cmd_retval)
 
+def filter_and_extract_json(file_path, output_file):
+    pattern = re.compile(r'.*inc:.*({.*})')
+    filtered_lines = []
+
+    with open(file_path, 'r') as file:
+        for line in file:
+            match = pattern.search(line)
+            if match:
+                filtered_lines.append(match.group(1))
+
+    json_data = []
+    for line in filtered_lines:
+        try:
+            json_obj = json.loads(line)
+            json_data.append(json_obj)
+        except json.JSONDecodeError:
+            print(f"Invalid JSON format: {line}")
+
+    with open(output_file, 'w') as file:
+        json.dump(json_data, file, indent=4)
+
+    print(f"Extracted JSON data has been saved to {output_file}")
+
 def parse_dut_syslog(lvl, phase):
 
     """
@@ -972,18 +995,10 @@ def parse_dut_syslog(lvl, phase):
         name = test_name
         if "[" in test_name:
             name = test_name.split("[")[1].split("]")[0]
-        # Capture from local syslog lines containing "inc:" and "{" "}""
-        pattern = r"""grep -E "^\S*\s+\S+\s+\S+\s+\S+[0-9]+:[0-9]+:[0-9]+(\.[0-9]+){{0,1}}\s+\S+\s+.*inc:.*{{" {}"""
-        outfile = "{}/{}_PerformanceTimer.txt".format(ETC_SPYTEST, name)
-        sanitize_file_by_pattern(pattern, my_syslog, outfile)
- 
-        # Capture from local syslog lines containing '{"calls"...}', starting from the line containing 'Consumer::execute'
-        cmd = "grep -E -o '\{\"calls\"[^}]+}' " + my_syslog + " | sed -n -e '/Consumer::execute/,$p'"
+        
         outfile = "{}/{}_PerformanceTimer.json".format(ETC_SPYTEST, name)
-        cmd_retval = execute_check_cmd(cmd, trace_cmd=False, trace_out=False, skip_error=True)
-        write_file(outfile, cmd_retval)
-
-        print("PERFORMACE_TIMER_SYSLOGS_CAPTURED_FILE: {}".format(outfile))
+        filter_and_extract_json(my_syslog, outfile)
+        execute_check_cmd("wc -l {}".format(outfile))
 
     if lvl == "none" or lvl not in syslog_levels:
         # no need to parse syslog

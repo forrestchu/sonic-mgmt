@@ -42,7 +42,7 @@ def esr_srte_policy_func_hooks(request):
     st.log("esr_srte_policy_func_hooks enter {}".format(func_name))
     if func_name == 'test_srte_policy_2k_vrf_ipv4_ipv6_07':
         double_dut_load_config('ip_ipv6_2k_config', 'ip_ipv6_2k_config')
-        ixia_load_config(ESR_2K_POLICY_CONFIG)
+        ixia_load_config(ESR_IPV4_IPV6_POLICY_CONFIG)
         ixia_start_all_protocols()
         st.wait(60)
     else:
@@ -393,9 +393,6 @@ def test_srte_policy_2k_vrf_2k_policy_03():
     if not retry_api(check_bgp_state, dut2, "2000::179", retry_count= 6, delay= 10):
         st.report_fail("Step0: Check bgp state failed")
 
-    #if not retry_api(check_bgp_route_count, dut2, "2000::179", "200000", retry_count= 10, delay= 10):
-    #    st.report_fail("Step1: Chek route count failed")
-
     ixia_disable_traffic(TRAFFIC_1K_TE_POLICY)
     ixia_enable_traffic(TRAFFIC_2K_TE_POLICY)
     ret = ixia_start_traffic(TRAFFIC_2K_TE_POLICY)
@@ -492,9 +489,6 @@ def test_srte_policy_2k_vrf_2k_policy_color_only_04():
 
     if not retry_api(check_bgp_state, dut2, "2000::179", retry_count= 6, delay= 10):
         st.report_fail("Step0: Check bgp state failed")
-
-    #if not retry_api(check_bgp_route_count, dut2, "2000::179", "200000", retry_count= 10, delay= 10):
-    #    st.report_fail("Step1: Chek route count failed")
 
     ixia_disable_traffic(TRAFFIC_1K_TE_POLICY)
     ixia_enable_traffic(TRAFFIC_2K_TE_POLICY)
@@ -743,11 +737,20 @@ def test_srte_policy_2k_vrf_4k_policy_falp_06():
     data.traffic_2k_te_policy = False
     st.report_pass("test_case_passed")
 
-    '''
+'''
 1. Dut1/Dut2 config 2k vrfs config ipv4 ipv6 route
 2. Check traffic
 '''
 @pytest.mark.community
 @pytest.mark.community_pass
 def test_srte_policy_2k_vrf_ipv4_ipv6_07():
+
+    #if not retry_api(check_bgp_route_count, dut2, "2000::179", "200000", True,  retry_count= 10, delay= 30):
+    #    st.report_fail("Step1: Chek route count failed")
+
+    #st.wait(120)
+
+    #if not retry_api(check_srv6_te_policy_active, dut2, 4003,  retry_count= 10, delay= 30):
+    #    st.report_fail("Step2: Chek te policy active count failed")
+
     st.report_pass("test_case_passed")

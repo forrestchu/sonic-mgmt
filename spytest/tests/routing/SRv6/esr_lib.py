@@ -877,19 +877,53 @@ def check_bgp_state(dut, neighbor_ip):
 def check_bfd_state(dut, key, check_field):
     return double_check_sbfd(dut, key, check_field, False, False)
 
-def check_route_count(dut, neighbor_ip, count):
+def check_bgp_vpn_route_count(dut, neighbor_ip, count, is_ipv6=False):
 
-    bgp_cmd = "show bgp ipv4 vpn summary neighbor {} json".format(neighbor_ip)
+    if is_ipv6:
+        bgp_cmd = "show bgp ipv6 vpn summary neighbor {} json".format(neighbor_ip)
+    else:
+        bgp_cmd = "show bgp ipv4 vpn summary neighbor {} json".format(neighbor_ip)
     output = st.show(dut, bgp_cmd, type='vtysh')
-    peer_info = output["peers"][neighbor_ip]
-    pfxRcd_value = peer_info["pfxRcd"]
+    st.log (output)
+    try:
+        data = json.loads(output)
+        peer_info = data["peers"][neighbor_ip]
+        pfxRcd_value = peer_info["pfxRcd"]
 
-    st.log (pfxRcd_value)
+        st.log (pfxRcd_value)
 
-    if count == pfxRcd_value:
-        return True
+        if count == pfxRcd_value:
+            return True
+
+    except Exception as e:
+        st.log('cli_show_json: failed to convert json output {}'.format(e))
+        return False
 
     return False
 
-def check_bgp_route_count(dut, neighbor_ip, count):
-    return check_route_count(dut, neighbor_ip, count)
+def check_bgp_route_count(dut, neighbor_ip,  count, is_ipv6):
+    return check_bgp_vpn_route_count(dut, neighbor_ip, count, is_ipv6)
+
+def check_srv6_te_policy_active_count(dut, count):
+    
+    cmd = "show srv6 tunnel detail"
+    output = st.show(dut, cmd, type='vtysh')
+    st.log (output)
+    match = re.search(r'Active count :\s*(\d+)', output)
+    try:
+        if match:
+            active_count = int(match.group(1))
+            st.log("Active count:".format(active_count))
+        else:
+            st.log("No match found for 'Active count'")
+        if active_count == count:
+            return True
+
+    except Exception as e:
+        st.log('cli_show_json: failed to convert json output {}'.format(e))
+        return False
+    return False
+
+
+def check_srv6_te_policy_active(dut, count):
+    return check_srv6_te_policy_active_count(dut, count)

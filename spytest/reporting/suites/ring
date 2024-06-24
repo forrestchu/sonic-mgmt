@@ -25,6 +25,9 @@
 #+file:routing/SBFD/test_esr_sbfd.py
 
 # testcases that [test_vrf.py] alreay pass
+-test:test_VrfFun_cli_clear_cmd
+-test:test_VrfFun_26_27
+-test:test_VrfFun001_06
 -test:test_VrfFun002
 -test:test_VrfFun003
 -test:test_VrfFun004
@@ -76,7 +79,7 @@
 # -test:test_ft_lldp_lldplocportdesc
 # -test:test_ft_lldp_rem_man_addr_table
 -test:test_srvpn_performance_500K
-#-test:test_srvpn_performance_1M
+-test:test_srvpn_performance_1M
 -test:test_srvpn_performance_2M
 # -test:test_bfd_for_static_route_case8
 # -test:test_subintf_501_502_traffic

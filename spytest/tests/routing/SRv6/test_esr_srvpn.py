@@ -1177,11 +1177,7 @@ def test_srvpn_performance_500K():
     dut2 = dut_list[1]
 
     for dut in dut_list:
-<<<<<<< HEAD
-        st.config(dut, 'docker exec swss touch /var/log/PerformanceTimer.Notice', skip_error_check=True)
-=======
         st.config(dut, 'docker exec -it swss sh -c "touch /var/log/PerformanceTimer.Notice"', skip_error_check=True)
->>>>>>> create indicator file inside docker
 
     route_count = 500000
 

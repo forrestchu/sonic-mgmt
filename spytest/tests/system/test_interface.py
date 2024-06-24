@@ -1,5 +1,6 @@
 import pytest
 import re, time
+import json
 
 from spytest import st, tgapi, SpyTestDict
 import apis.switching.vlan as vlanapi
@@ -17,6 +18,9 @@ def interface_module_hooks(request):
     global vars
     vars = st.ensure_min_topology("D1D2:2", "D1T1:2")
     initialize_variables()
+
+    config_fdb()
+
     if not vlanapi.create_vlan(vars.D1, intf_data.vlan_id):
         st.report_fail("vlan_create_fail", intf_data.vlan_id)
     if not vlanapi.add_vlan_member(vars.D1, intf_data.vlan_id, [vars.D1T1P1, vars.D1T1P2]):
@@ -95,6 +99,21 @@ def initialize_variables():
     intf_data.down_delay_ms = '20000'
     intf_data.down_delay_time_check = 8
     intf_data.up_delay_ms = '200'
+
+def config_fdb():
+    config_data = {
+        "SWITCH": {
+            "FDB": {
+                "fdb_aging_time": "1800",
+                "fdb_broadcast_miss_packet_action": "forward",
+                "fdb_multicast_miss_packet_action": "forward",
+                "fdb_unicast_miss_packet_action": "forward"
+            }
+        }
+    }
+    json_config = json.dumps(config_data)
+    st.apply_json(vars.D1, json_config)
+    st.apply_json(vars.D2, json_config)
 
 
 def port_fec_no_fec(vars, speed, fec=["none", "rs"]):

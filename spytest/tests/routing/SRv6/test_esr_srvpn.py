@@ -209,6 +209,7 @@ def esr_srvpn_func_hooks(request):
                                      "test_base_config_srvpn_multi_vrf_03",
                                      "test_end_x_action",
                                      "test_srvpn_ecmp_04",
+                                     "test_srvpn_performance",
                                      "test_srvpn_performance_500K",
                                      "test_srvpn_performance_1M",
                                      "test_srvpn_performance_2M"]:
@@ -1156,17 +1157,114 @@ def get_log_dir_path():
                         continue
                     writer.writerow([gap, interval, duration, inc, '{:.2f}'.format(inc/duration)]) 
 
-@pytest.fixture(scope="function")
-def collect_syslog(fname):
-    yield fname
-    name = fname
-    if "[" in fname:
-        name = fname.split("[")[1].split("]")[0]
-    try:
-        log = os.path.join(os.getcwd(), "../", get_log_dir_path(), name + "_PerformanceTimer.json")
-        st.download_file_from_dut(dut2, "/etc/spytest/" + name + "_PerformanceTimer.json", log)
-    except Exception:
-        return
+@pytest.mark.community
+@pytest.mark.community_pass
+@pytest.mark.parametrize("scale", [
+    ("500K"),
+    ("2M"),
+])
+def test_srvpn_performance(scale):
+
+    st.banner("test_srvpn_performance_{} begin".format(scale))
+
+    route_count = 1000000
+
+    if scale == "500K":
+        route_count = 500000
+    elif scale == "1M":
+        route_count = 1000000
+    elif scale == "2M":
+        route_count = 2000000
+
+    dut_list = st.get_dut_names()
+
+    for dut in dut_list:
+        st.config(dut, 'docker exec -it swss sh -c "touch /var/log/PerformanceTimer.Notice"', skip_error_check=True)
+
+    #load TG config
+    ixia_config = os.path.join(os.getcwd(), "routing/SRv6/performance/ixia_one_vrf_{}.json".format(scale))
+    ixia_load_config(ixia_config)
+
+    # start traffic
+    ixia_start_all_traffic()
+    ixia_start_logging_port_view()
+
+    # start protocol
+    ixia_start_all_protocols()
+    st.wait(300)
+    if not retry_api(check_vpn_route_nums, dut=dut2, expected_num=route_count * 2, compare=0, retry_count=3, delay=300):
+        st.report_fail("check vpn route_nums failed")
+
+    # get memory info for DUT1 bgpd,zebra,orchagent,syncd
+    st.log("====== DUT1 ======")
+    memory = duts_get_memory(dut1, 'bgpd')
+    st.log("====== Memory bgpd ======")
+    st.log(memory)
+    memory = duts_get_memory(dut1, 'zebra')
+    st.log("====== Memory zebra ======")
+    st.log(memory)
+    memory = duts_get_memory(dut1, 'orchagent')
+    st.log("====== Memory orchagent ======")
+    st.log(memory)
+    memory = duts_get_memory(dut1, 'syncd')
+    st.log("====== Memory syncd ======")
+    st.log(memory)
+
+    # get memory info for DUT2 bgpd,zebra,orchagent,syncd
+    st.log("====== DUT2 ======")
+    memory = duts_get_memory(dut2, 'bgpd')
+    st.log("====== Memory bgpd ======")
+    st.log(memory)
+    memory = duts_get_memory(dut2, 'zebra')
+    st.log("====== Memory zebra ======")
+    st.log(memory)
+    memory = duts_get_memory(dut2, 'orchagent')
+    st.log("====== Memory orchagent ======")
+    st.log(memory)
+    memory = duts_get_memory(dut2, 'syncd')
+    st.log("====== Memory syncd ======")
+    st.log(memory)
+
+    # stop protocol
+    ixia_stop_all_protocols()
+    st.wait(300)
+
+    # get performance data
+    ixia_stop_logging_port_view()
+    local_file = "port_statistics_{}.csv".format(route_count)
+    local_file = os.path.join(os.getcwd(), "../", get_log_dir_path(), local_file)
+
+    perf_jpg_file = 'eSR_Performance_{}.jpg'.format(route_count)
+    perf_jpg_file = os.path.join(os.getcwd(), "../", get_log_dir_path(), perf_jpg_file)
+
+    ixia_get_port_view_data(local_file)
+    plot_perf(local_file, perf_jpg_file)
+
+    load_t, cursor = get_route_load_time(0, local_file)
+    covergen_t = get_route_convergence_time(cursor, local_file)
+
+    st.log("======== {} Route Load Time =======".format(route_count))
+    st.log("Load Time: {} s, Rate: {} rps".format(load_t, route_count / load_t))
+
+    st.log("======== {} Route Convergence Time =======".format(route_count))
+    st.log("Convergence Time: {} s, Rate: {} rps".format(covergen_t, route_count / covergen_t))
+
+    # stop traffic
+    ixia_stop_all_traffic()
+
+    for dut in dut_list:
+        st.config(dut, 'docker exec -it swss sh -c "rm /var/log/PerformanceTimer.Notice"', skip_error_check=True)
+
+        perf_log_file = '{}_{}_perf_syslog'.format(dut, scale)
+        st.config(dut, 'grep inc:87 /var/log/syslog.1 > /tmp/{}'.format(perf_log_file))
+        st.config(dut, 'grep inc:87 /var/log/syslog >> /tmp/{}'.format(perf_log_file))
+        local_perf_log_file = os.path.join(os.getcwd(), "../", get_log_dir_path(), perf_log_file)
+        try:
+            st.download_file_from_dut(dut, "/tmp/{}".format(perf_log_file), local_perf_log_file)
+        except Exception:
+            return
+
+    st.report_pass("msg", "LoadPerf: {} rps, CovergePerf: {} rps".format(route_count / load_t, route_count / covergen_t))
 
 @pytest.mark.community
 @pytest.mark.community_pass
@@ -1273,10 +1371,7 @@ def test_srvpn_performance_500K():
 
 @pytest.mark.community
 @pytest.mark.community_pass
-@pytest.mark.parametrize("fname", [
-    ("srvpn_performance_1M"),
-])
-def test_srvpn_performance_1M(collect_syslog, fname):
+def test_srvpn_performance_1M():
     st.banner("test_srvpn_performance_1M begin")
     dut_list = st.get_dut_names()
     dut1 = dut_list[0]
@@ -1372,10 +1467,7 @@ def test_srvpn_performance_1M(collect_syslog, fname):
 
 @pytest.mark.community
 @pytest.mark.community_pass
-@pytest.mark.parametrize("fname", [
-    ("srvpn_performance_2M"),
-])
-def test_srvpn_performance_2M(collect_syslog, fname):
+def test_srvpn_performance_2M():
     st.banner("test_srvpn_performance_2M begin")
     dut_list = st.get_dut_names()
     dut1 = dut_list[0]

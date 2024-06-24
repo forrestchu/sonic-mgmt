@@ -1261,6 +1261,13 @@ def test_srvpn_performance_500K():
     for dut in dut_list:
         st.config(dut, 'docker exec -it swss sh -c "rm /var/log/PerformanceTimer.Notice"', skip_error_check=True)
 
+    for dut in dut_list:
+        perf_log_file = '{}_500K_perf_syslog'.format(dut)
+        st.config(dut, 'grep inc:87 /var/log/syslog.1 > /tmp/{}'.format(perf_log_file))
+        st.config(dut, 'grep inc:87 /var/log/syslog >> /tmp/{}'.format(perf_log_file))
+        local_perf_log_file = os.path.join(os.getcwd(), "../", get_log_dir_path(), perf_log_file)
+        st.download_file_from_dut(dut, "/tmp/{}".format(perf_log_file), local_perf_log_file)
+
     st.report_pass("msg", "LoadPerf: {} rps, CovergePerf: {} rps".format(route_count / load_t, route_count / covergen_t))
 
 
@@ -1353,6 +1360,13 @@ def test_srvpn_performance_1M(collect_syslog, fname):
     for dut in dut_list:
         st.config(dut, 'docker exec -it swss sh -c "rm /var/log/PerformanceTimer.Notice"', skip_error_check=True)
 
+    for dut in dut_list:
+        perf_log_file = '{}_1M_perf_syslog'.format(dut)
+        st.config(dut, 'grep inc:87 /var/log/syslog.1 > /tmp/{}'.format(perf_log_file))
+        st.config(dut, 'grep inc:87 /var/log/syslog >> /tmp/{}'.format(perf_log_file))
+        local_perf_log_file = os.path.join(os.getcwd(), "../", get_log_dir_path(), perf_log_file)
+        st.download_file_from_dut(dut, "/tmp/{}".format(perf_log_file), local_perf_log_file)
+
 
     st.report_pass("msg", "LoadPerf: {} rps, CovergePerf: {} rps".format(route_count / load_t, route_count / covergen_t))
 
@@ -1443,6 +1457,13 @@ def test_srvpn_performance_2M(collect_syslog, fname):
 
     for dut in dut_list:
         st.config(dut, 'docker exec -it swss sh -c "rm /var/log/PerformanceTimer.Notice"', skip_error_check=True)
+
+    for dut in dut_list:
+        perf_log_file = '{}_2M_perf_syslog'.format(dut)
+        st.config(dut, 'grep inc:87 /var/log/syslog.1 > /tmp/{}'.format(perf_log_file))
+        st.config(dut, 'grep inc:87 /var/log/syslog >> /tmp/{}'.format(perf_log_file))
+        local_perf_log_file = os.path.join(os.getcwd(), "../", get_log_dir_path(), perf_log_file)
+        st.download_file_from_dut(dut, "/tmp/{}".format(perf_log_file), local_perf_log_file)
 
     st.report_pass("msg", "LoadPerf: {} rps, CovergePerf: {} rps".format(route_count / load_t, route_count / covergen_t))
 

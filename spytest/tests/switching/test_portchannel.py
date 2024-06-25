@@ -110,6 +110,8 @@ def portchannel_func_hooks(request):
     elif st.get_func_name(request) == 'test_ft_lag_l3_hash_sip_dip_l4port':
         config_test_ft_lag_l3_hash_sip_dip_l4port()
         verify_portchannel_status()
+    elif st.get_func_name(request) == 'test_ft_lag_member_remove_delay_and_tx_delay':
+        config_test_ft_lag_member_remove_delay_and_tx_delay()
     elif st.get_func_name(request) == 'test_ft_portchannel_with_vlan_variations':
         dict1 = {"portchannel": data.portchannel_name, "members": [data.members_dut1[2],
                                             data.members_dut1[3]], "flag": 'del'}
@@ -126,6 +128,8 @@ def portchannel_func_hooks(request):
         portchannel_behavior_with_untagged_traffic_verify()
     elif st.get_func_name(request) == 'test_ft_lag_l3_hash_sip_dip_l4port':
         unconfig_test_ft_lag_l3_hash_sip_dip_l4port()
+    elif st.get_func_name(request) == 'test_ft_lag_member_remove_delay_and_tx_delay':
+        unconfig_test_ft_lag_member_remove_delay_and_tx_delay()
     elif st.get_func_name(request) == 'test_ft_portchannel_with_vlan_variations':
         dict1 = {"portchannel": data.portchannel_name, "members": [data.members_dut1[2],
                                                                    data.members_dut1[3]], "flag": 'add'}
@@ -181,6 +185,18 @@ def config_test_ft_lag_l3_hash_sip_dip_l4port():
     delete_vlan_member_using_thread([vars.D1, vars.D2], [data.vid, data.vid], [[data.portchannel_name, vars.D1T1P1],
                                     [data.portchannel_name, vars.D2T1P1]], True)
     verify_portchannel_status()
+
+def config_test_ft_lag_member_remove_delay_and_tx_delay():
+    delete_vlan_member_using_thread([vars.D1, vars.D2], [data.vid, data.vid], [[data.portchannel_name, vars.D1T1P1],
+                                    [data.portchannel_name, vars.D2T1P1]], True)
+    #delete portchannel first, will recreate portchannel with delay setting in testcase
+    #portchannel_obj.clear_portchannel_configuration([data.dut1, data.dut2])
+    portchannel_obj.delete_portchannel_member(data.dut1, data.portchannel_name, data.members_dut1)
+    portchannel_obj.delete_portchannel_member(data.dut2, data.portchannel_name, data.members_dut2)
+    st.wait(5)
+    portchannel_obj.delete_portchannel(data.dut1, data.portchannel_name)
+    portchannel_obj.delete_portchannel(data.dut2, data.portchannel_name)
+
 def portchannel_behavior_with_tagged_traffic_verify():
     data.tg.tg_traffic_control(action='stop', stream_handle=data.streams['D1T1_SD_Mac_Hash1'])
     if data.return_value == 2:
@@ -223,6 +239,10 @@ def unconfig_test_ft_portchannel_disabled_with_traffic():
     intf_obj.interface_operation(vars.D1, data.portchannel_name, 'startup')
 
 def unconfig_test_ft_lag_l3_hash_sip_dip_l4port():
+    ip_obj.clear_ip_configuration([vars.D1, vars.D2], family='ipv4', thread=True)
+    add_vlan_member_using_thread([vars.D1, vars.D2], [data.vid, data.vid], [[data.portchannel_name, vars.D1T1P1],
+                                                    [data.portchannel_name, vars.D2T1P1]],tagged=True)
+def unconfig_test_ft_lag_member_remove_delay_and_tx_delay():
     ip_obj.clear_ip_configuration([vars.D1, vars.D2], family='ipv4', thread=True)
     add_vlan_member_using_thread([vars.D1, vars.D2], [data.vid, data.vid], [[data.portchannel_name, vars.D1T1P1],
                                                     [data.portchannel_name, vars.D2T1P1]],tagged=True)
@@ -293,6 +313,100 @@ def verify_traffic_hashed_or_not(dut, port_list, pkts_per_port, traffic_loss_ver
             intf_obj.show_interface_counters_detailed(vars.D1, vars.D1T1P1)
             st.report_fail('traffic_loss_observed')
     return data.intf_count_dict
+
+def verify_traffic_lost(dut, port_list, port_in, dut2, rx_port_list, port_out):
+
+    sub_list = []
+    sub_list.append([intf_obj.show_interface_counters_all, dut])
+    sub_list.append([intf_obj.show_interface_counters_all, dut2])
+    [output, exceptions] = exec_all(True, sub_list)
+    ensure_no_exception(exceptions)
+    data.intf_counters_1, data.intf_counters_2 = output
+
+    data.tx_traffic = {}
+    data.rx_traffic = {}
+
+    total_tx = 0
+    total_rx = 0
+    for counter_dict in data.intf_counters_1:
+        if counter_dict['iface'] in port_list:
+            try:
+                iface = counter_dict['iface']
+                tx_ok_counter = counter_dict['tx_ok'].replace(',', '')
+                data.tx_traffic[iface] = int(tx_ok_counter) if tx_ok_counter.isdigit() else 0
+
+                total_tx += data.tx_traffic[iface]
+            except Exception:
+                st.report_fail('invalid_traffic_stats tx_ok_counter: {}'.format(tx_ok_counter))
+        if counter_dict['iface'] == port_in:
+            try:
+                rx_ok_counter = counter_dict['rx_ok'].replace(',', '')
+                data.rx_in = int(rx_ok_counter) if rx_ok_counter.isdigit() else 0
+            except Exception:
+                st.report_fail('invalid_traffic_stats')
+
+    for counter_dict in data.intf_counters_2:
+        if counter_dict['iface'] in rx_port_list:
+            try:
+                iface = counter_dict['iface']
+                rx_ok_counter = counter_dict['rx_ok'].replace(',', '')
+                data.rx_traffic[iface] = int(rx_ok_counter) if rx_ok_counter.isdigit() else 0
+
+                total_rx += data.rx_traffic[iface]
+            except Exception:
+                st.report_fail('invalid_traffic_stats rx_ok_counter: {}'.format(rx_ok_counter))
+        if counter_dict['iface'] == port_out:
+                try:
+                    tx_ok_counter = counter_dict['tx_ok'].replace(',', '')
+                    data.tx_out = int(tx_ok_counter) if tx_ok_counter.isdigit() else 0
+                except Exception:
+                    st.report_fail('invalid_traffic_stats')
+                break
+
+    st.log("verify_traffic_lost lag_total_tx:{}, lag_total_rx:{}".format(total_tx, total_rx))
+
+    ##check traffic, we allow 1/10000 traffic loss
+    if total_tx > total_rx and total_tx > total_rx + total_rx/10000:
+        #1/10000 packet loss maximum
+        st.log("traffic_loss!! lag_total_tx:{}, lag_total_rx:{}".format(total_tx, total_rx))
+        intf_obj.show_interface_counters_detailed(vars.D1, vars.D1T1P1)
+        st.report_fail('traffic_loss_observed')
+
+    if total_rx > total_tx and total_rx > total_tx + total_tx/10000:
+        #1/10000 packet loss maximum
+        st.log("traffic_loss!! lag_total_tx:{}, lag_total_rx:{}".format(total_tx, total_rx))
+        intf_obj.show_interface_counters_detailed(vars.D1, vars.D1T1P1)
+        st.report_fail('traffic_loss_observed')
+
+    st.log("verify_traffic_lost lag_total_tx:{}, rx_in:{}".format(total_tx, data.rx_in))
+
+    if total_tx > data.rx_in and total_tx > data.rx_in + data.rx_in/10000:
+        #1/10000 packet loss maximum
+        st.log("traffic_loss!! lag_total_tx:{}, rx_in:{}".format(total_tx, data.rx_in))
+        intf_obj.show_interface_counters_detailed(vars.D1, vars.D1T1P1)
+        st.report_fail('traffic_loss_observed')
+
+    if data.rx_in > total_tx and data.rx_in > total_tx + total_tx/10000:
+        #1/10000 packet loss maximum
+        st.log("traffic_loss!! lag_total_tx:{}, rx_in:{}".format(total_tx, data.rx_in))
+        intf_obj.show_interface_counters_detailed(vars.D1, vars.D1T1P1)
+        st.report_fail('traffic_loss_observed')
+
+    st.log("verify_traffic_lost lag_total_rx:{}, tx_out:{}".format(total_rx, data.tx_out))
+
+    if data.tx_out > total_rx and data.tx_out > total_rx + total_rx/10000:
+        #1/10000 packet loss maximum
+        st.log("traffic_loss!! data.tx_out:{}, lag_total_rx:{}".format(data.tx_out, total_rx))
+        intf_obj.show_interface_counters_detailed(vars.D1, vars.D1T1P1)
+        st.report_fail('traffic_loss_observed')
+
+    if total_rx > data.tx_out and total_rx > data.tx_out + data.tx_out/10000:
+        #1/10000 packet loss maximum
+        st.log("traffic_loss!! data.tx_out:{}, lag_total_rx:{}".format(data.tx_out, total_rx))
+        intf_obj.show_interface_counters_detailed(vars.D1, vars.D1T1P1)
+        st.report_fail('traffic_loss_observed')
+
+    return data
 
 def delete_vlan_member_using_thread(dut_list, vlan_list, members_list, tagged= False):
     sub_list = []
@@ -619,7 +733,7 @@ def test_ft_untagged_traffic_on_portchannel():
     verify_traffic_hashed_or_not(vars.D1, data.members_dut1 , 400)
     st.report_pass('test_case_passed')
 
-
+@pytest.mark.esr
 @pytest.mark.l3_lag_hash
 def test_ft_lag_l3_hash_sip_dip_l4port():
     """
@@ -746,11 +860,19 @@ def test_ft_lag_l3_hash_sip_dip_l4port():
     verify_traffic_hashed_or_not(vars.D1, data.members_dut1, 300,
                                  traffic_loss_verify=True, rx_port=vars.D1T1P1, tx_port=vars.D2T1P1, dut2=vars.D2)
     clear_intf_counters_using_thread([vars.D1, vars.D2])
+
+    #cleanup static route
+    ip_obj.delete_static_route(vars.D1, data.ip_addr_pc2, data.static_ip2, shell='vtysh', family=data.ipv4)
+    dict1 = {'next_hop': data.ip_addr_pc2, 'static_ip': data.static_ip3, 'shell': "vtysh", 'family': 'ipv4'}
+    dict2 = {'next_hop': data.ip_addr_po3, 'static_ip': data.static_ip3, 'shell': "vtysh", 'family': 'ipv4'}
+    output = exec_parallel(True, [vars.D1, vars.D2], ip_obj.delete_static_route, [dict1, dict2])
+    ensure_no_exception(output[1])
+    ip_obj.delete_static_route(vars.D2, data.ip_addr_pc1, data.static_ip1, shell='vtysh', family=data.ipv4)
+
     if result_state:
         st.report_pass('test_case_passed')
     else:
         st.report_fail("traffic_not_hashed", data.dut1)
-
 
 @pytest.mark.lag_member_interchanged
 def test_ft_member_state_after_interchanged_the_members_across_portchannels():
@@ -878,6 +1000,7 @@ def test_ft_member_state_after_interchanged_the_members_across_portchannels():
     else:
         st.report_fail("portchannel_member_state_failed")
 
+@pytest.mark.esr
 def test_ft_lag_fast_mode():
 
     result_state = True
@@ -957,6 +1080,239 @@ def test_ft_lag_fast_mode():
         st.report_pass("operation_successful")
     else:
         st.report_fail("portchannel_member_state_failed")
+
+@pytest.mark.esr
+@pytest.mark.l3_traffic_test_with_member_ops
+@pytest.mark.lag_remove_delay
+@pytest.mark.lag_tx_delay
+def test_ft_lag_member_remove_delay_and_tx_delay():
+    """
+    Author: wumu.zsl
+    scenario1 - Verify that traffic not lost normally.
+    scenario1 - Verify that traffic not lost during multiple member port add/remove.
+    scenario2 - Verify that traffic not lost during multiple member port disable/enable.
+    """
+    st.log('1.1-set up remove_delay and tx_delay')
+    portchannel_obj.config_portchannel_remove_delay(data.dut1)
+    portchannel_obj.config_portchannel_tx_delay(data.dut1)
+    portchannel_obj.config_portchannel_remove_delay(data.dut2)
+    portchannel_obj.config_portchannel_tx_delay(data.dut2)
+    portchannel_obj.config_portchannel_fast_mode(data.dut1, fast_mode=True)
+    portchannel_obj.config_portchannel_fast_mode(data.dut2, fast_mode=True)
+
+    st.log('1.2-Creating portchannel and adding members in both DUTs')
+    portchannel_obj.config_portchannel(data.dut1, data.dut2, data.portchannel_name, data.members_dut1,
+                                           data.members_dut2, "add")
+
+    st.log('1.3-check portchannel status')
+    verify_portchannel_status()
+
+    st.log('1.4-config interfaces and routes')
+    stream = data.tg.tg_traffic_config(port_handle=data.tg_ph_1, mode='create', length_mode='fixed', mac_dst=data.dut1_rt_int_mac,
+             mac_src='00:05:00:00:00:01', mac_src_mode='increment', mac_src_step='00:00:00:00:00:01', mac_dst_mode='fixed',
+             ip_src_addr=data.ip41, ip_src_mode='increment', ip_src_count=data.ip_src_count, ip_src_step='0.0.0.1', mac_src_count=1000,
+             ip_dst_addr=data.ip42, ip_dst_mode='fixed', pkts_per_burst=1000, l3_protocol='ipv4', transmit_mode='continuous')
+    data.streams['D1T1_SD_ip_Hash1'] = stream['stream_id']
+    result_state = True
+    data.subnet = '8'
+    data.ip_addr_pc1 = '20.1.1.2'
+    data.ip_addr_pc2 = '20.1.1.3'
+    data.ipv4 = 'ipv4'
+    data.ip_addr_po1 = '10.1.1.3'
+    data.ip_addr_po2 = '30.1.1.2'
+    data.ip_addr_po3 = '30.1.1.3'
+    data.static_ip1 = '10.0.0.0/8'
+    data.static_ip2 = '30.0.0.0/8'
+    data.static_ip3 = '40.0.0.0/8'
+    data.remote_mac = '00:00:00:00:00:01'
+    data.remote_mac2 = '00:00:00:00:00:02'
+    dict1 = {'interface_name': data.portchannel_name, 'ip_address': data.ip_addr_pc1, 'subnet': data.subnet,
+             'family': "ipv4"}
+    dict2 = {'interface_name': data.portchannel_name, 'ip_address': data.ip_addr_pc2, 'subnet': data.subnet,
+             'family': "ipv4"}
+    output = exec_parallel(True, [vars.D1, vars.D2], ip_obj.config_ip_addr_interface, [dict1, dict2])
+    ensure_no_exception(output[1])
+    dict1 = {'interface_name': vars.D1T1P1, 'ip_address': data.ip_addr_po1, 'subnet': data.subnet, 'family': "ipv4"}
+    dict2 = {'interface_name': vars.D2T1P1, 'ip_address': data.ip_addr_po2, 'subnet': data.subnet, 'family': "ipv4"}
+    output = exec_parallel(True, [vars.D1, vars.D2], ip_obj.config_ip_addr_interface, [dict1, dict2])
+    ensure_no_exception(output[1])
+    dict1 = {'interface_name': vars.D1T1P1, 'ip_address': "{}/8".format(data.ip_addr_po1), 'family': "ipv4"}
+    dict2 = {'interface_name': vars.D2T1P1, 'ip_address': "{}/8".format(data.ip_addr_po2), 'family': "ipv4"}
+    output = exec_parallel(True, [vars.D1, vars.D2], ip_obj.verify_interface_ip_address, [dict1, dict2])
+    ensure_no_exception(output[1])
+    if not output[0][0]:
+        st.report_fail('ip_routing_int_create_fail', data.ip_addr_po1)
+    if not output[0][1]:
+        st.report_fail('ip_routing_int_create_fail', data.ip_addr_po2)
+
+    # ping from partner
+    ip_obj.ping(vars.D2, data.ip_addr_pc1 , family='ipv4', count=3)
+    # test arp entry on portchannel
+    if not arp_obj.verify_arp(vars.D1, data.ip_addr_pc2):
+        st.error('Dynamic arp entry on prtchannel failed: ARP_entry_dynamic_entry_fail')
+        result_state = False
+    port_obj.shutdown(vars.D1, [data.portchannel_name])
+    # test arp entry on portchannel after shutdown it
+    if arp_obj.verify_arp(vars.D1, data.ip_addr_pc2):
+        st.error('Dynamic arp entry on prtchannel is not removed after shutdown:ARP_dynamic_entry_removal_fail')
+        result_state = False
+    port_obj.noshutdown(vars.D1, [data.portchannel_name])
+
+    ip_obj.create_static_route(vars.D1, data.ip_addr_pc2, data.static_ip2, shell='vtysh', family=data.ipv4)
+    dict1 = {'next_hop': data.ip_addr_pc2, 'static_ip': data.static_ip3, 'shell': "vtysh", 'family': 'ipv4'}
+    dict2 = {'next_hop': data.ip_addr_po3, 'static_ip': data.static_ip3, 'shell': "vtysh", 'family': 'ipv4'}
+    output = exec_parallel(True, [vars.D1, vars.D2], ip_obj.create_static_route, [dict1, dict2])
+    ensure_no_exception(output[1])
+    arp_obj.add_static_arp(vars.D2, data.ip_addr_po3, data.remote_mac, interface=vars.D2T1P1)
+    arp_obj.add_static_arp(vars.D2, data.ip42, data.remote_mac2, interface=vars.D2T1P1)
+    ip_obj.create_static_route(vars.D2, data.ip_addr_pc1, data.static_ip1, shell='vtysh', family=data.ipv4)
+    [output, exceptions] = exec_all(True, [
+        ExecAllFunc(poll_wait, ip_obj.verify_ip_route, 10, vars.D1, data.ipv4, ip_address=data.static_ip2, type="S"),
+        ExecAllFunc(poll_wait, ip_obj.verify_ip_route, 10, vars.D2, data.ipv4, ip_address=data.static_ip1, type="S")])
+    if not all(output):
+        st.error('ip_static_route_create_fail')
+        result_state = False
+    ensure_no_exception(exceptions)
+    if not ip_obj.ping(vars.D1, data.ip_addr_pc2):
+        st.report_fail("ping_fail", data.ip_addr_pc2)
+    dict1 = {'addresses': data.ip_addr_po2}
+    dict2 = {'addresses': data.ip_addr_po1}
+    output = exec_parallel(True, [vars.D1, vars.D2], ip_obj.ping, [dict1, dict2])
+    ensure_no_exception(output[1])
+    if not output[0][0]:
+        st.report_fail("ping_fail", data.ip_addr_po2)
+    if not output[0][1]:
+        st.report_fail("ping_fail", data.ip_addr_po1)
+    # Ping from tgen to DUT.
+    res = tgapi.verify_ping(src_obj=data.tg, port_handle=data.tg_ph_1, dev_handle=data.h1['handle'], dst_ip=data.ip42,
+                      ping_count='1', exp_count='1')
+    st.log("PING_RES: " + str(res))
+    if res:
+        st.log("Ping succeeded.")
+    else:
+        st.log("Ping failed.")
+
+
+    st.log('1.5-test scenario1')
+    clear_intf_counters_using_thread([vars.D1, vars.D2])
+    data.tg.tg_traffic_control(action='run', stream_handle=data.streams['D1T1_SD_ip_Hash1'], enable_arp=0)
+    st.wait(5)
+    data.tg.tg_traffic_control(action='stop', stream_handle=data.streams['D1T1_SD_ip_Hash1'])
+    st.log("Verify that traffic is forwarding over portchannel members")
+    verify_traffic_lost(vars.D1, data.members_dut1, vars.D1T1P1, vars.D2, data.members_dut2, vars.D2T1P1)
+
+    data.tg.tg_traffic_control(action='reset', port_handle=data.tg_ph_1)
+
+
+    st.log('1.5-test scenario2')
+    stream = data.tg.tg_traffic_config(port_handle=data.tg_ph_1, mode='create', length_mode='fixed', frame_size=90,
+             mac_src='00:05:00:00:00:01', mac_src_mode='fixed', mac_dst=data.dut1_rt_int_mac, ip_src_addr=data.ip41,
+             ip_src_mode='fixed', ip_dst_addr=data.ip43, ip_dst_mode='increment', ip_dst_step='0.0.0.1',
+             ip_dst_count=data.ip_dst_count, pkts_per_burst=2000, l3_protocol='ipv4', transmit_mode='continuous')
+    data.streams['D1T1_SD_ip_Hash2'] = stream['stream_id']
+    clear_intf_counters_using_thread([vars.D1, vars.D2])
+    data.tg.tg_traffic_control(action='run', stream_handle=data.streams['D1T1_SD_ip_Hash2'], enable_arp=0)
+    # DUT2: Remove 2 members from portchannel
+    st.log("Dut2 Remove {}'s member {}".format(data.portchannel_name, data.members_dut2[0]))
+    portchannel_obj.delete_portchannel_member(data.dut2, data.portchannel_name, data.members_dut2[0])
+    st.wait(3)
+    st.log("Dut2 Remove {}'s member {}".format(data.portchannel_name, data.members_dut2[1]))
+    portchannel_obj.delete_portchannel_member(data.dut2, data.portchannel_name, data.members_dut2[1])
+    st.wait(3)
+    # DUT1: Remove 1 members from portchannel
+    st.log("Dut1 Remove {}'s member {}".format(data.portchannel_name, data.members_dut1[2]))
+    portchannel_obj.delete_portchannel_member(data.dut1, data.portchannel_name, data.members_dut1[2])
+    st.wait(3)
+
+    # DUT2: add 2 members to portchannel
+    st.log("Dut2 Add {}'s member {}".format(data.portchannel_name, data.members_dut2[0]))
+    portchannel_obj.add_portchannel_member(data.dut2, data.portchannel_name, data.members_dut2[0])
+    st.wait(3)
+    st.log("Dut2 Add {}'s member {}".format(data.portchannel_name, data.members_dut2[1]))
+    portchannel_obj.add_portchannel_member(data.dut2, data.portchannel_name, data.members_dut2[1])
+    st.wait(3)
+    # DUT1: add 1 members to portchannel
+    st.log("Dut1 Add {}'s member {}".format(data.portchannel_name, data.members_dut1[2]))
+    portchannel_obj.add_portchannel_member(data.dut1, data.portchannel_name, data.members_dut1[2])
+    st.wait(3)
+
+    data.tg.tg_traffic_control(action='stop', stream_handle=data.streams['D1T1_SD_ip_Hash2'])
+    st.log("Verify that traffic is forwarding over portchannel members")
+    verify_traffic_lost(vars.D1, data.members_dut1, vars.D1T1P1, vars.D2, data.members_dut2, vars.D2T1P1)
+    data.tg.tg_traffic_control(action='reset', port_handle=data.tg_ph_1)
+
+
+    st.log('1.5-test scenario3')
+    stream = data.tg.tg_traffic_config(port_handle=data.tg_ph_1, mode='create', length_mode='fixed', frame_size=90,
+             mac_src='00:05:00:00:00:01', mac_src_mode='fixed', mac_dst=data.dut1_rt_int_mac, tcp_src_port_step=1,
+             ip_src_addr=data.ip41, tcp_src_port=data.src_port, tcp_src_port_mode='incr', tcp_src_port_count=data.tcp_src_port_count,
+             tcp_dst_port=data.dst_port, ip_dst_addr=data.ip42, tcp_dst_port_mode='incr', pkts_per_burst=2000,
+             l4_protocol='tcp', tcp_dst_port_step=1, tcp_dst_port_count=data.tcp_dst_port_count, l3_protocol='ipv4', transmit_mode='continuous')
+    data.streams['D1T1_SD_ip_Hash3'] = stream['stream_id']
+    clear_intf_counters_using_thread([vars.D1, vars.D2])
+    data.tg.tg_traffic_control(action='run', stream_handle=data.streams['D1T1_SD_ip_Hash3'], enable_arp=0)
+    # DUT2: disable 2 members from portchannel
+    st.log("Dut2 disable {}'s member {}".format(data.portchannel_name, data.members_dut2[3]))
+    portchannel_obj.disable_portchannel_member(data.dut2, data.portchannel_name, data.members_dut2[3])
+    st.wait(3)
+    ret = portchannel_obj.verify_portchannel_member_state(data.dut2, data.portchannel_name, data.members_dut2[3], "disable")
+    if not ret:
+        st.report_fail("member not in disable state", data.dut2)
+
+    st.log("Dut2 disable {}'s member {}".format(data.portchannel_name, data.members_dut2[2]))
+    portchannel_obj.disable_portchannel_member(data.dut2, data.portchannel_name, data.members_dut2[2])
+    st.wait(3)
+    ret = portchannel_obj.verify_portchannel_member_state(data.dut2, data.portchannel_name, data.members_dut2[2], "disable")
+    if not ret:
+        st.report_fail("member not in disable state", data.dut2)
+
+    # DUT1: disable 1 members from portchannel
+    st.log("Dut1 disable {}'s member {}".format(data.portchannel_name, data.members_dut1[1]))
+    portchannel_obj.disable_portchannel_member(data.dut1, data.portchannel_name, data.members_dut1[1])
+    st.wait(3)
+    ret = portchannel_obj.verify_portchannel_member_state(data.dut1, data.portchannel_name, data.members_dut1[1], "disable")
+    if not ret:
+        st.report_fail("member not in disable state", data.dut1)
+
+    # DUT2: enable 2 members to portchannel
+    st.log("Dut2 enable {}'s member {}".format(data.portchannel_name, data.members_dut2[3]))
+    portchannel_obj.enable_portchannel_member(data.dut2, data.portchannel_name, data.members_dut2[3])
+    st.wait(3)
+    st.log("Dut2 enable {}'s member {}".format(data.portchannel_name, data.members_dut2[2]))
+    portchannel_obj.enable_portchannel_member(data.dut2, data.portchannel_name, data.members_dut2[2])
+    st.wait(3)
+    # DUT1: enable 1 members to portchannel
+    st.log("Dut1 enable {}'s member {}".format(data.portchannel_name, data.members_dut1[1]))
+    portchannel_obj.enable_portchannel_member(data.dut1, data.portchannel_name, data.members_dut1[1])
+    st.wait(3)
+
+    data.tg.tg_traffic_control(action='stop', stream_handle=data.streams['D1T1_SD_ip_Hash3'])
+    st.log("Verify that traffic is forwarding over portchannel members")
+    verify_traffic_lost(vars.D1, data.members_dut1, vars.D1T1P1, vars.D2, data.members_dut2, vars.D2T1P1)
+    data.tg.tg_traffic_control(action='reset', port_handle=data.tg_ph_1)
+    clear_intf_counters_using_thread([vars.D1, vars.D2])
+
+    st.log('1.6-check portchannel status again')
+    verify_portchannel_status()
+
+    portchannel_obj.config_portchannel_remove_delay(data.dut1, delay=0)
+    portchannel_obj.config_portchannel_tx_delay(data.dut1, delay=0)
+    portchannel_obj.config_portchannel_remove_delay(data.dut2, delay=0)
+    portchannel_obj.config_portchannel_tx_delay(data.dut2, delay=0)
+    portchannel_obj.config_portchannel_fast_mode(data.dut1, fast_mode=False)
+    portchannel_obj.config_portchannel_fast_mode(data.dut2, fast_mode=False)
+    #cleanup static route
+    ip_obj.delete_static_route(vars.D1, data.ip_addr_pc2, data.static_ip2, shell='vtysh', family=data.ipv4)
+    dict1 = {'next_hop': data.ip_addr_pc2, 'static_ip': data.static_ip3, 'shell': "vtysh", 'family': 'ipv4'}
+    dict2 = {'next_hop': data.ip_addr_po3, 'static_ip': data.static_ip3, 'shell': "vtysh", 'family': 'ipv4'}
+    output = exec_parallel(True, [vars.D1, vars.D2], ip_obj.delete_static_route, [dict1, dict2])
+    ensure_no_exception(output[1])
+    ip_obj.delete_static_route(vars.D2, data.ip_addr_pc1, data.static_ip1, shell='vtysh', family=data.ipv4)
+
+    if result_state:
+        st.report_pass('test_case_passed')
+    else:
+        st.report_fail("traffic_not_hashed", data.dut1)
 
 @pytest.mark.portchannel_with_vlan_variations
 @pytest.mark.community

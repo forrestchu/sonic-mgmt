@@ -511,6 +511,48 @@ def add_del_portchannel_member(dut, portchannel, members, flag="add", skip_verif
         return False
     return True
 
+def enable_disable_portchannel_member(dut, portchannel, members, flag="enable", skip_verify=True, cli_type="", skip_err_check=False):
+    """
+    This API is used to enable or disable the members of the portchannel
+    Author: wumu.zsl
+    :param dut:
+    :param dut:
+    :param portchannel:
+    :param members:
+    :param flag:
+    :param skip_verify:
+    :return:
+    """
+    cli_type = st.get_ui_type(dut, cli_type=cli_type)
+    if flag != "enable" and flag != "disable":
+        st.error("Invalid input to enable/disable portchannel member internal api call...")
+        return False
+
+    action = "enable" if flag == "enable" else "disable"
+    if not portchannel:
+        st.error("Port Channel Member {} Error: Missing portchannel name".format(action))
+        return False
+
+    st.log("{} port channel member ...".format(action), dut=dut)
+    if cli_type == "click":
+        if not skip_verify:
+            portchannel_details = get_portchannel(dut, portchannel, cli_type=cli_type)
+            if not portchannel_details:
+                st.error("Port Channel Members {}: PortChannel {} not found".format(action, portchannel))
+                return False
+        for member in utils.make_list(members):
+            #use 'add' to the verify that member should be in portchannel
+            if not verify_portchannel_member(dut, portchannel, member, "add"):
+                st.error("Member {} not present in port channel member list {}".format(member, portchannel))
+                return False
+
+            member_flag = "enable-mem" if flag == "enable" else "disable-mem"
+            command = "teamd {} {} member-ports {}".format(member_flag, portchannel, member)
+            st.config(dut, command, skip_error_check=skip_err_check, type='alicli')
+    else:
+        st.error("Unsupported CLI Type: {}".format(cli_type))
+        return False
+    return True
 
 def delete_portchannel_member(dut, portchannel, members, cli_type=""):
     """
@@ -522,6 +564,27 @@ def delete_portchannel_member(dut, portchannel, members, cli_type=""):
     :return:
     """
     return add_del_portchannel_member(dut, portchannel, members, flag="del", cli_type=cli_type)
+
+def enable_portchannel_member(dut, portchannel, members, cli_type=""):
+    """
+    This API is used to enable the member of the portchannel
+    Author: wumu.zsl
+    :param dut:
+    :param portchannel:
+    :param members:
+    :return:
+    """
+    return enable_disable_portchannel_member(dut, portchannel, members, flag="enable", cli_type=cli_type)
+def disable_portchannel_member(dut, portchannel, members, cli_type=""):
+    """
+    This API is used to disable the member of the portchannel
+    Author: wumu.zsl
+    :param dut:
+    :param portchannel:
+    :param members:
+    :return:
+    """
+    return enable_disable_portchannel_member(dut, portchannel, members, flag="disable", cli_type=cli_type)
 
 
 def verify_portchannel_state(dut, portchannel, state="up", error_msg=True,cli_type=""):
@@ -614,7 +677,7 @@ def verify_portchannel_member_state(dut, portchannel, members_list, state='up', 
     cli_type = st.get_ui_type(dut, cli_type=cli_type)
     st.log("Verifying portchannel state with provided state ...", dut=dut)
 
-    supported_states = ['up', 'down']
+    supported_states = ['up', 'down', 'disable']
     if state not in supported_states:
         st.error("Invalid states provided in verify portchannel state")
         return False
@@ -629,7 +692,7 @@ def verify_portchannel_member_state(dut, portchannel, members_list, state='up', 
         return False
 
     if cli_type == "click":
-        member_state = 'S' if state == 'up' else 'D'
+        member_state = 'S' if state == 'up' else ('D' if state == 'down' else 'Disabled')
     elif cli_type in ["klish","rest-put","rest-patch"]:
         member_state = 'U' if state == 'up' else 'D'
     else:
@@ -1250,6 +1313,30 @@ def config_portchannel_fast_mode(dut, fast_mode=True, cli_type=''):
     st.log("configure port channel fast mode as {}".format(fast_mode), dut=dut)
     if cli_type == "click":
         command = "sw config lacp -f {}".format(str(fast_mode).lower())
+        st.config(dut, command, skip_error_check=True)
+    else:
+        st.error("Unsupported CLI Type: {}".format(cli_type))
+        return False
+    return True
+
+# configure the portchannel remove delay time at system level (not per portchannel)
+def config_portchannel_remove_delay(dut, delay=2, cli_type=''):
+    cli_type = st.get_ui_type(dut, cli_type=cli_type)
+    st.log("configure port channel remove_delay: {}".format(delay), dut=dut)
+    if cli_type == "click":
+        command = "redis-cli -n 4 -p 6379 hmset 'PORTCHANNEL_PARAMETERS|global' remove_delay {} ".format(delay)
+        st.config(dut, command, skip_error_check=True)
+    else:
+        st.error("Unsupported CLI Type: {}".format(cli_type))
+        return False
+    return True
+
+# configure the portchannel tx delay time at system level (not per portchannel)
+def config_portchannel_tx_delay(dut, delay=2, cli_type=''):
+    cli_type = st.get_ui_type(dut, cli_type=cli_type)
+    st.log("configure port channel tx_delay: {}".format(delay), dut=dut)
+    if cli_type == "click":
+        command = "redis-cli -n 4 -p 6379 hmset 'PORTCHANNEL_PARAMETERS|global' tx_delay {} ".format(delay)
         st.config(dut, command, skip_error_check=True)
     else:
         st.error("Unsupported CLI Type: {}".format(cli_type))

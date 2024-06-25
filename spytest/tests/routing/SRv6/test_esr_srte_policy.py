@@ -745,12 +745,20 @@ def test_srte_policy_2k_vrf_4k_policy_falp_06():
 @pytest.mark.community_pass
 def test_srte_policy_2k_vrf_ipv4_ipv6_07():
 
-    #if not retry_api(check_bgp_route_count, dut2, "2000::179", "200000", True,  retry_count= 10, delay= 30):
-    #    st.report_fail("Step1: Chek route count failed")
-
-    #st.wait(120)
+    if not retry_api(check_bgp_route_count, dut2, "2000::179", "200000", True,  retry_count= 10, delay= 30):
+        st.report_fail("Step1: Chek route count failed")
 
     #if not retry_api(check_srv6_te_policy_active, dut2, 4003,  retry_count= 10, delay= 30):
     #    st.report_fail("Step2: Chek te policy active count failed")
+
+    ixia_disable_traffic(TRAFFIC_IPV4_TE_POLICY)
+    ixia_enable_traffic(TRAFFIC_IPV6_TE_POLICY)
+    ret = ixia_start_traffic(TRAFFIC_IPV6_TE_POLICY)
+    if not ret:
+        st.report_fail("Step3: Start traffic item {} rx frame failed".format(TRAFFIC_IPV6_TE_POLICY))
+
+    ret = retry_api(check_mult_dut_intf_tx_traffic_counters, dut2, ['Ethernet3', 'Ethernet4'], 300, retry_count= 5, delay= 10)
+    #if not ret:
+    #    st.report_fail("Step4: Check dut interface counters failed")
 
     st.report_pass("test_case_passed")

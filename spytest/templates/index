@@ -57,6 +57,7 @@ show_ip_bgp_summary.tmpl, .*, sonic, show bgp ipv4 summary
 show_ip_bgp_summary.tmpl, .*, sonic, show bgp ipv6 summary
 show_ip_bgp_summary.tmpl, .*, sonic, show bgp ipv4 unicast summary
 show_ip_bgp_summary.tmpl, .*, sonic, show bgp ipv6 unicast summary
+show_ip_bgp_summary.tmpl, .*, sonic, show bgp ipv(4|6) summary neighbor .*
 #show_bgp_ipv4v6uni_prefix.tmpl, .*, sonic, show bgp ipv(4|6) unicast\s*(vrf .*)?
 show_ip_bgp_summary.tmpl, .*, sonic, show bgp vrf .* summary
 show_ip_bgp_summary.tmpl, .*, sonic, show ip bgp vrf .* summary
@@ -614,3 +615,4 @@ show_srte_policy.tmpl, .*, sonic, show sr-te policy .*
 show_bgp_ipv6_vpn_stat.tmpl, .*, sonic, show bgp ipv6 vpn statistics
 show_bgp_ipv6_vpn.tmpl, .*, sonic, cli .* 'show bgp ipv6 vpn'
 show_bgp_ipv6_vpn_prefix.tmpl, .*, sonic, cli .* 'show bgp ipv6 vpn .*'
+show_srte_tunnel.tmpl, .*, sonic, show srv6 tunnel detail

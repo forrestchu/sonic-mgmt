@@ -1,0 +1,11 @@
+Value InitCount (\d+)
+Value ActiveCount (\d+)
+Value InactiveCount (\d+)
+
+Start
+  ^\s*SRv6\s.*$$ -> GETCOUNT
+
+GETCOUNT
+  ^\s*Init\s+count\s+:+${InitCount}\s+Active+\s+count+\s+:+${ActiveCount}\s+Inactive+\s+count+\s+:+${InactiveCount}\s*$$ -> Record
+
+EOF

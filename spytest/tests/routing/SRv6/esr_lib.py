@@ -880,25 +880,19 @@ def check_bfd_state(dut, key, check_field):
 def check_bgp_vpn_route_count(dut, neighbor_ip, count, is_ipv6=False):
 
     if is_ipv6:
-        bgp_cmd = "show bgp ipv6 vpn summary neighbor {} json".format(neighbor_ip)
+        bgp_cmd = "show bgp ipv6 vpn summary neighbor {}".format(neighbor_ip)
     else:
-        bgp_cmd = "show bgp ipv4 vpn summary neighbor {} json".format(neighbor_ip)
+        bgp_cmd = "show bgp ipv4 vpn summary neighbor {}".format(neighbor_ip)
+
     output = st.show(dut, bgp_cmd, type='vtysh')
-    st.log (output)
-    try:
-        data = json.loads(output)
-        peer_info = data["peers"][neighbor_ip]
-        pfxRcd_value = peer_info["pfxRcd"]
-
-        st.log (pfxRcd_value)
-
-        if count == pfxRcd_value:
-            return True
-
-    except Exception as e:
-        st.log('cli_show_json: failed to convert json output {}'.format(e))
+    if type(output) == list and len(output)>0:
+        output = output[0]
+    else:
         return False
-
+    st.log (output)
+    pfxrcd = output.get(u'pfxrcd')
+    if (pfxrcd == count):
+        return True
     return False
 
 def check_bgp_route_count(dut, neighbor_ip,  count, is_ipv6):
@@ -909,19 +903,15 @@ def check_srv6_te_policy_active_count(dut, count):
     cmd = "show srv6 tunnel detail"
     output = st.show(dut, cmd, type='vtysh')
     st.log (output)
-    match = re.search(r'Active count :\s*(\d+)', output)
-    try:
-        if match:
-            active_count = int(match.group(1))
-            st.log("Active count:".format(active_count))
-        else:
-            st.log("No match found for 'Active count'")
-        if active_count == count:
-            return True
-
-    except Exception as e:
-        st.log('cli_show_json: failed to convert json output {}'.format(e))
+    if type(output) == list and len(output)>0:
+        output = output[0]
+    else:
         return False
+    st.log(output)
+    activecount = output.get(u'activecount')
+    st.log(activecount)
+    if (activecount == count):
+        return True
     return False
 
 

@@ -1835,6 +1835,34 @@ class WorkArea(object):
             from collections import Counter
             self.log("============ Results : {}".format(list(Counter(rlist).items())))
             self.log("==========================================================")
+        for dut in self.get_dut_names():
+            [_, logs_path, _] = _get_logs_path()
+            output = self.config(dut, "ls -l /var/log/swss/", skip_error_check=True)
+            for line in output.splitlines():
+                parts = line.split()
+                if len(parts) < 9 or parts[0].startswith('d'):
+                    continue
+                item = parts[-1]
+                src = os.path.join("/var/log/swss/", item)
+                dst = os.path.join(logs_path, dut + "-" + item)
+                self.download_file_from_dut(dut, src, dst)
+            
+            output = self.config(dut, "ls -l /var/log/syslog*", skip_error_check=True)
+            for line in output.splitlines():
+                parts = line.split()
+                if len(parts) < 9:
+                    continue
+                # -rw-r----- 1 root admin  7676677 Jul  2 20:21 /var/log/syslog
+                src = line.split()[-1]
+                self.config(dut, "sudo chmod +r " + src, skip_error_check=True)
+                name = src.split("/")[-1]
+                dst = os.path.join(logs_path, dut + "-" + name)
+                self.download_file_from_dut(dut, src, dst)
+
+            self.config(dut, "sudo rm /var/log/swss/*.rec.*", skip_error_check=True)
+            self.config(dut, "sudo rm /var/log/syslog.*", skip_error_check=True)
+            self.config(dut, "cd /var/core; sudo rm *", skip_error_check=True)
+
         self.log_time("session clean end")
 
     def _log_software_versions(self, dst=["all"]):

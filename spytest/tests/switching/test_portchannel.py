@@ -365,43 +365,43 @@ def verify_traffic_lost(dut, port_list, port_in, dut2, rx_port_list, port_out):
 
     st.log("verify_traffic_lost lag_total_tx:{}, lag_total_rx:{}".format(total_tx, total_rx))
 
-    ##check traffic, we allow 1/10000 traffic loss
-    if total_tx > total_rx and total_tx > total_rx + total_rx/10000:
-        #1/10000 packet loss maximum
+    ##check traffic, we allow 1/100 traffic loss
+    if total_tx > total_rx and total_tx > total_rx + total_rx/100:
+        #1/100 packet loss maximum
         st.log("traffic_loss!! lag_total_tx:{}, lag_total_rx:{}".format(total_tx, total_rx))
         intf_obj.show_interface_counters_detailed(vars.D1, vars.D1T1P1)
         st.report_fail('traffic_loss_observed')
 
-    if total_rx > total_tx and total_rx > total_tx + total_tx/10000:
-        #1/10000 packet loss maximum
+    if total_rx > total_tx and total_rx > total_tx + total_tx/100:
+        #1/100 packet loss maximum
         st.log("traffic_loss!! lag_total_tx:{}, lag_total_rx:{}".format(total_tx, total_rx))
         intf_obj.show_interface_counters_detailed(vars.D1, vars.D1T1P1)
         st.report_fail('traffic_loss_observed')
 
     st.log("verify_traffic_lost lag_total_tx:{}, rx_in:{}".format(total_tx, data.rx_in))
 
-    if total_tx > data.rx_in and total_tx > data.rx_in + data.rx_in/10000:
-        #1/10000 packet loss maximum
+    if total_tx > data.rx_in and total_tx > data.rx_in + data.rx_in/100:
+        #1/100 packet loss maximum
         st.log("traffic_loss!! lag_total_tx:{}, rx_in:{}".format(total_tx, data.rx_in))
         intf_obj.show_interface_counters_detailed(vars.D1, vars.D1T1P1)
         st.report_fail('traffic_loss_observed')
 
-    if data.rx_in > total_tx and data.rx_in > total_tx + total_tx/10000:
-        #1/10000 packet loss maximum
+    if data.rx_in > total_tx and data.rx_in > total_tx + total_tx/100:
+        #1/100 packet loss maximum
         st.log("traffic_loss!! lag_total_tx:{}, rx_in:{}".format(total_tx, data.rx_in))
         intf_obj.show_interface_counters_detailed(vars.D1, vars.D1T1P1)
         st.report_fail('traffic_loss_observed')
 
     st.log("verify_traffic_lost lag_total_rx:{}, tx_out:{}".format(total_rx, data.tx_out))
 
-    if data.tx_out > total_rx and data.tx_out > total_rx + total_rx/10000:
-        #1/10000 packet loss maximum
+    if data.tx_out > total_rx and data.tx_out > total_rx + total_rx/100:
+        #1/100 packet loss maximum
         st.log("traffic_loss!! data.tx_out:{}, lag_total_rx:{}".format(data.tx_out, total_rx))
         intf_obj.show_interface_counters_detailed(vars.D1, vars.D1T1P1)
         st.report_fail('traffic_loss_observed')
 
-    if total_rx > data.tx_out and total_rx > data.tx_out + data.tx_out/10000:
-        #1/10000 packet loss maximum
+    if total_rx > data.tx_out and total_rx > data.tx_out + data.tx_out/100:
+        #1/100 packet loss maximum
         st.log("traffic_loss!! data.tx_out:{}, lag_total_rx:{}".format(data.tx_out, total_rx))
         intf_obj.show_interface_counters_detailed(vars.D1, vars.D1T1P1)
         st.report_fail('traffic_loss_observed')

@@ -444,6 +444,9 @@ def test_sbfd_echo_two_endx_case2():
     # step 1 : config sbfd echo
     config_sbfd(dut1, policy, 'sbfd echo source-address 20.20.20.58')
 
+    # sbfd echo session offload delay 1min
+    st.wait(70)
+
     # step 2 : check sbfd echo
     check_filed = {
         'status':'up',
@@ -560,6 +563,9 @@ def test_sbfd_echo_multiple_case4():
     config_sbfd(dut1, policy_v4, 'sbfd echo source-address 20.20.20.58')
     config_sbfd(dut1, policy_v6, 'sbfd echo source-address 2000::58')
 
+    # sbfd echo session offload delay 1min
+    st.wait(70)
+
     # step 2 : check sbfd echo
     check_filed = {
         'status':'up',
@@ -655,6 +661,9 @@ def test_sbfd_reboot_recover_case6():
     config_sbfd(dut1, policy_5, 'sbfd echo source-address 20.20.20.58')
     config_sbfd(dut1, policy_6, 'sbfd enable remote 10086 source-address 2000::58')
 
+    # sbfd echo session offload delay 1min
+    st.wait(70)
+
     # step 2 : check sbfd 
     check_filed = {
         'status':'up'
@@ -671,11 +680,14 @@ def test_sbfd_reboot_recover_case6():
     save_config_and_reboot(dut1)
     learn_arp_by_ping()
 
+    # sbfd echo session offload delay 1min
+    st.wait(70)
+
     # step 3 : check sbfd status
     for key in combined_list:
         ret = double_check_sbfd(dut1, key, check_filed, None, False)
         if not ret:
-            st.report_fail("step 2 test_sbfd_reboot_recover_case6 failed")
+            st.report_fail("step 3 test_sbfd_reboot_recover_case6 failed")
     st.log("after reboot offload check finish")
 
     # step 4 : clear sbfd config
@@ -695,6 +707,9 @@ def test_sbfd_flapping_case7():
     # step 1 : config sbfd
     config_sbfd(dut1, policy_4, 'sbfd echo source-address 20.20.20.58')
     config_sbfd(dut1, policy_5, 'sbfd enable remote 10086 source-address 2000::58')
+
+    # sbfd echo session offload delay 1min
+    st.wait(70)
 
     # step 2 : check sbfd status
     check_filed = {
@@ -734,6 +749,9 @@ def test_sbfd_flapping_case7():
 
     show_appdb_tbale_info(dut1, 'SRV6_MY_SID_TABLE')
     show_appdb_tbale_info(dut2, 'SRV6_MY_SID_TABLE')
+
+    # sbfd echo session offload delay 1min
+    st.wait(70)
 
     # step 5: check sbfd status
     for key in combined_list:

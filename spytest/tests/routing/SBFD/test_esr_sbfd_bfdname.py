@@ -727,7 +727,9 @@ def test_sbfd_echo_v4_case7():
     # step 1: config sbfd-echo ipv4
     mode = 'sbfd-echo-v4'
     config_peer_bfd(mode)
-    st.wait(5)
+
+    # sbfd echo session offload delay 1min
+    st.wait(70)
 
    # step 2 : check sbfd-echo ipv4    
     check_field = {
@@ -794,7 +796,9 @@ def test_sbfd_echo_v6_case8():
     # step 1: config sbfd-echo ipv6
     mode = 'sbfd-echo-v6'
     config_peer_bfd(mode)
-    st.wait(5)
+    
+    # sbfd echo session offload delay 1min
+    st.wait(70)
 
    # step 2 : check sbfd-echo ipv6    
     check_field = {

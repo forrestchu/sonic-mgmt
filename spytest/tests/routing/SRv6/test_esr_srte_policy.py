@@ -750,7 +750,7 @@ def test_srte_policy_2k_vrf_ipv4_ipv6_07():
 
     if not retry_api(check_srv6_te_policy_active, dut2, "4003",  retry_count= 10, delay= 30):
         st.report_fail("Step2: Chek te policy active count failed")
-    '''
+
     ixia_disable_traffic(TRAFFIC_IPV4_TE_POLICY)
     ixia_enable_traffic(TRAFFIC_IPV6_TE_POLICY)
     ret = ixia_start_traffic(TRAFFIC_IPV6_TE_POLICY)
@@ -798,7 +798,7 @@ def test_srte_policy_2k_vrf_ipv4_ipv6_07():
     st.config(dut2, add_neighbor)
     st.wait(30)
 
-    if not retry_api(check_bgp_route_count, dut2, "2000::179", "200000",  retry_count= 10, delay= 30):
+    if not retry_api(check_bgp_route_count, dut2, "2000::179", "200000", False,  retry_count= 10, delay= 30):
         st.report_fail("Step10: Chek route count failed")
 
     ixia_disable_traffic(TRAFFIC_IPV6_TE_POLICY)
@@ -826,5 +826,5 @@ def test_srte_policy_2k_vrf_ipv4_ipv6_07():
     ret = ixia_stop_traffic(TRAFFIC_IPV4_TE_POLICY)
     if not ret:
         st.report_fail("Step15: Stop traffic item {} rx frame failed".format(TRAFFIC_IPV4_TE_POLICY))
-    '''
+
     st.report_pass("test_case_passed")

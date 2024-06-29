@@ -4045,6 +4045,8 @@ class Net(object):
             lvl = "none"
         elif phase == "post-test":
             lvl = self.cfg.syslog_check
+            if self.wa.last_error is not None:
+                lvl = "notice"
         elif phase.startswith("module_topology_check_"):
             lvl = self.cfg.syslog_check
         else:

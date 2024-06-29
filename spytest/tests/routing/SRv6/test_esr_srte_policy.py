@@ -628,7 +628,7 @@ def test_srte_policy_2k_vrf_4k_policy_05():
     #shutdown Ethernet4
     cmd = "interface {}\n no shutdown\n".format("Ethernet4")
     st.config(dut2, cmd, type="alicli", skip_error_check = True)
-    st.wait(10)
+    st.wait(70)
     #check bfd state
     check_filed = {
         'status':'up',

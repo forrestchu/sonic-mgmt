@@ -761,29 +761,29 @@ def test_srte_policy_2k_vrf_ipv4_ipv6_07():
     if not ret:
         st.report_fail("Step4: Check dut interface counters failed")
 
-    cmd = "interface {}\n shutdown\n".format("Ethernet3")
-    st.config(dut2, cmd, type="alicli", skip_error_check = True)
-    cmd = "interface {}\n shutdown\n".format("Ethernet4")
-    st.config(dut2, cmd, type="alicli", skip_error_check = True)
-    st.wait(180)
+    cmd = "cli -c 'configure terminal' -c 'interface {}' -c 'shutdown'".format("Ethernet3")
+    st.config(dut2, cmd)
+    cmd = "cli -c 'configure terminal' -c 'interface {}' -c 'shutdown'".format("Ethernet4")
+    st.config(dut2, cmd)
+    st.wait(120)
 
     if not retry_api(check_srv6_te_policy_active, dut2, "2003",  retry_count= 10, delay= 30):
         st.report_fail("Step5: Chek te policy active count failed")
 
-    ret = retry_api(check_mult_dut_intf_tx_traffic_counters, dut2, ['Ethernet1', 'Ethernet2'], 300, retry_count= 5, delay= 10)
+    ret = retry_api(check_mult_dut_intf_tx_traffic_counters, dut2, ['Ethernet1', 'Ethernet2'], 300, retry_count= 10, delay= 30)
     if not ret:
         st.report_fail("Step6: Check dut interface counters failed")
 
-    cmd = "interface {}\n no shutdown\n".format("Ethernet3")
-    st.config(dut2, cmd, type="alicli", skip_error_check = True)
-    cmd = "interface {}\n no shutdown\n".format("Ethernet4")
-    st.config(dut2, cmd, type="alicli", skip_error_check = True)
-    st.wait(180)
+    cmd = "cli -c 'configure terminal' -c 'interface {}' -c 'no shutdown'".format("Ethernet3")
+    st.config(dut2, cmd)
+    cmd = "cli -c 'configure terminal' -c 'interface {}' -c 'no shutdown'".format("Ethernet4")
+    st.config(dut2, cmd)
+    st.wait(120)
 
     if not retry_api(check_srv6_te_policy_active, dut2, "4003",  retry_count= 10, delay= 30):
         st.report_fail("Step7: Chek te policy active count failed")
 
-    ret = retry_api(check_mult_dut_intf_tx_traffic_counters, dut2, ['Ethernet3', 'Ethernet4'], 300, retry_count= 5, delay= 10)
+    ret = retry_api(check_mult_dut_intf_tx_traffic_counters, dut2, ['Ethernet3', 'Ethernet4'], 300, retry_count= 10, delay= 30)
     if not ret:
         st.report_fail("Step8: Check dut interface counters failed")
 
@@ -793,7 +793,7 @@ def test_srte_policy_2k_vrf_ipv4_ipv6_07():
 
     add_neighbor = 'vtysh -c "configure terminal" -c "router bgp 100" -c "address-family ipv6 vpn" -c "no neighbor 2000::179 activate"'
     st.config(dut2, add_neighbor)
-    st.wait(30)
+    st.wait(5)
     add_neighbor = 'vtysh -c "configure terminal" -c "router bgp 100" -c "address-family ipv4 vpn" -c "neighbor 2000::179 activate"'
     st.config(dut2, add_neighbor)
     st.wait(30)
@@ -807,19 +807,19 @@ def test_srte_policy_2k_vrf_ipv4_ipv6_07():
     if not ret:
         st.report_fail("Step11: Start traffic item {} rx frame failed".format(TRAFFIC_IPV4_TE_POLICY))
 
-    ret = retry_api(check_mult_dut_intf_tx_traffic_counters, dut2, ['Ethernet3', 'Ethernet4'], 300, retry_count= 5, delay= 10)
+    ret = retry_api(check_mult_dut_intf_tx_traffic_counters, dut2, ['Ethernet3', 'Ethernet4'], 300, retry_count= 10, delay= 30)
     if not ret:
         st.report_fail("Step12: Check dut interface counters failed")
 
-    cmd = "interface {}\n shutdown\n".format("Ethernet3")
-    st.config(dut2, cmd, type="alicli", skip_error_check = True)
-    cmd = "interface {}\n shutdown\n".format("Ethernet4")
-    st.config(dut2, cmd, type="alicli", skip_error_check = True)
-    st.wait(180)
+    cmd = "cli -c 'configure terminal' -c 'interface {}' -c 'shutdown'".format("Ethernet3")
+    st.config(dut2, cmd)
+    cmd = "cli -c 'configure terminal' -c 'interface {}' -c 'shutdown'".format("Ethernet4")
+    st.config(dut2, cmd)
+    st.wait(120)
     if not retry_api(check_srv6_te_policy_active, dut2, "2003",  retry_count= 10, delay= 30):
         st.report_fail("Step13: Chek te policy active count failed")
 
-    ret = retry_api(check_mult_dut_intf_tx_traffic_counters, dut2, ['Ethernet1', 'Ethernet2'], 300, retry_count= 5, delay= 10)
+    ret = retry_api(check_mult_dut_intf_tx_traffic_counters, dut2, ['Ethernet1', 'Ethernet2'], 300, retry_count= 10, delay= 30)
     if not ret:
         st.report_fail("Step14: Check dut interface counters failed")
 

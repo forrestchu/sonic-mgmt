@@ -78,6 +78,10 @@ def tg_config():
 
 
 def dut_config():
+    #enable set_lacp_key by default
+    portchannel_obj.config_portchannel_set_lacp_key(data.dut1, set_lacp_key=True)
+    portchannel_obj.config_portchannel_set_lacp_key(data.dut2, set_lacp_key=True)
+
     st.log('Creating port-channel and adding members in both DUTs')
     portchannel_obj.config_portchannel(data.dut1, data.dut2, data.portchannel_name, data.members_dut1,
                                            data.members_dut2, "add")

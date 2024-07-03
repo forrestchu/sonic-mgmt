@@ -1342,3 +1342,14 @@ def config_portchannel_tx_delay(dut, delay=2, cli_type=''):
         st.error("Unsupported CLI Type: {}".format(cli_type))
         return False
     return True
+# configure the portchannel set_lacp_key true/false at system level (not per portchannel)
+def config_portchannel_set_lacp_key(dut, set_lacp_key=True, cli_type=''):
+    cli_type = st.get_ui_type(dut, cli_type=cli_type)
+    st.log("configure port channel set_lacp_key as {}".format(set_lacp_key), dut=dut)
+    if cli_type == "click":
+        command = "sw config lacp -k {}".format(str(set_lacp_key).lower())
+        st.config(dut, command, skip_error_check=True)
+    else:
+        st.error("Unsupported CLI Type: {}".format(cli_type))
+        return False
+    return True

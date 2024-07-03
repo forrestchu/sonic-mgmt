@@ -1522,6 +1522,8 @@ class WorkArea(object):
         else:
             apply_port_defaults = self._load_image_dut(dut, "current")
 
+        self.config(dut, "sudo rm /var/log/swss/*.rec.* /var/log/syslog.* /var/core/*", skip_error_check=True)
+
         # create TA default configuration
         apis_instrument("init-config-start", dut)
         self.hooks.init_base_config(dut)
@@ -1858,10 +1860,6 @@ class WorkArea(object):
                 name = src.split("/")[-1]
                 dst = os.path.join(logs_path, dut + "-" + name)
                 self.download_file_from_dut(dut, src, dst)
-
-            self.config(dut, "sudo rm /var/log/swss/*.rec.*", skip_error_check=True)
-            self.config(dut, "sudo rm /var/log/syslog.*", skip_error_check=True)
-            self.config(dut, "cd /var/core; sudo rm *", skip_error_check=True)
 
         self.log_time("session clean end")
 

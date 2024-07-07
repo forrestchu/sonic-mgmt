@@ -869,6 +869,87 @@ def double_check_sbfd(dut, sbfd_key, sbfd_check_filed, offload=True, delete=Fals
 
     return True
 
+def check_ip_interface_state(dut, interface):
+    cmd = "cli -c 'no page' -c 'show ip interface brief'"
+    output = st.show(dut, cmd)
+    cnt = 0
+
+    for i in range(len(output)):
+        state = output[i]['state']
+        intf = output[i]['interface'].split('.')
+        if state == 'UP' and intf[0] in interface:
+            cnt += 1
+    
+    st.log("cnt:{} len:{}".format(cnt,len(output)))
+    if cnt == 8:
+        return True
+    else:
+        return False 
+
+def check_ip_intf_state(dut, interface):
+    cmd = "cli -c 'no page' -c 'show ip interface brief'"
+    output = st.show(dut, cmd)
+    cnt = 0
+
+    for i in range(len(output)):
+        state = output[i]['state']
+        intf = output[i]['interface'].split('.')
+        if state == 'UP' and intf[0] == interface:
+            cnt += 1
+    
+    st.log("cnt:{} len:{}".format(cnt,len(output)))
+    if cnt == 256:
+        return True
+    else:
+        return False  
+
+
+def check_arp_state(dut, interface):
+    output = st.show(dut, "show arp")
+    cnt = 0
+    for i in range(len(output)):
+        intf = output[i]['iface'].split('.')
+        if intf[0] == interface:
+            cnt += 1
+
+    st.log("cnt:{} len:{}".format(cnt,len(output)))
+
+    if cnt == 128:
+        return True
+    else:
+        return False 
+
+def check_ndp_state(dut, interface):
+    output = st.show(dut, "show ndp")
+    cnt = 0
+    for i in range(len(output)):
+        intf = output[i]['interface'].split('.')
+        if intf[0] == interface:
+            cnt += 1
+
+    if cnt == 256:
+        return True
+    else:
+        return False 
+
+def check_asicdb_member(dut):
+    check_msg = "Total 768 Entries."
+    output = st.show(dut, "cdb asicdb member")
+
+    if check_msg in output:
+        return True
+    else:
+        return False     
+
+def check_asicdb_member_hash(dut):
+    check_msg = "Total 12 Entries."
+    output = st.show(dut, "cdb asicdb member")
+
+    if check_msg in output:
+        return True
+    else:
+        return False  
+
 def check_bgp_state(dut, neighbor_ip):
     output = st.show(dut, 'show bgp neighbors {}'.format(neighbor_ip), type='vtysh')
     bgp_state = output[0]['state'] if output else "NotEstablished"

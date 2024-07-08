@@ -1,6 +1,6 @@
 
 IXIA_HOST = "10.137.91.199"
-IXIA_PORT = 11033
+IXIA_PORT = 12031
 
 ESR_MULTI_VRF_CONFIG = "esr_multi_vrf.ixncfg"
 ESR_MULTI_VRF_ECMP_CONFIG = "esr_multi_vrf_ecmp.ixncfg"
@@ -15,7 +15,7 @@ ESR_LOCATOR_ENDX_ECMP_UNUA_V6_CONFIG = "locator_endx_ecmp_unua_v6.ixncfg"
 ESR_LOCATOR_ENDX_ECMP_UA_V6_CONFIG = "locator_endx_ecmp_ua_v6.ixncfg"
 ESR_LOCATOR_ENDX_ECMP_V4_CONFIG = "locator_endx_ecmp_v4.ixncfg"
 ESR_LOCATOR_ENDX_ECMP_V6_CONFIG = "locator_endx_ecmp_v6.ixncfg"
-ESR_LOCATOR_ENDX_ECMP_V6_HASH_CONFIG = "locator_endx_ecmp_v6_hash.ixncfg"
+ESR_LOCATOR_ENDX_ECMP_V6_HASH_CONFIG = "endx_ecmp_hash_v6.ixncfg"
 
 # IXIA_PORT connected to 179
 PORT_NAME_1 = "1/1/15"
@@ -63,10 +63,4 @@ TRAFFIC_IPV4_TE_POLICY = "TE-IPv4"
 TRAFFIC_IPV6_TE_POLICY = "TE-IPv6"
 
 TRAFFIC_ENDX_ECMP = "Quick Flow Groups"
-# TRAFFIC_COMPRESS_UA_ENDX_ECMP_V4 = "compress-ua-endx-ecmp-v4"
-# TRAFFIC_COMPRESS_UNUA_ENDX_ECMP_V6 = "compress-unua-endx-ecmp-v6"
-# TRAFFIC_COMPRESS_UA_ENDX_ECMP_V6 = "compress-ua-endx-ecmp-v6"
-# TRAFFIC_NON_COMPRESS_ENDX_ECMP_V4 = "non-compress-endx-ecmp-v4"
-# TRAFFIC_NON_COMPRESS_ENDX_ECMP_V6 = "non-compress-endx-ecmp-v6"
-
 

@@ -2,7 +2,7 @@
     "DEVICE_METADATA": {
         "localhost": {
             "asic": "cisco",
-            "hostname": "MC-57",
+            "hostname": "MC-59",
             "port_form": "64x100G+32x200G+4x10G",
             "synchronous_mode": "disable",
             "type": "MetroCoreRouter"
@@ -41,13 +41,13 @@
             "family": "IPv6",
             "scope": "global"
         },
-        "Ethernet7|2033::57/64": {
+        "Ethernet33|2033::57/64": {
             "family": "IPv6",
             "scope": "global"
         }
     },
     "MGMT_INTERFACE": {
-        "eth0|21.135.163.57/26": {
+        "eth0|21.135.163.59/26": {
             "gwaddr": "21.135.163.62"
         }
     },

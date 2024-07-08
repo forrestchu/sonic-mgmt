@@ -2,7 +2,7 @@
     "DEVICE_METADATA": {
         "localhost": {
             "asic": "cisco",
-            "hostname": "MC-56",
+            "hostname": "MC-58",
             "port_form": "64x100G+32x200G+4x10G",
             "synchronous_mode": "disable",
             "type": "MetroCoreRouter"
@@ -41,17 +41,17 @@
             "family": "IPv6",
             "scope": "global"
         },
-        "Ethernet7|200.1.0.1/24": {
+        "Ethernet33|200.1.0.1/24": {
             "family": "IPv4",
             "scope": "global"
         },
-        "Ethernet7|2000:0:0:1::1/64": {
+        "Ethernet33|2000:0:0:1::1/64": {
             "family": "IPv6",
             "scope": "global"
         }
     },
     "MGMT_INTERFACE": {
-        "eth0|21.135.163.56/26": {
+        "eth0|21.135.163.58/26": {
             "gwaddr": "21.135.163.62"
         }
     },
@@ -451,6 +451,25 @@
         "Ethernet99": {
             "admin_status": "up",
             "alias": "Ethernet99"
+        }
+    },
+    "STATIC_ROUTE": {
+        "3.3.3.3/32": {
+            "bfd_name": [
+                "NULL"
+            ],
+            "color": [
+                "NULL"
+            ],
+            "distance": [
+                "NULL"
+            ],
+            "nexthop": [
+                "200.1.0.2"
+            ],
+            "tag": [
+                "NULL"
+            ]
         }
     },
     "SWITCH": {

@@ -3,6 +3,7 @@ import random
 import math
 import re
 import pytest
+import json
 
 from spytest import st, tgapi, SpyTestDict
 from spytest.utils import random_vlan_list
@@ -71,6 +72,9 @@ def ip_module_hooks(request):
     # Min topology verification
     st.log("Ensuring minimum topology")
     vars = st.ensure_min_topology("D1T1:4", "D2T1:2", "D1D2:4")
+
+    config_fdb()
+
     # Initialize TG and TG port handlers
     tg_handler = tgapi.get_handles_byname("T1D1P1", "T1D1P2", "T1D2P1", "T1D2P2")
     tg = tg_handler["tg"]
@@ -151,6 +155,21 @@ def ip_func_hooks(request):
             st.log("ping_fail",data.ip6_addr[7])
         ipfeature.create_static_route(vars.D1, data.ip6_addr[7], data.static_ip6_rt, family=data.af_ipv6, vrf=data.vrf_name[2])
     yield
+
+def config_fdb():
+    config_data = {
+        "SWITCH": {
+            "FDB": {
+                "fdb_aging_time": "1800",
+                "fdb_broadcast_miss_packet_action": "forward",
+                "fdb_multicast_miss_packet_action": "forward",
+                "fdb_unicast_miss_packet_action": "forward"
+            }
+        }
+    }
+    json_config = json.dumps(config_data)
+    st.apply_json(vars.D1, json_config)
+    st.apply_json(vars.D2, json_config)
 
 def delete_bgp_router(dut, router_id, as_num):
     """

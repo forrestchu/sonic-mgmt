@@ -1194,7 +1194,7 @@ def test_srvpn_performance(scale):
     # start protocol
     ixia_start_all_protocols()
     st.wait(WAIT)
-    if not retry_api(check_vpn_route_nums, dut=dut2, expected_num=route_count * 2, compare=0, retry_count=3, delay=300):
+    if not retry_api(check_vpn_route_nums, dut=dut2, expected_num=route_count * 2, compare=0, retry_count=3, delay=WAIT):
         st.report_fail("check vpn route_nums failed")
 
     # get memory info for DUT1 bgpd,zebra,orchagent,syncd

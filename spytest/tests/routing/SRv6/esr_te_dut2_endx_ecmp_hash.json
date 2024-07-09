@@ -511,5 +511,13 @@
         "gnmi": {
             "port": "8080"
         }
+    },
+    "USER_METADATA": {
+        "admin": {
+            "groups": "sudo,docker",
+            "role": "ADMIN",
+            "secret": "$1$WFtM/P.X$vXxpA7rUt1h7TL0WfcUuF/",
+            "shell": "/bin/bash"
+        }
     }
 }

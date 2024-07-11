@@ -50,6 +50,8 @@ def esr_srte_policy_func_hooks(request):
     elif func_name == 'test_locator_128_endx_ecmp':
         if data.load_locator_endx_ecmp_conf_done == False:
             double_dut_load_config('128_endx_ecmp', '128_endx_ecmp')
+            ixia_load_config(ESR_LOCATOR_ENDX_ECMP_128_MEMBER_CONFIG)
+            ixia_start_all_protocols()
             data.load_locator_endx_ecmp_conf_done = True
     elif func_name == 'test_locator_endx_ecmp_hash':
         if data.load_locator_endx_ecmp_hash_conf_done == False:
@@ -883,7 +885,7 @@ def test_locator_128_endx_ecmp():
     if not retry_api(check_ndp_state, dut2, 'Eth1', retry_count=1, delay= 10):
         st.report_fail("Step0.6: {} Check ndp state failed".format(dut2))
 
-    if not retry_api(check_ndp_state, dut2, 'Eth1', retry_count=1, delay= 10):
+    if not retry_api(check_ndp_state, dut2, 'Eth2', retry_count=1, delay= 10):
         st.report_fail("Step0.7: {} Check ndp state failed".format(dut2))
 
     # check appdb
@@ -959,106 +961,194 @@ def test_locator_128_endx_ecmp():
     appdb_onefield_checkpoint(dut2, key, "ifname", data.noncompress_endx_ecmp_sid_ifname, expect = True, checkpoint = checkpoint_msg)
     appdb_onefield_checkpoint(dut2, key, "nexthop", data.noncompress_endx_ecmp_sid_nexthop_v6, expect = True, checkpoint = checkpoint_msg)
 
+    # flapping interface
+    intf_list = ['Ethernet1', 'Ethernet2']
+    
+    for i in range(20):
+        for intf in intf_list:
+            st.config(dut2, 'cli -c "config t" -c "interface {}" -c "shutdown"'.format(intf))
+            st.wait(2)
+            st.config(dut2, 'cli -c "config t" -c "interface {}" -c "no shutdown"'.format(intf))
+            st.wait(2)
+    
+    # arp/nd learn
+    for i in range(1,129):
+        st.config(dut1, 'ping -c 1 101.0.{}.59'.format(i))
+        st.config(dut1, 'ping -c 1 101:0:{}::59'.format(hex(i)[2:]))
+        st.config(dut1, 'ping -c 1 202.0.{}.59'.format(i))
+        st.config(dut1, 'ping -c 1 202:0:{}::59'.format(hex(i)[2:]))
+
+    # check arp/nd
+    if not retry_api(check_arp_state, dut1, 'Eth1', retry_count=1, delay= 10):
+        st.report_fail("Step0.8: {} Check arp state failed".format(dut1))
+
+    if not retry_api(check_arp_state, dut1, 'Eth2', retry_count=1, delay= 10):
+        st.report_fail("Step0.9: {} Check arp state failed".format(dut1))
+
+    if not retry_api(check_ndp_state, dut2, 'Eth1', retry_count=1, delay= 10):
+        st.report_fail("Step0.10: {} Check ndp state failed".format(dut2))
+
+    if not retry_api(check_ndp_state, dut2, 'Eth2', retry_count=1, delay= 10):
+        st.report_fail("Step0.11: {} Check ndp state failed".format(dut2))
+
+
     # check asicdb
     ret = retry_api(check_asicdb_member, dut2, retry_count= 3, delay= 5)
     if not ret:
         st.report_fail("Step0.8: Check dut2 cdb asicdb member failed")
-    
-    # unua v4
-    load_ixia_config(ESR_LOCATOR_ENDX_ECMP_UNUA_V4_CONFIG,TRAFFIC_ENDX_ECMP)
 
-    ret = ixia_start_traffic(TRAFFIC_ENDX_ECMP)
+    # unua v4
+    ixia_disable_traffic(TRAFFIC_ENDX_ECMP_UNUA_V4)
+    ixia_enable_traffic(TRAFFIC_ENDX_ECMP_UNUA_V4)
+    ret = ixia_start_traffic(TRAFFIC_ENDX_ECMP_UNUA_V4)
     if not ret:
-        st.report_fail("Step1.1: Start traffic item {} ixia_config {} frame failed".format(TRAFFIC_ENDX_ECMP,ESR_LOCATOR_ENDX_ECMP_UNUA_V4_CONFIG))
+        st.report_fail("Step1.1: Start traffic item {} rx frame failed".format(TRAFFIC_ENDX_ECMP_UNUA_V4))
+
     st.wait(30)
-    #check traffic on interface Ethernet1
-    ret = retry_api(check_dut_intf_tx_traffic_counters, dut2, ["Ethernet1"], 5100, retry_count= 3, delay= 5)
+    # check traffic on interface Ethernet1
+    ret = retry_api(check_dut_intf_tx_traffic_counters, dut2, ["Ethernet1"], 7200, retry_count= 3, delay= 5)
     if not ret:
         st.report_fail("Step1.2: Check dut interface counters failed")
 
-    ret = ixia_stop_traffic(TRAFFIC_ENDX_ECMP)
+    ret = ixia_stop_traffic(TRAFFIC_ENDX_ECMP_UNUA_V4)
     if not ret:
-        st.report_fail("Step1.3: Stop traffic item {} ixia_config {} frame failed".format(TRAFFIC_ENDX_ECMP,ESR_LOCATOR_ENDX_ECMP_UNUA_V4_CONFIG))
+        st.report_fail("Step1.3: Stop traffic item {} frame failed".format(TRAFFIC_ENDX_ECMP_UNUA_V4))
+
+    # check traffic on ixia
+    ret = ixia_check_traffic(TRAFFIC_ENDX_ECMP_UNUA_V4, key="Rx Frame Rate", value=10000, exact_match = False)
+    if not ret:
+        st.report_fail("Step1.4: Check traffic item {} ixia rx frame failed".format(TRAFFIC_ENDX_ECMP_UNUA_V4))
+
+    ret = ixia_stop_traffic(TRAFFIC_ENDX_ECMP_UNUA_V4)
+    if not ret:
+        st.report_fail("Step1.5: Stop traffic item {} frame failed".format(TRAFFIC_ENDX_ECMP_UNUA_V4))
 
     # ua v4
-    load_ixia_config(ESR_LOCATOR_ENDX_ECMP_UA_V4_CONFIG,TRAFFIC_ENDX_ECMP)
-
-    ret = ixia_start_traffic(TRAFFIC_ENDX_ECMP)
+    ixia_disable_traffic(TRAFFIC_ENDX_ECMP_UA_V4)
+    ixia_enable_traffic(TRAFFIC_ENDX_ECMP_UA_V4)
+    ret = ixia_start_traffic(TRAFFIC_ENDX_ECMP_UA_V4)
     if not ret:
-        st.report_fail("Step2.1: Start traffic item {} ixia_config {} frame failed".format(TRAFFIC_ENDX_ECMP,ESR_LOCATOR_ENDX_ECMP_UA_V4_CONFIG))
+        st.report_fail("Step2.1: Start traffic item {} frame failed".format(TRAFFIC_ENDX_ECMP_UA_V4))
     st.wait(30)
     #check traffic on interface Ethernet1
-    ret = retry_api(check_dut_intf_tx_traffic_counters, dut2, ["Ethernet1"], 5100, retry_count= 3, delay= 5)
+    ret = retry_api(check_dut_intf_tx_traffic_counters, dut2, ["Ethernet1"], 7200, retry_count= 3, delay= 5)
     if not ret:
         st.report_fail("Step2.2: Check dut interface counters failed")
 
-    ret = ixia_stop_traffic(TRAFFIC_ENDX_ECMP)
+    ret = ixia_stop_traffic(TRAFFIC_ENDX_ECMP_UA_V4)
     if not ret:
-        st.report_fail("Step2.3: Stop traffic item {} ixia_config {} frame failed".format(TRAFFIC_ENDX_ECMP,ESR_LOCATOR_ENDX_ECMP_UA_V4_CONFIG))    
+        st.report_fail("Step2.3: Stop traffic item {} frame failed".format(TRAFFIC_ENDX_ECMP_UA_V4))  
+
+    # check traffic on ixia
+    ret = ixia_check_traffic(TRAFFIC_ENDX_ECMP_UA_V4, key="Rx Frame Rate", value=10000, exact_match = False)
+    if not ret:
+        st.report_fail("Step2.4: Check traffic item {} ixia rx frame failed".format(TRAFFIC_ENDX_ECMP_UA_V4))
+
+    ret = ixia_stop_traffic(TRAFFIC_ENDX_ECMP_UA_V4)
+    if not ret:
+        st.report_fail("Step2.5: Stop traffic item {} frame failed".format(TRAFFIC_ENDX_ECMP_UA_V4))    
 
     # unua v6
-    load_ixia_config(ESR_LOCATOR_ENDX_ECMP_UNUA_V6_CONFIG,TRAFFIC_ENDX_ECMP)
-
-    ret = ixia_start_traffic(TRAFFIC_ENDX_ECMP)
+    ixia_disable_traffic(TRAFFIC_ENDX_ECMP_UNUA_V6)
+    ixia_enable_traffic(TRAFFIC_ENDX_ECMP_UNUA_V6)
+    ret = ixia_start_traffic(TRAFFIC_ENDX_ECMP_UNUA_V6)
     if not ret:
-        st.report_fail("Step3.1: Start traffic item {} ixia_config {} frame failed".format(TRAFFIC_ENDX_ECMP,ESR_LOCATOR_ENDX_ECMP_UNUA_V6_CONFIG))
+        st.report_fail("Step3.1: Start traffic item {} frame failed".format(TRAFFIC_ENDX_ECMP_UNUA_V6))
     st.wait(30)
+
     #check traffic on interface Ethernet1
-    ret = retry_api(check_dut_intf_tx_traffic_counters, dut2, ["Ethernet1"], 5100, retry_count= 3, delay= 5)
+    ret = retry_api(check_dut_intf_tx_traffic_counters, dut2, ["Ethernet1"], 7200, retry_count= 3, delay= 5)
     if not ret:
         st.report_fail("Step3.2: Check dut interface counters failed")
 
-    ret = ixia_stop_traffic(TRAFFIC_ENDX_ECMP)
+    ret = ixia_stop_traffic(TRAFFIC_ENDX_ECMP_UNUA_V6)
     if not ret:
-        st.report_fail("Step3.3: Stop traffic item {} ixia_config {} frame failed".format(TRAFFIC_ENDX_ECMP,ESR_LOCATOR_ENDX_ECMP_UNUA_V6_CONFIG))  
+        st.report_fail("Step3.3: Stop traffic item {} frame failed".format(TRAFFIC_ENDX_ECMP_UNUA_V6))  
+
+    # check traffic on ixia
+    ret = ixia_check_traffic(TRAFFIC_ENDX_ECMP_UNUA_V6, key="Rx Frame Rate", value=10000, exact_match = False)
+    if not ret:
+        st.report_fail("Step3.4: Check traffic item {} ixia rx frame failed".format(TRAFFIC_ENDX_ECMP_UNUA_V6))
+
+    ret = ixia_stop_traffic(TRAFFIC_ENDX_ECMP_UNUA_V6)
+    if not ret:
+        st.report_fail("Step3.5: Stop traffic item {} frame failed".format(TRAFFIC_ENDX_ECMP_UNUA_V6))  
 
     # ua v6
-    load_ixia_config(ESR_LOCATOR_ENDX_ECMP_UA_V6_CONFIG,TRAFFIC_ENDX_ECMP)
-
-    ret = ixia_start_traffic(TRAFFIC_ENDX_ECMP)
+    ixia_disable_traffic(TRAFFIC_ENDX_ECMP_UA_V6)
+    ixia_enable_traffic(TRAFFIC_ENDX_ECMP_UA_V6)
+    ret = ixia_start_traffic(TRAFFIC_ENDX_ECMP_UA_V6)
     if not ret:
-        st.report_fail("Step4.1: Start traffic item {} ixia_config {} frame failed".format(TRAFFIC_ENDX_ECMP,ESR_LOCATOR_ENDX_ECMP_UA_V6_CONFIG))
+        st.report_fail("Step4.1: Start traffic item {} ixia_config {} frame failed".format(TRAFFIC_ENDX_ECMP_UA_V6))
     st.wait(30)
     #check traffic on interface Ethernet1
-    ret = retry_api(check_dut_intf_tx_traffic_counters, dut2, ["Ethernet1"], 5100, retry_count= 3, delay= 5)
+    ret = retry_api(check_dut_intf_tx_traffic_counters, dut2, ["Ethernet1"], 7200, retry_count= 3, delay= 5)
     if not ret:
         st.report_fail("Step4.2: Check dut interface counters failed")
 
-    ret = ixia_stop_traffic(TRAFFIC_ENDX_ECMP)
+    ret = ixia_stop_traffic(TRAFFIC_ENDX_ECMP_UA_V6)
     if not ret:
-        st.report_fail("Step4.3: Stop traffic item {} ixia_config {} frame failed".format(TRAFFIC_ENDX_ECMP,ESR_LOCATOR_ENDX_ECMP_UA_V6_CONFIG))   
+        st.report_fail("Step4.3: Stop traffic item {} frame failed".format(TRAFFIC_ENDX_ECMP_UA_V6))   
+
+    # check traffic on ixia
+    ret = ixia_check_traffic(TRAFFIC_ENDX_ECMP_UA_V6, key="Rx Frame Rate", value=10000, exact_match = False)
+    if not ret:
+        st.report_fail("Step4.4: Check traffic item {} ixia rx frame failed".format(TRAFFIC_ENDX_ECMP_UA_V6))
+
+    ret = ixia_stop_traffic(TRAFFIC_ENDX_ECMP_UA_V6)
+    if not ret:
+        st.report_fail("Step4.5: Stop traffic item {} frame failed".format(TRAFFIC_ENDX_ECMP_UA_V6))   
 
     # endx ecmp v4
-    load_ixia_config(ESR_LOCATOR_ENDX_ECMP_V4_CONFIG,TRAFFIC_ENDX_ECMP)
-
-    ret = ixia_start_traffic(TRAFFIC_ENDX_ECMP)
+    ixia_disable_traffic(TRAFFIC_NONCOMPRESS_ENDX_ECMP_V4)
+    ixia_enable_traffic(TRAFFIC_NONCOMPRESS_ENDX_ECMP_V4)
+    ret = ixia_start_traffic(TRAFFIC_NONCOMPRESS_ENDX_ECMP_V4)
     if not ret:
-        st.report_fail("Step5.1: Start traffic item {} ixia_config {} frame failed".format(TRAFFIC_ENDX_ECMP,ESR_LOCATOR_ENDX_ECMP_V4_CONFIG))
+        st.report_fail("Step5.1: Start traffic item {} frame failed".format(TRAFFIC_NONCOMPRESS_ENDX_ECMP_V4))
     st.wait(30)
     #check traffic on interface Ethernet2
-    ret = retry_api(check_dut_intf_tx_traffic_counters, dut2, ["Ethernet2"], 5100, retry_count= 3, delay= 5)
+    ret = retry_api(check_dut_intf_tx_traffic_counters, dut2, ["Ethernet2"], 5600, retry_count= 3, delay= 5)
     if not ret:
         st.report_fail("Step5.2: Check dut interface counters failed")
 
-    ret = ixia_stop_traffic(TRAFFIC_ENDX_ECMP)
+    ret = ixia_stop_traffic(TRAFFIC_NONCOMPRESS_ENDX_ECMP_V4)
     if not ret:
-        st.report_fail("Step5.3: Stop traffic item {} ixia_config {} frame failed".format(TRAFFIC_ENDX_ECMP,ESR_LOCATOR_ENDX_ECMP_V4_CONFIG))   
+        st.report_fail("Step5.3: Stop traffic item {} frame failed".format(TRAFFIC_NONCOMPRESS_ENDX_ECMP_V4))   
+
+    # check traffic on ixia
+    ret = ixia_check_traffic(TRAFFIC_NONCOMPRESS_ENDX_ECMP_V4, key="Rx Frame Rate", value=10000, exact_match = False)
+    if not ret:
+        st.report_fail("Step5.4: Check traffic item {} ixia rx frame failed".format(TRAFFIC_NONCOMPRESS_ENDX_ECMP_V4))
+
+    ret = ixia_stop_traffic(TRAFFIC_NONCOMPRESS_ENDX_ECMP_V4)
+    if not ret:
+        st.report_fail("Step5.5: Stop traffic item {} frame failed".format(TRAFFIC_NONCOMPRESS_ENDX_ECMP_V4))   
 
     # endx ecmp v6
-    load_ixia_config(ESR_LOCATOR_ENDX_ECMP_V6_CONFIG,TRAFFIC_ENDX_ECMP)
-
-    ret = ixia_start_traffic(TRAFFIC_ENDX_ECMP)
+    ixia_disable_traffic(TRAFFIC_NONCOMPRESS_ENDX_ECMP_V6)
+    ixia_enable_traffic(TRAFFIC_NONCOMPRESS_ENDX_ECMP_V6)
+    ret = ixia_start_traffic(TRAFFIC_NONCOMPRESS_ENDX_ECMP_V6)
     if not ret:
-        st.report_fail("Step6.1: Start traffic item {} ixia_config {} frame failed".format(TRAFFIC_ENDX_ECMP,ESR_LOCATOR_ENDX_ECMP_V6_CONFIG))
+        st.report_fail("Step6.1: Start traffic item {} frame failed".format(TRAFFIC_NONCOMPRESS_ENDX_ECMP_V6))
     st.wait(30)
+
     #check traffic on interface Ethernet2
-    ret = retry_api(check_dut_intf_tx_traffic_counters, dut2, ["Ethernet2"], 5100, retry_count= 3, delay= 5)
+    ret = retry_api(check_dut_intf_tx_traffic_counters, dut2, ["Ethernet2"], 5600, retry_count= 3, delay= 5)
     if not ret:
         st.report_fail("Step6.2: Check dut interface counters failed")
 
-    ret = ixia_stop_traffic(TRAFFIC_ENDX_ECMP)
+    ret = ixia_stop_traffic(TRAFFIC_NONCOMPRESS_ENDX_ECMP_V6)
     if not ret:
-        st.report_fail("Step6.3: Stop traffic item {} ixia_config {} frame failed".format(TRAFFIC_ENDX_ECMP,ESR_LOCATOR_ENDX_ECMP_V6_CONFIG))  
+        st.report_fail("Step6.3: Stop traffic item {} frame failed".format(TRAFFIC_NONCOMPRESS_ENDX_ECMP_V6))  
+
+    # check traffic on ixia
+    ret = ixia_check_traffic(TRAFFIC_NONCOMPRESS_ENDX_ECMP_V6, key="Rx Frame Rate", value=10000, exact_match = False)
+    if not ret:
+        st.report_fail("Step6.4: Check traffic item {} ixia rx frame failed".format(TRAFFIC_NONCOMPRESS_ENDX_ECMP_V6))
+
+    ret = ixia_stop_traffic(TRAFFIC_NONCOMPRESS_ENDX_ECMP_V6)
+    if not ret:
+        st.report_fail("Step6.5: Stop traffic item {} frame failed".format(TRAFFIC_NONCOMPRESS_ENDX_ECMP_V6))  
                 
     st.report_pass("test_case_passed")
 

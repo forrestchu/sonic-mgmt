@@ -9,7 +9,11 @@
         }
     },
     "INTERFACE": {
-        "Ethernet33|2033::59/64": {
+        "Ethernet33|201.1.0.1/24": {
+            "family": "IPv4",
+            "scope": "global"
+        },
+        "Ethernet33|2000:0:1:1::1/64": {
             "family": "IPv6",
             "scope": "global"
         }

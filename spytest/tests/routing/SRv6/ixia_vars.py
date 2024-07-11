@@ -9,12 +9,7 @@ ESR_MIRROR_CONFIG = "esr_mirror.ixncfg"
 ESR_2K_POLICY_CONFIG = "esr_te_policy.ixncfg"
 ESR_SID_REMARKING_CONFIG = "esr_sid_remarking.ixncfg"
 ESR_IPV4_IPV6_POLICY_CONFIG = "ip_ipv6_te_policy.ixncfg"
-ESR_LOCATOR_ENDX_ECMP_UNUA_V4_CONFIG = "locator_endx_ecmp_unua_v4.ixncfg"
-ESR_LOCATOR_ENDX_ECMP_UA_V4_CONFIG = "locator_endx_ecmp_ua_v4.ixncfg"
-ESR_LOCATOR_ENDX_ECMP_UNUA_V6_CONFIG = "locator_endx_ecmp_unua_v6.ixncfg"
-ESR_LOCATOR_ENDX_ECMP_UA_V6_CONFIG = "locator_endx_ecmp_ua_v6.ixncfg"
-ESR_LOCATOR_ENDX_ECMP_V4_CONFIG = "locator_endx_ecmp_v4.ixncfg"
-ESR_LOCATOR_ENDX_ECMP_V6_CONFIG = "locator_endx_ecmp_v6.ixncfg"
+ESR_LOCATOR_ENDX_ECMP_128_MEMBER_CONFIG = "locator_endx_ecmp_128_member.ixncfg"
 ESR_LOCATOR_ENDX_ECMP_V6_HASH_CONFIG = "endx_ecmp_hash_v6.ixncfg"
 
 # IXIA_PORT connected to 179
@@ -62,5 +57,13 @@ TRAFFIC_SID_REMARKING_V6_FAIL = "Traffic_SID_remarking_v6_fail"
 TRAFFIC_IPV4_TE_POLICY = "TE-IPv4"
 TRAFFIC_IPV6_TE_POLICY = "TE-IPv6"
 
+TRAFFIC_ENDX_ECMP_UNUA_V4 = "endx_ecmp_unua_v4"
+TRAFFIC_ENDX_ECMP_UA_V4 = "endx_ecmp_ua_v4"
+TRAFFIC_ENDX_ECMP_UNUA_V6 = "endx_ecmp_unua_v6"
+TRAFFIC_ENDX_ECMP_UA_V6 = "endx_ecmp_ua_v6"
+TRAFFIC_NONCOMPRESS_ENDX_ECMP_V4 = "noncompress_endx_ecmp_v4"
+TRAFFIC_NONCOMPRESS_ENDX_ECMP_V6 = "noncompress_endx_ecmp_v6"
+
 TRAFFIC_ENDX_ECMP = "Quick Flow Groups"
+
 

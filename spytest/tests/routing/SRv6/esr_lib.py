@@ -505,6 +505,46 @@ def appdb_get_onefield(dut, key, field):
     st.log(output)
     return output
 
+def appdb_get_onefield_route_related(dut, route_key, field):
+    ret = ""
+    if field in ['nexthop', 'ifname', 'seg_src', 'segment']:
+        nexthop_group = appdb_get_onefield(dut, route_key, 'nexthop_group')
+        if nexthop_group and nexthop_group != "na":
+            nhg_key = 'NEXTHOP_GROUP_TABLE:' + nexthop_group
+            nexthop_group_field = appdb_get_onefield(dut, nhg_key, "nexthop_group")
+            if nexthop_group_field and nexthop_group_field != "na": # recursive
+                nhgs = nexthop_group_field.split(",")
+                for idx in range(len(nhgs)):
+                    if idx:
+                        ret += ","
+                    nhg_key_2 = 'NEXTHOP_GROUP_TABLE:' + nhgs[idx]
+                    subRet = appdb_get_onefield(dut, nhg_key_2, field)
+                    if subRet is None:
+                        return None
+                    ret += subRet
+                return ret
+            else:
+                return appdb_get_onefield(dut, nhg_key, field)
+    elif field in ['vpn_sid']:
+        pic_group = appdb_get_onefield(dut, route_key, 'pic_context_id')
+        if pic_group and pic_group != "na":
+            pic_key = 'PIC_CONTEXT_TABLE:' + pic_group
+            pic_group_field = appdb_get_onefield(dut, pic_key, "pic_group")
+            if pic_group_field and pic_group_field != "na": # recursive
+                pics = pic_group_field.split(",")
+                for idx in range(len(pics)):
+                    if idx:
+                        ret += ","
+                    pic_key_2 = 'PIC_CONTEXT_TABLE:' + pics[idx]
+                    subRet = appdb_get_onefield(dut, pic_key_2, field)
+                    if subRet is None:
+                        return None
+                    ret += subRet
+                return ret
+            else:
+                return appdb_get_onefield(dut, pic_key, field)
+    return appdb_get_onefield(dut, route_key, field)
+
 ## check vrf leran route nums
 # show ip route vrf VRFNAME summary
 # compare: 1 more than or equal , 0 equal, -1 less than

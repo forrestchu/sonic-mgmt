@@ -960,18 +960,13 @@ def test_srvpn_ecmp_04():
         show_cmd = "cli -c 'show ip route vrf {} {}'".format(to_check_vrf, "200.10.0.1/32")
         st.show(dut, show_cmd, skip_tmpl=True)
 
-        nexthop_group = appdb_get_onefield(dut, key, "nexthop_group")
-        nexthop = ""
-        ifname = ""
-        if nexthop_group and nexthop_group != "na":
-            nhg_key = 'NEXTHOP_GROUP_TABLE:' + nexthop_group
-            nexthop = appdb_get_onefield(dut, nhg_key, "nexthop")
-            ifname = appdb_get_onefield(dut, nhg_key, "ifname")
-        else:
-            nexthop = appdb_get_onefield(dut, key, "nexthop")
-            ifname = appdb_get_onefield(dut, key, "ifname")
+        nexthop = appdb_get_onefield_route_related(dut, key, "nexthop")
+        ifname = appdb_get_onefield_route_related(dut, key, "ifname")
+
+        if nexthop is None or ifname is None:
+            return False
         
-        if nexthop != "2000::179,3000::179":
+        if nexthop != "2000::179,3000::179" and nexthop != "3000::179,2000::179":
             return False
 
         if ifname != "unknown,unknown":
@@ -981,21 +976,15 @@ def test_srvpn_ecmp_04():
     if not retry_api(check_ecmp_appdb, retry_count= 3, delay= 10):
         st.report_fail("step1 check_vrf_fib test_srvpn_ecmp_04")
 
-    pic_context_id = appdb_get_onefield(dut2, key, "pic_context_id")
-    vpnsid_val = ""
-    if pic_context_id and pic_context_id != "na":
-        pic_key = 'PIC_CONTEXT_TABLE:' + pic_context_id
-        vpnsid_val = appdb_get_onefield(dut2, pic_key, "vpn_sid")
-    else:
-        vpnsid_val = appdb_get_onefield(dut2, key, "vpn_sid")
+    vpnsid_val = appdb_get_onefield_route_related(dut2, key, "vpn_sid")
 
     if vpnsid_val is None:
         st.report_fail(checkpoint_msg)
 
     vpnsid_ecmp_list = vpnsid_val.split(",")
-    for sid in ["fd00:201:202:fff1:10::", "fd00:201:201:fff1:60::"]:
+    for sid in ["fd00:201:201:fff1:10::"]:
         if sid not in vpnsid_ecmp_list:
-            st.log("step1 route appdb check failed , sid = {}".format(sid))
+            st.report_fail("step1 route appdb check failed , sid = {}".format(sid))
 
     st.wait(30)
 
@@ -1401,7 +1390,8 @@ def test_srvpn_mirror_config_redistribute_vrf_06():
     for vrf_it in [svrf_name, dvrf_name]:
         appdb_key = "ROUTE_TABLE:{}:{}".format(vrf_it, check_prefix)
         for k in check_val.keys():
-            appdb_onefield_checkpoint(dut1, appdb_key, k, check_val[k], expect = True, checkpoint = checkpoint_msg)
+            if appdb_get_onefield_route_related(dut1, appdb_key, k) != check_val[k]:
+                st.report_fail("{} app DB has no right filed {}".format(checkpoint_msg, k))
 
 
     # check2 : dut2 PUBLIC_TC0 PUBLIC_TC1 ipv6 route
@@ -1449,7 +1439,8 @@ def test_srvpn_mirror_config_redistribute_vrf_06():
     for vrf_it in [svrf_name, dvrf_name]:
         appdb_key = "ROUTE_TABLE:{}:{}".format(vrf_it, check_prefix)
         for k in check_val.keys():
-            appdb_onefield_checkpoint(dut2, appdb_key, k, check_val[k], expect = True, checkpoint = checkpoint_msg)
+            if appdb_get_onefield_route_related(dut2, appdb_key, k) != check_val[k]:
+                st.report_fail("{} app DB has no right filed {}".format(checkpoint_msg, k))
     # check3 : no redistribute vrf
 
     # check4 : recover redistribute vrf

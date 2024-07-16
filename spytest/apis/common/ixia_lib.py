@@ -243,6 +243,31 @@ class IxiaController():
                 return item
         return None
 
+    def get_ipv6(self, topology_name, device_group_name, ethernet_name,
+                 ipv6_name):
+        parent_item = self.get_ethernet(topology_name, device_group_name, ethernet_name)
+        if not parent_item:
+            return None
+
+        item_list = parent_item.Ipv6.find()
+        for item in item_list:
+            if item.Name == ipv6_name:
+                return item
+        return None
+
+    def get_ipv6_bgp_peer(self, topology_name, device_group_name, ethernet_name,
+                 ipv4_name, bgp_peer_name):
+        parent_item = self.get_ipv6(topology_name, device_group_name, ethernet_name,
+                                     ipv4_name)
+        if not parent_item:
+            return None
+
+        item_list = parent_item.BgpIpv6Peer.find()
+        for item in item_list:
+            if item.Name == bgp_peer_name:
+                return item
+        return None
+
     def get_network_group(self, topology_name, device_group_name, network_group_name):
         device_group = self.get_device_group(topology_name, device_group_name)
         if not device_group:

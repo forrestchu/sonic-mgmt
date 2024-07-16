@@ -23,6 +23,7 @@ data.dut2_load_2k_policy_config_done = False
 data.dut2_load_4k_policy_config_done = False
 data.traffic_1k_te_policy = False
 data.traffic_2k_te_policy = False
+data.have_run_ipv4_ipv6_07 = False
 data.load_locator_endx_ecmp_conf_done = False
 data.load_locator_endx_ecmp_hash_conf_done = False
 
@@ -42,11 +43,16 @@ def esr_srte_policy_module_hooks(request):
 def esr_srte_policy_func_hooks(request):
     func_name = st.get_func_name(request)
     st.log("esr_srte_policy_func_hooks enter {}".format(func_name))
-    if func_name == 'test_srte_policy_2k_vrf_ipv4_ipv6_07':
-        double_dut_load_config('ip_ipv6_2k_config', 'ip_ipv6_2k_config')
-        ixia_load_config(ESR_IPV4_IPV6_POLICY_CONFIG)
-        ixia_start_all_protocols()
-        st.wait(60)
+    if func_name == 'test_srte_policy_2k_vrf_ipv4_ipv6_07' or func_name == 'test_srte_policy_2k_vrf_ipv4_ipv6_flap_08':
+        if data.have_run_ipv4_ipv6_07 == False:
+            double_dut_load_config('ip_ipv6_2k_config', 'ip_ipv6_2k_config')
+        if func_name == 'test_srte_policy_2k_vrf_ipv4_ipv6_07':
+            ixia_load_config(ESR_IPV4_IPV6_POLICY_CONFIG)
+            ixia_start_all_protocols()
+            st.wait(60)
+        else:
+            ixia_load_config(ESR_IPV4_IPV6_500K_POLICY_CONFIG)
+            #st.wait(30)
     elif func_name == 'test_locator_128_endx_ecmp':
         if data.load_locator_endx_ecmp_conf_done == False:
             double_dut_load_config('128_endx_ecmp', '128_endx_ecmp')
@@ -70,7 +76,7 @@ def esr_srte_policy_func_hooks(request):
             data.load_policy_ixia_conf_done = True
 
     yield
-    if func_name != 'test_srte_policy_2k_vrf_ipv4_ipv6_07':
+    if func_name != 'test_srte_policy_2k_vrf_ipv4_ipv6_07' and func_name != 'test_srte_policy_2k_vrf_ipv4_ipv6_flap_08':
         if data.traffic_1k_te_policy == True:
             ixia_stop_traffic(TRAFFIC_1K_TE_POLICY)
             data.traffic_1k_te_policy == False
@@ -845,8 +851,107 @@ def test_srte_policy_2k_vrf_ipv4_ipv6_07():
     if not ret:
         st.report_fail("Step15: Stop traffic item {} rx frame failed".format(TRAFFIC_IPV4_TE_POLICY))
 
+    data.have_run_ipv4_ipv6_07 = True
     st.report_pass("test_case_passed")
 
+@pytest.mark.community
+@pytest.mark.community_pass
+def test_srte_policy_2k_vrf_ipv4_ipv6_flap_08():
+    if data.have_run_ipv4_ipv6_07 == True:
+        add_neighbor = 'vtysh -c "configure terminal" -c "router bgp 100" -c "address-family ipv4 vpn" -c "no neighbor 2000::179 activate"'
+        st.config(dut2, add_neighbor)
+        st.wait(5)
+        add_neighbor = 'vtysh -c "configure terminal" -c "router bgp 100" -c "address-family ipv6 vpn" -c "neighbor 2000::179 activate"'
+        st.config(dut2, add_neighbor)
+        st.wait(30)
+
+        if not retry_api(check_bgp_state, dut2, "2000::179", retry_count= 6, delay= 10):
+            st.report_fail("Step0: Check bgp 2000::179 state failed")
+    
+        cmd = "cli -c 'configure terminal' -c 'interface {}' -c 'no shutdown'".format("Ethernet3")
+        st.config(dut2, cmd)
+        cmd = "cli -c 'configure terminal' -c 'interface {}' -c 'no shutdown'".format("Ethernet4")
+        st.config(dut2, cmd)
+        st.wait(60)
+        if not retry_api(check_bgp_state, dut2, "2033::179", retry_count= 6, delay= 10):
+            st.report_fail("Step1: Check bgp 2033::179 state failed")
+        if not retry_api(check_bgp_state, dut2, "2044::179", retry_count= 6, delay= 10):
+            st.report_fail("Step2: Check bgp 2044::179 state failed")
+
+    ixia_start_all_protocols()
+    st.wait(60)
+
+    if not retry_api(check_bgp_route_count, dut2, "2000::179", "500000", True,  retry_count= 10, delay= 30):
+        st.report_fail("Step3: Chek route count failed")
+
+    if not retry_api(check_srv6_te_policy_active, dut2, "4003",  retry_count= 10, delay= 30):
+        st.report_fail("Step4: Chek te policy active count failed")
+
+    ixia_disable_traffic(TRAFFIC_IPV4_TE_POLICY)
+    ixia_enable_traffic(TRAFFIC_IPV6_TE_POLICY)
+    ret = ixia_start_traffic(TRAFFIC_IPV6_TE_POLICY)
+    if not ret:
+        st.report_fail("Step3: Start traffic item {} rx frame failed".format(TRAFFIC_IPV6_TE_POLICY))
+
+    TOPOLOGY = "Topology 2"
+    DEVICE_GROUP = "Device Group 2"
+    ETHERNET = "Ethernet 2"
+    IPV6_NAME = "IPv6 1"
+    BGP_PEER_NAME = "BGP+ Peer 1"
+
+    show_hw_route_count(dut1)
+    show_hw_route_count(dut2)
+
+    st.log("start flap")
+    ixia_config_bgp_ipv6_flapping(TOPOLOGY, DEVICE_GROUP, ETHERNET, IPV6_NAME, BGP_PEER_NAME, True)
+    st.wait(20)
+    ixia_config_bgp_ipv6_flapping(TOPOLOGY, DEVICE_GROUP, ETHERNET, IPV6_NAME, BGP_PEER_NAME, False)
+    st.wait(60)
+    show_hw_route_count(dut1)
+    show_hw_route_count(dut2)
+
+    ret = retry_api(check_mult_dut_intf_tx_traffic_counters, dut2, ['Ethernet3', 'Ethernet4'], 200, retry_count= 5, delay= 10)
+    if not ret:
+        st.report_fail("Step3: Check dut interface counters failed")
+
+    ret = ixia_stop_traffic(TRAFFIC_2K_TE_POLICY)
+    if not ret:
+        st.report_fail("Step4: Stop traffic item {} rx frame failed".format(TRAFFIC_2K_TE_POLICY))
+
+    add_neighbor = 'vtysh -c "configure terminal" -c "router bgp 100" -c "address-family ipv6 vpn" -c "no neighbor 2000::179 activate"'
+    st.config(dut2, add_neighbor)
+    st.wait(5)
+    add_neighbor = 'vtysh -c "configure terminal" -c "router bgp 100" -c "address-family ipv4 vpn" -c "neighbor 2000::179 activate"'
+    st.config(dut2, add_neighbor)
+    st.wait(30)
+
+    if not retry_api(check_bgp_route_count, dut2, "2000::179", "500000", False,  retry_count= 10, delay= 30):
+        st.report_fail("Step10: Chek route count failed")
+    TOPOLOGY = "Topology 1"
+    DEVICE_GROUP = "Device Group 1"
+    ETHERNET = "Ethernet 1"
+    IPV4_NAME = "IPv4 1"
+    BGP_PEER_NAME = "BGP Peer 1"
+
+    show_hw_route_count(dut1)
+    show_hw_route_count(dut2)
+
+    st.log("start flap")
+    ixia_config_bgp_ipv6_flapping(TOPOLOGY, DEVICE_GROUP, ETHERNET, IPV4_NAME, BGP_PEER_NAME, True)
+    st.wait(20)
+    ixia_config_bgp_ipv6_flapping(TOPOLOGY, DEVICE_GROUP, ETHERNET, IPV4_NAME, BGP_PEER_NAME, False)
+    st.wait(60)
+    show_hw_route_count(dut1)
+    show_hw_route_count(dut2)
+    ret = retry_api(check_mult_dut_intf_tx_traffic_counters, dut2, ['Ethernet3', 'Ethernet4'], 245, retry_count= 5, delay= 10)
+    if not ret:
+        st.report_fail("Step3: Check dut interface counters failed")
+
+    ret = ixia_stop_traffic(TRAFFIC_2K_TE_POLICY)
+    if not ret:
+        st.report_fail("Step4: Stop traffic item {} rx frame failed".format(TRAFFIC_2K_TE_POLICY))
+
+    st.report_pass("test_case_passed")
 
 @pytest.mark.community
 @pytest.mark.community_pass

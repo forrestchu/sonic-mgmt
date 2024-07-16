@@ -306,6 +306,22 @@ class IxiaController():
         bgp_peer.Flap.Single('false')
         return True
 
+    def enable_ipv6_bgp_peer_flapping(self, bgp_peer, uptime_s=10, downtime_s=10):
+        if not bgp_peer:
+            return False
+
+        bgp_peer.Flap.Single('true')
+        bgp_peer.UptimeInSec.Single(uptime_s)
+        bgp_peer.DowntimeInSec.Single(downtime_s)
+        return True
+
+    def disable_ipv6_bgp_peer_flapping(self, bgp_peer):
+        if not bgp_peer:
+            return False
+
+        bgp_peer.Flap.Single('false')
+        return True
+
     def enable_csv_logging(self, caption):
         if caption == "Port Statistics":
             view = self.ixnetwork.Statistics.View.find(Caption="Port Statistics")

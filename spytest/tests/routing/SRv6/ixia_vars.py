@@ -9,6 +9,7 @@ ESR_MIRROR_CONFIG = "esr_mirror.ixncfg"
 ESR_2K_POLICY_CONFIG = "esr_te_policy.ixncfg"
 ESR_SID_REMARKING_CONFIG = "esr_sid_remarking.ixncfg"
 ESR_IPV4_IPV6_POLICY_CONFIG = "ip_ipv6_te_policy.ixncfg"
+ESR_IPV4_IPV6_500K_POLICY_CONFIG = "ip_ipv6_500k_te_policy.ixncfg"
 ESR_LOCATOR_ENDX_ECMP_128_MEMBER_CONFIG = "locator_endx_ecmp_128_member.ixncfg"
 ESR_LOCATOR_ENDX_ECMP_V6_HASH_CONFIG = "endx_ecmp_hash_v6.ixncfg"
 

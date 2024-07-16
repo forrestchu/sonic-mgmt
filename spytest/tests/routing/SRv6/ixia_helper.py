@@ -178,7 +178,25 @@ def ixia_config_bgp_flapping(topology_name, device_group_name, ethernet_name,
     if enable:
         res = ixia_controller.enable_ipv4_bgp_peer_flapping(item, 10, 10)
     else:
-        res = ixia_controller. disable_ipv4_bgp_peer_flapping(item)
+        res = ixia_controller.disable_ipv4_bgp_peer_flapping(item)
+    if not res:
+        st.log("Set bgp peer flapping failed")
+
+    topology = ixia_controller.ixnetwork.Globals.find().Topology.find()
+    topology.ApplyOnTheFly()
+
+def ixia_config_bgp_ipv6_flapping(topology_name, device_group_name, ethernet_name,
+                 ipv6_name, bgp_peer_name, enable):
+
+    item = ixia_controller.get_ipv6_bgp_peer(topology_name, device_group_name, ethernet_name,
+                 ipv6_name, bgp_peer_name)
+    if not item:
+        print("Failed to get ipv6 bgp peer")
+
+    if enable:
+        res = ixia_controller.enable_ipv6_bgp_peer_flapping(item, 10, 10)
+    else:
+        res = ixia_controller.disable_ipv6_bgp_peer_flapping(item)
     if not res:
         st.log("Set bgp peer flapping failed")
 

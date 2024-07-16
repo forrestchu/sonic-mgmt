@@ -879,7 +879,7 @@ def test_srte_policy_2k_vrf_ipv4_ipv6_flap_08():
             st.report_fail("Step2: Check bgp 2044::179 state failed")
 
     ixia_start_all_protocols()
-    st.wait(60)
+    st.wait(120)
 
     if not retry_api(check_bgp_route_count, dut2, "2000::179", "500000", True,  retry_count= 10, delay= 30):
         st.report_fail("Step3: Chek route count failed")
@@ -891,7 +891,7 @@ def test_srte_policy_2k_vrf_ipv4_ipv6_flap_08():
     ixia_enable_traffic(TRAFFIC_IPV6_TE_POLICY)
     ret = ixia_start_traffic(TRAFFIC_IPV6_TE_POLICY)
     if not ret:
-        st.report_fail("Step3: Start traffic item {} rx frame failed".format(TRAFFIC_IPV6_TE_POLICY))
+        st.report_fail("Step5: Start traffic item {} rx frame failed".format(TRAFFIC_IPV6_TE_POLICY))
 
     TOPOLOGY = "Topology 2"
     DEVICE_GROUP = "Device Group 2"
@@ -906,17 +906,17 @@ def test_srte_policy_2k_vrf_ipv4_ipv6_flap_08():
     ixia_config_bgp_ipv6_flapping(TOPOLOGY, DEVICE_GROUP, ETHERNET, IPV6_NAME, BGP_PEER_NAME, True)
     st.wait(20)
     ixia_config_bgp_ipv6_flapping(TOPOLOGY, DEVICE_GROUP, ETHERNET, IPV6_NAME, BGP_PEER_NAME, False)
-    st.wait(60)
+    st.wait(240)
     show_hw_route_count(dut1)
     show_hw_route_count(dut2)
 
-    ret = retry_api(check_mult_dut_intf_tx_traffic_counters, dut2, ['Ethernet3', 'Ethernet4'], 200, retry_count= 5, delay= 10)
+    ret = retry_api(check_mult_dut_intf_tx_traffic_counters, dut2, ['Ethernet3', 'Ethernet4'], 245, retry_count= 15, delay= 10)
     if not ret:
-        st.report_fail("Step3: Check dut interface counters failed")
+        st.report_fail("Step6: Check dut interface counters failed")
 
-    ret = ixia_stop_traffic(TRAFFIC_2K_TE_POLICY)
+    ret = ixia_stop_traffic(TRAFFIC_IPV6_TE_POLICY)
     if not ret:
-        st.report_fail("Step4: Stop traffic item {} rx frame failed".format(TRAFFIC_2K_TE_POLICY))
+        st.report_fail("Step7: Stop traffic item {} rx frame failed".format(TRAFFIC_IPV6_TE_POLICY))
 
     add_neighbor = 'vtysh -c "configure terminal" -c "router bgp 100" -c "address-family ipv6 vpn" -c "no neighbor 2000::179 activate"'
     st.config(dut2, add_neighbor)
@@ -926,7 +926,14 @@ def test_srte_policy_2k_vrf_ipv4_ipv6_flap_08():
     st.wait(30)
 
     if not retry_api(check_bgp_route_count, dut2, "2000::179", "500000", False,  retry_count= 10, delay= 30):
-        st.report_fail("Step10: Chek route count failed")
+        st.report_fail("Step8: Chek route count failed")
+
+    ixia_disable_traffic(TRAFFIC_IPV6_TE_POLICY)
+    ixia_enable_traffic(TRAFFIC_IPV4_TE_POLICY)
+    ret = ixia_start_traffic(TRAFFIC_IPV4_TE_POLICY)
+    if not ret:
+        st.report_fail("Step9: Start traffic item {} rx frame failed".format(TRAFFIC_IPV4_TE_POLICY))
+
     TOPOLOGY = "Topology 1"
     DEVICE_GROUP = "Device Group 1"
     ETHERNET = "Ethernet 1"
@@ -937,19 +944,19 @@ def test_srte_policy_2k_vrf_ipv4_ipv6_flap_08():
     show_hw_route_count(dut2)
 
     st.log("start flap")
-    ixia_config_bgp_ipv6_flapping(TOPOLOGY, DEVICE_GROUP, ETHERNET, IPV4_NAME, BGP_PEER_NAME, True)
+    ixia_config_bgp_flapping(TOPOLOGY, DEVICE_GROUP, ETHERNET, IPV4_NAME, BGP_PEER_NAME, True)
     st.wait(20)
-    ixia_config_bgp_ipv6_flapping(TOPOLOGY, DEVICE_GROUP, ETHERNET, IPV4_NAME, BGP_PEER_NAME, False)
-    st.wait(60)
+    ixia_config_bgp_flapping(TOPOLOGY, DEVICE_GROUP, ETHERNET, IPV4_NAME, BGP_PEER_NAME, False)
+    st.wait(240)
     show_hw_route_count(dut1)
     show_hw_route_count(dut2)
-    ret = retry_api(check_mult_dut_intf_tx_traffic_counters, dut2, ['Ethernet3', 'Ethernet4'], 245, retry_count= 5, delay= 10)
+    ret = retry_api(check_mult_dut_intf_tx_traffic_counters, dut2, ['Ethernet3', 'Ethernet4'], 200, retry_count= 15, delay= 10)
     if not ret:
-        st.report_fail("Step3: Check dut interface counters failed")
+        st.report_fail("Step10: Check dut interface counters failed")
 
-    ret = ixia_stop_traffic(TRAFFIC_2K_TE_POLICY)
+    ret = ixia_stop_traffic(TRAFFIC_IPV4_TE_POLICY)
     if not ret:
-        st.report_fail("Step4: Stop traffic item {} rx frame failed".format(TRAFFIC_2K_TE_POLICY))
+        st.report_fail("Step11: Stop traffic item {} rx frame failed".format(TRAFFIC_IPV4_TE_POLICY))
 
     st.report_pass("test_case_passed")
 

@@ -426,6 +426,12 @@
         }, 
         "PortChannel101": {
             "admin_status": "up"
+        },
+        "PortChannel102": {
+            "admin_status": "up"
+        }, 
+        "PortChannel103": {
+            "admin_status": "up"
         }
     },
     "PORTCHANNEL_INTERFACE": {
@@ -447,11 +453,32 @@
         "PortChannel101|fd00:200::59/64": {
             "family": "IPv6", 
             "scope": "global"
+        },
+        "PortChannel102|192.30.1.59/24": {
+            "family": "IPv4", 
+            "scope": "global"
+        }, 
+        "PortChannel102|fd00:300::59/64": {
+            "family": "IPv6", 
+            "scope": "global"
+        }, 
+        "PortChannel103": {
+            "vrf_name": "Test1"
+        }, 
+        "PortChannel103|192.40.1.59/24": {
+            "family": "IPv4", 
+            "scope": "global"
+        }, 
+        "PortChannel103|fd00:400::59/64": {
+            "family": "IPv6", 
+            "scope": "global"
         }
     }, 
     "PORTCHANNEL_MEMBER": {
         "PortChannel100|Ethernet1": {}, 
-        "PortChannel101|Ethernet2": {}
+        "PortChannel101|Ethernet2": {},
+        "PortChannel102|Ethernet3": {}, 
+        "PortChannel103|Ethernet4": {}
     }, 
     "PORTCHANNEL_PARAMETERS": {
         "global": {

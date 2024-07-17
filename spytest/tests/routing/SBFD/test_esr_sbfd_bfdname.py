@@ -64,12 +64,14 @@ def load_json_config(filesuffix=''):
     st.banner("%s json config loaded completed" % (filesuffix))
 
 def show_appdb_table_info(dut, table):
+    key = 'empty array'
     command = redis.build(dut, redis.APPL_DB, 'keys "{}"'.format(table))
     output = st.show(dut, command, skip_tmpl=True)
-    if output is '':
-        st.report_fail("{} app DB has no {}".format(dut, table))
-    st.log(output)
-    return output
+    if key in output:
+        return
+    else:
+        st.log(output)
+        st.report_fail("{} app DB has {}".format(dut, table))
 
 def get_bfd_uptime_sec(output):
     uptime = 0
@@ -89,7 +91,8 @@ def get_bfd_uptime_sec(output):
 def double_check_bfd_session(dut, bfd_session_key, bfd_session_check_field, offload=True, delete=False):
     # show bfd peers | grep 'peer 192.20.1.59 bfd-name BFD_SINGLE_V4_VRF bfd-mode bfd local-address 192.20.1.58 vrf Test1 interface PortChannel101' -A 20
     create_by_hardware = False
-    cmd = 'cli -c "no page" -c "show bfd peers" | grep {} -A 20'.format('"'+bfd_session_key+'"')
+    bfd_status = ''
+    cmd = 'cli -c "no page" -c "show bfd peers" | grep {} -A 21'.format('"'+bfd_session_key+'"')
     output = st.show(dut, cmd)
     st.log (output)
     if type(output) != list:
@@ -113,6 +116,8 @@ def double_check_bfd_session(dut, bfd_session_key, bfd_session_check_field, offl
     for field, val in bfd_session_check_field.items():
         st.log (field)
         st.log (val)
+        if field == 'status':
+            bfd_status = val
         if field in output :
             if type(output[field]) == list:
                 checkval = output[field][0]
@@ -139,29 +144,30 @@ def double_check_bfd_session(dut, bfd_session_key, bfd_session_check_field, offl
                 st.log("{} 's {} is not match, expect {} actual {}".format(bfd_session_key, field, val, checkval))
                 return False
     
-    if uptime2 - uptime1 < 10:
-        st.log("{} not up continuously".format(bfd_session_key))
-        return False
-    
-    if 'local_id' in output:
-        data.current_discr = output['local_id']
-    
-    if 'hardware' in output:
-        if output['hardware'] == 'hardware':
-            create_by_hardware = True
-    
-    # show bfd peers counters | grep 'peer 20.20.20.58 p(endpoint 20.20.20.58 color 1 sidlist sl1_ipv4) local-address 20.20.20.58' -A 7
-    count_cmd = 'cli -c "no page" -c "show bfd peers counters" | grep {} -A 7'.format('"'+bfd_session_key+'"')
-    output = st.show(dut, count_cmd)
-    if type(output) == list and len(output)>0:
-        output = output[0]
-    st.log (output)
-
-    if offload:
-        # check appdb ,check hardware flag
-        if create_by_hardware == False:
-            st.log("{} not offload".format(bfd_session_key))
+    if bfd_status == 'up':
+        if uptime2 - uptime1 < 10:
+            st.log("{} not up continuously".format(bfd_session_key))
             return False
+        
+        if 'local_id' in output:
+            data.current_discr = output['local_id']
+        
+        if 'hardware' in output:
+            if output['hardware'] == 'hardware':
+                create_by_hardware = True
+        
+        # show bfd peers counters | grep 'peer 20.20.20.58 p(endpoint 20.20.20.58 color 1 sidlist sl1_ipv4) local-address 20.20.20.58' -A 7
+        count_cmd = 'cli -c "no page" -c "show bfd peers counters" | grep {} -A 7'.format('"'+bfd_session_key+'"')
+        output = st.show(dut, count_cmd)
+        if type(output) == list and len(output)>0:
+            output = output[0]
+        st.log (output)
+
+        if offload:
+            # check appdb ,check hardware flag
+            if create_by_hardware == False:
+                st.log("{} not offload".format(bfd_session_key))
+                return False
 
     return True
 
@@ -176,8 +182,12 @@ def save_config_and_reboot(dut):
 def learn_arp_by_ping():
     st.config(dut1, 'ping -c2 192.10.1.59')
     st.config(dut1, 'ping -c2 192.20.1.59 -I PortChannel101')
+    st.config(dut1, 'ping -c2 192.30.1.59')
+    st.config(dut1, 'ping -c2 192.40.1.59 -I PortChannel103')
     st.config(dut1, 'ping -c2 fd00:100::59')
     st.config(dut1, 'ping -c2 fd00:200::59 -I PortChannel101')
+    st.config(dut1, 'ping -c2 fd00:300::59')
+    st.config(dut1, 'ping -c2 fd00:400::59 -I PortChannel103')
     st.config(dut1, 'ping -c2 20.20.20.59')
     st.config(dut1, 'ping -c2 2000::59')
     st.config(dut1, 'ping -c2 30.30.30.59 -I PortChannel101')
@@ -185,8 +195,12 @@ def learn_arp_by_ping():
 
     st.config(dut2, 'ping -c2 192.10.1.58')
     st.config(dut2, 'ping -c2 192.20.1.58 -I PortChannel101')
+    st.config(dut2, 'ping -c2 192.30.1.58')
+    st.config(dut2, 'ping -c2 192.40.1.58 -I PortChannel103')
     st.config(dut2, 'ping -c2 fd00:100::58')
     st.config(dut2, 'ping -c2 fd00:200::58 -I PortChannel101')
+    st.config(dut2, 'ping -c2 fd00:300::58')
+    st.config(dut2, 'ping -c2 fd00:400::58 -I PortChannel103')
     st.config(dut2, 'ping -c2 20.20.20.58')
     st.config(dut2, 'ping -c2 2000::58')
     st.config(dut2, 'ping -c2 30.30.30.58 -I PortChannel101')
@@ -221,47 +235,94 @@ def check_bfd_session_configdb(bfd_mode, configdb_key, default, checkpoint):
             configdb_onefield_checkpoint(dut2, configdb_key, "peer", "192.20.1.58", True, checkpoint)
             configdb_onefield_checkpoint(dut2, configdb_key, "enabled", "true", True, checkpoint)
             configdb_onefield_checkpoint(dut2, configdb_key, "vrf", "Test1", True, checkpoint)
+
     elif bfd_mode == 'bfd-single-v6': 
         if configdb_key == 'BFD_PEER|BFD_SINGLE_V6_DEFAULT':
             configdb_onefield_checkpoint(dut1, configdb_key, "mode", "bfd", True, checkpoint)
             configdb_onefield_checkpoint(dut1, configdb_key, "interface", "PortChannel100", True, checkpoint)
             configdb_onefield_checkpoint(dut1, configdb_key, "multihop", "false", True, checkpoint)
-            configdb_onefield_checkpoint(dut1, configdb_key, "peer", "192.10.1.59", True, checkpoint)
+            configdb_onefield_checkpoint(dut1, configdb_key, "peer", "fd00:100::59", True, checkpoint)
             configdb_onefield_checkpoint(dut1, configdb_key, "enabled", "true", True, checkpoint)
 
-        elif configdb_key == 'BFD_PEER|BFD_SINGLE_V6_VRF':
             configdb_onefield_checkpoint(dut2, configdb_key, "mode", "bfd", True, checkpoint)
             configdb_onefield_checkpoint(dut2, configdb_key, "interface", "PortChannel100", True, checkpoint)
             configdb_onefield_checkpoint(dut2, configdb_key, "multihop", "false", True, checkpoint)
-            configdb_onefield_checkpoint(dut2, configdb_key, "peer", "192.10.1.58", True, checkpoint)
+            configdb_onefield_checkpoint(dut2, configdb_key, "peer", "fd00:100::58", True, checkpoint)
+            configdb_onefield_checkpoint(dut2, configdb_key, "enabled", "true", True, checkpoint) 
+
+        elif configdb_key == 'BFD_PEER|BFD_SINGLE_V6_VRF':
+            configdb_onefield_checkpoint(dut1, configdb_key, "mode", "bfd", True, checkpoint)
+            configdb_onefield_checkpoint(dut1, configdb_key, "interface", "PortChannel101", True, checkpoint)
+            configdb_onefield_checkpoint(dut1, configdb_key, "multihop", "false", True, checkpoint)
+            configdb_onefield_checkpoint(dut1, configdb_key, "peer", "fd00:200::59", True, checkpoint)
+            configdb_onefield_checkpoint(dut1, configdb_key, "enabled", "true", True, checkpoint)
+            configdb_onefield_checkpoint(dut1, configdb_key, "vrf", "Test1", True, checkpoint)
+
+            configdb_onefield_checkpoint(dut2, configdb_key, "mode", "bfd", True, checkpoint)
+            configdb_onefield_checkpoint(dut2, configdb_key, "interface", "PortChannel101", True, checkpoint)
+            configdb_onefield_checkpoint(dut2, configdb_key, "multihop", "false", True, checkpoint)
+            configdb_onefield_checkpoint(dut2, configdb_key, "peer", "fd00:200::58", True, checkpoint)
             configdb_onefield_checkpoint(dut2, configdb_key, "enabled", "true", True, checkpoint)
             configdb_onefield_checkpoint(dut2, configdb_key, "vrf", "Test1", True, checkpoint)
+
     elif bfd_mode == 'bfd-multi-v4': 
         if configdb_key == 'BFD_PEER|BFD_MULTI_V4_DEFAULT':
             configdb_onefield_checkpoint(dut1, configdb_key, "mode", "bfd", True, checkpoint)
-            configdb_onefield_checkpoint(dut1, configdb_key, "interface", "PortChannel100", True, checkpoint)
-            configdb_onefield_checkpoint(dut1, configdb_key, "multihop", "True", True, checkpoint)
-            configdb_onefield_checkpoint(dut1, configdb_key, "peer", "192.10.1.59", True, checkpoint)
+            configdb_onefield_checkpoint(dut1, configdb_key, "local-address", "192.30.1.58", True, checkpoint)
+            configdb_onefield_checkpoint(dut1, configdb_key, "multihop", "true", True, checkpoint)
+            configdb_onefield_checkpoint(dut1, configdb_key, "peer", "192.30.1.59", True, checkpoint)
             configdb_onefield_checkpoint(dut1, configdb_key, "enabled", "true", True, checkpoint)
 
             configdb_onefield_checkpoint(dut2, configdb_key, "mode", "bfd", True, checkpoint)
-            configdb_onefield_checkpoint(dut2, configdb_key, "interface", "PortChannel100", True, checkpoint)
-            configdb_onefield_checkpoint(dut2, configdb_key, "multihop", "True", True, checkpoint)
-            configdb_onefield_checkpoint(dut2, configdb_key, "peer", "192.10.1.58", True, checkpoint)
+            configdb_onefield_checkpoint(dut2, configdb_key, "local-address", "192.30.1.59", True, checkpoint)
+            configdb_onefield_checkpoint(dut2, configdb_key, "multihop", "true", True, checkpoint)
+            configdb_onefield_checkpoint(dut2, configdb_key, "peer", "192.30.1.58", True, checkpoint)
             configdb_onefield_checkpoint(dut2, configdb_key, "enabled", "true", True, checkpoint)
 
         elif configdb_key == 'BFD_PEER|BFD_MULTI_V4_VRF':
             configdb_onefield_checkpoint(dut1, configdb_key, "mode", "bfd", True, checkpoint)
-            configdb_onefield_checkpoint(dut1, configdb_key, "multihop", "True", True, checkpoint)
-            configdb_onefield_checkpoint(dut1, configdb_key, "peer", "192.20.1.59", True, checkpoint)
+            configdb_onefield_checkpoint(dut1, configdb_key, "local-address", "192.40.1.58", True, checkpoint)
+            configdb_onefield_checkpoint(dut1, configdb_key, "multihop", "true", True, checkpoint)
+            configdb_onefield_checkpoint(dut1, configdb_key, "peer", "192.40.1.59", True, checkpoint)
             configdb_onefield_checkpoint(dut1, configdb_key, "enabled", "true", True, checkpoint)
             configdb_onefield_checkpoint(dut1, configdb_key, "vrf", "Test1", True, checkpoint)  
 
             configdb_onefield_checkpoint(dut2, configdb_key, "mode", "bfd", True, checkpoint)
-            configdb_onefield_checkpoint(dut2, configdb_key, "multihop", "True", True, checkpoint)
-            configdb_onefield_checkpoint(dut2, configdb_key, "peer", "192.20.1.58", True, checkpoint)
+            configdb_onefield_checkpoint(dut2, configdb_key, "local-address", "192.40.1.59", True, checkpoint)
+            configdb_onefield_checkpoint(dut2, configdb_key, "multihop", "true", True, checkpoint)
+            configdb_onefield_checkpoint(dut2, configdb_key, "peer", "192.40.1.58", True, checkpoint)
             configdb_onefield_checkpoint(dut2, configdb_key, "enabled", "true", True, checkpoint)
             configdb_onefield_checkpoint(dut2, configdb_key, "vrf", "Test1", True, checkpoint)  
+
+    elif bfd_mode == 'bfd-multi-v6': 
+        if configdb_key == 'BFD_PEER|BFD_MULTI_V6_DEFAULT':
+            configdb_onefield_checkpoint(dut1, configdb_key, "mode", "bfd", True, checkpoint)
+            configdb_onefield_checkpoint(dut1, configdb_key, "local-address", "fd00:300::58", True, checkpoint)
+            configdb_onefield_checkpoint(dut1, configdb_key, "multihop", "true", True, checkpoint)
+            configdb_onefield_checkpoint(dut1, configdb_key, "peer", "fd00:300::59", True, checkpoint)
+            configdb_onefield_checkpoint(dut1, configdb_key, "enabled", "true", True, checkpoint)
+
+            configdb_onefield_checkpoint(dut2, configdb_key, "mode", "bfd", True, checkpoint)
+            configdb_onefield_checkpoint(dut2, configdb_key, "local-address", "fd00:300::59", True, checkpoint)
+            configdb_onefield_checkpoint(dut2, configdb_key, "multihop", "true", True, checkpoint)
+            configdb_onefield_checkpoint(dut2, configdb_key, "peer", "fd00:300::58", True, checkpoint)
+            configdb_onefield_checkpoint(dut2, configdb_key, "enabled", "true", True, checkpoint)
+
+        elif configdb_key == 'BFD_PEER|BFD_MULTI_V6_VRF':
+            configdb_onefield_checkpoint(dut1, configdb_key, "mode", "bfd", True, checkpoint)
+            configdb_onefield_checkpoint(dut1, configdb_key, "local-address", "fd00:400::58", True, checkpoint)
+            configdb_onefield_checkpoint(dut1, configdb_key, "multihop", "true", True, checkpoint)
+            configdb_onefield_checkpoint(dut1, configdb_key, "peer", "fd00:400::59", True, checkpoint)
+            configdb_onefield_checkpoint(dut1, configdb_key, "enabled", "true", True, checkpoint)
+            configdb_onefield_checkpoint(dut1, configdb_key, "vrf", "Test1", True, checkpoint)
+
+            configdb_onefield_checkpoint(dut2, configdb_key, "mode", "bfd", True, checkpoint)
+            configdb_onefield_checkpoint(dut2, configdb_key, "local-address", "fd00:400::59", True, checkpoint)
+            configdb_onefield_checkpoint(dut2, configdb_key, "multihop", "true", True, checkpoint)
+            configdb_onefield_checkpoint(dut2, configdb_key, "peer", "fd00:400::58", True, checkpoint)
+            configdb_onefield_checkpoint(dut2, configdb_key, "enabled", "true", True, checkpoint)
+            configdb_onefield_checkpoint(dut2, configdb_key, "vrf", "Test1", True, checkpoint)
+
     elif bfd_mode == 'sbfd-echo-v4':
             configdb_onefield_checkpoint(dut1, configdb_key, "mode", "sbfd-echo", True, checkpoint)
             configdb_onefield_checkpoint(dut1, configdb_key, "segment-list", "fd00:303:2022:fff1:eee::", True, checkpoint)
@@ -302,85 +363,105 @@ def check_bfd_session_status(bfd_mode, check_field, offload=True, delete=False):
         key = 'peer 192.20.1.59 bfd-name BFD_SINGLE_V4_VRF bfd-mode bfd local-address 192.20.1.58 vrf Test1 interface PortChannel101'
         ret = double_check_bfd_session(dut1, key, check_field, offload, delete)
         if not ret:
-            st.report_fail("step 2 dut1 test_bfd_ipv4_single_hop_case1 vrf Test1 failed")
+            st.report_fail("dut1 {} check_bfd_session_status vrf Test1 failed".format(bfd_mode))
 
         key = 'peer 192.20.1.58 bfd-name BFD_SINGLE_V4_VRF bfd-mode bfd local-address 192.20.1.59 vrf Test1 interface PortChannel101'
         ret = double_check_bfd_session(dut2, key, check_field, offload, delete)
         if not ret:
-            st.report_fail("step 2 dut2 test_bfd_ipv4_single_hop_case1 vrf Test1 failed")
+            st.report_fail("dut2 {} check_bfd_session_status vrf Test1 failed".format(bfd_mode))
 
         key = 'peer 192.10.1.59 bfd-name BFD_SINGLE_V4_DEFAULT bfd-mode bfd local-address 192.10.1.58 vrf Default interface PortChannel100'
         ret = double_check_bfd_session(dut1, key, check_field, offload, delete)
         if not ret:
-            st.report_fail("step 2 dut1 test_bfd_ipv4_single_hop_case1 vrf default failed")
+            st.report_fail("dut1 {} check_bfd_session_status vrf default failed".format(bfd_mode))
 
         key = 'peer 192.10.1.58 bfd-name BFD_SINGLE_V4_DEFAULT bfd-mode bfd local-address 192.10.1.59 vrf Default interface PortChannel100'
         ret = double_check_bfd_session(dut2, key, check_field, offload, delete)
         if not ret:
-            st.report_fail("step 2 dut2 test_bfd_ipv4_single_hop_case1 vrf default failed")
+            st.report_fail("dut2 {} check_bfd_session_status vrf default failed".format(bfd_mode))
     elif bfd_mode == 'bfd-single-v6':
         key = 'peer fd00:200::59 bfd-name BFD_SINGLE_V6_VRF bfd-mode bfd local-address fd00:200::58 vrf Test1 interface PortChannel101'
         ret = double_check_bfd_session(dut1, key, check_field, offload, delete)
         if not ret:
-            st.report_fail("step 2 dut1 test_bfd_ipv6_single_hop_case1 vrf Test1 failed")
+            st.report_fail("dut1 {} check_bfd_session_status vrf Test1 failed".format(bfd_mode))
 
         key = 'peer fd00:200::58 bfd-name BFD_SINGLE_V6_VRF bfd-mode bfd local-address fd00:200::59 vrf Test1 interface PortChannel101'
         ret = double_check_bfd_session(dut2, key, check_field, offload, delete)
         if not ret:
-            st.report_fail("step 2 dut2 test_bfd_ipv6_single_hop_case1 vrf Test1 failed")
+            st.report_fail("dut2 {} check_bfd_session_status vrf Test1 failed".format(bfd_mode))
 
         key = 'peer fd00:100::59 bfd-name BFD_SINGLE_V6_DEFAULT bfd-mode bfd local-address fd00:100::58 vrf Default interface PortChannel100'
         ret = double_check_bfd_session(dut1, key, check_field, offload, delete)
         if not ret:
-            st.report_fail("step 2 dut1 test_bfd_ipv6_single_hop_case1 vrf default failed")
+            st.report_fail("dut1 {} check_bfd_session_status vrf default failed".format(bfd_mode))
 
         key = 'peer fd00:100::58 bfd-name BFD_SINGLE_V6_DEFAULT bfd-mode bfd local-address fd00:100::59 vrf Default interface PortChannel100'
         ret = double_check_bfd_session(dut2, key, check_field, offload, delete)
         if not ret:
-            st.report_fail("step 2 dut2 test_bfd_ipv6_single_hop_case1 vrf default failed")
+            st.report_fail("dut2 {} check_bfd_session_status vrf default failed".format(bfd_mode))
     elif bfd_mode == 'bfd-multi-v4':
-        key = 'peer 192.20.1.59 bfd-name BFD_MULTI_V4_VRF bfd-mode bfd local-address 192.20.1.58 vrf Test1 interface PortChannel101'
+        key = 'peer 192.40.1.59 bfd-name BFD_MULTI_V4_VRF multihop bfd-mode bfd local-address 192.40.1.58 vrf Test1'
         ret = double_check_bfd_session(dut1, key, check_field, offload, delete)
         if not ret:
-            st.report_fail("step 2 dut1 test_bfd_ipv4_multi_hop_case3 vrf Test1 failed")
+            st.report_fail("dut1 {} check_bfd_session_status vrf Test1 failed".format(bfd_mode))
 
-        key = 'peer 192.20.1.58 bfd-name BFD_MULTI_V4_VRF bfd-mode bfd local-address 192.20.1.59 vrf Test1 interface PortChannel101'
+        key = 'peer 192.40.1.58 bfd-name BFD_MULTI_V4_VRF multihop bfd-mode bfd local-address 192.40.1.59 vrf Test1'
         ret = double_check_bfd_session(dut2, key, check_field, offload, delete)
         if not ret:
-            st.report_fail("step 2 dut2 test_bfd_ipv4_multi_hop_case3 vrf Test1 failed")
+            st.report_fail("dut2 {} check_bfd_session_status vrf Test1 failed".format(bfd_mode))
 
-        key = 'peer 192.10.1.59 bfd-name BFD_MULTI_V4_DEFAULT bfd-mode bfd local-address 192.10.1.58 vrf Default interface PortChannel100'
+        key = 'peer 192.30.1.59 bfd-name BFD_MULTI_V4_DEFAULT multihop bfd-mode bfd local-address 192.30.1.58 vrf Default'
         ret = double_check_bfd_session(dut1, key, check_field, offload, delete)
         if not ret:
-            st.report_fail("step 2 dut1 test_bfd_ipv4_multi_hop_case3 vrf default failed")
+            st.report_fail("dut1 {} check_bfd_session_status vrf default failed".format(bfd_mode))
 
-        key = 'peer 192.10.1.58 bfd-name BFD_MULTI_V4_DEFAULT bfd-mode bfd local-address 192.10.1.59 vrf Default interface PortChannel100'
+        key = 'peer 192.30.1.58 bfd-name BFD_MULTI_V4_DEFAULT multihop bfd-mode bfd local-address 192.30.1.59 vrf Default'
         ret = double_check_bfd_session(dut2, key, check_field, offload, delete)
         if not ret:
-            st.report_fail("step 2 dut2 test_bfd_ipv4_multi_hop_case3 vrf default failed")
+            st.report_fail("dut2 {} check_bfd_session_status vrf default failed".format(bfd_mode))
+    elif bfd_mode == 'bfd-multi-v6':
+        key = 'peer fd00:400::59 bfd-name BFD_MULTI_V6_VRF multihop bfd-mode bfd local-address fd00:400::58 vrf Test1'
+        ret = double_check_bfd_session(dut1, key, check_field, offload, delete)
+        if not ret:
+            st.report_fail("dut1 {} check_bfd_session_status vrf Test1 failed".format(bfd_mode))
+
+        key = 'peer fd00:400::58 bfd-name BFD_MULTI_V6_VRF multihop bfd-mode bfd local-address fd00:400::59 vrf Test1'
+        ret = double_check_bfd_session(dut2, key, check_field, offload, delete)
+        if not ret:
+            st.report_fail("dut2 {} check_bfd_session_status vrf Test1 failed".format(bfd_mode))
+
+        key = 'peer fd00:300::59 bfd-name BFD_MULTI_V6_DEFAULT multihop bfd-mode bfd local-address fd00:300::58 vrf Default'
+        ret = double_check_bfd_session(dut1, key, check_field, offload, delete)
+        if not ret:
+            st.report_fail("dut1 {} check_bfd_session_status vrf default failed".format(bfd_mode))
+
+        key = 'peer fd00:300::58 bfd-name BFD_MULTI_V6_DEFAULT multihop bfd-mode bfd local-address fd00:300::59 vrf Default'
+        ret = double_check_bfd_session(dut2, key, check_field, offload, delete)
+        if not ret:
+            st.report_fail("dut2 {} check_bfd_session_status vrf default failed".format(bfd_mode))
     elif bfd_mode == 'sbfd-echo-v4':
         key = 'peer 20.20.20.58 bfd-name SBFD_ECHO_V4_DEFAULT bfd-mode sbfd-echo local-address 20.20.20.58 segment-list fd00:303:2022:fff1:eee:: source-ipv6 2000::58 vrf Default'
         ret = double_check_bfd_session(dut1, key, check_field, offload, delete)
         if not ret:
-            st.report_fail("step 2 dut1 test_sbfd_echo_v4_case7 vrf Default failed")
+            st.report_fail("dut1 {} check_bfd_session_status vrf Default failed".format(bfd_mode))
 
     elif bfd_mode == 'sbfd-echo-v6':
         key = 'peer 2000::58 bfd-name SBFD_ECHO_V6_DEFAULT bfd-mode sbfd-echo local-address 2000::58 segment-list fd00:303:2022:fff1:eee:: source-ipv6 2000::58 vrf Default'
         ret = double_check_bfd_session(dut1, key, check_field, offload, delete)
         if not ret:
-            st.report_fail("step 2 dut1 test_sbfd_echo_v6_case8 vrf Default failed")
+            st.report_fail("dut1 {} check_bfd_session_status vrf Default failed".format(bfd_mode))
 
     elif bfd_mode == 'sbfd-init-v4':
         key = 'peer 20.20.20.59 bfd-name SBFD_INIT_V4_DEFAULT bfd-mode sbfd-init local-address 20.20.20.58 segment-list fd00:303:2022:fff1:eee:: source-ipv6 2000::58 vrf Default'
         ret = double_check_bfd_session(dut1, key, check_field, offload, delete)
         if not ret:
-            st.report_fail("step 2 dut1 test_sbfd_init_v4_case5 vrf Default failed")
+            st.report_fail("dut1 {} check_bfd_session_status vrf Default failed".format(bfd_mode))
 
     elif bfd_mode == 'sbfd-init-v6':
         key = 'peer 2000::59 bfd-name SBFD_INIT_V6_DEFAULT bfd-mode sbfd-init local-address 2000::58 segment-list fd00:303:2022:fff1:eee:: source-ipv6 2000::58 remote-discr 10087 vrf Default'
         ret = double_check_bfd_session(dut1, key, check_field, offload, delete)
         if not ret:
-            st.report_fail("step 2 dut1 test_sbfd_init_v6_case6 vrf Default failed")
+            st.report_fail("dut1 {} check_bfd_session_status vrf Default failed".format(bfd_mode))
     else:
         st.log("check_bfd_session_status: wrong bfd mode type")
 
@@ -406,6 +487,13 @@ def del_peer_bfd(bfd_mode):
         #vrf
         st.config(dut1, "cli -c 'configure terminal' -c 'no bfd name BFD_MULTI_V4_VRF'")
         st.config(dut2, "cli -c 'configure terminal' -c 'no bfd name BFD_MULTI_V4_VRF'")
+    elif bfd_mode == 'bfd-multi-v6':
+        #default
+        st.config(dut1, "cli -c 'configure terminal' -c 'no bfd name BFD_MULTI_V6_DEFAULT'")
+        st.config(dut2, "cli -c 'configure terminal' -c 'no bfd name BFD_MULTI_V6_DEFAULT'")
+        #vrf
+        st.config(dut1, "cli -c 'configure terminal' -c 'no bfd name BFD_MULTI_V6_VRF'")
+        st.config(dut2, "cli -c 'configure terminal' -c 'no bfd name BFD_MULTI_V6_VRF'")
     elif bfd_mode == 'sbfd-echo-v4':
         #sbfd-echo v4
         st.config(dut1, "cli -c 'configure terminal' -c 'no bfd name SBFD_ECHO_V4_DEFAULT'")
@@ -415,9 +503,11 @@ def del_peer_bfd(bfd_mode):
     elif bfd_mode == 'sbfd-init-v4':
         #sbfd-init v4
         st.config(dut1, "cli -c 'configure terminal' -c 'no bfd name SBFD_INIT_V4_DEFAULT'")
+        st.config(dut2, "cli -c 'configure terminal' -c 'no sbfd reflector all'")
     elif bfd_mode == 'sbfd-init-v6':
         #sbfd-init v6
         st.config(dut1, "cli -c 'configure terminal' -c 'no bfd name SBFD_INIT_V6_DEFAULT'")
+        st.config(dut2, "cli -c 'configure terminal' -c 'no sbfd reflector all'")
     
                 
 def config_peer_bfd(bfd_mode):
@@ -459,35 +549,35 @@ def config_peer_bfd(bfd_mode):
                   'bfd peer fd00:100::58 bfd-name BFD_SINGLE_V6_DEFAULT bfd-mode bfd status enable interface PortChannel100'")
         #vrf
         st.config(dut1, "cli -c 'configure terminal' -c \
-                  'bfd peer fd00:200::59 bfd-name BFD_SINGLE_V6_DEFAULT bfd-mode bfd status enable interface PortChannel101 vrf Test1'")
+                  'bfd peer fd00:200::59 bfd-name BFD_SINGLE_V6_VRF bfd-mode bfd status enable interface PortChannel101 vrf Test1'")
         st.config(dut2, "cli -c 'configure terminal' -c \
-                  'bfd peer fd00:200::58 bfd-name BFD_SINGLE_V6_DEFAULT bfd-mode bfd status enable interface PortChannel101 vrf Test1'")
+                  'bfd peer fd00:200::58 bfd-name BFD_SINGLE_V6_VRF bfd-mode bfd status enable interface PortChannel101 vrf Test1'")
     elif bfd_mode == 'bfd-multi-v4':
         #default
         st.config(dut1, "cli -c 'configure terminal' -c \
-                  'bfd peer 192.10.1.59 bfd-name BFD_MULTI_V4_DEFAULT bfd-mode bfd status enable local-address 192.10.1.58'")
+                  'bfd peer 192.30.1.59 bfd-name BFD_MULTI_V4_DEFAULT bfd-mode bfd status enable local-address 192.30.1.58 multihop'")
         st.config(dut2, "cli -c 'configure terminal' -c \
-                  'bfd peer 192.10.1.58 bfd-name BFD_MULTI_V4_DEFAULT bfd-mode bfd status enable local-address 192.10.1.59'")
+                  'bfd peer 192.30.1.58 bfd-name BFD_MULTI_V4_DEFAULT bfd-mode bfd status enable local-address 192.30.1.59 multihop'")
         #vrf
         st.config(dut1, "cli -c 'configure terminal' -c \
-                  'bfd peer 192.20.1.59 bfd-name BFD_MULTI_V4_VRF bfd-mode bfd status enable local-address 192.20.1.58 vrf Test1'")
+                  'bfd peer 192.40.1.59 bfd-name BFD_MULTI_V4_VRF bfd-mode bfd status enable local-address 192.40.1.58 multihop vrf Test1'")
         st.config(dut2, "cli -c 'configure terminal' -c \
-                  'bfd peer 192.20.1.58 bfd-name BFD_MULTI_V4_VRF bfd-mode bfd status enable local-address 192.20.1.59 vrf Test1'")
+                  'bfd peer 192.40.1.58 bfd-name BFD_MULTI_V4_VRF bfd-mode bfd status enable local-address 192.40.1.59 multihop vrf Test1'")
     elif bfd_mode == 'bfd-multi-v6':
         #default
         st.config(dut1, "cli -c 'configure terminal' -c \
-                  'bfd peer fd00:100::59 bfd-name BFD_MULTI_V6_DEFAULT bfd-mode bfd status enable local-address fd00:100::58'")
+                  'bfd peer fd00:300::59 bfd-name BFD_MULTI_V6_DEFAULT bfd-mode bfd status enable local-address fd00:300::58 multihop'")
         st.config(dut2, "cli -c 'configure terminal' -c \
-                  'bfd peer fd00:100::58 bfd-name BFD_MULTI_V6_DEFAULT bfd-mode bfd status enable local-address fd00:100::59'")
+                  'bfd peer fd00:300::58 bfd-name BFD_MULTI_V6_DEFAULT bfd-mode bfd status enable local-address fd00:300::59 multihop'")
         #vrf
         st.config(dut1, "cli -c 'configure terminal' -c \
-                  'bfd peer fd00:200::59 bfd-name BFD_MULTI_V6_DEFAULT bfd-mode bfd status enable local-address fd00:200::58 vrf Test1'")
+                  'bfd peer fd00:400::59 bfd-name BFD_MULTI_V6_VRF bfd-mode bfd status enable local-address fd00:400::58 multihop vrf Test1'")
         st.config(dut2, "cli -c 'configure terminal' -c \
-                  'bfd peer fd00:200::58 bfd-name BFD_MULTI_V6_DEFAULT bfd-mode bfd status enable local-address fd00:200::59 vrf Test1'")
+                  'bfd peer fd00:400::58 bfd-name BFD_MULTI_V6_VRF bfd-mode bfd status enable local-address fd00:400::59 multihop vrf Test1'")
     else:
         st.log("config_peer_bfd: wrong bfd mode type")
 
-    
+
 @pytest.fixture(scope="module", autouse=True)
 def sbfd_module_hooks(request):
     #add things at the start of this module
@@ -500,8 +590,8 @@ def sbfd_module_hooks(request):
 def sbfd_bfd_func_hooks(request):
     # add things at the start every test case
 
-    if st.get_func_name(request) in  ["test_bfd_ipv4_single_hop_case1", "test_sbfd_init_v6_case6",
-                                      "test_sbfd_echo_v4_case7", "test_sbfd_echo_v6_case8"]:
+    if st.get_func_name(request) in  ["test_config_bfd_name_session_case1", "test_config_sbfd_name_session_case2",
+                                      "test_exception_bfd_name_session_case3", "test_exception_sbfd_name_session_case4"]:
         st.log("bfd_basic_config case enter ")
         if data.load_basic_config_done == False:
             load_json_config('bfd_basic_config')
@@ -511,187 +601,258 @@ def sbfd_bfd_func_hooks(request):
         # ping each other to learn nd and arp 
         learn_arp_by_ping()
     
-        # # check
-        # st.show(dut1, "vtysh -c 'show sr-te policy detail'", skip_tmpl=True)
-        # # check
-        # st.show(dut1, 'ip neigh show', skip_tmpl=True)
-
-        # show_appdb_tbale_info(dut1, '*SRV6_MY_SID_TABLE*')
-        # show_appdb_tbale_info(dut2, '*SRV6_MY_SID_TABLE*')
-    
-    # if st.get_func_name(request) in  ["test_bfd_for_static_route_case8"]:
-    #     st.log("static_bfd_config case enter ")
-    #     if data.load_static_config_done == False:
-    #         load_json_config('static_bfd_config')
-    #         st.wait(120)
-    #         data.load_static_config_done = True
-    # #load TG config
-
     yield
     pass
 
 # BFD-BASIC-FUNC-001
+# BFD-BASIC-FUNC-002
+# BFD-BASIC-FUNC-003
 @pytest.mark.community
 @pytest.mark.community_pass
-def test_bfd_ipv4_single_hop_case1():
-    st.banner("test_bfd_ipv4_single_hop_case1 begin")
-    # step 1: config bfd ipv4 single hop
-    mode = 'bfd-single-v4'
-    config_peer_bfd(mode)
-    st.wait(5)
+def test_config_bfd_name_session_case1():
+    st.banner("test_config_bfd_name_session_case1 begin")
+    
+    # step 1: config bfd single-v4/single-v6/multi-v4/multi-v6
+    config_peer_bfd('bfd-single-v4')
+    st.wait(2)
+    config_peer_bfd('bfd-single-v6')
+    st.wait(2)
+    config_peer_bfd('bfd-multi-v4')
+    st.wait(2)
+    config_peer_bfd('bfd-multi-v6')
+    st.wait(2)
 
-   # step 2 : check bfd ipv4 single hop    
+    # step 2 : check bfd single-v4/single-v6/multi-v4/multi-v6  
     check_field = {
         'status':'up',
         'peer_type' : 'configured',
         'multiplier': '3'
-    }
+    }   
+    mode = 'bfd-single-v4'
+    check_bfd_session_status(mode, check_field, True, False)
 
+    mode = 'bfd-single-v6'
+    check_bfd_session_status(mode, check_field, True, False)
+
+    mode = 'bfd-multi-v4'
+    check_bfd_session_status(mode, check_field, True, False)
+
+    mode = 'bfd-multi-v6'
     check_bfd_session_status(mode, check_field, True, False)
 
     # step3: check configdb
-    #  127.0.0.1:6379[4]> hgetall BFD_PEER|BFD_SINGLE_V4_DEFAULT
-    #  1) "mode"
-    #  2) "bfd"
-    #  3) "interface"
-    #  4) "PortChannel100"
-    #  5) "multihop"
-    #  6) "false"
-    #  7) "peer"
-    #  8) "192.10.1.59"
-    #  9) "enabled"
-    # 10) "true"
-    # 127.0.0.1:6379[4]> hgetall BFD_PEER|BFD_SINGLE_V4_VRF
-    #  1) "mode"
-    #  2) "bfd"
-    #  3) "interface"
-    #  4) "PortChannel101"
-    #  5) "multihop"
-    #  6) "false"
-    #  7) "peer"
-    #  8) "192.20.1.59"
-    #  9) "vrf"
-    # 10) "Test1"
-    # 11) "enabled"
-    # 12) "true"
-    # 127.0.0.1:6379[4]> 
+    mode = 'bfd-single-v4'
     configdb_key = "BFD_PEER|BFD_SINGLE_V4_DEFAULT"
-    checkpoint_msg = "test_bfd_ipv4_single_hop_case1 config {} check failed.".format(configdb_key)
+    checkpoint_msg = "test_config_bfd_name_session_case1 config {} check failed.".format(configdb_key)
     check_bfd_session_configdb(mode, configdb_key, True, checkpoint_msg)
 
     configdb_key = "BFD_PEER|BFD_SINGLE_V4_VRF"
-    checkpoint_msg = "test_bfd_ipv4_single_hop_case1 config {} check failed.".format(configdb_key)
+    checkpoint_msg = "test_config_bfd_name_session_case1 config {} check failed.".format(configdb_key)
+    check_bfd_session_configdb(mode, configdb_key, True, checkpoint_msg)
+
+    mode = 'bfd-single-v6'
+    configdb_key = "BFD_PEER|BFD_SINGLE_V6_DEFAULT"
+    checkpoint_msg = "test_config_bfd_name_session_case1 config {} check failed.".format(configdb_key)
+    check_bfd_session_configdb(mode, configdb_key, True, checkpoint_msg)
+
+    configdb_key = "BFD_PEER|BFD_SINGLE_V6_VRF"
+    checkpoint_msg = "test_config_bfd_name_session_case1 config {} check failed.".format(configdb_key)
+    check_bfd_session_configdb(mode, configdb_key, True, checkpoint_msg)
+    
+    mode = 'bfd-multi-v4'
+    configdb_key = "BFD_PEER|BFD_MULTI_V4_DEFAULT"
+    checkpoint_msg = "test_config_bfd_name_session_case1 config {} check failed.".format(configdb_key)
+    check_bfd_session_configdb(mode, configdb_key, True, checkpoint_msg)
+
+    configdb_key = "BFD_PEER|BFD_MULTI_V4_VRF"
+    checkpoint_msg = "test_config_bfd_name_session_case1 config {} check failed.".format(configdb_key)
+    check_bfd_session_configdb(mode, configdb_key, True, checkpoint_msg)
+
+    mode = 'bfd-multi-v6'
+    configdb_key = "BFD_PEER|BFD_MULTI_V6_DEFAULT"
+    checkpoint_msg = "test_config_bfd_name_session_case1 config {} check failed.".format(configdb_key)
+    check_bfd_session_configdb(mode, configdb_key, True, checkpoint_msg)
+
+    configdb_key = "BFD_PEER|BFD_MULTI_V6_VRF"
+    checkpoint_msg = "test_config_bfd_name_session_case1 config {} check failed.".format(configdb_key)
     check_bfd_session_configdb(mode, configdb_key, True, checkpoint_msg)
 
     # step 4 : modify interval and multiplier
-    #default
+    # single v4 default
     st.config(dut1, "cli -c 'configure terminal' -c \
                 'bfd peer 192.10.1.59 bfd-name BFD_SINGLE_V4_DEFAULT bfd-mode bfd status enable interface PortChannel100 detection-multiplier 5 min-receive 100 min-tx-interval 100'")
     st.config(dut2, "cli -c 'configure terminal' -c \
                 'bfd peer 192.10.1.58 bfd-name BFD_SINGLE_V4_DEFAULT bfd-mode bfd status enable interface PortChannel100 detection-multiplier 5 min-receive 100 min-tx-interval 100'")
-    #vrf
+    # single v4 vrf
     st.config(dut1, "cli -c 'configure terminal' -c \
                 'bfd peer 192.20.1.59 bfd-name BFD_SINGLE_V4_VRF bfd-mode bfd status enable interface PortChannel101 vrf Test1 detection-multiplier 5 min-receive 100 min-tx-interval 100'")
     st.config(dut2, "cli -c 'configure terminal' -c \
                 'bfd peer 192.20.1.58 bfd-name BFD_SINGLE_V4_VRF bfd-mode bfd status enable interface PortChannel101 vrf Test1 detection-multiplier 5 min-receive 100 min-tx-interval 100'")  
+
+    # single v6 default
+    st.config(dut1, "cli -c 'configure terminal' -c \
+                'bfd peer fd00:100::59 bfd-name BFD_SINGLE_V6_DEFAULT bfd-mode bfd status enable interface PortChannel100 detection-multiplier 5 min-receive 100 min-tx-interval 100'")
+    st.config(dut2, "cli -c 'configure terminal' -c \
+                'bfd peer fd00:100::58 bfd-name BFD_SINGLE_V6_DEFAULT bfd-mode bfd status enable interface PortChannel100 detection-multiplier 5 min-receive 100 min-tx-interval 100'")
+    # single v6 vrf
+    st.config(dut1, "cli -c 'configure terminal' -c \
+                'bfd peer fd00:200::59 bfd-name BFD_SINGLE_V6_VRF bfd-mode bfd status enable interface PortChannel101 vrf Test1 detection-multiplier 5 min-receive 100 min-tx-interval 100'")
+    st.config(dut2, "cli -c 'configure terminal' -c \
+                'bfd peer fd00:200::58 bfd-name BFD_SINGLE_V6_VRF bfd-mode bfd status enable interface PortChannel101 vrf Test1 detection-multiplier 5 min-receive 100 min-tx-interval 100'")  
+
+    # multi v4 default
+    st.config(dut1, "cli -c 'configure terminal' -c \
+                'bfd peer 192.30.1.59 bfd-name BFD_MULTI_V4_DEFAULT bfd-mode bfd status enable local-address 192.30.1.58 multihop detection-multiplier 5 min-receive 100 min-tx-interval 100'")
+    st.config(dut2, "cli -c 'configure terminal' -c \
+                'bfd peer 192.30.1.58 bfd-name BFD_MULTI_V4_DEFAULT bfd-mode bfd status enable local-address 192.30.1.59 multihop detection-multiplier 5 min-receive 100 min-tx-interval 100'")
+    # multi v4 vrf
+    st.config(dut1, "cli -c 'configure terminal' -c \
+                'bfd peer 192.40.1.59 bfd-name BFD_MULTI_V4_VRF bfd-mode bfd status enable local-address 192.40.1.58 multihop vrf Test1 detection-multiplier 5 min-receive 100 min-tx-interval 100'")
+    st.config(dut2, "cli -c 'configure terminal' -c \
+                'bfd peer 192.40.1.58 bfd-name BFD_MULTI_V4_VRF bfd-mode bfd status enable local-address 192.40.1.59 multihop vrf Test1 detection-multiplier 5 min-receive 100 min-tx-interval 100'")  
+
+    # multi v6 default
+    st.config(dut1, "cli -c 'configure terminal' -c \
+                'bfd peer fd00:300::59 bfd-name BFD_MULTI_V6_DEFAULT bfd-mode bfd status enable local-address fd00:300::58 multihop detection-multiplier 5 min-receive 100 min-tx-interval 100'")
+    st.config(dut2, "cli -c 'configure terminal' -c \
+                'bfd peer fd00:300::58 bfd-name BFD_MULTI_V6_DEFAULT bfd-mode bfd status enable local-address fd00:300::59 multihop detection-multiplier 5 min-receive 100 min-tx-interval 100'")
+    # multi v6 vrf
+    st.config(dut1, "cli -c 'configure terminal' -c \
+                'bfd peer fd00:400::59 bfd-name BFD_MULTI_V6_VRF bfd-mode bfd status enable local-address fd00:400::58 multihop vrf Test1 detection-multiplier 5 min-receive 100 min-tx-interval 100'")
+    st.config(dut2, "cli -c 'configure terminal' -c \
+                'bfd peer fd00:400::58 bfd-name BFD_MULTI_V6_VRF bfd-mode bfd status enable local-address fd00:400::59 multihop vrf Test1 detection-multiplier 5 min-receive 100 min-tx-interval 100'")  
+
+
     check_field = {
         'status':'up',
         'peer_type' : 'configured',
         'multiplier': '5'
     }
 
+    mode = 'bfd-single-v4'
+    check_bfd_session_status(mode, check_field, True, False)
+
+    mode = 'bfd-single-v6'
+    check_bfd_session_status(mode, check_field, True, False)
+
+    mode = 'bfd-multi-v4'
+    check_bfd_session_status(mode, check_field, True, False)
+
+    mode = 'bfd-multi-v6'
     check_bfd_session_status(mode, check_field, True, False)
 
     # check configdb
+    mode = 'bfd-single-v4'
     configdb_key = "BFD_PEER|BFD_SINGLE_V4_DEFAULT"
-    checkpoint_msg = "test_bfd_ipv4_single_hop_case1 config {} check failed.".format(configdb_key)
+    checkpoint_msg = "test_config_bfd_name_session_case1 config {} check failed.".format(configdb_key)
     check_bfd_session_configdb(mode, configdb_key, False, checkpoint_msg)
 
     configdb_key = "BFD_PEER|BFD_SINGLE_V4_VRF"
-    checkpoint_msg = "test_bfd_ipv4_single_hop_case1 config {} check failed.".format(configdb_key)
+    checkpoint_msg = "test_config_bfd_name_session_case1 config {} check failed.".format(configdb_key)
     check_bfd_session_configdb(mode, configdb_key, False, checkpoint_msg)
 
-    # step 5 : check del bfd ipv4 single 
-    del_peer_bfd(mode)
+    mode = 'bfd-single-v6'
+    configdb_key = "BFD_PEER|BFD_SINGLE_V6_DEFAULT"
+    checkpoint_msg = "test_config_bfd_name_session_case1 config {} check failed.".format(configdb_key)
+    check_bfd_session_configdb(mode, configdb_key, False, checkpoint_msg)
+
+    configdb_key = "BFD_PEER|BFD_SINGLE_V6_VRF"
+    checkpoint_msg = "test_config_bfd_name_session_case1 config {} check failed.".format(configdb_key)
+    check_bfd_session_configdb(mode, configdb_key, False, checkpoint_msg)
+    
+    mode = 'bfd-multi-v4'
+    configdb_key = "BFD_PEER|BFD_MULTI_V4_DEFAULT"
+    checkpoint_msg = "test_config_bfd_name_session_case1 config {} check failed.".format(configdb_key)
+    check_bfd_session_configdb(mode, configdb_key, False, checkpoint_msg)
+
+    configdb_key = "BFD_PEER|BFD_MULTI_V4_VRF"
+    checkpoint_msg = "test_config_bfd_name_session_case1 config {} check failed.".format(configdb_key)
+    check_bfd_session_configdb(mode, configdb_key, False, checkpoint_msg)
+
+    mode = 'bfd-multi-v6'
+    configdb_key = "BFD_PEER|BFD_MULTI_V6_DEFAULT"
+    checkpoint_msg = "test_config_bfd_name_session_case1 config {} check failed.".format(configdb_key)
+    check_bfd_session_configdb(mode, configdb_key, False, checkpoint_msg)
+
+    configdb_key = "BFD_PEER|BFD_MULTI_V6_VRF"
+    checkpoint_msg = "test_config_bfd_name_session_case1 config {} check failed.".format(configdb_key)
+    check_bfd_session_configdb(mode, configdb_key, False, checkpoint_msg)
+
+    # step 5 : check del bfd single-v4/single-v6/multi-v4/multi-v6
     check_field = {}
+    mode = 'bfd-single-v4' 
+    del_peer_bfd(mode)
+    check_bfd_session_status(mode, check_field, True, True)
+
+    mode = 'bfd-single-v6' 
+    del_peer_bfd(mode)
+    check_bfd_session_status(mode, check_field, True, True)
+
+    mode = 'bfd-multi-v4' 
+    del_peer_bfd(mode)
+    check_bfd_session_status(mode, check_field, True, True)
+
+    mode = 'bfd-multi-v6' 
+    del_peer_bfd(mode)
     check_bfd_session_status(mode, check_field, True, True)
         
     # step 6 : check appdb is clear
+    show_appdb_table_info(dut1, '*BFD*')
+    show_appdb_table_info(dut2, '*BFD*')
 
     st.report_pass('test_case_passed')
 
 
-# BFD-BASIC-FUNC-001
-# @pytest.mark.community
-# @pytest.mark.community_pass
-# def test_bfd_ipv6_single_hop_case2():
-#     st.report_pass('test_case_passed')
-
-# # BFD-BASIC-FUNC-002
-# @pytest.mark.community
-# @pytest.mark.community_pass
-# def test_bfd_ipv4_multi_hop_case3():
-#     st.report_pass('test_case_passed')
-
-# # BFD-BASIC-FUNC-002
-# @pytest.mark.community
-# @pytest.mark.community_pass
-# def test_bfd_ipv6_multi_hop_case3():
-#     st.report_pass('test_case_passed')
-
-# # BFD-BASIC-FUNC-003
-# @pytest.mark.community
-# @pytest.mark.community_pass
-# def test_bfd_mix_case4():
-#     st.report_pass('test_case_passed')
-
-# # SBFD-BASIC-FUNC-001
-# @pytest.mark.community
-# @pytest.mark.community_pass
-# def test_sbfd_init_v4_case5():
-#     st.report_pass('test_case_passed')
-
 # SBFD-BASIC-FUNC-001
+# SBFD-BASIC-FUNC-002
 @pytest.mark.community
 @pytest.mark.community_pass
-def test_sbfd_init_v6_case6():
-    st.banner("test_sbfd_init_v6_case6 begin")
-    # step 1: config sbfd-init ipv6
+def test_config_sbfd_name_session_case2():
+    st.banner("test_config_sbfd_name_session_case2 begin")
+    # step 1: config sbfd
+    mode = 'sbfd-echo-v4'
+    config_peer_bfd(mode)
+    mode = 'sbfd-echo-v6'
+    config_peer_bfd(mode)
     mode = 'sbfd-init-v6'
     config_peer_bfd(mode)
-    st.wait(5)
+    st.wait(70)
 
-   # step 2 : check sbfd-init ipv6    
+   # step 2 : check sbfd    
     check_field = {
         'status':'up',
         'peer_type' : 'sbfd initiator',
         'multiplier': '3'
     }
+    mode = 'sbfd-init-v6'
+    check_bfd_session_status(mode, check_field, True, False)
 
+    check_field = {
+        'status':'up',
+        'peer_type' : 'echo',
+        'multiplier': '3'
+    }
+    mode = 'sbfd-echo-v4'
+    check_bfd_session_status(mode, check_field, True, False)
+    mode = 'sbfd-echo-v6'
     check_bfd_session_status(mode, check_field, True, False)
 
     # step3: check configdb
-    # 127.0.0.1:6379[4]> hgetall "BFD_PEER|SBFD_INIT_V6_DEFAULT"
-    #  1) "mode"
-    #  2) "sbfd-init"
-    #  3) "segment-list"
-    #  4) "fd00:303:2022:fff1:eee::"
-    #  5) "source-ipv6"
-    #  6) "2000::58"
-    #  7) "remote-discr"
-    #  8) "10087"
-    #  9) "local-address"
-    # 10) "2000::58"
-    # 11) "multihop"
-    # 12) "false"
-    # 13) "peer"
-    # 14) "2000::59"
-    # 15) "enabled"
-    # 16) "true"
-    # 127.0.0.1:6379[4]> 
+    mode = 'sbfd-init-v6'
     configdb_key = "BFD_PEER|SBFD_INIT_V6_DEFAULT"
-    checkpoint_msg = "test_sbfd_init_v6_case6 config {} check failed.".format(configdb_key)
+    checkpoint_msg = "test_config_sbfd_name_session_case2 config {} check failed.".format(configdb_key)
     check_bfd_session_configdb(mode, configdb_key, True, checkpoint_msg)
+
+    mode = 'sbfd-echo-v4'
+    configdb_key = "BFD_PEER|SBFD_ECHO_V4_DEFAULT"
+    checkpoint_msg = "test_config_sbfd_name_session_case2 config {} check failed.".format(configdb_key)
+    check_bfd_session_configdb(mode, configdb_key, True, checkpoint_msg)
+
+    mode = 'sbfd-echo-v6'
+    configdb_key = "BFD_PEER|SBFD_ECHO_V6_DEFAULT"
+    checkpoint_msg = "test_config_sbfd_name_session_case2 config {} check failed.".format(configdb_key)
+    check_bfd_session_configdb(mode, configdb_key, True, checkpoint_msg)
+
 
     # step 4 : modify interval and multiplier
     st.config(dut1, "cli -c 'configure terminal' -c \
@@ -703,155 +864,538 @@ def test_sbfd_init_v6_case6():
         'peer_type' : 'sbfd initiator',
         'multiplier': '5'
     }
-
+    mode = 'sbfd-init-v6'
     check_bfd_session_status(mode, check_field, True, False)
 
-    # check configdb
-    configdb_key = "BFD_PEER|SBFD_INIT_V6_DEFAULT"
-    checkpoint_msg = "test_sbfd_init_v6_case6 config {} check failed.".format(configdb_key)
-    check_bfd_session_configdb(mode, configdb_key, False, checkpoint_msg)
-
-    # step 5 : check del sbfd-init ipv6
-    del_peer_bfd(mode)
-    check_field = {}
-    check_bfd_session_status(mode, check_field, True, True)
-        
-    # step 6 : check appdb is clear
-    st.report_pass('test_case_passed')
-
-# SBFD-BASIC-FUNC-002
-@pytest.mark.community
-@pytest.mark.community_pass
-def test_sbfd_echo_v4_case7():
-    st.banner("test_sbfd_echo_v4_case7 begin")
-    # step 1: config sbfd-echo ipv4
-    mode = 'sbfd-echo-v4'
-    config_peer_bfd(mode)
-
-    # sbfd echo session offload delay 1min
-    st.wait(70)
-
-   # step 2 : check sbfd-echo ipv4    
     check_field = {
         'status':'up',
         'peer_type' : 'echo',
-        'multiplier': '3'
+        'multiplier': '5'
     }
-
-    check_bfd_session_status(mode, check_field, True, False)
-
-    # step3: check configdb
-    # 127.0.0.1:6379[4]> hgetall "BFD_PEER|SBFD_ECHO_V4_DEFAULT"
-    #  1) "mode"
-    #  2) "sbfd-echo"
-    #  3) "segment-list"
-    #  4) "fd00:303:2022:fff1:eee::"
-    #  5) "source-ipv6"
-    #  6) "2000::58"
-    #  7) "local-address"
-    #  8) "20.20.20.58"
-    #  9) "multihop"
-    # 10) "false"
-    # 11) "peer"
-    # 12) "20.20.20.58"
-    # 13) "enabled"
-    # 14) "true"
-    # 127.0.0.1:6379[4]> 
-    configdb_key = "BFD_PEER|SBFD_ECHO_V4_DEFAULT"
-    checkpoint_msg = "test_sbfd_echo_v4_case7 config {} check failed.".format(configdb_key)
-    check_bfd_session_configdb(mode, configdb_key, True, checkpoint_msg)
-
-    # step 4 : modify interval and multiplier
     st.config(dut1, "cli -c 'configure terminal' -c \
                 'bfd peer 20.20.20.58 bfd-name SBFD_ECHO_V4_DEFAULT bfd-mode sbfd-echo status enable local-address 20.20.20.58 \
                  segment-list fd00:303:2022:fff1:eee:: source-ipv6 2000::58 detection-multiplier 5 min-receive 100 min-tx-interval 100'")
-
-    check_field = {
-        'status':'up',
-        'peer_type' : 'echo',
-        'multiplier': '5'
-    }
-
+    mode = 'sbfd-echo-v4'
     check_bfd_session_status(mode, check_field, True, False)
 
+    st.config(dut1, "cli -c 'configure terminal' -c \
+                'bfd peer 2000::58 bfd-name SBFD_ECHO_V6_DEFAULT bfd-mode sbfd-echo status enable local-address 2000::58 \
+                 segment-list fd00:303:2022:fff1:eee:: source-ipv6 2000::58 detection-multiplier 5 min-receive 100 min-tx-interval 100'")
+    mode = 'sbfd-echo-v6'
+    check_bfd_session_status(mode, check_field, True, False)
+ 
     # check configdb
-    configdb_key = "BFD_PEER|SBFD_ECHO_V4_DEFAULT"
-    checkpoint_msg = "test_sbfd_echo_v4_case7 config {} check failed.".format(configdb_key)
+    mode = 'sbfd-init-v6'
+    configdb_key = "BFD_PEER|SBFD_INIT_V6_DEFAULT"
+    checkpoint_msg = "test_config_sbfd_name_session_case2 config {} check failed.".format(configdb_key)
     check_bfd_session_configdb(mode, configdb_key, False, checkpoint_msg)
 
-    # step 5 : check del sbfd-echo ipv4
-    del_peer_bfd(mode)
+    mode = 'sbfd-echo-v4'
+    configdb_key = "BFD_PEER|SBFD_ECHO_V4_DEFAULT"
+    checkpoint_msg = "test_config_sbfd_name_session_case2 config {} check failed.".format(configdb_key)
+    check_bfd_session_configdb(mode, configdb_key, False, checkpoint_msg)
+
+    mode = 'sbfd-echo-v6'
+    configdb_key = "BFD_PEER|SBFD_ECHO_V6_DEFAULT"
+    checkpoint_msg = "test_config_sbfd_name_session_case2 config {} check failed.".format(configdb_key)
+    check_bfd_session_configdb(mode, configdb_key, False, checkpoint_msg)
+
+    # step 5 : check del sbfd
     check_field = {}
+    mode = 'sbfd-init-v6'
+    del_peer_bfd(mode)
     check_bfd_session_status(mode, check_field, True, True)
-        
+    
+    mode = 'sbfd-echo-v4'
+    del_peer_bfd(mode)
+    check_bfd_session_status(mode, check_field, True, True)
+
+    mode = 'sbfd-echo-v6'
+    del_peer_bfd(mode)
+    check_bfd_session_status(mode, check_field, True, True)
+
     # step 6 : check appdb is clear
+    show_appdb_table_info(dut1, '*BFD*')
+    show_appdb_table_info(dut2, '*BFD*')   
 
     st.report_pass('test_case_passed')
 
-# SBFD-BASIC-FUNC-002
+
+# BFD-BASIC-EXCP-001
+# BFD-BASIC-EXCP-002
+# BFD-BASIC-EXCP-003
 @pytest.mark.community
 @pytest.mark.community_pass
-def test_sbfd_echo_v6_case8():
-    st.banner("test_sbfd_echo_v6_case8 begin")
-    # step 1: config sbfd-echo ipv6
-    mode = 'sbfd-echo-v6'
-    config_peer_bfd(mode)
-    
-    # sbfd echo session offload delay 1min
+def test_exception_bfd_name_session_case3():
+    st.banner("test_exception_bfd_name_session_case3 begin")
+
+    # BFD-BASIC-EXCP-001
+    # step 1: config bfd single-v4/single-v6/multi-v4/multi-v6
+    st.log("step 1.1 config bfd single-v4/single-v6/multi-v4/multi-v6:")
+    config_peer_bfd('bfd-single-v4')
+    st.wait(2)
+    config_peer_bfd('bfd-single-v6')
+    st.wait(2)
+    config_peer_bfd('bfd-multi-v4')
+    st.wait(2)
+    config_peer_bfd('bfd-multi-v6')
+    st.wait(2)
+
+    # step 2 : check bfd single-v4/single-v6/multi-v4/multi-v6  
+    st.log("step 1.2 check bfd single-v4/single-v6/multi-v4/multi-v6:")
+    check_field = {
+        'status':'up',
+        'peer_type' : 'configured',
+        'multiplier': '3'
+    }   
+    mode = 'bfd-single-v4'
+    check_bfd_session_status(mode, check_field, True, False)
+
+    mode = 'bfd-single-v6'
+    check_bfd_session_status(mode, check_field, True, False)
+
+    mode = 'bfd-multi-v4'
+    check_bfd_session_status(mode, check_field, True, False)
+
+    mode = 'bfd-multi-v6'
+    check_bfd_session_status(mode, check_field, True, False)
+
+    # step 3 : shutdown interface
+    st.log("step 1.3 shutdown interface:")
+    intf_list = ['Ethernet1', 'Ethernet2', 'Ethernet3', 'Ethernet4']
+    for intf in intf_list:
+        st.config(dut2, 'cli -c "config t" -c "interface {}" -c "shutdown"'.format(intf))
+        st.wait(5)
+
+    # step 4 : check bfd single-v4/single-v6/multi-v4/multi-v6  
+    st.log("step 1.4 check bfd single-v4/single-v6/multi-v4/multi-v6:")
+    check_field = {
+        'status':'down',
+        'peer_type' : 'configured',
+        'multiplier': '3'
+    }   
+    mode = 'bfd-single-v4'
+    check_bfd_session_status(mode, check_field, True, False)
+
+    mode = 'bfd-single-v6'
+    check_bfd_session_status(mode, check_field, True, False)
+
+    mode = 'bfd-multi-v4'
+    check_bfd_session_status(mode, check_field, True, False)
+
+    mode = 'bfd-multi-v6'
+    check_bfd_session_status(mode, check_field, True, False)
+
+    # step 5 : no shutdown interface
+    st.log("step 1.5 no shutdown interface:")
+    intf_list = ['Ethernet1', 'Ethernet2', 'Ethernet3', 'Ethernet4']
+    for intf in intf_list:
+        st.config(dut2, 'cli -c "config t" -c "interface {}" -c "no shutdown"'.format(intf))
+        st.wait(5)
+
+    # step 6 : check bfd single-v4/single-v6/multi-v4/multi-v6  
+    st.log("step 1.6 check bfd single-v4/single-v6/multi-v4/multi-v6:")
+    check_field = {
+        'status':'up',
+        'peer_type' : 'configured',
+        'multiplier': '3'
+    }   
+    mode = 'bfd-single-v4'
+    check_bfd_session_status(mode, check_field, True, False)
+
+    mode = 'bfd-single-v6'
+    check_bfd_session_status(mode, check_field, True, False)
+
+    mode = 'bfd-multi-v4'
+    check_bfd_session_status(mode, check_field, True, False)
+
+    mode = 'bfd-multi-v6'
+    check_bfd_session_status(mode, check_field, True, False)
+
+    # step 7 : check del bfd single-v4/single-v6/multi-v4/multi-v6
+    st.log("step 1.7 check del bfd single-v4/single-v6/multi-v4/multi-v6:") 
+    check_field = {}
+    mode = 'bfd-single-v4' 
+    del_peer_bfd(mode)
+    check_bfd_session_status(mode, check_field, True, True)
+
+    mode = 'bfd-single-v6' 
+    del_peer_bfd(mode)
+    check_bfd_session_status(mode, check_field, True, True)
+
+    mode = 'bfd-multi-v4' 
+    del_peer_bfd(mode)
+    check_bfd_session_status(mode, check_field, True, True)
+
+    mode = 'bfd-multi-v6' 
+    del_peer_bfd(mode)
+    check_bfd_session_status(mode, check_field, True, True)
+        
+    # step 8 : check appdb is clear
+    st.log("step 1.8 check appdb is clear:")
+    show_appdb_table_info(dut1, '*BFD*')
+    show_appdb_table_info(dut2, '*BFD*')   
+
+    # BFD-BASIC-EXCP-002    
+    # step 1 : shutdown interface
+    st.log("step 2.1 shutdown interface:")
+    intf_list = ['Ethernet1', 'Ethernet2', 'Ethernet3', 'Ethernet4']
+    for intf in intf_list:
+        st.config(dut2, 'cli -c "config t" -c "interface {}" -c "shutdown"'.format(intf))
+        st.wait(5)
+
+    # step 2: config bfd single-v4/single-v6/multi-v4/multi-v6
+    st.log("step 2.2 config bfd single-v4/single-v6/multi-v4/multi-v6:")
+    config_peer_bfd('bfd-single-v4')
+    st.wait(2)
+    config_peer_bfd('bfd-single-v6')
+    st.wait(2)
+    config_peer_bfd('bfd-multi-v4')
+    st.wait(2)
+    config_peer_bfd('bfd-multi-v6')
+    st.wait(2)
+
+    # step 3 : check bfd single-v4/single-v6/multi-v4/multi-v6  
+    st.log("step 2.3 check bfd single-v4/single-v6/multi-v4/multi-v6:")
+    check_field = {
+        'status':'down',
+        'peer_type' : 'configured',
+        'multiplier': '3'
+    }   
+    mode = 'bfd-single-v4'
+    check_bfd_session_status(mode, check_field, True, False)
+
+    mode = 'bfd-single-v6'
+    check_bfd_session_status(mode, check_field, True, False)
+
+    mode = 'bfd-multi-v4'
+    check_bfd_session_status(mode, check_field, True, False)
+
+    mode = 'bfd-multi-v6'
+    check_bfd_session_status(mode, check_field, True, False)
+
+    # step 4 : no shutdown interface
+    st.log("step 2.4 no shutdown interface:")
+    intf_list = ['Ethernet1', 'Ethernet2', 'Ethernet3', 'Ethernet4']
+    for intf in intf_list:
+        st.config(dut2, 'cli -c "config t" -c "interface {}" -c "no shutdown"'.format(intf))
+        st.wait(5)
+
+    # step 5 : check bfd single-v4/single-v6/multi-v4/multi-v6  
+    st.log("step 2.5 check bfd single-v4/single-v6/multi-v4/multi-v6:")
+    check_field = {
+        'status':'up',
+        'peer_type' : 'configured',
+        'multiplier': '3'
+    }   
+    mode = 'bfd-single-v4'
+    check_bfd_session_status(mode, check_field, True, False)
+
+    mode = 'bfd-single-v6'
+    check_bfd_session_status(mode, check_field, True, False)
+
+    mode = 'bfd-multi-v4'
+    check_bfd_session_status(mode, check_field, True, False)
+
+    mode = 'bfd-multi-v6'
+    check_bfd_session_status(mode, check_field, True, False)
+
+    # step 6 : check del sbfd
+    st.log("step 2.6 check del sbfd:")
+    check_field = {}
+    mode = 'bfd-single-v4' 
+    del_peer_bfd(mode)
+    check_bfd_session_status(mode, check_field, True, True)
+
+    mode = 'bfd-single-v6' 
+    del_peer_bfd(mode)
+    check_bfd_session_status(mode, check_field, True, True)
+
+    mode = 'bfd-multi-v4' 
+    del_peer_bfd(mode)
+    check_bfd_session_status(mode, check_field, True, True)
+
+    mode = 'bfd-multi-v6' 
+    del_peer_bfd(mode)
+    check_bfd_session_status(mode, check_field, True, True)
+
+    # step 7 : check appdb is clear
+    st.log("step 2.7 check appdb is clear:")
+    show_appdb_table_info(dut1, '*BFD*')
+    show_appdb_table_info(dut2, '*BFD*')   
+
+    # BFD-BASIC-EXCP-003 
+    # step 1: config bfd single-v4/single-v6/multi-v4/multi-v6
+    st.log("step 3.1 config bfd single-v4/single-v6/multi-v4/multi-v6:")
+    config_peer_bfd('bfd-single-v4')
+    st.wait(2)
+    config_peer_bfd('bfd-single-v6')
+    st.wait(2)
+    config_peer_bfd('bfd-multi-v4')
+    st.wait(2)
+    config_peer_bfd('bfd-multi-v6')
+    st.wait(2)
+
+    # step 2 : check bfd single-v4/single-v6/multi-v4/multi-v6  
+    st.log("step 3.2 check bfd single-v4/single-v6/multi-v4/multi-v6:")
+    check_field = {
+        'status':'up',
+        'peer_type' : 'configured',
+        'multiplier': '3'
+    }   
+    mode = 'bfd-single-v4'
+    check_bfd_session_status(mode, check_field, True, False)
+
+    mode = 'bfd-single-v6'
+    check_bfd_session_status(mode, check_field, True, False)
+
+    mode = 'bfd-multi-v4'
+    check_bfd_session_status(mode, check_field, True, False)
+
+    mode = 'bfd-multi-v6'
+    check_bfd_session_status(mode, check_field, True, False)
+
+    # step 3 : flapping interface 
+    st.log("step 3.3 flapping interface:")
+    intf_list = ['Ethernet1', 'Ethernet2', 'Ethernet3', 'Ethernet4']  
+    for i in range(10):
+        for intf in intf_list:
+            st.config(dut2, 'cli -c "config t" -c "interface {}" -c "shutdown"'.format(intf))
+            st.wait(5)
+            st.config(dut2, 'cli -c "config t" -c "interface {}" -c "no shutdown"'.format(intf))
+            st.wait(5)
+
+    # step 4 : check bfd single-v4/single-v6/multi-v4/multi-v6  
+    st.log("step 3.4 check bfd single-v4/single-v6/multi-v4/multi-v6:")
+    check_field = {
+        'status':'up',
+        'peer_type' : 'configured',
+        'multiplier': '3'
+    }   
+    mode = 'bfd-single-v4'
+    check_bfd_session_status(mode, check_field, True, False)
+
+    mode = 'bfd-single-v6'
+    check_bfd_session_status(mode, check_field, True, False)
+
+    mode = 'bfd-multi-v4'
+    check_bfd_session_status(mode, check_field, True, False)
+
+    mode = 'bfd-multi-v6'
+    check_bfd_session_status(mode, check_field, True, False)
+
+    # step 5 : check del bfd single-v4/single-v6/multi-v4/multi-v6
+    st.log("step 3.5 check del bfd single-v4/single-v6/multi-v4/multi-v6:")
+    check_field = {}
+    mode = 'bfd-single-v4' 
+    del_peer_bfd(mode)
+    check_bfd_session_status(mode, check_field, True, True)
+
+    mode = 'bfd-single-v6' 
+    del_peer_bfd(mode)
+    check_bfd_session_status(mode, check_field, True, True)
+
+    mode = 'bfd-multi-v4' 
+    del_peer_bfd(mode)
+    check_bfd_session_status(mode, check_field, True, True)
+
+    mode = 'bfd-multi-v6' 
+    del_peer_bfd(mode)
+    check_bfd_session_status(mode, check_field, True, True)
+        
+    # step 6 : check appdb is clear
+    st.log("step 3.6 check appdb is clear:")
+    show_appdb_table_info(dut1, '*BFD*')
+    show_appdb_table_info(dut2, '*BFD*')
+
+    st.report_pass('test_case_passed')
+
+
+# SBFD-BASIC-EXCP-001
+# SBFD-BASIC-EXCP-002
+@pytest.mark.community
+@pytest.mark.community_pass
+def test_exception_sbfd_name_session_case4():
+    st.banner("test_exception_sbfd_name_session_case4 begin")
+
+    # SBFD-BASIC-EXCP-001
+    # step 1: config sbfd sbfd-echo-v4/sbfd-echo-v6/sbfd-init-v6
+    st.log("step 1.1 config sbfd sbfd-echo-v4/sbfd-echo-v6/sbfd-init-v6:")
+    config_peer_bfd('sbfd-echo-v4')
+    st.wait(2)
+    config_peer_bfd('sbfd-echo-v6')
+    st.wait(2)
+    config_peer_bfd('sbfd-init-v6')
     st.wait(70)
 
-   # step 2 : check sbfd-echo ipv6    
+    # step 2 : check sbfd sbfd-echo-v4/sbfd-echo-v6/sbfd-init-v6  
+    st.log("step 1.2 check sbfd sbfd-echo-v4/sbfd-echo-v6/sbfd-init-v6:")
+    check_field = {
+        'status':'up',
+        'peer_type' : 'sbfd initiator',
+        'multiplier': '3'
+    }
+    mode = 'sbfd-init-v6'
+    check_bfd_session_status(mode, check_field, True, False)
+
     check_field = {
         'status':'up',
         'peer_type' : 'echo',
         'multiplier': '3'
     }
-
+    mode = 'sbfd-echo-v4'
+    check_bfd_session_status(mode, check_field, True, False)
+    mode = 'sbfd-echo-v6'
     check_bfd_session_status(mode, check_field, True, False)
 
-    # step3: check configdb
-    # 127.0.0.1:6379[4]> hgetall "BFD_PEER|SBFD_ECHO_V6_DEFAULT"
-    #  1) "mode"
-    #  2) "sbfd-echo"
-    #  3) "segment-list"
-    #  4) "fd00:303:2022:fff1:eee::"
-    #  5) "source-ipv6"
-    #  6) "2000::58"
-    #  7) "local-address"
-    #  8) "2000::58"
-    #  9) "multihop"
-    # 10) "false"
-    # 11) "peer"
-    # 12) "2000::58"
-    # 13) "enabled"
-    # 14) "true"
-    configdb_key = "BFD_PEER|SBFD_ECHO_V6_DEFAULT"
-    checkpoint_msg = "test_sbfd_echo_v6_case8 config {} check failed.".format(configdb_key)
-    check_bfd_session_configdb(mode, configdb_key, True, checkpoint_msg)
+    # step 3 : Deprecation Routing 
+    st.log("step 1.3 Deprecation Routing:")
+    st.config(dut1, 'cli -c "config t" -c "no ipv6 route fd00:303:2022::/48 fd00:100::59"')
+    st.wait(5)
 
-    # step 4 : modify interval and multiplier
-    st.config(dut1, "cli -c 'configure terminal' -c \
-                'bfd peer 2000::58 bfd-name SBFD_ECHO_V6_DEFAULT bfd-mode sbfd-echo status enable local-address 2000::58 \
-                 segment-list fd00:303:2022:fff1:eee:: source-ipv6 2000::58 detection-multiplier 5 min-receive 100 min-tx-interval 100'")
-    
+    # step 4 : check sbfd sbfd-echo-v4/sbfd-echo-v6/sbfd-init-v6  
+    st.log("step 1.4 check sbfd sbfd-echo-v4/sbfd-echo-v6/sbfd-init-v6:")
+    check_field = {
+        'status':'down',
+        'peer_type' : 'sbfd initiator',
+        'multiplier': '3'
+    }
+    mode = 'sbfd-init-v6'
+    check_bfd_session_status(mode, check_field, True, False)
+
+    check_field = {
+        'status':'down',
+        'peer_type' : 'echo',
+        'multiplier': '3'
+    }
+    mode = 'sbfd-echo-v4'
+    check_bfd_session_status(mode, check_field, True, False)
+    mode = 'sbfd-echo-v6'
+    check_bfd_session_status(mode, check_field, True, False)
+
+    # step 5 : Restoring Routes
+    st.log("step 1.5 Restoring Routes:")
+    st.config(dut1, 'cli -c "config t" -c "ipv6 route fd00:303:2022::/48 fd00:100::59"')
+    st.wait(70)
+
+    # step 6 : check sbfd sbfd-echo-v4/sbfd-echo-v6/sbfd-init-v6 
+    st.log("step 1.6 check sbfd sbfd-echo-v4/sbfd-echo-v6/sbfd-init-v6:")
+    check_field = {
+        'status':'up',
+        'peer_type' : 'sbfd initiator',
+        'multiplier': '3'
+    }
+    mode = 'sbfd-init-v6'
+    check_bfd_session_status(mode, check_field, True, False)
+
     check_field = {
         'status':'up',
         'peer_type' : 'echo',
-        'multiplier': '5'
+        'multiplier': '3'
     }
-
+    mode = 'sbfd-echo-v4'
+    check_bfd_session_status(mode, check_field, True, False)
+    mode = 'sbfd-echo-v6'
     check_bfd_session_status(mode, check_field, True, False)
 
-    # check configdb
-    configdb_key = "BFD_PEER|SBFD_ECHO_V6_DEFAULT"
-    checkpoint_msg = "test_sbfd_echo_v6_case8 config {} check failed.".format(configdb_key)
-    check_bfd_session_configdb(mode, configdb_key, False, checkpoint_msg)
-
-    # step 5 : check del sbfd-echo ipv6
-    del_peer_bfd(mode)
+    # step 7 : check del sbfd sbfd-echo-v4/sbfd-echo-v6/sbfd-init-v6
+    st.log("step 1.7 check del sbfd sbfd-echo-v4/sbfd-echo-v6/sbfd-init-v6:") 
     check_field = {}
+    mode = 'sbfd-init-v6'
+    del_peer_bfd(mode)
     check_bfd_session_status(mode, check_field, True, True)
-        
+    
+    mode = 'sbfd-echo-v4'
+    del_peer_bfd(mode)
+    check_bfd_session_status(mode, check_field, True, True)
+
+    mode = 'sbfd-echo-v6'
+    del_peer_bfd(mode)
+    check_bfd_session_status(mode, check_field, True, True)
+
+    # step 8 : check appdb is clear
+    st.log("step 1.8 check appdb is clear:")
+    show_appdb_table_info(dut1, '*BFD*')
+    show_appdb_table_info(dut2, '*BFD*')   
+          
+
+    # SBFD-BASIC-EXCP-002   
+    # step 1 : Deprecation Routing
+    st.log("step 2.1 Deprecation Routing:")
+    st.config(dut1, 'cli -c "config t" -c "no ipv6 route fd00:303:2022::/48 fd00:100::59"')
+    st.wait(5)
+
+    # step 2: config sbfd sbfd-echo-v4/sbfd-echo-v6/sbfd-init-v6
+    st.log("step 1.1 config sbfd sbfd-echo-v4/sbfd-echo-v6/sbfd-init-v6:")
+    config_peer_bfd('sbfd-echo-v4')
+    st.wait(2)
+    config_peer_bfd('sbfd-echo-v6')
+    st.wait(2)
+    config_peer_bfd('sbfd-init-v6')
+    st.wait(70)
+
+    st.log("step 2.2 check sbfd sbfd-echo-v4/sbfd-echo-v6/sbfd-init-v6:")
+    check_field = {
+        'status':'down',
+        'peer_type' : 'sbfd initiator',
+        'multiplier': '3'
+    }
+    mode = 'sbfd-init-v6'
+    check_bfd_session_status(mode, check_field, True, False)
+
+    check_field = {
+        'status':'down',
+        'peer_type' : 'echo',
+        'multiplier': '3'
+    }
+    mode = 'sbfd-echo-v4'
+    check_bfd_session_status(mode, check_field, True, False)
+    mode = 'sbfd-echo-v6'
+    check_bfd_session_status(mode, check_field, True, False)
+
+    # step 3 : Restoring Routes
+    st.log("step 2.3 Restoring Routes:")
+    st.config(dut1, 'cli -c "config t" -c "ipv6 route fd00:303:2022::/48 fd00:100::59"')
+    st.wait(70)
+
+    # step 4 : check sbfd sbfd-echo-v4/sbfd-echo-v6/sbfd-init-v6 
+    st.log("step 2.4 check sbfd sbfd-echo-v4/sbfd-echo-v6/sbfd-init-v6:")
+    check_field = {
+        'status':'up',
+        'peer_type' : 'sbfd initiator',
+        'multiplier': '3'
+    }
+    mode = 'sbfd-init-v6'
+    check_bfd_session_status(mode, check_field, True, False)
+
+    check_field = {
+        'status':'up',
+        'peer_type' : 'echo',
+        'multiplier': '3'
+    }
+    mode = 'sbfd-echo-v4'
+    check_bfd_session_status(mode, check_field, True, False)
+    mode = 'sbfd-echo-v6'
+    check_bfd_session_status(mode, check_field, True, False)
+
+    # step 5 : check del sbfd sbfd-echo-v4/sbfd-echo-v6/sbfd-init-v6
+    st.log("step 2.5 check del sbfd sbfd-echo-v4/sbfd-echo-v6/sbfd-init-v6:") 
+    check_field = {}
+    mode = 'sbfd-init-v6'
+    del_peer_bfd(mode)
+    check_bfd_session_status(mode, check_field, True, True)
+    
+    mode = 'sbfd-echo-v4'
+    del_peer_bfd(mode)
+    check_bfd_session_status(mode, check_field, True, True)
+
+    mode = 'sbfd-echo-v6'
+    del_peer_bfd(mode)
+    check_bfd_session_status(mode, check_field, True, True)
+
     # step 6 : check appdb is clear
+    st.log("step 2.6 check appdb is clear:")
+    show_appdb_table_info(dut1, '*BFD*')
+    show_appdb_table_info(dut2, '*BFD*')   
 
     st.report_pass('test_case_passed')

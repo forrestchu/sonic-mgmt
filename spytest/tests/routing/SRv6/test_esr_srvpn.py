@@ -1170,7 +1170,7 @@ def test_srvpn_performance(scale):
     dut_list = st.get_dut_names()
 
     for dut in dut_list:
-        st.config(dut, 'docker exec -it swss sh -c "touch /tmp/PerformanceTimer.Notice"', skip_error_check=True)
+        st.config(dut, 'docker exec -it swss sh -c "touch /var/log/syslog_notice_flag"', skip_error_check=True)
 
     #load TG config
     ixia_config = os.path.join(os.getcwd(), "routing/SRv6/performance/ixia_one_vrf_{}.json".format(scale))
@@ -1244,7 +1244,7 @@ def test_srvpn_performance(scale):
     ixia_stop_all_traffic()
 
     for dut in dut_list:
-        st.config(dut, 'docker exec -it swss sh -c "rm /tmp/PerformanceTimer.Notice"', skip_error_check=True)
+        st.config(dut, 'docker exec -it swss sh -c "rm /var/log/syslog_notice_flag"', skip_error_check=True)
 
         perf_log_file = '{}_{}_perf_syslog'.format(dut, scale)
         st.config(dut, 'grep inc:87 /var/log/syslog.1 > /tmp/{}'.format(perf_log_file))

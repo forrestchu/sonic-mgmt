@@ -11,7 +11,6 @@ Value outRouteMap (\S+)
 Start
   ^\s*Device Status\:${devIsolate}$$
   ^\s*Isolate from BMC\:${bmcIsolate}$$
-  ^\s*Forbidden Isolate Neighbors\:\[${forbiddenNeighors}\]
   ^(-+\s*)*$$
   ^\s*${vrf}\s+${addressFamily}\s+${neighbor}\s+${status}\s+${outRouteMap}\s*$$ -> Record
 

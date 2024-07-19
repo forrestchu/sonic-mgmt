@@ -54,6 +54,38 @@ def check_bgp_isolate(dut, check_status):
     return True
 
 
+def precheck_bgp_advanced_isolate(dut):
+
+    cmd = "cli -c 'no page' -c 'show advanced_isolated_precheck'"
+    output = st.show(dut, cmd)
+    st.log(output)
+    if len(output) == 0:
+        st.error("Show OUTPUT is Empty")
+        st.report_fail("bgp isolate advanced precheck failed")
+
+    for i in range(len(output)):
+        if output[i]['precheck'] != 'success':
+            st.error("vrf {} neighbor {} pre check failed".format(output[i]['vrf'],output[i]['neighbor']))
+            return False
+    
+    return True
+
+def check_bgp_advanced_isolate(dut, check_status):
+
+    cmd = "cli -c 'no page' -c 'show advanced_isolated_bgp'"
+    output = st.show(dut,cmd)
+    if len(output) == 0:
+        st.error("Show OUTPUT is Empty")
+        st.report_fail("bgp isolate failed")
+
+    for i in range(len(output)):
+        if output[i]['status'] != check_status:
+            st.error("vrf {} neighbor {} isolate failed".format(output[i]['vrf'],output[i]['neighbor']))
+            return False
+    
+    return True
+
+
 def bgp_permit_route_map_set(dut, local_as_id, vrf, group_name, map_name, as_path, config='yes'):
 
     command = "route-map {} permit 10\n".format(map_name)

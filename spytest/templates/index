@@ -606,6 +606,8 @@ show_kdump_status.tmpl, .*, sonic, sudo show kdump status
 show_bmp.tmpl, .*, sonic, show bmp
 show_isolated_precheck.tmpl, .*, sonic, cli .* 'show isolated_precheck'
 show_isolated_bgp.tmpl, .*, sonic, cli .* 'show isolated_bgp'
+show_isolated_precheck.tmpl, .*, sonic, cli .* 'show advanced_isolated_precheck'
+show_isolated_bgp.tmpl, .*, sonic, cli .* 'show advanced_isolated_bgp'
 show_link_delay.tmpl, .*, sonic, show link delay .*
 show_twamp_session.tmpl, .*, sonic, show twamp-light session.*
 show_twamp_statistics.tmpl, .*, sonic, show twamp-light statistics.*

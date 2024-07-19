@@ -1756,8 +1756,7 @@ def test_bgp_fast_isolate_and_recover():
     dut1 = data.my_dut_list[0]
     dut2 = data.my_dut_list[1]
     tg = data.tg_list[0]
-    traffic_list = [data.streams['port5_to_port1_vrf_503'], data.streams['port1_to_port5_vrf_503'],
-                    data.streams['port3_to_port7_vrf_501'], data.streams['port7_to_port3_vrf_501']]
+    traffic_list = [data.streams['port5_to_port1_vrf_503'], data.streams['port1_to_port5_vrf_503']]
     test_vrf = data.dut_traffic_vrf_name['503']
     all_route = dict()
     vrf_route = dict()
@@ -1826,25 +1825,7 @@ def test_bgp_fast_isolate_and_recover():
             'rx_ports' : [vars.T1D2P1, vars.T1D2P2],
             'rx_obj' : [data.tg_list[4],data.tg_list[5]],
             'stream_list': [[data.streams['port1_to_port5_vrf_503']]]
-        },
-        # Ignore the traffic check between DUT and Ruijie
-        # Since Ruijie device is not stable and we don't want to debug it
-        #'3': {
-        #    'tx_ports' : [vars.T1D1P3],
-        #    'tx_obj' : [data.tg_list[2]],
-        #    'exp_ratio' : [1],        #TG3 use only one 200G port
-        #    'rx_ports' : [vars.T1D1P5],
-        #    'rx_obj' : [data.tg_list[6]],
-        #    'stream_list': [[data.streams['port3_to_port7_vrf_501']]]
-        #},
-        #'4': {
-        #    'tx_ports' : [vars.T1D1P5],
-        #    'tx_obj' : [data.tg_list[6]],
-        #    'exp_ratio' : [0],        #two ecmp port, each is 50%
-        #    'rx_ports' : [vars.T1D1P3, vars.T1D1P4],
-        #    'rx_obj' : [data.tg_list[2], data.tg_list[3]],
-        #    'stream_list': [[data.streams['port7_to_port3_vrf_501']]]
-        #}
+        }
     }
 
     #check ecmp port
@@ -1888,25 +1869,7 @@ def test_bgp_fast_isolate_and_recover():
             'rx_ports' : [vars.T1D2P1, vars.T1D2P2],
             'rx_obj' : [data.tg_list[4],data.tg_list[5]],
             'stream_list': [[data.streams['port1_to_port5_vrf_503']]]
-        },
-        # Ignore the traffic check between DUT and Ruijie
-        # Since Ruijie device is not stable and we don't want to debug it
-        #'3': {
-        #    'tx_ports' : [vars.T1D1P3],
-        #    'tx_obj' : [data.tg_list[2]],
-        #    'exp_ratio' : [1],        #TG3 use only one 200G port
-        #    'rx_ports' : [vars.T1D1P5],
-        #    'rx_obj' : [data.tg_list[6]],
-        #    'stream_list': [[data.streams['port3_to_port7_vrf_501']]]
-        #},
-        #'4': {
-        #    'tx_ports' : [vars.T1D1P5],
-        #    'tx_obj' : [data.tg_list[6]],
-        #    'exp_ratio' : [1],        #two ecmp port, each is 50%
-        #    'rx_ports' : [vars.T1D1P3, vars.T1D1P4],
-        #    'rx_obj' : [data.tg_list[2], data.tg_list[3]],
-        #    'stream_list': [[data.streams['port7_to_port3_vrf_501']]]
-        #}
+        }
     }
 
     tg.tg_traffic_control(action='stop', stream_handle=traffic_list)
@@ -1916,4 +1879,141 @@ def test_bgp_fast_isolate_and_recover():
         show_drop_packet_info()
         st.report_fail("validate_tgen_traffic failed")
 
+    st.report_pass("test_case_passed")
+
+
+@pytest.mark.community
+@pytest.mark.community_pass
+def test_bgp_fast_advanced_isolate_and_recover():
+
+    data.my_dut_list = st.get_dut_names()
+    dut1 = data.my_dut_list[0]
+    dut2 = data.my_dut_list[1]
+    tg = data.tg_list[0]
+    traffic_list = [data.streams['port5_to_port1_vrf_503'], data.streams['port1_to_port5_vrf_503']]
+    test_vrf = data.dut_traffic_vrf_name['503']
+    all_route = dict()
+    vrf_route = dict()
+
+    #loc_lib.dut_load_bgp_isolate_peer_group(dut1, data.dut1_vrf_bgp_as, data.dut2_vrf_bgp_as, test_vrf, data.dut2_all_ip_addr, config='yes')
+    #loc_lib.dut_load_bgp_isolate_peer_group(dut2, data.dut2_vrf_bgp_as, data.dut1_vrf_bgp_as, test_vrf, data.dut1_all_ip_addr, config='yes')
+    #st.wait(60)
+
+    for vrf in data.dut_traffic_vrf_name.keys():
+        publish_route = 0
+        vrf_neigh_list = []
+        vrf_route_list = []
+        vrf_isolate_route_list = []
+        output=bgp_api.show_bgp_ipv4_summary_vtysh(dut2,vrf=data.dut_traffic_vrf_name[vrf])
+        for nbr in output:
+            if nbr['asn'] == data.dut1_vrf_bgp_as:
+                # topo changes , some peer cannot Establish
+                if nbr['neighbor'] in ['11.108.102.2', '11.10.102.2', '11.108.100.2', '11.10.100.2']:
+                    continue
+                vrf_neigh_list.append(nbr['neighbor'])
+                vrf_route_list.append(nbr['state'])
+        for ip in data.dut1_all_ip_addr:
+            if ip['interface'].startswith('Loopback') and (ip['vrf'] == data.dut_traffic_vrf_name[vrf]):
+                publish_route += 1
+        for i in range(len(vrf_neigh_list)):
+            vrf_isolate_route_list.append(str(publish_route))
+        vrf_route['neighbor'] = vrf_neigh_list
+        vrf_route['state'] = vrf_route_list
+        vrf_route['isolate_state'] = vrf_isolate_route_list
+        all_route[data.dut_traffic_vrf_name[vrf]] = copy.deepcopy(vrf_route)
+
+    st.banner("precheck bgp status")
+    loc_lib.precheck_bgp_advanced_isolate(dut1)
+    
+    st.banner("start advanced isolate and check")
+    isolate_cmd = "advanced-isolate fast"
+    st.config(dut1, isolate_cmd, type='alicli')
+    st.wait(20)
+
+    if not retry_api(loc_lib.check_bgp_advanced_isolate, dut=dut1, check_status='isolate', retry_count= 3, delay= 3):
+        st.report_fail("bgp isolate execute failed")
+
+    st.wait(90)
+    for vrf in data.dut_traffic_vrf_name.keys():
+        name = data.dut_traffic_vrf_name[vrf]
+        if not retry_api(ip_bgp.check_bgp_session, dut=dut2,nbr_list=all_route[name]['neighbor'], state_list=all_route[name]['isolate_state'], vrf_name=name, retry_count= 5, delay= 10):
+            st.report_fail("bgp isolate failed")
+
+    st.wait(30)
+    tg.tg_traffic_control(action='clear_stats', port_handle=data.tg_ph_list)
+    st.log("tg_ph_list xxx {}".format(data.tg_ph_list))
+    tg.tg_traffic_control(action='run', stream_handle=traffic_list)
+    st.wait(10)
+    traffic_details = {
+    '1': {
+            'tx_ports' : [vars.T1D2P1],
+            'tx_obj' : [data.tg_list[4]],
+            'exp_ratio' : [0],        #two ecmp port, each is 50%
+            'rx_ports' : [vars.T1D1P1, vars.T1D1P2],
+            'rx_obj' : [data.tg_list[0], data.tg_list[1]],
+            'stream_list': [[data.streams['port5_to_port1_vrf_503']]]
+        },
+        '2': {
+            'tx_ports' : [vars.T1D1P1],
+            'tx_obj' : [data.tg_list[0]],
+            'exp_ratio' : [1],        #two ecmp port, each is 50%
+            'rx_ports' : [vars.T1D2P1, vars.T1D2P2],
+            'rx_obj' : [data.tg_list[4],data.tg_list[5]],
+            'stream_list': [[data.streams['port1_to_port5_vrf_503']]]
+        }
+    }
+
+    #check ecmp port
+    if not tgapi.validate_tgen_traffic(traffic_details=traffic_details, mode='streamblock', comp_type='packet_count'):
+        show_drop_packet_info()
+        st.report_fail("validate_tgen_traffic failed")
+    
+
+    st.banner("recover advanced isolate and check")
+    no_isolate_cmd = "no advanced-isolate fast"
+    st.config(dut1, no_isolate_cmd, type='alicli')
+    st.wait(10)
+
+    if not retry_api(loc_lib.check_bgp_advanced_isolate, dut=dut1, check_status='no-isolate', retry_count= 3, delay= 3):
+        st.report_fail("bgp isolate recover failed")
+    
+    st.wait(120)
+    
+    for vrf in data.dut_traffic_vrf_name.keys():
+        name = data.dut_traffic_vrf_name[vrf]
+        if not retry_api(ip_bgp.check_bgp_session, dut=dut2, nbr_list=all_route[name]['neighbor'], state_list=all_route[name]['state'], vrf_name=name, retry_count= 3, delay= 10):
+            st.report_fail("bgp isolate recover failed")
+    st.wait(30)
+
+    tg.tg_traffic_control(action='clear_stats', port_handle=data.tg_ph_list)
+
+    st.wait(10)
+    traffic_details = {
+       '1': {
+            'tx_ports' : [vars.T1D2P1],
+            'tx_obj' : [data.tg_list[4]],
+            'exp_ratio' : [1],        #two ecmp port, each is 50%
+            'rx_ports' : [vars.T1D1P1, vars.T1D1P2],
+            'rx_obj' : [data.tg_list[0], data.tg_list[1]],
+            'stream_list': [[data.streams['port5_to_port1_vrf_503']]]
+        },
+        '2': {
+            'tx_ports' : [vars.T1D1P1],
+            'tx_obj' : [data.tg_list[0]],
+            'exp_ratio' : [1],        #two ecmp port, each is 50%
+            'rx_ports' : [vars.T1D2P1, vars.T1D2P2],
+            'rx_obj' : [data.tg_list[4],data.tg_list[5]],
+            'stream_list': [[data.streams['port1_to_port5_vrf_503']]]
+        }
+    }
+
+    tg.tg_traffic_control(action='stop', stream_handle=traffic_list)
+
+    #check ecmp port
+    if not tgapi.validate_tgen_traffic(traffic_details=traffic_details, mode='streamblock', comp_type='packet_count'):
+        show_drop_packet_info()
+        st.report_fail("validate_tgen_traffic failed")
+
+    loc_lib.dut_load_bgp_isolate_peer_group(dut1, data.dut1_vrf_bgp_as, data.dut2_vrf_bgp_as, test_vrf, data.dut2_all_ip_addr, config='no')
+    loc_lib.dut_load_bgp_isolate_peer_group(dut2, data.dut2_vrf_bgp_as, data.dut1_vrf_bgp_as, test_vrf, data.dut1_all_ip_addr, config='no')
     st.report_pass("test_case_passed")

@@ -9,7 +9,6 @@ Value isolateOutRouteMap (\S+)
 
 Start
   ^\s*\[Precheck\]\:${precheck}$$
-  ^\s*Forbidden Isolate Neighbors\:\[${forbiddenNeighors}\]
   ^(-+\s*)*$$
   ^\s*${vrf}\s+${addressFamily}\s+${neighbor}\s+${outRouteMap}\s+${isolateOutRouteMap}\s*$$ -> Record
 

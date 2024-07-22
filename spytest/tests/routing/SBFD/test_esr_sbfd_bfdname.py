@@ -452,7 +452,7 @@ def check_bfd_session_status(bfd_mode, check_field, offload=True, delete=False):
             st.report_fail("dut1 {} check_bfd_session_status vrf Default failed".format(bfd_mode))
 
     elif bfd_mode == 'sbfd-init-v4':
-        key = 'peer 20.20.20.59 bfd-name SBFD_INIT_V4_DEFAULT bfd-mode sbfd-init local-address 20.20.20.58 segment-list fd00:303:2022:fff1:eee:: source-ipv6 2000::58 vrf Default'
+        key = 'peer 20.20.20.59 bfd-name SBFD_INIT_V4_DEFAULT bfd-mode sbfd-init local-address 20.20.20.58 segment-list fd00:303:2022:fff1:eee:: source-ipv6 2000::58 remote-discr 10086 vrf Default'
         ret = double_check_bfd_session(dut1, key, check_field, offload, delete)
         if not ret:
             st.report_fail("dut1 {} check_bfd_session_status vrf Default failed".format(bfd_mode))
@@ -814,6 +814,8 @@ def test_config_sbfd_name_session_case2():
     config_peer_bfd(mode)
     mode = 'sbfd-echo-v6'
     config_peer_bfd(mode)
+    mode = 'sbfd-init-v4'
+    config_peer_bfd(mode)
     mode = 'sbfd-init-v6'
     config_peer_bfd(mode)
     st.wait(70)
@@ -824,6 +826,8 @@ def test_config_sbfd_name_session_case2():
         'peer_type' : 'sbfd initiator',
         'multiplier': '3'
     }
+    mode = 'sbfd-init-v4'
+    check_bfd_session_status(mode, check_field, True, False)
     mode = 'sbfd-init-v6'
     check_bfd_session_status(mode, check_field, True, False)
 
@@ -838,6 +842,11 @@ def test_config_sbfd_name_session_case2():
     check_bfd_session_status(mode, check_field, True, False)
 
     # step3: check configdb
+    mode = 'sbfd-init-v4'
+    configdb_key = "BFD_PEER|SBFD_INIT_V4_DEFAULT"
+    checkpoint_msg = "test_config_sbfd_name_session_case2 config {} check failed.".format(configdb_key)
+    check_bfd_session_configdb(mode, configdb_key, True, checkpoint_msg)
+
     mode = 'sbfd-init-v6'
     configdb_key = "BFD_PEER|SBFD_INIT_V6_DEFAULT"
     checkpoint_msg = "test_config_sbfd_name_session_case2 config {} check failed.".format(configdb_key)
@@ -867,6 +876,13 @@ def test_config_sbfd_name_session_case2():
     mode = 'sbfd-init-v6'
     check_bfd_session_status(mode, check_field, True, False)
 
+    st.config(dut1, "cli -c 'configure terminal' -c \
+                'bfd peer 20.20.20.59 bfd-name SBFD_INIT_V4_DEFAULT bfd-mode sbfd-init status enable local-address 20.20.20.58  \
+                 segment-list fd00:303:2022:fff1:eee:: source-ipv6 2000::58 remote-discr 10086 detection-multiplier 5 min-receive 100 min-tx-interval 100'")
+
+    mode = 'sbfd-init-v4'
+    check_bfd_session_status(mode, check_field, True, False)
+
     check_field = {
         'status':'up',
         'peer_type' : 'echo',
@@ -885,6 +901,11 @@ def test_config_sbfd_name_session_case2():
     check_bfd_session_status(mode, check_field, True, False)
  
     # check configdb
+    mode = 'sbfd-init-v4'
+    configdb_key = "BFD_PEER|SBFD_INIT_V4_DEFAULT"
+    checkpoint_msg = "test_config_sbfd_name_session_case2 config {} check failed.".format(configdb_key)
+    check_bfd_session_configdb(mode, configdb_key, False, checkpoint_msg)
+
     mode = 'sbfd-init-v6'
     configdb_key = "BFD_PEER|SBFD_INIT_V6_DEFAULT"
     checkpoint_msg = "test_config_sbfd_name_session_case2 config {} check failed.".format(configdb_key)
@@ -902,6 +923,10 @@ def test_config_sbfd_name_session_case2():
 
     # step 5 : check del sbfd
     check_field = {}
+    mode = 'sbfd-init-v4'
+    del_peer_bfd(mode)
+    check_bfd_session_status(mode, check_field, True, True)
+
     mode = 'sbfd-init-v6'
     del_peer_bfd(mode)
     check_bfd_session_status(mode, check_field, True, True)
@@ -1225,16 +1250,20 @@ def test_exception_sbfd_name_session_case4():
     st.wait(2)
     config_peer_bfd('sbfd-echo-v6')
     st.wait(2)
+    config_peer_bfd('sbfd-init-v4')
+    st.wait(2)
     config_peer_bfd('sbfd-init-v6')
     st.wait(70)
 
-    # step 2 : check sbfd sbfd-echo-v4/sbfd-echo-v6/sbfd-init-v6  
-    st.log("step 1.2 check sbfd sbfd-echo-v4/sbfd-echo-v6/sbfd-init-v6:")
+    # step 2 : check sbfd sbfd-echo-v4/sbfd-echo-v6/sbfd-init-v4/sbfd-init-v6  
+    st.log("step 1.2 check sbfd sbfd-echo-v4/sbfd-echo-v6/sbfd-init-v4/sbfd-init-v6:")
     check_field = {
         'status':'up',
         'peer_type' : 'sbfd initiator',
         'multiplier': '3'
     }
+    mode = 'sbfd-init-v4'
+    check_bfd_session_status(mode, check_field, True, False)
     mode = 'sbfd-init-v6'
     check_bfd_session_status(mode, check_field, True, False)
 
@@ -1254,12 +1283,14 @@ def test_exception_sbfd_name_session_case4():
     st.wait(5)
 
     # step 4 : check sbfd sbfd-echo-v4/sbfd-echo-v6/sbfd-init-v6  
-    st.log("step 1.4 check sbfd sbfd-echo-v4/sbfd-echo-v6/sbfd-init-v6:")
+    st.log("step 1.4 check sbfd sbfd-echo-v4/sbfd-echo-v6/sbfd-init-v4/sbfd-init-v6:")
     check_field = {
         'status':'down',
         'peer_type' : 'sbfd initiator',
         'multiplier': '3'
     }
+    mode = 'sbfd-init-v4'
+    check_bfd_session_status(mode, check_field, True, False)
     mode = 'sbfd-init-v6'
     check_bfd_session_status(mode, check_field, True, False)
 
@@ -1279,12 +1310,14 @@ def test_exception_sbfd_name_session_case4():
     st.wait(70)
 
     # step 6 : check sbfd sbfd-echo-v4/sbfd-echo-v6/sbfd-init-v6 
-    st.log("step 1.6 check sbfd sbfd-echo-v4/sbfd-echo-v6/sbfd-init-v6:")
+    st.log("step 1.6 check sbfd sbfd-echo-v4/sbfd-echo-v6/sbfd-init-v4/sbfd-init-v6:")
     check_field = {
         'status':'up',
         'peer_type' : 'sbfd initiator',
         'multiplier': '3'
     }
+    mode = 'sbfd-init-v4'
+    check_bfd_session_status(mode, check_field, True, False)
     mode = 'sbfd-init-v6'
     check_bfd_session_status(mode, check_field, True, False)
 
@@ -1301,6 +1334,10 @@ def test_exception_sbfd_name_session_case4():
     # step 7 : check del sbfd sbfd-echo-v4/sbfd-echo-v6/sbfd-init-v6
     st.log("step 1.7 check del sbfd sbfd-echo-v4/sbfd-echo-v6/sbfd-init-v6:") 
     check_field = {}
+    mode = 'sbfd-init-v4'
+    del_peer_bfd(mode)
+    check_bfd_session_status(mode, check_field, True, True)
+
     mode = 'sbfd-init-v6'
     del_peer_bfd(mode)
     check_bfd_session_status(mode, check_field, True, True)
@@ -1326,20 +1363,24 @@ def test_exception_sbfd_name_session_case4():
     st.wait(5)
 
     # step 2: config sbfd sbfd-echo-v4/sbfd-echo-v6/sbfd-init-v6
-    st.log("step 1.1 config sbfd sbfd-echo-v4/sbfd-echo-v6/sbfd-init-v6:")
+    st.log("step 1.1 config sbfd sbfd-echo-v4/sbfd-echo-v6/sbfd-init-v4/sbfd-init-v6:")
     config_peer_bfd('sbfd-echo-v4')
     st.wait(2)
     config_peer_bfd('sbfd-echo-v6')
     st.wait(2)
+    config_peer_bfd('sbfd-init-v4')
+    st.wait(2)
     config_peer_bfd('sbfd-init-v6')
     st.wait(70)
 
-    st.log("step 2.2 check sbfd sbfd-echo-v4/sbfd-echo-v6/sbfd-init-v6:")
+    st.log("step 2.2 check sbfd sbfd-echo-v4/sbfd-echo-v6/sbfd-init-v4/sbfd-init-v6:")
     check_field = {
         'status':'down',
         'peer_type' : 'sbfd initiator',
         'multiplier': '3'
     }
+    mode = 'sbfd-init-v4'
+    check_bfd_session_status(mode, check_field, True, False)
     mode = 'sbfd-init-v6'
     check_bfd_session_status(mode, check_field, True, False)
 
@@ -1358,13 +1399,15 @@ def test_exception_sbfd_name_session_case4():
     st.config(dut1, 'cli -c "config t" -c "ipv6 route fd00:303:2022::/48 fd00:100::59"')
     st.wait(70)
 
-    # step 4 : check sbfd sbfd-echo-v4/sbfd-echo-v6/sbfd-init-v6 
-    st.log("step 2.4 check sbfd sbfd-echo-v4/sbfd-echo-v6/sbfd-init-v6:")
+    # step 4 : check sbfd sbfd-echo-v4/sbfd-echo-v6/sbfd-init-v4/sbfd-init-v6 
+    st.log("step 2.4 check sbfd sbfd-echo-v4/sbfd-echo-v6/sbfd-init-v4/sbfd-init-v6:")
     check_field = {
         'status':'up',
         'peer_type' : 'sbfd initiator',
         'multiplier': '3'
     }
+    mode = 'sbfd-init-v4'
+    check_bfd_session_status(mode, check_field, True, False)
     mode = 'sbfd-init-v6'
     check_bfd_session_status(mode, check_field, True, False)
 
@@ -1378,9 +1421,13 @@ def test_exception_sbfd_name_session_case4():
     mode = 'sbfd-echo-v6'
     check_bfd_session_status(mode, check_field, True, False)
 
-    # step 5 : check del sbfd sbfd-echo-v4/sbfd-echo-v6/sbfd-init-v6
-    st.log("step 2.5 check del sbfd sbfd-echo-v4/sbfd-echo-v6/sbfd-init-v6:") 
+    # step 5 : check del sbfd sbfd-echo-v4/sbfd-echo-v6/sbfd-init-v4/sbfd-init-v6
+    st.log("step 2.5 check del sbfd sbfd-echo-v4/sbfd-echo-v6/sbfd-init-v4/sbfd-init-v6:") 
     check_field = {}
+    mode = 'sbfd-init-v4'
+    del_peer_bfd(mode)
+    check_bfd_session_status(mode, check_field, True, True)
+
     mode = 'sbfd-init-v6'
     del_peer_bfd(mode)
     check_bfd_session_status(mode, check_field, True, True)

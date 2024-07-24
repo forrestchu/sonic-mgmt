@@ -268,8 +268,9 @@ def test_sbfd_initiator_single_endx_case1():
     checkpoint_msg = "test_base_config_srvpn_locator_01 config {} check failed.".format(configdb_key)
     configdb_onefield_checkpoint(dut1, configdb_key, "sbfd_type", "enable", expect = True, checkpoint = checkpoint_msg)
     configdb_onefield_checkpoint(dut1, configdb_key, "sbfd_update_source", "2000::58", expect = True, checkpoint = checkpoint_msg)
-    expected_cpath = '100|cp1_ipv4|sl1_ipv4|1'
-    configdb_checkarray(dut1, configdb_key, "cpath@", expected_cpath, expect = True, checkpoint = checkpoint_msg)
+
+    configdb_key = "SRV6_POLICY|1|2000::59|100|cp1_ipv4"
+    configdb_onefield_checkpoint(dut1, configdb_key, "seg_name", "sl1_ipv4", expect = True, checkpoint = checkpoint_msg)
 
     # step 3 : check configdb , single endx ipv4 cannot offload ,so has no bfd appdb
 #127.0.0.1:6379[4]> hgetall SRV6_POLICY|1|2000::59
@@ -310,8 +311,9 @@ def test_sbfd_initiator_single_endx_case1():
     configdb_onefield_checkpoint(dut1, configdb_key, "sbfd_detect_multiplier", "3", expect = True, checkpoint = checkpoint_msg)
     configdb_onefield_checkpoint(dut1, configdb_key, "sbfd_rx_timer", "100", expect = True, checkpoint = checkpoint_msg)
     configdb_onefield_checkpoint(dut1, configdb_key, "sbfd_tx_timer", "100", expect = True, checkpoint = checkpoint_msg)
-    expected_cpath = '100|cp1_ipv4|sl1_ipv4|1'
-    configdb_checkarray(dut1, configdb_key, "cpath@", expected_cpath, expect = True, checkpoint = checkpoint_msg)
+
+    configdb_key = "SRV6_POLICY|1|2000::59|100|cp1_ipv4"
+    configdb_onefield_checkpoint(dut1, configdb_key, "seg_name", "sl1_ipv4", expect = True, checkpoint = checkpoint_msg)
 
     output = st.show(dut1, "show sr-te policy color 1 endpoint 2000::59 detail", type="vtysh")
     st.log(output)
@@ -344,8 +346,9 @@ def test_sbfd_initiator_single_endx_case1():
     checkpoint_msg = "test_base_config_srvpn_locator_01 config {} check failed.".format(configdb_key)
     configdb_onefield_checkpoint(dut1, configdb_key, "sbfd_type", "enable", expect = True, checkpoint = checkpoint_msg)
     configdb_onefield_checkpoint(dut1, configdb_key, "sbfd_update_source", "2000::58", expect = True, checkpoint = checkpoint_msg)
-    expected_cpath = '100|cp1_ipv6|sl2_ipv6|1'
-    configdb_checkarray(dut1, configdb_key, "cpath@", expected_cpath, expect = True, checkpoint = checkpoint_msg)
+
+    configdb_key = "SRV6_POLICY|2|2000::59|100|cp1_ipv6"
+    configdb_onefield_checkpoint(dut1, configdb_key, "seg_name", "sl2_ipv6", expect = True, checkpoint = checkpoint_msg)
 
 #127.0.0.1:6379[4]> hgetall SRV6_POLICY|1|2000::59
 #  1) "cpath@"
@@ -414,8 +417,9 @@ def test_sbfd_initiator_single_endx_case1():
     configdb_onefield_checkpoint(dut1, configdb_key, "sbfd_detect_multiplier", "3", expect = True, checkpoint = checkpoint_msg)
     configdb_onefield_checkpoint(dut1, configdb_key, "sbfd_rx_timer", "100", expect = True, checkpoint = checkpoint_msg)
     configdb_onefield_checkpoint(dut1, configdb_key, "sbfd_tx_timer", "100", expect = True, checkpoint = checkpoint_msg)
-    expected_cpath = '100|cp1_ipv6|sl2_ipv6|1'
-    configdb_checkarray(dut1, configdb_key, "cpath@", expected_cpath, expect = True, checkpoint = checkpoint_msg)
+
+    configdb_key = "SRV6_POLICY|2|2000::59|100|cp1_ipv6"
+    configdb_onefield_checkpoint(dut1, configdb_key, "seg_name", "sl2_ipv6", expect = True, checkpoint = checkpoint_msg)
 
     output = st.show(dut1, "show sr-te policy color 2 endpoint 2000::59 detail", type="vtysh")
     st.log(output)

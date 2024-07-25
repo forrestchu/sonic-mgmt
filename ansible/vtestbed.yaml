@@ -341,7 +341,7 @@
   group-name: vms9-1
   topo: ciscovs-7nodes
   ptf_image_name: docker-ptf
-  ptf: ptf-01  
+  ptf: ptf-01
   ptf_ip: 10.250.0.102/24
   ptf_ipv6: fec0::ffff:afa:2/64
   server: server_1
@@ -356,7 +356,7 @@
   group-name: vms9-1
   topo: ciscovs-5nodes
   ptf_image_name: docker-ptf
-  ptf: ptf-01  
+  ptf: ptf-01
   ptf_ip: 10.250.0.102/24
   ptf_ipv6: fec0::ffff:afa:2/64
   server: server_1

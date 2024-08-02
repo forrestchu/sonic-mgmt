@@ -1021,7 +1021,7 @@ def check_bgp_route_count(dut, neighbor_ip,  count, is_ipv6):
 
 def check_srv6_te_policy_active_count(dut, count):
     
-    cmd = "show srv6 tunnel detail"
+    cmd = "show sr-te tunnel"
     output = st.show(dut, cmd, type='vtysh')
     st.log (output)
     if type(output) == list and len(output)>0:

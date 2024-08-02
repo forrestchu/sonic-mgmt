@@ -982,7 +982,7 @@ def check_asicdb_member(dut):
         return False     
 
 def check_asicdb_member_hash(dut):
-    check_msg = "Total 12 Entries."
+    check_msg = "Total 24 Entries."
     output = st.show(dut, "cdb asicdb member")
 
     if check_msg in output:

@@ -1837,6 +1837,8 @@ class WorkArea(object):
             from collections import Counter
             self.log("============ Results : {}".format(list(Counter(rlist).items())))
             self.log("==========================================================")
+
+        ''' Shuai: Don't download logs, the Server has very limited space
         if "Pass Rate = 100.00%" not in data:
             for dut in self.get_dut_names():
                 [_, logs_path, _] = _get_logs_path()
@@ -1861,6 +1863,7 @@ class WorkArea(object):
                     name = src.split("/")[-1]
                     dst = os.path.join(logs_path, dut + "-" + name)
                     self.download_file_from_dut(dut, src, dst)
+        '''
 
         self.log_time("session clean end")
 

@@ -974,7 +974,7 @@ def check_ndp_state(dut, interface):
 
 def check_asicdb_member(dut):
     check_msg = "Total 768 Entries."
-    output = st.show(dut, "cdb asicdb member")
+    output = st.show(dut, "cdb asicdb member", skip_tmpl=True)
 
     if check_msg in output:
         return True
@@ -983,7 +983,7 @@ def check_asicdb_member(dut):
 
 def check_asicdb_member_hash(dut):
     check_msg = "Total 24 Entries."
-    output = st.show(dut, "cdb asicdb member")
+    output = st.show(dut, "cdb asicdb member", skip_tmpl=True)
 
     if check_msg in output:
         return True

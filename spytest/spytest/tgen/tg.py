@@ -1678,6 +1678,7 @@ class TGIxia(TGBase):
     def collect_diagnosic(self, fail_reason):
         # Default Location of collected diags for Windows :: C:\Program Files (x86)\Ixia\IxNetwork\9.10.2007.7\diagnostic
         # Default Location of collected diags for Linux:: /opt/ixia/IxNetwork/9.10.2007.7/aptixia/api/logcollector
+        ''' shuai: don't collect the ixia diagnostic, the Windows server has very limited space
         file_location = ''
         if self.tg_version in ["8.4", "8.40", "8.42", "8.42"]:
             file_location = get_ixnet().getAttribute('::ixNet::OBJ-/globals', '-persistencePath') + '\\'
@@ -1701,6 +1702,8 @@ class TGIxia(TGBase):
         logger.info('Diagnostics File: {}'.format(diags_file))
         get_ixnet().execute('collectLogs', get_ixnet().writeTo(diags_file, '-ixNetRelative'), 'currentInstance')
         logger.info('Collecting Ixia diagnostics....completed')
+        '''
+        pass
 
     def local_ixnet_call(self,method,*args):
         #::ixNet::OK'

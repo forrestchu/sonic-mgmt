@@ -27,6 +27,7 @@ def smartflow_module_hooks(request):
 
     wait_for_smartflow_up(vars.D1, 60)
     wait_for_smartflow_up(vars.D2, 60)
+    time.sleep(30)
 
     yield
 

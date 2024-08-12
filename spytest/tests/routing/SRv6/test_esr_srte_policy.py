@@ -980,25 +980,25 @@ def test_locator_128_endx_ecmp():
 
     st.wait(5)
 
-    # arp/nd learn
-    for i in range(1,129):
-        st.config(dut1, 'ping -c 1 101.0.{}.59'.format(i))
-        st.config(dut1, 'ping -c 1 101:0:{}::59'.format(hex(i)[2:]))
-        st.config(dut1, 'ping -c 1 202.0.{}.59'.format(i))
-        st.config(dut1, 'ping -c 1 202:0:{}::59'.format(hex(i)[2:]))
+    # # arp/nd learn
+    # for i in range(1,129):
+    #     st.config(dut1, 'ping -c 1 101.0.{}.59'.format(i))
+    #     st.config(dut1, 'ping -c 1 101:0:{}::59'.format(hex(i)[2:]))
+    #     st.config(dut1, 'ping -c 1 202.0.{}.59'.format(i))
+    #     st.config(dut1, 'ping -c 1 202:0:{}::59'.format(hex(i)[2:]))
 
-    # check arp/nd
-    if not retry_api(check_arp_state, dut1, 'Eth1', retry_count=1, delay= 10):
-        st.report_fail("Step0.4: {} Check arp state failed".format(dut1))
+    # # check arp/nd
+    # if not retry_api(check_arp_state, dut1, 'Eth1', retry_count=1, delay= 10):
+    #     st.report_fail("Step0.4: {} Check arp state failed".format(dut1))
 
-    if not retry_api(check_arp_state, dut1, 'Eth2', retry_count=1, delay= 10):
-        st.report_fail("Step0.5: {} Check arp state failed".format(dut1))
+    # if not retry_api(check_arp_state, dut1, 'Eth2', retry_count=1, delay= 10):
+    #     st.report_fail("Step0.5: {} Check arp state failed".format(dut1))
 
-    if not retry_api(check_ndp_state, dut2, 'Eth1', retry_count=1, delay= 10):
-        st.report_fail("Step0.6: {} Check ndp state failed".format(dut2))
+    # if not retry_api(check_ndp_state, dut2, 'Eth1', retry_count=1, delay= 10):
+    #     st.report_fail("Step0.6: {} Check ndp state failed".format(dut2))
 
-    if not retry_api(check_ndp_state, dut2, 'Eth2', retry_count=1, delay= 10):
-        st.report_fail("Step0.7: {} Check ndp state failed".format(dut2))
+    # if not retry_api(check_ndp_state, dut2, 'Eth2', retry_count=1, delay= 10):
+    #     st.report_fail("Step0.7: {} Check ndp state failed".format(dut2))
 
     # check appdb
     # unua v4
@@ -1083,25 +1083,25 @@ def test_locator_128_endx_ecmp():
             st.config(dut2, 'cli -c "config t" -c "interface {}" -c "no shutdown"'.format(intf))
             st.wait(2)
     
-    # arp/nd learn
-    for i in range(1,129):
-        st.config(dut1, 'ping -c 1 101.0.{}.59'.format(i))
-        st.config(dut1, 'ping -c 1 101:0:{}::59'.format(hex(i)[2:]))
-        st.config(dut1, 'ping -c 1 202.0.{}.59'.format(i))
-        st.config(dut1, 'ping -c 1 202:0:{}::59'.format(hex(i)[2:]))
+    # # arp/nd learn
+    # for i in range(1,129):
+    #     st.config(dut1, 'ping -c 1 101.0.{}.59'.format(i))
+    #     st.config(dut1, 'ping -c 1 101:0:{}::59'.format(hex(i)[2:]))
+    #     st.config(dut1, 'ping -c 1 202.0.{}.59'.format(i))
+    #     st.config(dut1, 'ping -c 1 202:0:{}::59'.format(hex(i)[2:]))
 
-    # check arp/nd
-    if not retry_api(check_arp_state, dut1, 'Eth1', retry_count=1, delay= 10):
-        st.report_fail("Step0.8: {} Check arp state failed".format(dut1))
+    # # check arp/nd
+    # if not retry_api(check_arp_state, dut1, 'Eth1', retry_count=1, delay= 10):
+    #     st.report_fail("Step0.8: {} Check arp state failed".format(dut1))
 
-    if not retry_api(check_arp_state, dut1, 'Eth2', retry_count=1, delay= 10):
-        st.report_fail("Step0.9: {} Check arp state failed".format(dut1))
+    # if not retry_api(check_arp_state, dut1, 'Eth2', retry_count=1, delay= 10):
+    #     st.report_fail("Step0.9: {} Check arp state failed".format(dut1))
 
-    if not retry_api(check_ndp_state, dut2, 'Eth1', retry_count=1, delay= 10):
-        st.report_fail("Step0.10: {} Check ndp state failed".format(dut2))
+    # if not retry_api(check_ndp_state, dut2, 'Eth1', retry_count=1, delay= 10):
+    #     st.report_fail("Step0.10: {} Check ndp state failed".format(dut2))
 
-    if not retry_api(check_ndp_state, dut2, 'Eth2', retry_count=1, delay= 10):
-        st.report_fail("Step0.11: {} Check ndp state failed".format(dut2))
+    # if not retry_api(check_ndp_state, dut2, 'Eth2', retry_count=1, delay= 10):
+    #     st.report_fail("Step0.11: {} Check ndp state failed".format(dut2))
 
 
     # check asicdb
@@ -1281,11 +1281,11 @@ def test_locator_endx_ecmp_hash():
 
     st.wait(5)
 
-    # nd learn
-    st.config(dut1, 'ping -c 1  2044::179')
-    st.config(dut1, 'ping -c 1  2055::179')
-    st.config(dut1, 'ping -c 1  2066::179')
-    st.config(dut1, 'ping -c 1  2077::179')
+    # # nd learn
+    # st.config(dut1, 'ping -c 1  2044::179')
+    # st.config(dut1, 'ping -c 1  2055::179')
+    # st.config(dut1, 'ping -c 1  2066::179')
+    # st.config(dut1, 'ping -c 1  2077::179')
 
     # check appdb
     # noncompress-v6

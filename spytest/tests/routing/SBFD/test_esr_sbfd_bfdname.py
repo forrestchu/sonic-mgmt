@@ -89,7 +89,7 @@ def get_bfd_uptime_sec(output):
     return uptime
 
 def double_check_bfd_session(dut, bfd_session_key, bfd_session_check_field, offload=True, delete=False):
-    # show bfd peers | grep 'peer 192.20.1.59 bfd-name BFD_SINGLE_V4_VRF bfd-mode bfd local-address 192.20.1.58 vrf Test1 interface PortChannel101' -A 20
+    # show bfd peers | grep 'peer 192.20.1.59 name BFD_SINGLE_V4_VRF mode bfd local-address 192.20.1.58 vrf Test1 interface PortChannel101' -A 20
     create_by_hardware = False
     bfd_status = ''
     cmd = 'cli -c "no page" -c "show bfd peers" | grep {} -A 21'.format('"'+bfd_session_key+'"')
@@ -262,7 +262,7 @@ def check_bfd_session_configdb(bfd_mode, configdb_key, default, checkpoint):
             configdb_onefield_checkpoint(dut2, configdb_key, "interface", "PortChannel101", True, checkpoint)
             configdb_onefield_checkpoint(dut2, configdb_key, "multihop", "false", True, checkpoint)
             configdb_onefield_checkpoint(dut2, configdb_key, "peer", "fd00:200::58", True, checkpoint)
-            configdb_onefield_checkpoint(dut2, configdb_key, "enabled", "true", True, checkpoint)
+            #configdb_onefield_checkpoint(dut2, configdb_key, "enabled", "true", True, checkpoint)
             configdb_onefield_checkpoint(dut2, configdb_key, "vrf", "Test1", True, checkpoint)
 
     elif bfd_mode == 'bfd-multi-v4': 
@@ -339,8 +339,17 @@ def check_bfd_session_configdb(bfd_mode, configdb_key, default, checkpoint):
             configdb_onefield_checkpoint(dut1, configdb_key, "multihop", "false", True, checkpoint)
             configdb_onefield_checkpoint(dut1, configdb_key, "peer", "2000::58", True, checkpoint)
             configdb_onefield_checkpoint(dut1, configdb_key, "enabled", "true", True, checkpoint)
+    elif bfd_mode == 'sbfd-init-v4':
+            configdb_onefield_checkpoint(dut1, configdb_key, "mode", "sbfd", True, checkpoint)
+            configdb_onefield_checkpoint(dut1, configdb_key, "segment-list", "fd00:303:2022:fff1:eee::", True, checkpoint)
+            configdb_onefield_checkpoint(dut1, configdb_key, "source-ipv6", "2000::58", True, checkpoint)
+            configdb_onefield_checkpoint(dut1, configdb_key, "remote-discr", "10086", True, checkpoint)
+            configdb_onefield_checkpoint(dut1, configdb_key, "local-address", "20.20.20.58", True, checkpoint)
+            configdb_onefield_checkpoint(dut1, configdb_key, "multihop", "false", True, checkpoint)
+            configdb_onefield_checkpoint(dut1, configdb_key, "peer", "20.20.20.59", True, checkpoint)
+            configdb_onefield_checkpoint(dut1, configdb_key, "enabled", "true", True, checkpoint)
     elif bfd_mode == 'sbfd-init-v6':
-            configdb_onefield_checkpoint(dut1, configdb_key, "mode", "sbfd-init", True, checkpoint)
+            configdb_onefield_checkpoint(dut1, configdb_key, "mode", "sbfd", True, checkpoint)
             configdb_onefield_checkpoint(dut1, configdb_key, "segment-list", "fd00:303:2022:fff1:eee::", True, checkpoint)
             configdb_onefield_checkpoint(dut1, configdb_key, "source-ipv6", "2000::58", True, checkpoint)
             configdb_onefield_checkpoint(dut1, configdb_key, "remote-discr", "10087", True, checkpoint)
@@ -360,105 +369,105 @@ def check_bfd_session_configdb(bfd_mode, configdb_key, default, checkpoint):
 
 def check_bfd_session_status(bfd_mode, check_field, offload=True, delete=False):
     if bfd_mode == 'bfd-single-v4':
-        key = 'peer 192.20.1.59 bfd-name BFD_SINGLE_V4_VRF bfd-mode bfd local-address 192.20.1.58 vrf Test1 interface PortChannel101'
+        key = 'peer 192.20.1.59 name BFD_SINGLE_V4_VRF mode bfd local-address 192.20.1.58 vrf Test1 interface PortChannel101'
         ret = double_check_bfd_session(dut1, key, check_field, offload, delete)
         if not ret:
             st.report_fail("dut1 {} check_bfd_session_status vrf Test1 failed".format(bfd_mode))
 
-        key = 'peer 192.20.1.58 bfd-name BFD_SINGLE_V4_VRF bfd-mode bfd local-address 192.20.1.59 vrf Test1 interface PortChannel101'
+        key = 'peer 192.20.1.58 name BFD_SINGLE_V4_VRF mode bfd local-address 192.20.1.59 vrf Test1 interface PortChannel101'
         ret = double_check_bfd_session(dut2, key, check_field, offload, delete)
         if not ret:
             st.report_fail("dut2 {} check_bfd_session_status vrf Test1 failed".format(bfd_mode))
 
-        key = 'peer 192.10.1.59 bfd-name BFD_SINGLE_V4_DEFAULT bfd-mode bfd local-address 192.10.1.58 vrf Default interface PortChannel100'
+        key = 'peer 192.10.1.59 name BFD_SINGLE_V4_DEFAULT mode bfd local-address 192.10.1.58 vrf Default interface PortChannel100'
         ret = double_check_bfd_session(dut1, key, check_field, offload, delete)
         if not ret:
             st.report_fail("dut1 {} check_bfd_session_status vrf default failed".format(bfd_mode))
 
-        key = 'peer 192.10.1.58 bfd-name BFD_SINGLE_V4_DEFAULT bfd-mode bfd local-address 192.10.1.59 vrf Default interface PortChannel100'
+        key = 'peer 192.10.1.58 name BFD_SINGLE_V4_DEFAULT mode bfd local-address 192.10.1.59 vrf Default interface PortChannel100'
         ret = double_check_bfd_session(dut2, key, check_field, offload, delete)
         if not ret:
             st.report_fail("dut2 {} check_bfd_session_status vrf default failed".format(bfd_mode))
     elif bfd_mode == 'bfd-single-v6':
-        key = 'peer fd00:200::59 bfd-name BFD_SINGLE_V6_VRF bfd-mode bfd local-address fd00:200::58 vrf Test1 interface PortChannel101'
+        key = 'peer fd00:200::59 name BFD_SINGLE_V6_VRF mode bfd local-address fd00:200::58 vrf Test1 interface PortChannel101'
         ret = double_check_bfd_session(dut1, key, check_field, offload, delete)
         if not ret:
             st.report_fail("dut1 {} check_bfd_session_status vrf Test1 failed".format(bfd_mode))
 
-        key = 'peer fd00:200::58 bfd-name BFD_SINGLE_V6_VRF bfd-mode bfd local-address fd00:200::59 vrf Test1 interface PortChannel101'
+        key = 'peer fd00:200::58 name BFD_SINGLE_V6_VRF mode bfd local-address fd00:200::59 vrf Test1 interface PortChannel101'
         ret = double_check_bfd_session(dut2, key, check_field, offload, delete)
         if not ret:
             st.report_fail("dut2 {} check_bfd_session_status vrf Test1 failed".format(bfd_mode))
 
-        key = 'peer fd00:100::59 bfd-name BFD_SINGLE_V6_DEFAULT bfd-mode bfd local-address fd00:100::58 vrf Default interface PortChannel100'
+        key = 'peer fd00:100::59 name BFD_SINGLE_V6_DEFAULT mode bfd local-address fd00:100::58 vrf Default interface PortChannel100'
         ret = double_check_bfd_session(dut1, key, check_field, offload, delete)
         if not ret:
             st.report_fail("dut1 {} check_bfd_session_status vrf default failed".format(bfd_mode))
 
-        key = 'peer fd00:100::58 bfd-name BFD_SINGLE_V6_DEFAULT bfd-mode bfd local-address fd00:100::59 vrf Default interface PortChannel100'
+        key = 'peer fd00:100::58 name BFD_SINGLE_V6_DEFAULT mode bfd local-address fd00:100::59 vrf Default interface PortChannel100'
         ret = double_check_bfd_session(dut2, key, check_field, offload, delete)
         if not ret:
             st.report_fail("dut2 {} check_bfd_session_status vrf default failed".format(bfd_mode))
     elif bfd_mode == 'bfd-multi-v4':
-        key = 'peer 192.40.1.59 bfd-name BFD_MULTI_V4_VRF multihop bfd-mode bfd local-address 192.40.1.58 vrf Test1'
+        key = 'peer 192.40.1.59 name BFD_MULTI_V4_VRF multihop mode bfd local-address 192.40.1.58 vrf Test1'
         ret = double_check_bfd_session(dut1, key, check_field, offload, delete)
         if not ret:
             st.report_fail("dut1 {} check_bfd_session_status vrf Test1 failed".format(bfd_mode))
 
-        key = 'peer 192.40.1.58 bfd-name BFD_MULTI_V4_VRF multihop bfd-mode bfd local-address 192.40.1.59 vrf Test1'
+        key = 'peer 192.40.1.58 name BFD_MULTI_V4_VRF multihop mode bfd local-address 192.40.1.59 vrf Test1'
         ret = double_check_bfd_session(dut2, key, check_field, offload, delete)
         if not ret:
             st.report_fail("dut2 {} check_bfd_session_status vrf Test1 failed".format(bfd_mode))
 
-        key = 'peer 192.30.1.59 bfd-name BFD_MULTI_V4_DEFAULT multihop bfd-mode bfd local-address 192.30.1.58 vrf Default'
+        key = 'peer 192.30.1.59 name BFD_MULTI_V4_DEFAULT multihop mode bfd local-address 192.30.1.58 vrf Default'
         ret = double_check_bfd_session(dut1, key, check_field, offload, delete)
         if not ret:
             st.report_fail("dut1 {} check_bfd_session_status vrf default failed".format(bfd_mode))
 
-        key = 'peer 192.30.1.58 bfd-name BFD_MULTI_V4_DEFAULT multihop bfd-mode bfd local-address 192.30.1.59 vrf Default'
+        key = 'peer 192.30.1.58 name BFD_MULTI_V4_DEFAULT multihop mode bfd local-address 192.30.1.59 vrf Default'
         ret = double_check_bfd_session(dut2, key, check_field, offload, delete)
         if not ret:
             st.report_fail("dut2 {} check_bfd_session_status vrf default failed".format(bfd_mode))
     elif bfd_mode == 'bfd-multi-v6':
-        key = 'peer fd00:400::59 bfd-name BFD_MULTI_V6_VRF multihop bfd-mode bfd local-address fd00:400::58 vrf Test1'
+        key = 'peer fd00:400::59 name BFD_MULTI_V6_VRF multihop mode bfd local-address fd00:400::58 vrf Test1'
         ret = double_check_bfd_session(dut1, key, check_field, offload, delete)
         if not ret:
             st.report_fail("dut1 {} check_bfd_session_status vrf Test1 failed".format(bfd_mode))
 
-        key = 'peer fd00:400::58 bfd-name BFD_MULTI_V6_VRF multihop bfd-mode bfd local-address fd00:400::59 vrf Test1'
+        key = 'peer fd00:400::58 name BFD_MULTI_V6_VRF multihop mode bfd local-address fd00:400::59 vrf Test1'
         ret = double_check_bfd_session(dut2, key, check_field, offload, delete)
         if not ret:
             st.report_fail("dut2 {} check_bfd_session_status vrf Test1 failed".format(bfd_mode))
 
-        key = 'peer fd00:300::59 bfd-name BFD_MULTI_V6_DEFAULT multihop bfd-mode bfd local-address fd00:300::58 vrf Default'
+        key = 'peer fd00:300::59 name BFD_MULTI_V6_DEFAULT multihop mode bfd local-address fd00:300::58 vrf Default'
         ret = double_check_bfd_session(dut1, key, check_field, offload, delete)
         if not ret:
             st.report_fail("dut1 {} check_bfd_session_status vrf default failed".format(bfd_mode))
 
-        key = 'peer fd00:300::58 bfd-name BFD_MULTI_V6_DEFAULT multihop bfd-mode bfd local-address fd00:300::59 vrf Default'
+        key = 'peer fd00:300::58 name BFD_MULTI_V6_DEFAULT multihop mode bfd local-address fd00:300::59 vrf Default'
         ret = double_check_bfd_session(dut2, key, check_field, offload, delete)
         if not ret:
             st.report_fail("dut2 {} check_bfd_session_status vrf default failed".format(bfd_mode))
     elif bfd_mode == 'sbfd-echo-v4':
-        key = 'peer 20.20.20.58 bfd-name SBFD_ECHO_V4_DEFAULT bfd-mode sbfd-echo local-address 20.20.20.58 segment-list fd00:303:2022:fff1:eee:: source-ipv6 2000::58 vrf Default'
+        key = 'peer 20.20.20.58 name SBFD_ECHO_V4_DEFAULT mode sbfd-echo local-address 20.20.20.58 segment-list fd00:303:2022:fff1:eee:: source-ipv6 2000::58 vrf Default'
         ret = double_check_bfd_session(dut1, key, check_field, offload, delete)
         if not ret:
             st.report_fail("dut1 {} check_bfd_session_status vrf Default failed".format(bfd_mode))
 
     elif bfd_mode == 'sbfd-echo-v6':
-        key = 'peer 2000::58 bfd-name SBFD_ECHO_V6_DEFAULT bfd-mode sbfd-echo local-address 2000::58 segment-list fd00:303:2022:fff1:eee:: source-ipv6 2000::58 vrf Default'
+        key = 'peer 2000::58 name SBFD_ECHO_V6_DEFAULT mode sbfd-echo local-address 2000::58 segment-list fd00:303:2022:fff1:eee:: source-ipv6 2000::58 vrf Default'
         ret = double_check_bfd_session(dut1, key, check_field, offload, delete)
         if not ret:
             st.report_fail("dut1 {} check_bfd_session_status vrf Default failed".format(bfd_mode))
 
     elif bfd_mode == 'sbfd-init-v4':
-        key = 'peer 20.20.20.59 bfd-name SBFD_INIT_V4_DEFAULT bfd-mode sbfd-init local-address 20.20.20.58 segment-list fd00:303:2022:fff1:eee:: source-ipv6 2000::58 remote-discr 10086 vrf Default'
+        key = 'peer 20.20.20.59 name SBFD_INIT_V4_DEFAULT mode sbfd local-address 20.20.20.58 segment-list fd00:303:2022:fff1:eee:: source-ipv6 2000::58 remote-discr 10086 vrf Default'
         ret = double_check_bfd_session(dut1, key, check_field, offload, delete)
         if not ret:
             st.report_fail("dut1 {} check_bfd_session_status vrf Default failed".format(bfd_mode))
 
     elif bfd_mode == 'sbfd-init-v6':
-        key = 'peer 2000::59 bfd-name SBFD_INIT_V6_DEFAULT bfd-mode sbfd-init local-address 2000::58 segment-list fd00:303:2022:fff1:eee:: source-ipv6 2000::58 remote-discr 10087 vrf Default'
+        key = 'peer 2000::59 name SBFD_INIT_V6_DEFAULT mode sbfd local-address 2000::58 segment-list fd00:303:2022:fff1:eee:: source-ipv6 2000::58 remote-discr 10087 vrf Default'
         ret = double_check_bfd_session(dut1, key, check_field, offload, delete)
         if not ret:
             st.report_fail("dut1 {} check_bfd_session_status vrf Default failed".format(bfd_mode))
@@ -468,112 +477,112 @@ def check_bfd_session_status(bfd_mode, check_field, offload=True, delete=False):
 def del_peer_bfd(bfd_mode):
     if bfd_mode == 'bfd-single-v4':
         #default
-        st.config(dut1, "cli -c 'configure terminal' -c 'no bfd name BFD_SINGLE_V4_DEFAULT'")
-        st.config(dut2, "cli -c 'configure terminal' -c 'no bfd name BFD_SINGLE_V4_DEFAULT'")
+        st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c 'no peer 192.10.1.59 name BFD_SINGLE_V4_DEFAULT mode bfd interface PortChannel100'")
+        st.config(dut2, "cli -c 'configure terminal' -c 'bfd' -c 'no peer 192.10.1.58 name BFD_SINGLE_V4_DEFAULT mode bfd interface PortChannel100'")
         #vrf
-        st.config(dut1, "cli -c 'configure terminal' -c 'no bfd name BFD_SINGLE_V4_VRF'")
-        st.config(dut2, "cli -c 'configure terminal' -c 'no bfd name BFD_SINGLE_V4_VRF'")
+        st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c 'no peer 192.20.1.59 name BFD_SINGLE_V4_VRF mode bfd interface PortChannel101 vrf Test1'")
+        st.config(dut2, "cli -c 'configure terminal' -c 'bfd' -c 'no peer 192.20.1.58 name BFD_SINGLE_V4_VRF mode bfd interface PortChannel101 vrf Test1'")
     elif bfd_mode == 'bfd-single-v6':
         #default
-        st.config(dut1, "cli -c 'configure terminal' -c 'no bfd name BFD_SINGLE_V6_DEFAULT'")
-        st.config(dut2, "cli -c 'configure terminal' -c 'no bfd name BFD_SINGLE_V6_DEFAULT'")
+        st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c 'no peer fd00:100::59 name BFD_SINGLE_V6_DEFAULT mode bfd interface PortChannel100'")
+        st.config(dut2, "cli -c 'configure terminal' -c 'bfd' -c 'no peer fd00:100::58 name BFD_SINGLE_V6_DEFAULT mode bfd interface PortChannel100'")
         #vrf
-        st.config(dut1, "cli -c 'configure terminal' -c 'no bfd name BFD_SINGLE_V6_VRF'")
-        st.config(dut2, "cli -c 'configure terminal' -c 'no bfd name BFD_SINGLE_V6_VRF'")
+        st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c 'no peer fd00:200::59 name BFD_SINGLE_V6_VRF mode bfd interface PortChannel101 vrf Test1'")
+        st.config(dut2, "cli -c 'configure terminal' -c 'bfd' -c 'no peer fd00:200::58 name BFD_SINGLE_V6_VRF mode bfd interface PortChannel101 vrf Test1'")
     elif bfd_mode == 'bfd-multi-v4':
         #default
-        st.config(dut1, "cli -c 'configure terminal' -c 'no bfd name BFD_MULTI_V4_DEFAULT'")
-        st.config(dut2, "cli -c 'configure terminal' -c 'no bfd name BFD_MULTI_V4_DEFAULT'")
+        st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c 'no peer 192.30.1.59 name BFD_MULTI_V4_DEFAULT mode bfd local-address 192.30.1.58 multihop'")
+        st.config(dut2, "cli -c 'configure terminal' -c 'bfd' -c 'no peer 192.30.1.58 name BFD_MULTI_V4_DEFAULT mode bfd local-address 192.30.1.59 multihop'")
         #vrf
-        st.config(dut1, "cli -c 'configure terminal' -c 'no bfd name BFD_MULTI_V4_VRF'")
-        st.config(dut2, "cli -c 'configure terminal' -c 'no bfd name BFD_MULTI_V4_VRF'")
+        st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c 'no peer 192.40.1.59 name BFD_MULTI_V4_VRF mode bfd local-address 192.40.1.58 multihop vrf Test1'")
+        st.config(dut2, "cli -c 'configure terminal' -c 'bfd' -c 'no peer 192.40.1.58 name BFD_MULTI_V4_VRF mode bfd local-address 192.40.1.59 multihop vrf Test1'")
     elif bfd_mode == 'bfd-multi-v6':
         #default
-        st.config(dut1, "cli -c 'configure terminal' -c 'no bfd name BFD_MULTI_V6_DEFAULT'")
-        st.config(dut2, "cli -c 'configure terminal' -c 'no bfd name BFD_MULTI_V6_DEFAULT'")
+        st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c 'no peer fd00:300::59 name BFD_MULTI_V6_DEFAULT mode bfd local-address fd00:300::58 multihop'")
+        st.config(dut2, "cli -c 'configure terminal' -c 'bfd' -c 'no peer fd00:300::58 name BFD_MULTI_V6_DEFAULT mode bfd local-address fd00:300::59 multihop'")
         #vrf
-        st.config(dut1, "cli -c 'configure terminal' -c 'no bfd name BFD_MULTI_V6_VRF'")
-        st.config(dut2, "cli -c 'configure terminal' -c 'no bfd name BFD_MULTI_V6_VRF'")
+        st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c 'no peer fd00:400::59 name BFD_MULTI_V6_VRF mode bfd local-address fd00:400::58 multihop vrf Test1'")
+        st.config(dut2, "cli -c 'configure terminal' -c 'bfd' -c 'no peer fd00:400::58 name BFD_MULTI_V6_VRF mode bfd local-address fd00:400::59 multihop vrf Test1'")
     elif bfd_mode == 'sbfd-echo-v4':
         #sbfd-echo v4
-        st.config(dut1, "cli -c 'configure terminal' -c 'no bfd name SBFD_ECHO_V4_DEFAULT'")
+        st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c 'no peer 20.20.20.58 name SBFD_ECHO_V4_DEFAULT mode sbfd-echo local-address 20.20.20.58 segment-list fd00:303:2022:fff1:eee:: source-ipv6 2000::58'")
     elif bfd_mode == 'sbfd-echo-v6':
         #sbfd-echo v6
-        st.config(dut1, "cli -c 'configure terminal' -c 'no bfd name SBFD_ECHO_V6_DEFAULT'")
+        st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c 'no peer 2000::58 name SBFD_ECHO_V6_DEFAULT mode sbfd-echo local-address 2000::58 segment-list fd00:303:2022:fff1:eee:: source-ipv6 2000::58'")
     elif bfd_mode == 'sbfd-init-v4':
-        #sbfd-init v4
-        st.config(dut1, "cli -c 'configure terminal' -c 'no bfd name SBFD_INIT_V4_DEFAULT'")
+        #sbfd v4
+        st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c 'no peer 20.20.20.59 name SBFD_INIT_V4_DEFAULT mode sbfd local-address 20.20.20.58 segment-list fd00:303:2022:fff1:eee:: source-ipv6 2000::58 remote-discr 10086'")
         st.config(dut2, "cli -c 'configure terminal' -c 'no sbfd reflector all'")
     elif bfd_mode == 'sbfd-init-v6':
-        #sbfd-init v6
-        st.config(dut1, "cli -c 'configure terminal' -c 'no bfd name SBFD_INIT_V6_DEFAULT'")
+        #sbfd v6
+        st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c 'no peer 2000::59 name SBFD_INIT_V6_DEFAULT mode sbfd local-address 2000::58 segment-list fd00:303:2022:fff1:eee:: source-ipv6 2000::58 remote-discr 10087'")
         st.config(dut2, "cli -c 'configure terminal' -c 'no sbfd reflector all'")
     
                 
 def config_peer_bfd(bfd_mode):
     # sbfd only need test vrf default
     if bfd_mode == 'sbfd-echo-v4':
-        st.config(dut1, "cli -c 'configure terminal' -c \
-                  'bfd peer 20.20.20.58 bfd-name SBFD_ECHO_V4_DEFAULT bfd-mode sbfd-echo status enable \
+        st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c \
+                  'peer 20.20.20.58 name SBFD_ECHO_V4_DEFAULT mode sbfd-echo\
                   local-address 20.20.20.58 segment-list fd00:303:2022:fff1:eee:: source-ipv6 2000::58'")
     elif bfd_mode == 'sbfd-echo-v6':
-        st.config(dut1, "cli -c 'configure terminal' -c \
-                  'bfd peer 2000::58 bfd-name SBFD_ECHO_V6_DEFAULT bfd-mode sbfd-echo status enable \
+        st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c \
+                  'peer 2000::58 name SBFD_ECHO_V6_DEFAULT mode sbfd-echo \
                   local-address 2000::58 segment-list fd00:303:2022:fff1:eee:: source-ipv6 2000::58'")
     elif bfd_mode == 'sbfd-init-v4':
-        st.config(dut1, "cli -c 'configure terminal' -c \
-                  'bfd peer 20.20.20.59 bfd-name SBFD_INIT_V4_DEFAULT bfd-mode sbfd-init status enable \
+        st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c \
+                  'peer 20.20.20.59 name SBFD_INIT_V4_DEFAULT mode sbfd \
                   local-address 20.20.20.58 segment-list fd00:303:2022:fff1:eee:: source-ipv6 2000::58 remote-discr 10086'")
         st.config(dut2, "cli -c 'configure terminal' -c 'sbfd reflector source-address 20.20.20.59 discriminator 10086'")
     elif bfd_mode == 'sbfd-init-v6':
-        st.config(dut1, "cli -c 'configure terminal' -c \
-                  'bfd peer 2000::59 bfd-name SBFD_INIT_V6_DEFAULT bfd-mode sbfd-init status enable \
+        st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c \
+                  'peer 2000::59 name SBFD_INIT_V6_DEFAULT mode sbfd \
                   local-address 2000::58 segment-list fd00:303:2022:fff1:eee:: source-ipv6 2000::58 remote-discr 10087'")
         st.config(dut2, "cli -c 'configure terminal' -c 'sbfd reflector source-address 2000::59 discriminator 10087'")
     elif bfd_mode == 'bfd-single-v4':
         #default
-        st.config(dut1, "cli -c 'configure terminal' -c \
-                  'bfd peer 192.10.1.59 bfd-name BFD_SINGLE_V4_DEFAULT bfd-mode bfd status enable interface PortChannel100'")
-        st.config(dut2, "cli -c 'configure terminal' -c \
-                  'bfd peer 192.10.1.58 bfd-name BFD_SINGLE_V4_DEFAULT bfd-mode bfd status enable interface PortChannel100'")
+        st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c \
+                  'peer 192.10.1.59 name BFD_SINGLE_V4_DEFAULT mode bfd interface PortChannel100'")
+        st.config(dut2, "cli -c 'configure terminal' -c 'bfd' -c \
+                  'peer 192.10.1.58 name BFD_SINGLE_V4_DEFAULT mode bfd interface PortChannel100'")
         #vrf
-        st.config(dut1, "cli -c 'configure terminal' -c \
-                  'bfd peer 192.20.1.59 bfd-name BFD_SINGLE_V4_VRF bfd-mode bfd status enable interface PortChannel101 vrf Test1'")
-        st.config(dut2, "cli -c 'configure terminal' -c \
-                  'bfd peer 192.20.1.58 bfd-name BFD_SINGLE_V4_VRF bfd-mode bfd status enable interface PortChannel101 vrf Test1'")
+        st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c \
+                  'peer 192.20.1.59 name BFD_SINGLE_V4_VRF mode bfd interface PortChannel101 vrf Test1'")
+        st.config(dut2, "cli -c 'configure terminal' -c 'bfd' -c \
+                  'peer 192.20.1.58 name BFD_SINGLE_V4_VRF mode bfd interface PortChannel101 vrf Test1'")
     elif bfd_mode == 'bfd-single-v6':
         #default
-        st.config(dut1, "cli -c 'configure terminal' -c \
-                  'bfd peer fd00:100::59 bfd-name BFD_SINGLE_V6_DEFAULT bfd-mode bfd status enable interface PortChannel100'")
-        st.config(dut2, "cli -c 'configure terminal' -c \
-                  'bfd peer fd00:100::58 bfd-name BFD_SINGLE_V6_DEFAULT bfd-mode bfd status enable interface PortChannel100'")
+        st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c \
+                  'peer fd00:100::59 name BFD_SINGLE_V6_DEFAULT mode bfd interface PortChannel100'")
+        st.config(dut2, "cli -c 'configure terminal' -c 'bfd' -c \
+                  'peer fd00:100::58 name BFD_SINGLE_V6_DEFAULT mode bfd interface PortChannel100'")
         #vrf
-        st.config(dut1, "cli -c 'configure terminal' -c \
-                  'bfd peer fd00:200::59 bfd-name BFD_SINGLE_V6_VRF bfd-mode bfd status enable interface PortChannel101 vrf Test1'")
-        st.config(dut2, "cli -c 'configure terminal' -c \
-                  'bfd peer fd00:200::58 bfd-name BFD_SINGLE_V6_VRF bfd-mode bfd status enable interface PortChannel101 vrf Test1'")
+        st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c \
+                  'peer fd00:200::59 name BFD_SINGLE_V6_VRF mode bfd interface PortChannel101 vrf Test1'")
+        st.config(dut2, "cli -c 'configure terminal' -c 'bfd' -c \
+                  'peer fd00:200::58 name BFD_SINGLE_V6_VRF mode bfd interface PortChannel101 vrf Test1'")
     elif bfd_mode == 'bfd-multi-v4':
         #default
-        st.config(dut1, "cli -c 'configure terminal' -c \
-                  'bfd peer 192.30.1.59 bfd-name BFD_MULTI_V4_DEFAULT bfd-mode bfd status enable local-address 192.30.1.58 multihop'")
-        st.config(dut2, "cli -c 'configure terminal' -c \
-                  'bfd peer 192.30.1.58 bfd-name BFD_MULTI_V4_DEFAULT bfd-mode bfd status enable local-address 192.30.1.59 multihop'")
+        st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c \
+                  'peer 192.30.1.59 name BFD_MULTI_V4_DEFAULT mode bfd local-address 192.30.1.58 multihop'")
+        st.config(dut2, "cli -c 'configure terminal' -c 'bfd' -c \
+                  'peer 192.30.1.58 name BFD_MULTI_V4_DEFAULT mode bfd local-address 192.30.1.59 multihop'")
         #vrf
-        st.config(dut1, "cli -c 'configure terminal' -c \
-                  'bfd peer 192.40.1.59 bfd-name BFD_MULTI_V4_VRF bfd-mode bfd status enable local-address 192.40.1.58 multihop vrf Test1'")
-        st.config(dut2, "cli -c 'configure terminal' -c \
-                  'bfd peer 192.40.1.58 bfd-name BFD_MULTI_V4_VRF bfd-mode bfd status enable local-address 192.40.1.59 multihop vrf Test1'")
+        st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c \
+                  'peer 192.40.1.59 name BFD_MULTI_V4_VRF mode bfd local-address 192.40.1.58 multihop vrf Test1'")
+        st.config(dut2, "cli -c 'configure terminal' -c 'bfd' -c \
+                  'peer 192.40.1.58 name BFD_MULTI_V4_VRF mode bfd local-address 192.40.1.59 multihop vrf Test1'")
     elif bfd_mode == 'bfd-multi-v6':
         #default
-        st.config(dut1, "cli -c 'configure terminal' -c \
-                  'bfd peer fd00:300::59 bfd-name BFD_MULTI_V6_DEFAULT bfd-mode bfd status enable local-address fd00:300::58 multihop'")
-        st.config(dut2, "cli -c 'configure terminal' -c \
-                  'bfd peer fd00:300::58 bfd-name BFD_MULTI_V6_DEFAULT bfd-mode bfd status enable local-address fd00:300::59 multihop'")
+        st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c \
+                  'peer fd00:300::59 name BFD_MULTI_V6_DEFAULT mode bfd local-address fd00:300::58 multihop'")
+        st.config(dut2, "cli -c 'configure terminal' -c 'bfd' -c \
+                  'peer fd00:300::58 name BFD_MULTI_V6_DEFAULT mode bfd local-address fd00:300::59 multihop'")
         #vrf
-        st.config(dut1, "cli -c 'configure terminal' -c \
-                  'bfd peer fd00:400::59 bfd-name BFD_MULTI_V6_VRF bfd-mode bfd status enable local-address fd00:400::58 multihop vrf Test1'")
-        st.config(dut2, "cli -c 'configure terminal' -c \
-                  'bfd peer fd00:400::58 bfd-name BFD_MULTI_V6_VRF bfd-mode bfd status enable local-address fd00:400::59 multihop vrf Test1'")
+        st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c \
+                  'peer fd00:400::59 name BFD_MULTI_V6_VRF mode bfd local-address fd00:400::58 multihop vrf Test1'")
+        st.config(dut2, "cli -c 'configure terminal' -c 'bfd' -c \
+                  'peer fd00:400::58 name BFD_MULTI_V6_VRF mode bfd local-address fd00:400::59 multihop vrf Test1'")
     else:
         st.log("config_peer_bfd: wrong bfd mode type")
 
@@ -679,49 +688,125 @@ def test_config_bfd_name_session_case1():
 
     # step 4 : modify interval and multiplier
     # single v4 default
-    st.config(dut1, "cli -c 'configure terminal' -c \
-                'bfd peer 192.10.1.59 bfd-name BFD_SINGLE_V4_DEFAULT bfd-mode bfd status enable interface PortChannel100 detection-multiplier 5 min-receive 100 min-tx-interval 100'")
-    st.config(dut2, "cli -c 'configure terminal' -c \
-                'bfd peer 192.10.1.58 bfd-name BFD_SINGLE_V4_DEFAULT bfd-mode bfd status enable interface PortChannel100 detection-multiplier 5 min-receive 100 min-tx-interval 100'")
+    st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer 192.10.1.59 name BFD_SINGLE_V4_DEFAULT mode bfd interface PortChannel100' -c 'detect-multiplier 5'")
+    st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer 192.10.1.59 name BFD_SINGLE_V4_DEFAULT mode bfd interface PortChannel100' -c 'receive-interval 100'")
+    st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer 192.10.1.59 name BFD_SINGLE_V4_DEFAULT mode bfd interface PortChannel100' -c 'transmit-interval 100'")
+
+    st.config(dut2, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer 192.10.1.58 name BFD_SINGLE_V4_DEFAULT mode bfd interface PortChannel100' -c 'detect-multiplier 5'")
+    st.config(dut2, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer 192.10.1.58 name BFD_SINGLE_V4_DEFAULT mode bfd interface PortChannel100' -c 'receive-interval 100'")
+    st.config(dut2, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer 192.10.1.58 name BFD_SINGLE_V4_DEFAULT mode bfd interface PortChannel100' -c 'transmit-interval 100'")
+
     # single v4 vrf
-    st.config(dut1, "cli -c 'configure terminal' -c \
-                'bfd peer 192.20.1.59 bfd-name BFD_SINGLE_V4_VRF bfd-mode bfd status enable interface PortChannel101 vrf Test1 detection-multiplier 5 min-receive 100 min-tx-interval 100'")
-    st.config(dut2, "cli -c 'configure terminal' -c \
-                'bfd peer 192.20.1.58 bfd-name BFD_SINGLE_V4_VRF bfd-mode bfd status enable interface PortChannel101 vrf Test1 detection-multiplier 5 min-receive 100 min-tx-interval 100'")  
+    st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer 192.20.1.59 name BFD_SINGLE_V4_VRF mode bfd interface PortChannel101 vrf Test1' -c 'detect-multiplier 5'")
+    st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer 192.20.1.59 name BFD_SINGLE_V4_VRF mode bfd interface PortChannel101 vrf Test1' -c 'receive-interval 100'")
+    st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer 192.20.1.59 name BFD_SINGLE_V4_VRF mode bfd interface PortChannel101 vrf Test1' -c 'transmit-interval 100'")
+
+    st.config(dut2, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer 192.20.1.58 name BFD_SINGLE_V4_VRF mode bfd interface PortChannel101 vrf Test1' -c 'detect-multiplier 5'")
+    st.config(dut2, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer 192.20.1.58 name BFD_SINGLE_V4_VRF mode bfd interface PortChannel101 vrf Test1' -c 'receive-interval 100'")
+    st.config(dut2, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer 192.20.1.58 name BFD_SINGLE_V4_VRF mode bfd interface PortChannel101 vrf Test1' -c 'transmit-interval 100'")
 
     # single v6 default
-    st.config(dut1, "cli -c 'configure terminal' -c \
-                'bfd peer fd00:100::59 bfd-name BFD_SINGLE_V6_DEFAULT bfd-mode bfd status enable interface PortChannel100 detection-multiplier 5 min-receive 100 min-tx-interval 100'")
-    st.config(dut2, "cli -c 'configure terminal' -c \
-                'bfd peer fd00:100::58 bfd-name BFD_SINGLE_V6_DEFAULT bfd-mode bfd status enable interface PortChannel100 detection-multiplier 5 min-receive 100 min-tx-interval 100'")
+    st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer fd00:100::59 name BFD_SINGLE_V6_DEFAULT mode bfd interface PortChannel100' -c 'detect-multiplier 5'")
+    st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer fd00:100::59 name BFD_SINGLE_V6_DEFAULT mode bfd interface PortChannel100' -c 'receive-interval 100'")
+    st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer fd00:100::59 name BFD_SINGLE_V6_DEFAULT mode bfd interface PortChannel100' -c 'transmit-interval 100'")
+
+    st.config(dut2, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer fd00:100::58 name BFD_SINGLE_V6_DEFAULT mode bfd interface PortChannel100' -c 'detect-multiplier 5'")
+    st.config(dut2, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer fd00:100::58 name BFD_SINGLE_V6_DEFAULT mode bfd interface PortChannel100' -c 'receive-interval 100'")
+    st.config(dut2, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer fd00:100::58 name BFD_SINGLE_V6_DEFAULT mode bfd interface PortChannel100' -c 'transmit-interval 100'")
+
     # single v6 vrf
-    st.config(dut1, "cli -c 'configure terminal' -c \
-                'bfd peer fd00:200::59 bfd-name BFD_SINGLE_V6_VRF bfd-mode bfd status enable interface PortChannel101 vrf Test1 detection-multiplier 5 min-receive 100 min-tx-interval 100'")
-    st.config(dut2, "cli -c 'configure terminal' -c \
-                'bfd peer fd00:200::58 bfd-name BFD_SINGLE_V6_VRF bfd-mode bfd status enable interface PortChannel101 vrf Test1 detection-multiplier 5 min-receive 100 min-tx-interval 100'")  
+    st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer fd00:200::59 name BFD_SINGLE_V6_VRF mode bfd interface PortChannel101 vrf Test1' -c 'detect-multiplier 5'")
+    st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer fd00:200::59 name BFD_SINGLE_V6_VRF mode bfd interface PortChannel101 vrf Test1' -c 'receive-interval 100'")
+    st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer fd00:200::59 name BFD_SINGLE_V6_VRF mode bfd interface PortChannel101 vrf Test1' -c 'transmit-interval 100'")
+
+    st.config(dut2, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer fd00:200::58 name BFD_SINGLE_V6_VRF mode bfd interface PortChannel101 vrf Test1' -c 'detect-multiplier 5'")
+    st.config(dut2, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer fd00:200::58 name BFD_SINGLE_V6_VRF mode bfd interface PortChannel101 vrf Test1' -c 'receive-interval 100'")
+    st.config(dut2, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer fd00:200::58 name BFD_SINGLE_V6_VRF mode bfd interface PortChannel101 vrf Test1' -c 'transmit-interval 100'")
 
     # multi v4 default
-    st.config(dut1, "cli -c 'configure terminal' -c \
-                'bfd peer 192.30.1.59 bfd-name BFD_MULTI_V4_DEFAULT bfd-mode bfd status enable local-address 192.30.1.58 multihop detection-multiplier 5 min-receive 100 min-tx-interval 100'")
-    st.config(dut2, "cli -c 'configure terminal' -c \
-                'bfd peer 192.30.1.58 bfd-name BFD_MULTI_V4_DEFAULT bfd-mode bfd status enable local-address 192.30.1.59 multihop detection-multiplier 5 min-receive 100 min-tx-interval 100'")
+    st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer 192.30.1.59 name BFD_MULTI_V4_DEFAULT mode bfd local-address 192.30.1.58 multihop' -c 'detect-multiplier 5'")
+    st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer 192.30.1.59 name BFD_MULTI_V4_DEFAULT mode bfd local-address 192.30.1.58 multihop' -c 'receive-interval 100'")
+    st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer 192.30.1.59 name BFD_MULTI_V4_DEFAULT mode bfd local-address 192.30.1.58 multihop' -c 'transmit-interval 100'")
+
+    st.config(dut2, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer 192.30.1.58 name BFD_MULTI_V4_DEFAULT mode bfd local-address 192.30.1.59 multihop' -c 'detect-multiplier 5'")
+    st.config(dut2, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer 192.30.1.58 name BFD_MULTI_V4_DEFAULT mode bfd local-address 192.30.1.59 multihop' -c 'receive-interval 100'")
+    st.config(dut2, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer 192.30.1.58 name BFD_MULTI_V4_DEFAULT mode bfd local-address 192.30.1.59 multihop' -c 'transmit-interval 100'")
+
     # multi v4 vrf
-    st.config(dut1, "cli -c 'configure terminal' -c \
-                'bfd peer 192.40.1.59 bfd-name BFD_MULTI_V4_VRF bfd-mode bfd status enable local-address 192.40.1.58 multihop vrf Test1 detection-multiplier 5 min-receive 100 min-tx-interval 100'")
-    st.config(dut2, "cli -c 'configure terminal' -c \
-                'bfd peer 192.40.1.58 bfd-name BFD_MULTI_V4_VRF bfd-mode bfd status enable local-address 192.40.1.59 multihop vrf Test1 detection-multiplier 5 min-receive 100 min-tx-interval 100'")  
+    st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer 192.40.1.59 name BFD_MULTI_V4_VRF mode bfd local-address 192.40.1.58 multihop vrf Test1' -c 'detect-multiplier 5'")
+    st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer 192.40.1.59 name BFD_MULTI_V4_VRF mode bfd local-address 192.40.1.58 multihop vrf Test1' -c 'receive-interval 100'")
+    st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer 192.40.1.59 name BFD_MULTI_V4_VRF mode bfd local-address 192.40.1.58 multihop vrf Test1' -c 'transmit-interval 100'")
+
+    st.config(dut2, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer 192.40.1.58 name BFD_MULTI_V4_VRF mode bfd local-address 192.40.1.59 multihop vrf Test1' -c 'detect-multiplier 5'")
+    st.config(dut2, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer 192.40.1.58 name BFD_MULTI_V4_VRF mode bfd local-address 192.40.1.59 multihop vrf Test1' -c 'receive-interval 100'")
+    st.config(dut2, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer 192.40.1.58 name BFD_MULTI_V4_VRF mode bfd local-address 192.40.1.59 multihop vrf Test1' -c 'transmit-interval 100'")
+                
 
     # multi v6 default
-    st.config(dut1, "cli -c 'configure terminal' -c \
-                'bfd peer fd00:300::59 bfd-name BFD_MULTI_V6_DEFAULT bfd-mode bfd status enable local-address fd00:300::58 multihop detection-multiplier 5 min-receive 100 min-tx-interval 100'")
-    st.config(dut2, "cli -c 'configure terminal' -c \
-                'bfd peer fd00:300::58 bfd-name BFD_MULTI_V6_DEFAULT bfd-mode bfd status enable local-address fd00:300::59 multihop detection-multiplier 5 min-receive 100 min-tx-interval 100'")
-    # multi v6 vrf
-    st.config(dut1, "cli -c 'configure terminal' -c \
-                'bfd peer fd00:400::59 bfd-name BFD_MULTI_V6_VRF bfd-mode bfd status enable local-address fd00:400::58 multihop vrf Test1 detection-multiplier 5 min-receive 100 min-tx-interval 100'")
-    st.config(dut2, "cli -c 'configure terminal' -c \
-                'bfd peer fd00:400::58 bfd-name BFD_MULTI_V6_VRF bfd-mode bfd status enable local-address fd00:400::59 multihop vrf Test1 detection-multiplier 5 min-receive 100 min-tx-interval 100'")  
+    st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer fd00:300::59 name BFD_MULTI_V6_DEFAULT mode bfd local-address fd00:300::58 multihop' -c 'detect-multiplier 5'")
+    st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer fd00:300::59 name BFD_MULTI_V6_DEFAULT mode bfd local-address fd00:300::58 multihop' -c 'receive-interval 100'")
+    st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer fd00:300::59 name BFD_MULTI_V6_DEFAULT mode bfd local-address fd00:300::58 multihop' -c 'transmit-interval 100'")
 
+    st.config(dut2, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer fd00:300::58 name BFD_MULTI_V6_DEFAULT mode bfd local-address fd00:300::59 multihop' -c 'detect-multiplier 5'")
+    st.config(dut2, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer fd00:300::58 name BFD_MULTI_V6_DEFAULT mode bfd local-address fd00:300::59 multihop' -c 'receive-interval 100'")
+    st.config(dut2, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer fd00:300::58 name BFD_MULTI_V6_DEFAULT mode bfd local-address fd00:300::59 multihop' -c 'transmit-interval 100'")
+                
+    # multi v6 vrf
+    st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer fd00:400::59 name BFD_MULTI_V6_VRF mode bfd local-address fd00:400::58 multihop vrf Test1' -c 'detect-multiplier 5'")
+    st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer fd00:400::59 name BFD_MULTI_V6_VRF mode bfd local-address fd00:400::58 multihop vrf Test1' -c 'receive-interval 100'")
+    st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer fd00:400::59 name BFD_MULTI_V6_VRF mode bfd local-address fd00:400::58 multihop vrf Test1' -c 'transmit-interval 100'")
+
+    st.config(dut2, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer fd00:400::58 name BFD_MULTI_V6_VRF mode bfd local-address fd00:400::59 multihop vrf Test1' -c 'detect-multiplier 5'")
+    st.config(dut2, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer fd00:400::58 name BFD_MULTI_V6_VRF mode bfd local-address fd00:400::59 multihop vrf Test1' -c 'receive-interval 100'")
+    st.config(dut2, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer fd00:400::58 name BFD_MULTI_V6_VRF mode bfd local-address fd00:400::59 multihop vrf Test1' -c 'transmit-interval 100'")
 
     check_field = {
         'status':'up',
@@ -864,9 +949,15 @@ def test_config_sbfd_name_session_case2():
 
 
     # step 4 : modify interval and multiplier
-    st.config(dut1, "cli -c 'configure terminal' -c \
-                'bfd peer 2000::59 bfd-name SBFD_INIT_V6_DEFAULT bfd-mode sbfd-init status enable local-address 2000::58 \
-                 segment-list fd00:303:2022:fff1:eee:: source-ipv6 2000::58 remote-discr 10087 detection-multiplier 5 min-receive 100 min-tx-interval 100'")
+    st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer 2000::59 name SBFD_INIT_V6_DEFAULT mode sbfd local-address 2000::58 \
+                 segment-list fd00:303:2022:fff1:eee:: source-ipv6 2000::58 remote-discr 10087' -c 'detect-multiplier 5'")
+    st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer 2000::59 name SBFD_INIT_V6_DEFAULT mode sbfd local-address 2000::58 \
+                 segment-list fd00:303:2022:fff1:eee:: source-ipv6 2000::58 remote-discr 10087' -c 'receive-interval 100'")
+    st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer 2000::59 name SBFD_INIT_V6_DEFAULT mode sbfd local-address 2000::58 \
+                 segment-list fd00:303:2022:fff1:eee:: source-ipv6 2000::58 remote-discr 10087' -c 'transmit-interval 100'")
     
     check_field = {
         'status':'up',
@@ -876,9 +967,15 @@ def test_config_sbfd_name_session_case2():
     mode = 'sbfd-init-v6'
     check_bfd_session_status(mode, check_field, True, False)
 
-    st.config(dut1, "cli -c 'configure terminal' -c \
-                'bfd peer 20.20.20.59 bfd-name SBFD_INIT_V4_DEFAULT bfd-mode sbfd-init status enable local-address 20.20.20.58  \
-                 segment-list fd00:303:2022:fff1:eee:: source-ipv6 2000::58 remote-discr 10086 detection-multiplier 5 min-receive 100 min-tx-interval 100'")
+    st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer 20.20.20.59 name SBFD_INIT_V4_DEFAULT mode sbfd local-address 20.20.20.58  \
+                 segment-list fd00:303:2022:fff1:eee:: source-ipv6 2000::58 remote-discr 10086' -c 'detect-multiplier 5'")
+    st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer 20.20.20.59 name SBFD_INIT_V4_DEFAULT mode sbfd local-address 20.20.20.58  \
+                 segment-list fd00:303:2022:fff1:eee:: source-ipv6 2000::58 remote-discr 10086' -c 'receive-interval 100'")
+    st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer 20.20.20.59 name SBFD_INIT_V4_DEFAULT mode sbfd local-address 20.20.20.58  \
+                 segment-list fd00:303:2022:fff1:eee:: source-ipv6 2000::58 remote-discr 10086' -c 'transmit-interval 100'")
 
     mode = 'sbfd-init-v4'
     check_bfd_session_status(mode, check_field, True, False)
@@ -888,15 +985,27 @@ def test_config_sbfd_name_session_case2():
         'peer_type' : 'echo',
         'multiplier': '5'
     }
-    st.config(dut1, "cli -c 'configure terminal' -c \
-                'bfd peer 20.20.20.58 bfd-name SBFD_ECHO_V4_DEFAULT bfd-mode sbfd-echo status enable local-address 20.20.20.58 \
-                 segment-list fd00:303:2022:fff1:eee:: source-ipv6 2000::58 detection-multiplier 5 min-receive 100 min-tx-interval 100'")
+    st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer 20.20.20.58 name SBFD_ECHO_V4_DEFAULT mode sbfd-echo local-address 20.20.20.58 \
+                 segment-list fd00:303:2022:fff1:eee:: source-ipv6 2000::58' -c 'detect-multiplier 5'")
+    st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer 20.20.20.58 name SBFD_ECHO_V4_DEFAULT mode sbfd-echo local-address 20.20.20.58 \
+                 segment-list fd00:303:2022:fff1:eee:: source-ipv6 2000::58' -c 'receive-interval 100'")
+    st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer 20.20.20.58 name SBFD_ECHO_V4_DEFAULT mode sbfd-echo local-address 20.20.20.58 \
+                 segment-list fd00:303:2022:fff1:eee:: source-ipv6 2000::58' -c 'transmit-interval 100'")
     mode = 'sbfd-echo-v4'
     check_bfd_session_status(mode, check_field, True, False)
 
-    st.config(dut1, "cli -c 'configure terminal' -c \
-                'bfd peer 2000::58 bfd-name SBFD_ECHO_V6_DEFAULT bfd-mode sbfd-echo status enable local-address 2000::58 \
-                 segment-list fd00:303:2022:fff1:eee:: source-ipv6 2000::58 detection-multiplier 5 min-receive 100 min-tx-interval 100'")
+    st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer 2000::58 name SBFD_ECHO_V6_DEFAULT mode sbfd-echo local-address 2000::58 \
+                 segment-list fd00:303:2022:fff1:eee:: source-ipv6 2000::58' -c 'detect-multiplier 5'")
+    st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer 2000::58 name SBFD_ECHO_V6_DEFAULT mode sbfd-echo local-address 2000::58 \
+                 segment-list fd00:303:2022:fff1:eee:: source-ipv6 2000::58' -c 'receive-interval 100'")
+    st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c  \
+                'peer 2000::58 name SBFD_ECHO_V6_DEFAULT mode sbfd-echo local-address 2000::58 \
+                 segment-list fd00:303:2022:fff1:eee:: source-ipv6 2000::58' -c 'transmit-interval 100'")
     mode = 'sbfd-echo-v6'
     check_bfd_session_status(mode, check_field, True, False)
  

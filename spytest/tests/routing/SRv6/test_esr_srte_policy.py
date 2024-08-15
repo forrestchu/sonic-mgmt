@@ -175,10 +175,10 @@ def test_srte_policy_2k_vrf_1k_policy_01():
         'peer_type' : 'echo',
         'multiplier': '3'
     }
-    key = "bfd-name d"
+    key = "name d"
 
     if not retry_api(check_bfd_state, dut2, key, check_filed, retry_count= 10, delay= 10):
-        st.report_fail("Step3: The cpath d: bfd-name d not down")
+        st.report_fail("Step3: The cpath d: name d not down")
 
     ret = retry_api(check_dut_intf_tx_traffic_counters, dut2, ["Ethernet3"], 150, retry_count= 3, delay= 5)
     if not ret:
@@ -195,10 +195,10 @@ def test_srte_policy_2k_vrf_1k_policy_01():
         'peer_type' : 'echo',
         'multiplier': '3'
     }
-    key = "bfd-name d"
+    key = "name d"
 
     if not retry_api(check_bfd_state, dut2, key, check_filed, retry_count= 10, delay= 10):
-        st.report_fail("Step5: The cpath d: bfd-name d not up")
+        st.report_fail("Step5: The cpath d: name d not up")
 
     ret = retry_api(check_dut_intf_tx_traffic_counters, dut2, ["Ethernet4"], 150, retry_count= 3, delay= 5)
     if not ret:
@@ -272,10 +272,10 @@ def test_srte_policy_2k_vrf_1k_policy_color_only_02():
         'peer_type' : 'echo',
         'multiplier': '3'
     }
-    key = "bfd-name d"
+    key = "name d"
 
     if not retry_api(check_bfd_state, dut2, key, check_filed, retry_count= 10, delay= 10):
-        st.report_fail("Step4: The cpath d: bfd-name d not down")
+        st.report_fail("Step4: The cpath d: name d not down")
 
     ret = retry_api(check_dut_intf_tx_traffic_counters, dut2, ["Ethernet3"], 150, retry_count= 3, delay= 5)
     if not ret:
@@ -292,10 +292,10 @@ def test_srte_policy_2k_vrf_1k_policy_color_only_02():
         'peer_type' : 'echo',
         'multiplier': '3'
     }
-    key = "bfd-name c"
+    key = "name c"
 
     if not retry_api(check_bfd_state, dut2, key, check_filed, retry_count= 10, delay= 10):
-        st.report_fail("Step6: The cpath c: bfd-name c not down")
+        st.report_fail("Step6: The cpath c: name c not down")
 
     ret = retry_api(check_dut_intf_tx_traffic_counters, dut2, ["Ethernet2"], 150, retry_count= 3, delay= 5)
     if not ret:
@@ -312,10 +312,10 @@ def test_srte_policy_2k_vrf_1k_policy_color_only_02():
         'peer_type' : 'echo',
         'multiplier': '3'
     }
-    key = "bfd-name b"
+    key = "name b"
 
     if not retry_api(check_bfd_state, dut2, key, check_filed, retry_count= 10, delay= 10):
-        st.report_fail("Step8: The cpath b: bfd-name b not down")
+        st.report_fail("Step8: The cpath b: name b not down")
 
     ret = retry_api(check_dut_intf_tx_traffic_counters, dut2, ["Ethernet1"], 150, retry_count= 3, delay= 5)
     if not ret:
@@ -332,10 +332,10 @@ def test_srte_policy_2k_vrf_1k_policy_color_only_02():
         'peer_type' : 'echo',
         'multiplier': '3'
     }
-    key = "bfd-name b"
+    key = "name b"
 
     if not retry_api(check_bfd_state, dut2, key, check_filed, retry_count= 10, delay= 10):
-        st.report_fail("Step10: The cpath b: bfd-name b not up")
+        st.report_fail("Step10: The cpath b: name b not up")
 
     ret = retry_api(check_dut_intf_tx_traffic_counters, dut2, ["Ethernet2"], 150, retry_count= 3, delay= 5)
     if not ret:
@@ -352,10 +352,10 @@ def test_srte_policy_2k_vrf_1k_policy_color_only_02():
         'peer_type' : 'echo',
         'multiplier': '3'
     }
-    key = "bfd-name c"
+    key = "name c"
 
     if not retry_api(check_bfd_state, dut2, key, check_filed, retry_count= 10, delay= 10):
-        st.report_fail("Step12: The cpath c: bfd-name c not down")
+        st.report_fail("Step12: The cpath c: name c not down")
 
     ret = retry_api(check_dut_intf_tx_traffic_counters, dut2, ["Ethernet3"], 150, retry_count= 3, delay= 5)
     if not ret:
@@ -372,10 +372,10 @@ def test_srte_policy_2k_vrf_1k_policy_color_only_02():
         'peer_type' : 'echo',
         'multiplier': '3'
     }
-    key = "bfd-name d"
+    key = "name d"
 
     if not retry_api(check_bfd_state, dut2, key, check_filed, retry_count= 10, delay= 10):
-        st.report_fail("Step14: The cpath d: bfd-name d not down")
+        st.report_fail("Step14: The cpath d: name d not down")
 
     ret = retry_api(check_dut_intf_tx_traffic_counters, dut2, ["Ethernet4"], 150, retry_count= 3, delay= 5)
     if not ret:
@@ -439,10 +439,10 @@ def test_srte_policy_2k_vrf_2k_policy_03():
         'peer_type' : 'echo',
         'multiplier': '3'
     }
-    key = "bfd-name d"
+    key = "name d"
 
     if not retry_api(check_bfd_state, dut2, key, check_filed, retry_count= 10, delay= 10):
-        st.report_fail("Step4: The cpath d: bfd-name d not down")
+        st.report_fail("Step4: The cpath d: name d not down")
 
     #sbfd down, cpath change to c
     ret = retry_api(check_dut_intf_tx_traffic_counters, dut2, ["Ethernet3"], 300, retry_count= 3, delay= 5)
@@ -460,10 +460,10 @@ def test_srte_policy_2k_vrf_2k_policy_03():
         'peer_type' : 'echo',
         'multiplier': '3'
     }
-    key = "bfd-name d"
+    key = "name d"
 
     if not retry_api(check_bfd_state, dut2, key, check_filed, retry_count= 10, delay= 10):
-        st.report_fail("Step6: The cpath d: bfd-name a not up")
+        st.report_fail("Step6: The cpath d: name a not up")
 
     #check traffic back to Ethernet4
     ret = retry_api(check_dut_intf_tx_traffic_counters, dut2, ["Ethernet4"], 300, retry_count= 3, delay= 5)
@@ -535,10 +535,10 @@ def test_srte_policy_2k_vrf_2k_policy_color_only_04():
         'peer_type' : 'echo',
         'multiplier': '3'
     }
-    key = "bfd-name d"
+    key = "name d"
 
     if not retry_api(check_bfd_state, dut2, key, check_filed, retry_count= 10, delay= 10):
-        st.report_fail("Step4: The cpath d: bfd-name d not down")
+        st.report_fail("Step4: The cpath d: name d not down")
 
     #sbfd down, cpath change to c
     ret = retry_api(check_dut_intf_tx_traffic_counters, dut2, ["Ethernet3"], 300, retry_count= 3, delay= 5)
@@ -556,10 +556,10 @@ def test_srte_policy_2k_vrf_2k_policy_color_only_04():
         'peer_type' : 'echo',
         'multiplier': '3'
     }
-    key = "bfd-name d"
+    key = "name d"
 
     if not retry_api(check_bfd_state, dut2, key, check_filed, retry_count= 10, delay= 10):
-        st.report_fail("Step6: The cpath d: bfd-name a not up")
+        st.report_fail("Step6: The cpath d: name a not up")
 
     #check traffic back to Ethernet4
     ret = retry_api(check_dut_intf_tx_traffic_counters, dut2, ["Ethernet4"], 300, retry_count= 3, delay= 5)
@@ -640,10 +640,10 @@ def test_srte_policy_2k_vrf_4k_policy_05():
         'peer_type' : 'echo',
         'multiplier': '3'
     }
-    key = "bfd-name d"
+    key = "name d"
 
     if not retry_api(check_bfd_state, dut2, key, check_filed, retry_count= 10, delay= 10):
-        st.report_fail("Step3: The cpath d: bfd-name d not down")
+        st.report_fail("Step3: The cpath d: name d not down")
     #sbfd down, cpath change to c
     ret = retry_api(check_dut_intf_tx_traffic_counters, dut2, ["Ethernet3"], 300, retry_count= 5, delay= 10)
     if not ret:
@@ -659,10 +659,10 @@ def test_srte_policy_2k_vrf_4k_policy_05():
         'peer_type' : 'echo',
         'multiplier': '3'
     }
-    key = "bfd-name d"
+    key = "name d"
 
     if not retry_api(check_bfd_state, dut2, key, check_filed, retry_count= 10, delay= 10):
-        st.report_fail("Step5: The cpath d: bfd-name d not up")
+        st.report_fail("Step5: The cpath d: name d not up")
 
     ret = retry_api(check_mult_dut_intf_tx_traffic_counters, dut2, ['Ethernet3', 'Ethernet4'], 300, retry_count= 5, delay= 10)
     if not ret:

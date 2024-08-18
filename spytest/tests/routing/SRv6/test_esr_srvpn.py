@@ -1385,7 +1385,7 @@ def test_srvpn_mirror_config_redistribute_vrf_06():
         "ifname":"unknown",
         "vpn_sid":"fd00:201:2022:fff0:3::",
         "seg_src":"fd00:0:200:171::",
-        "segment":"na",
+        #"segment":"na",
         "blackhole":"false"
     }
     checkpoint_msg = "test_srvpn_mirror_config_redistribute_vrf_06 check1"
@@ -1434,7 +1434,7 @@ def test_srvpn_mirror_config_redistribute_vrf_06():
         "ifname":"unknown",
         "vpn_sid":"fd00:201:2021:fff0:2::",
         "seg_src":"fd00:0:200:172::",
-        "segment":"na",
+        #"segment":"na",
         "blackhole":"false"
     }
     checkpoint_msg = "test_srvpn_mirror_config_redistribute_vrf_06 check1"

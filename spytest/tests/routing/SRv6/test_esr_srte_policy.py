@@ -523,6 +523,9 @@ def test_srte_policy_2k_vrf_2k_policy_color_only_04():
     #check traffic cpath d, on interface Ethernet4
     ret = retry_api(check_dut_intf_tx_traffic_counters, dut2, ["Ethernet4"], 300, retry_count= 3, delay= 5)
     if not ret:
+        show_appdb_table_info(dut2,"*_NEXTHOP*")
+        show_appdb_table_info(dut2,"*_PIC*")
+        show_appdb_table_info(dut2,"*_ROUTE*")
         st.report_fail("Step3: Check dut interface counters failed")
 
     #shutdown Ethernet4
@@ -543,6 +546,9 @@ def test_srte_policy_2k_vrf_2k_policy_color_only_04():
     #sbfd down, cpath change to c
     ret = retry_api(check_dut_intf_tx_traffic_counters, dut2, ["Ethernet3"], 300, retry_count= 3, delay= 5)
     if not ret:
+        show_appdb_table_info(dut2,"*_NEXTHOP*")
+        show_appdb_table_info(dut2,"*_PIC*")
+        show_appdb_table_info(dut2,"*_ROUTE*")
         st.report_fail("Step5: Check dut interface counters failed")
 
     #no shutdown inteface ,sbfd up, cpath change to d
@@ -564,6 +570,9 @@ def test_srte_policy_2k_vrf_2k_policy_color_only_04():
     #check traffic back to Ethernet4
     ret = retry_api(check_dut_intf_tx_traffic_counters, dut2, ["Ethernet4"], 300, retry_count= 3, delay= 5)
     if not ret:
+        show_appdb_table_info(dut2,"*_NEXTHOP*")
+        show_appdb_table_info(dut2,"*_PIC*")
+        show_appdb_table_info(dut2,"*_ROUTE*")
         st.report_fail("Step7: Check dut interface counters failed")
 
     ret = ixia_stop_traffic(TRAFFIC_2K_TE_POLICY)
@@ -647,6 +656,9 @@ def test_srte_policy_2k_vrf_4k_policy_05():
     #sbfd down, cpath change to c
     ret = retry_api(check_dut_intf_tx_traffic_counters, dut2, ["Ethernet3"], 300, retry_count= 5, delay= 10)
     if not ret:
+        show_appdb_table_info(dut2,"*_NEXTHOP*")
+        show_appdb_table_info(dut2,"*_PIC*")
+        show_appdb_table_info(dut2,"*_ROUTE*")
         st.report_fail("Step4: Check dut interface counters failed")
 
     #shutdown Ethernet4
@@ -666,6 +678,9 @@ def test_srte_policy_2k_vrf_4k_policy_05():
 
     ret = retry_api(check_mult_dut_intf_tx_traffic_counters, dut2, ['Ethernet3', 'Ethernet4'], 300, retry_count= 5, delay= 10)
     if not ret:
+        show_appdb_table_info(dut2,"*_NEXTHOP*")
+        show_appdb_table_info(dut2,"*_PIC*")
+        show_appdb_table_info(dut2,"*_ROUTE*")
         st.report_fail("Step6: Check dut interface counters failed")
 
     ret = ixia_stop_traffic(TRAFFIC_2K_TE_POLICY)
@@ -753,6 +768,9 @@ def test_srte_policy_2k_vrf_4k_policy_falp_06():
 
     ret = retry_api(check_mult_dut_intf_tx_traffic_counters, dut2, ['Ethernet3', 'Ethernet4'], 300, retry_count= 5, delay= 10)
     if not ret:
+        show_appdb_table_info(dut2,"*_NEXTHOP*")
+        show_appdb_table_info(dut2,"*_PIC*")
+        show_appdb_table_info(dut2,"*_ROUTE*")
         st.report_fail("Step3: Check dut interface counters failed")
 
     ret = ixia_stop_traffic(TRAFFIC_2K_TE_POLICY)
@@ -783,6 +801,9 @@ def test_srte_policy_2k_vrf_ipv4_ipv6_07():
 
     ret = retry_api(check_mult_dut_intf_tx_traffic_counters, dut2, ['Ethernet3', 'Ethernet4'], 300, retry_count= 10, delay= 30)
     if not ret:
+        show_appdb_table_info(dut2,"*_NEXTHOP*")
+        show_appdb_table_info(dut2,"*_PIC*")
+        show_appdb_table_info(dut2,"*_ROUTE*")
         st.report_fail("Step4: Check dut interface counters failed")
 
     cmd = "cli -c 'configure terminal' -c 'interface {}' -c 'shutdown'".format("Ethernet3")
@@ -796,6 +817,9 @@ def test_srte_policy_2k_vrf_ipv4_ipv6_07():
 
     ret = retry_api(check_mult_dut_intf_tx_traffic_counters, dut2, ['Ethernet1', 'Ethernet2'], 300, retry_count= 10, delay= 30)
     if not ret:
+        show_appdb_table_info(dut2,"*_NEXTHOP*")
+        show_appdb_table_info(dut2,"*_PIC*")
+        show_appdb_table_info(dut2,"*_ROUTE*")
         st.report_fail("Step6: Check dut interface counters failed")
 
     cmd = "cli -c 'configure terminal' -c 'interface {}' -c 'no shutdown'".format("Ethernet3")
@@ -809,6 +833,9 @@ def test_srte_policy_2k_vrf_ipv4_ipv6_07():
 
     ret = retry_api(check_mult_dut_intf_tx_traffic_counters, dut2, ['Ethernet3', 'Ethernet4'], 300, retry_count= 10, delay= 30)
     if not ret:
+        show_appdb_table_info(dut2,"*_NEXTHOP*")
+        show_appdb_table_info(dut2,"*_PIC*")
+        show_appdb_table_info(dut2,"*_ROUTE*")
         st.report_fail("Step8: Check dut interface counters failed")
 
     ret = ixia_stop_traffic(TRAFFIC_IPV6_TE_POLICY)
@@ -833,6 +860,9 @@ def test_srte_policy_2k_vrf_ipv4_ipv6_07():
 
     ret = retry_api(check_mult_dut_intf_tx_traffic_counters, dut2, ['Ethernet3', 'Ethernet4'], 300, retry_count= 10, delay= 30)
     if not ret:
+        show_appdb_table_info(dut2,"*_NEXTHOP*")
+        show_appdb_table_info(dut2,"*_PIC*")
+        show_appdb_table_info(dut2,"*_ROUTE*")
         st.report_fail("Step12: Check dut interface counters failed")
 
     cmd = "cli -c 'configure terminal' -c 'interface {}' -c 'shutdown'".format("Ethernet3")
@@ -845,6 +875,9 @@ def test_srte_policy_2k_vrf_ipv4_ipv6_07():
 
     ret = retry_api(check_mult_dut_intf_tx_traffic_counters, dut2, ['Ethernet1', 'Ethernet2'], 300, retry_count= 10, delay= 30)
     if not ret:
+        show_appdb_table_info(dut2,"*_NEXTHOP*")
+        show_appdb_table_info(dut2,"*_PIC*")
+        show_appdb_table_info(dut2,"*_ROUTE*")
         st.report_fail("Step14: Check dut interface counters failed")
 
     ret = ixia_stop_traffic(TRAFFIC_IPV4_TE_POLICY)
@@ -912,6 +945,9 @@ def test_srte_policy_2k_vrf_ipv4_ipv6_flap_08():
 
     ret = retry_api(check_mult_dut_intf_tx_traffic_counters, dut2, ['Ethernet3', 'Ethernet4'], 245, retry_count= 15, delay= 10)
     if not ret:
+        show_appdb_table_info(dut2,"*_NEXTHOP*")
+        show_appdb_table_info(dut2,"*_PIC*")
+        show_appdb_table_info(dut2,"*_ROUTE*")
         st.report_fail("Step6: Check dut interface counters failed")
 
     ret = ixia_stop_traffic(TRAFFIC_IPV6_TE_POLICY)
@@ -952,6 +988,9 @@ def test_srte_policy_2k_vrf_ipv4_ipv6_flap_08():
     show_hw_route_count(dut2)
     ret = retry_api(check_mult_dut_intf_tx_traffic_counters, dut2, ['Ethernet3', 'Ethernet4'], 200, retry_count= 15, delay= 10)
     if not ret:
+        show_appdb_table_info(dut2,"*_NEXTHOP*")
+        show_appdb_table_info(dut2,"*_PIC*")
+        show_appdb_table_info(dut2,"*_ROUTE*")
         st.report_fail("Step10: Check dut interface counters failed")
 
     ret = ixia_stop_traffic(TRAFFIC_IPV4_TE_POLICY)

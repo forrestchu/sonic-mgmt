@@ -1038,3 +1038,7 @@ def check_srv6_te_policy_active_count(dut, count):
 
 def check_srv6_te_policy_active(dut, count):
     return check_srv6_te_policy_active_count(dut, count)
+
+def show_appdb_table_info(dut, table):
+    command = redis.build(dut, redis.APPL_DB, 'keys "{}"'.format(table))
+    st.show(dut, command, skip_tmpl=True)

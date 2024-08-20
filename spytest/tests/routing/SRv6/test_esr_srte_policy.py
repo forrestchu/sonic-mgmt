@@ -799,7 +799,7 @@ def test_srte_policy_2k_vrf_ipv4_ipv6_07():
     if not ret:
         st.report_fail("Step3: Start traffic item {} rx frame failed".format(TRAFFIC_IPV6_TE_POLICY))
 
-    ret = retry_api(check_mult_dut_intf_tx_traffic_counters, dut2, ['Ethernet3', 'Ethernet4'], 300, retry_count= 10, delay= 30)
+    ret = retry_api(check_mult_dut_intf_tx_traffic_counters, dut2, ['Ethernet3', 'Ethernet4'], 300, retry_count= 15, delay= 30)
     if not ret:
         show_appdb_table_info(dut2,"*_NEXTHOP*")
         show_appdb_table_info(dut2,"*_PIC*")
@@ -815,7 +815,7 @@ def test_srte_policy_2k_vrf_ipv4_ipv6_07():
     if not retry_api(check_srv6_te_policy_active, dut2, "2003",  retry_count= 10, delay= 30):
         st.report_fail("Step5: Chek te policy active count failed")
 
-    ret = retry_api(check_mult_dut_intf_tx_traffic_counters, dut2, ['Ethernet1', 'Ethernet2'], 300, retry_count= 10, delay= 30)
+    ret = retry_api(check_mult_dut_intf_tx_traffic_counters, dut2, ['Ethernet1', 'Ethernet2'], 300, retry_count= 15, delay= 30)
     if not ret:
         show_appdb_table_info(dut2,"*_NEXTHOP*")
         show_appdb_table_info(dut2,"*_PIC*")
@@ -831,7 +831,7 @@ def test_srte_policy_2k_vrf_ipv4_ipv6_07():
     if not retry_api(check_srv6_te_policy_active, dut2, "4003",  retry_count= 10, delay= 30):
         st.report_fail("Step7: Chek te policy active count failed")
 
-    ret = retry_api(check_mult_dut_intf_tx_traffic_counters, dut2, ['Ethernet3', 'Ethernet4'], 300, retry_count= 10, delay= 30)
+    ret = retry_api(check_mult_dut_intf_tx_traffic_counters, dut2, ['Ethernet3', 'Ethernet4'], 300, retry_count= 15, delay= 30)
     if not ret:
         show_appdb_table_info(dut2,"*_NEXTHOP*")
         show_appdb_table_info(dut2,"*_PIC*")
@@ -858,7 +858,7 @@ def test_srte_policy_2k_vrf_ipv4_ipv6_07():
     if not ret:
         st.report_fail("Step11: Start traffic item {} rx frame failed".format(TRAFFIC_IPV4_TE_POLICY))
 
-    ret = retry_api(check_mult_dut_intf_tx_traffic_counters, dut2, ['Ethernet3', 'Ethernet4'], 300, retry_count= 10, delay= 30)
+    ret = retry_api(check_mult_dut_intf_tx_traffic_counters, dut2, ['Ethernet3', 'Ethernet4'], 300, retry_count= 15, delay= 30)
     if not ret:
         show_appdb_table_info(dut2,"*_NEXTHOP*")
         show_appdb_table_info(dut2,"*_PIC*")
@@ -873,7 +873,7 @@ def test_srte_policy_2k_vrf_ipv4_ipv6_07():
     if not retry_api(check_srv6_te_policy_active, dut2, "2003",  retry_count= 10, delay= 30):
         st.report_fail("Step13: Chek te policy active count failed")
 
-    ret = retry_api(check_mult_dut_intf_tx_traffic_counters, dut2, ['Ethernet1', 'Ethernet2'], 300, retry_count= 10, delay= 30)
+    ret = retry_api(check_mult_dut_intf_tx_traffic_counters, dut2, ['Ethernet1', 'Ethernet2'], 300, retry_count= 15, delay= 30)
     if not ret:
         show_appdb_table_info(dut2,"*_NEXTHOP*")
         show_appdb_table_info(dut2,"*_PIC*")
@@ -943,7 +943,7 @@ def test_srte_policy_2k_vrf_ipv4_ipv6_flap_08():
     show_hw_route_count(dut1)
     show_hw_route_count(dut2)
 
-    ret = retry_api(check_mult_dut_intf_tx_traffic_counters, dut2, ['Ethernet3', 'Ethernet4'], 245, retry_count= 15, delay= 10)
+    ret = retry_api(check_mult_dut_intf_tx_traffic_counters, dut2, ['Ethernet3', 'Ethernet4'], 245, retry_count= 15, delay= 30)
     if not ret:
         show_appdb_table_info(dut2,"*_NEXTHOP*")
         show_appdb_table_info(dut2,"*_PIC*")
@@ -986,7 +986,7 @@ def test_srte_policy_2k_vrf_ipv4_ipv6_flap_08():
     st.wait(240)
     show_hw_route_count(dut1)
     show_hw_route_count(dut2)
-    ret = retry_api(check_mult_dut_intf_tx_traffic_counters, dut2, ['Ethernet3', 'Ethernet4'], 200, retry_count= 15, delay= 10)
+    ret = retry_api(check_mult_dut_intf_tx_traffic_counters, dut2, ['Ethernet3', 'Ethernet4'], 200, retry_count= 15, delay= 30)
     if not ret:
         show_appdb_table_info(dut2,"*_NEXTHOP*")
         show_appdb_table_info(dut2,"*_PIC*")

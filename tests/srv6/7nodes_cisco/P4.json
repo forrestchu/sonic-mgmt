@@ -12,6 +12,10 @@
     "ROUTE_MAP" : {
         "pass_all|1" : {
             "route_operation" : "permit"
+        },
+        "pass_all_in|1" : {
+            "route_operation" : "permit",
+            "set_ipv6_next_hop_prefer_global" : "true"
         }
     },
     "BGP_GLOBALS_AF" : {
@@ -24,22 +28,22 @@
     "BGP_NEIGHBOR_AF" : {
         "default|fc01::86|ipv6_unicast" : {
             "admin_status" : "true",
-            "route_map_in" : "pass_all",
+            "route_map_in" : "pass_all_in",
             "route_map_out" : "pass_all"
         },
         "default|fc07::02|ipv6_unicast" : {
             "admin_status" : "true",
-            "route_map_in" : "pass_all",
+            "route_map_in" : "pass_all_in",
             "route_map_out" : "pass_all"
         },
         "default|fc06::01|ipv6_unicast" :{
             "admin_status" : "true",
-            "route_map_in" : "pass_all",
+            "route_map_in" : "pass_all_in",
             "route_map_out" : "pass_all"
         },
         "default|fc04::02|ipv6_unicast": {
             "admin_status" : "true",
-            "route_map_in" : "pass_all",
+            "route_map_in" : "pass_all_in",
             "route_map_out" : "pass_all"
         }
     },
@@ -50,7 +54,8 @@
             "min_adv_interval": "0",
             "local_addr" :"fc01::85",
             "asn": "65100",
-            "ebgp_multihop": "255",
+            "ebgp_multihop": "true",
+            "ebgp_multihop_ttl":  "255",
             "name": "P1"
         },
         "default|fc07::2": {
@@ -59,7 +64,8 @@
             "min_adv_interval": "0",
             "local_addr" :"fc07::1",
             "asn": "65102",
-            "ebgp_multihop": "255",
+            "ebgp_multihop": "true",
+            "ebgp_multihop_ttl":  "255",
             "name": "P2"
         },
         "default|fc06::1": {
@@ -68,7 +74,8 @@
             "min_adv_interval": "0",
             "local_addr" :"fc06::2",
             "asn": "64602",
-            "ebgp_multihop": "255",
+            "ebgp_multihop": "true",
+            "ebgp_multihop_ttl":  "255",
             "name": "PE3"
         },
         "default|fc04::2": {
@@ -77,7 +84,8 @@
             "min_adv_interval": "0",
             "local_addr" :"fc04::1",
             "asn": "65101",
-            "ebgp_multihop": "255",
+            "ebgp_multihop": "true",
+            "ebgp_multihop_ttl":  "255",
             "name": "P2"
         }
     },
@@ -92,7 +100,7 @@
             "hwsku" : "cisco-8101-p4-32x100-vs",
             "nexthop_group" : "enabled",
             "frr_mgmt_framework_config": "true",
-            "docker_routing_config_mode": "separated",
+            "docker_routing_config_mode": "unified",
             "type": "LeafRouter"
         }
     },

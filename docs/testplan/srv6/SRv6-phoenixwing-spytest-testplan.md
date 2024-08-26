@@ -46,7 +46,8 @@
     - [test\_end\_x\_action](#test_end_x_action)
       - [Set up](#set-up-9)
       - [Test procedures](#test-procedures-9)
-    - [test\_srvpn\_performance\_2M](#test_srvpn_performance_2m)
+    - [test\_srvpn\_performance\_2M (VPN case)](#test_srvpn_performance_2m-vpn-case)
+    - [test\_srvpn\_performance\_1M (global IPv6 case)](#test_srvpn_performance_1m-global-ipv6-case)
   - [SRv6 Policy Test Cases (Total 10 cases)](#srv6-policy-test-cases-total-10-cases)
     - [test\_srte\_policy\_2k\_vrf\_1k\_policy\_01](#test_srte_policy_2k_vrf_1k_policy_01)
       - [Set up](#set-up-10)
@@ -69,6 +70,13 @@
     - [test\_locator\_128\_endx\_ecmp](#test_locator_128_endx_ecmp)
       - [Set up](#set-up-15)
       - [Test procedures](#test-procedures-15)
+  - [Convergence Testing, total 6 cases](#convergence-testing-total-6-cases)
+    - [Local IGP link failure with global 1M v6 routes](#local-igp-link-failure-with-global-1m-v6-routes)
+    - [remote IGP failure with global 1M v6 routes](#remote-igp-failure-with-global-1m-v6-routes)
+    - [Remote BGP PE failure with global 1M v6 routes](#remote-bgp-pe-failure-with-global-1m-v6-routes)
+    - [Local IGP link failure with 1M SRv6 VPNv4 Routes](#local-igp-link-failure-with-1m-srv6-vpnv4-routes)
+    - [remote IGP failure with 1M SRv6 VPNv4 Routes](#remote-igp-failure-with-1m-srv6-vpnv4-routes)
+    - [Remote BGP PE failure with 1M SRv6 VPNv4 Routes](#remote-bgp-pe-failure-with-1m-srv6-vpnv4-routes)
 
 ## Overview
 The Phoenix Wing initiative will verify four hardware platforms. Two of these platforms, equipped with Cisco's Q200 chip, will be supplied by Cisco and Inspur. The other two, using Broadcom's Q3D chip, will come from Huaqin and Ruijie.
@@ -236,7 +244,7 @@ Similar to test_base_config_srvpn_2kl_route_learn_02, config one local sid with 
 #### Test procedures
 Use traffic to check if we hit on END_X SID and if the traffic goes via a specified port provided in END_X.
 
-### test_srvpn_performance_2M
+### test_srvpn_performance_2M (VPN case)
 When preparing this test case, the test script would
 1. Set both ports connected to traffic generator are vrf ports.
 2. Set up eBGP session between DUT1 and traffic generator Traffic via vrf ports.
@@ -251,6 +259,9 @@ Note:
 This test case focuses on
 1. Basic SRv6 VPN functionality verification
 2. Loading time / withdraw time measurement to secure the enhancement result.
+
+### test_srvpn_performance_1M (global IPv6 case)
+Similar than test_srvpn_performance_2M, except we use the traffic generateor to publish 1M global IPv6 routes. On DUTs, we use port's global IPv6 address to peer with the traffic generator, a.k.a, no vrf case.
 
 ## SRv6 Policy Test Cases (Total 10 cases)
 Note: Due to we don't have SBFD hardware offload enabled, we can't have high scale SBFD sessions to protect high number of cpaths. We apply work around either config less SBFD sessions or not config SBFD sessions. This work around would be removed once SBFD hardware offload is supported.
@@ -317,3 +328,48 @@ Verify END_X SID with ECMP.
 Config an end_x sid with 128 nexthops, and form 128 member ECMP for END_X SID. SID would cover both compress and none-compress end_x SID and nexthop would cover v4 nexthop and v6 next hop.
 #### Test procedures
 Config each combination and run traffic to verify.
+
+## Convergence Testing, total 6 cases
+The purpose for this set of test cases are for verifying Prefix Independent Convergence (PIC) at various cases.
+<figure align=center>
+    <img src="images/spytest-5nodes.png" >
+    <figcaption>Figure 2. SRv6 Spytest 5-node Topology <figcaption>
+</figure>
+
+This topology is a trimmed version from 7-node ptf testbed. We have three PE devices, each of them are connected with the traffic generator. We have two P devices.
+
+Ixia would publish routes from PE1/PE2 to PE3 via MP-BGP. The traffic would be sent from PE3 to PE1/PE2. The purpose for this test suite is to validate PIC related changes in both global table and VPN table.
+### Local IGP link failure with global 1M v6 routes
+The interfaces connecting with Ixia and PE1 are under global table. PE1 and PE2 use eBGP interface peering with ixia. Ixia publishes 1M V6 routes to PE1 and PE2. PE1 and PE2 would redistribute them to PE3.
+
+Traffic will be sent from PE3 to PE1 and PE2 via them 1M routes as destination IPs. We want to measure the traffic loss during outage.
+
+In this case, we shut the link between PE3 and P1. PE3's orchagent would be aware traffic loss and make quick fix up first.
+
+### remote IGP failure with global 1M v6 routes
+The setting is similar to " Local IGP link failure with global 1M v6 routes".
+
+During the test, we will shut the link between PE1 and P1 to simulate remote IGP link failure. This test focus on verifying PIC core's fix up.
+
+### Remote BGP PE failure with global 1M v6 routes
+The setting is similar to " Local IGP link failure with global 1M v6 routes".
+
+During the test, we will shut down two links. One link is between PE1 and P1, and the other is between PE1 and P2. This test is to simulate remote BGP node failure, a.k.a focusing PIC edge's verification.
+
+
+### Local IGP link failure with 1M SRv6 VPNv4 Routes
+The setting is similar to " Local IGP link failure with global 1M v6 routes", except PE1 and PE2 uses VRF interface to peer with ixia. Ixia would publish V4 routes to PE1 and PE2.
+
+Traffic will be sent from PE3 to PE1 and PE2 via them 1M routes as destination IPs. We want to measure the traffic loss during outage.
+
+In this case, we shut the link between PE3 and P1. PE3's orchagent would be aware traffic loss and make quick fix up first.
+
+### remote IGP failure with 1M SRv6 VPNv4 Routes
+The setting is similar to "Local IGP link failure with 1M SRv6 VPNv4 Routes"
+
+During the test, we will shut the link between PE1 and P1 to simulate remote IGP link failure. This test focus on verifying PIC core's fix up.
+
+### Remote BGP PE failure with 1M SRv6 VPNv4 Routes
+The setting is similar to "Local IGP link failure with 1M SRv6 VPNv4 Routes"
+
+During the test, we will shut down two links. One link is between PE1 and P1, and the other is between PE1 and P2. This test is to simulate remote BGP node failure, a.k.a focusing PIC edge's verification.

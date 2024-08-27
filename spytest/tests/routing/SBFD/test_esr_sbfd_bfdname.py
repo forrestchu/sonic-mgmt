@@ -359,12 +359,16 @@ def check_bfd_session_configdb(bfd_mode, configdb_key, default, checkpoint):
             configdb_onefield_checkpoint(dut1, configdb_key, "enabled", "true", True, checkpoint)
 
     if default == False:
-        configdb_onefield_checkpoint(dut1, configdb_key, "min-tx-interval", "100", True, checkpoint)
-        configdb_onefield_checkpoint(dut1, configdb_key, "min-receive", "100", True, checkpoint)
+        if bfd_mode == 'sbfd-echo-v4' or bfd_mode == 'sbfd-echo-v6':
+            configdb_onefield_checkpoint(dut1, configdb_key, "echo-tx-interval", "100", True, checkpoint)
+            configdb_onefield_checkpoint(dut1, configdb_key, "echo-rx-interval", "100", True, checkpoint)
+        else:
+            configdb_onefield_checkpoint(dut1, configdb_key, "min-tx-interval", "100", True, checkpoint)
+            configdb_onefield_checkpoint(dut1, configdb_key, "min-rx-interval", "100", True, checkpoint)
         configdb_onefield_checkpoint(dut1, configdb_key, "detection-multiplier", "5", True, checkpoint)
         if bfd_mode != 'sbfd-echo-v4' and  bfd_mode != 'sbfd-echo-v6' and bfd_mode != 'sbfd-init-v6' and bfd_mode != 'sbfd-init-v4':
             configdb_onefield_checkpoint(dut2, configdb_key, "min-tx-interval", "100", True, checkpoint)
-            configdb_onefield_checkpoint(dut2, configdb_key, "min-receive", "100", True, checkpoint)
+            configdb_onefield_checkpoint(dut2, configdb_key, "min-rx-interval", "100", True, checkpoint)
             configdb_onefield_checkpoint(dut2, configdb_key, "detection-multiplier", "5", True, checkpoint)     
 
 def check_bfd_session_status(bfd_mode, check_field, offload=True, delete=False):
@@ -990,10 +994,10 @@ def test_config_sbfd_name_session_case2():
                  segment-list fd00:303:2022:fff1:eee:: source-ipv6 2000::58' -c 'detect-multiplier 5'")
     st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c  \
                 'peer 20.20.20.58 name SBFD_ECHO_V4_DEFAULT mode sbfd-echo local-address 20.20.20.58 \
-                 segment-list fd00:303:2022:fff1:eee:: source-ipv6 2000::58' -c 'receive-interval 100'")
+                 segment-list fd00:303:2022:fff1:eee:: source-ipv6 2000::58' -c 'echo receive-interval 100'")
     st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c  \
                 'peer 20.20.20.58 name SBFD_ECHO_V4_DEFAULT mode sbfd-echo local-address 20.20.20.58 \
-                 segment-list fd00:303:2022:fff1:eee:: source-ipv6 2000::58' -c 'transmit-interval 100'")
+                 segment-list fd00:303:2022:fff1:eee:: source-ipv6 2000::58' -c 'echo transmit-interval 100'")
     mode = 'sbfd-echo-v4'
     check_bfd_session_status(mode, check_field, True, False)
 
@@ -1002,10 +1006,10 @@ def test_config_sbfd_name_session_case2():
                  segment-list fd00:303:2022:fff1:eee:: source-ipv6 2000::58' -c 'detect-multiplier 5'")
     st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c  \
                 'peer 2000::58 name SBFD_ECHO_V6_DEFAULT mode sbfd-echo local-address 2000::58 \
-                 segment-list fd00:303:2022:fff1:eee:: source-ipv6 2000::58' -c 'receive-interval 100'")
+                 segment-list fd00:303:2022:fff1:eee:: source-ipv6 2000::58' -c 'echo receive-interval 100'")
     st.config(dut1, "cli -c 'configure terminal' -c 'bfd' -c  \
                 'peer 2000::58 name SBFD_ECHO_V6_DEFAULT mode sbfd-echo local-address 2000::58 \
-                 segment-list fd00:303:2022:fff1:eee:: source-ipv6 2000::58' -c 'transmit-interval 100'")
+                 segment-list fd00:303:2022:fff1:eee:: source-ipv6 2000::58' -c 'echo transmit-interval 100'")
     mode = 'sbfd-echo-v6'
     check_bfd_session_status(mode, check_field, True, False)
  

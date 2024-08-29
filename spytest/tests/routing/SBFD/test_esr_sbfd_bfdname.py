@@ -268,27 +268,27 @@ def check_bfd_session_configdb(bfd_mode, configdb_key, default, checkpoint):
     elif bfd_mode == 'bfd-multi-v4': 
         if configdb_key == 'BFD_PEER|BFD_MULTI_V4_DEFAULT':
             configdb_onefield_checkpoint(dut1, configdb_key, "mode", "bfd", True, checkpoint)
-            configdb_onefield_checkpoint(dut1, configdb_key, "local-address", "192.30.1.58", True, checkpoint)
+            configdb_onefield_checkpoint(dut1, configdb_key, "local_address", "192.30.1.58", True, checkpoint)
             configdb_onefield_checkpoint(dut1, configdb_key, "multihop", "true", True, checkpoint)
             configdb_onefield_checkpoint(dut1, configdb_key, "peer", "192.30.1.59", True, checkpoint)
             configdb_onefield_checkpoint(dut1, configdb_key, "enabled", "true", True, checkpoint)
 
             configdb_onefield_checkpoint(dut2, configdb_key, "mode", "bfd", True, checkpoint)
-            configdb_onefield_checkpoint(dut2, configdb_key, "local-address", "192.30.1.59", True, checkpoint)
+            configdb_onefield_checkpoint(dut2, configdb_key, "local_address", "192.30.1.59", True, checkpoint)
             configdb_onefield_checkpoint(dut2, configdb_key, "multihop", "true", True, checkpoint)
             configdb_onefield_checkpoint(dut2, configdb_key, "peer", "192.30.1.58", True, checkpoint)
             configdb_onefield_checkpoint(dut2, configdb_key, "enabled", "true", True, checkpoint)
 
         elif configdb_key == 'BFD_PEER|BFD_MULTI_V4_VRF':
             configdb_onefield_checkpoint(dut1, configdb_key, "mode", "bfd", True, checkpoint)
-            configdb_onefield_checkpoint(dut1, configdb_key, "local-address", "192.40.1.58", True, checkpoint)
+            configdb_onefield_checkpoint(dut1, configdb_key, "local_address", "192.40.1.58", True, checkpoint)
             configdb_onefield_checkpoint(dut1, configdb_key, "multihop", "true", True, checkpoint)
             configdb_onefield_checkpoint(dut1, configdb_key, "peer", "192.40.1.59", True, checkpoint)
             configdb_onefield_checkpoint(dut1, configdb_key, "enabled", "true", True, checkpoint)
             configdb_onefield_checkpoint(dut1, configdb_key, "vrf", "Test1", True, checkpoint)  
 
             configdb_onefield_checkpoint(dut2, configdb_key, "mode", "bfd", True, checkpoint)
-            configdb_onefield_checkpoint(dut2, configdb_key, "local-address", "192.40.1.59", True, checkpoint)
+            configdb_onefield_checkpoint(dut2, configdb_key, "local_address", "192.40.1.59", True, checkpoint)
             configdb_onefield_checkpoint(dut2, configdb_key, "multihop", "true", True, checkpoint)
             configdb_onefield_checkpoint(dut2, configdb_key, "peer", "192.40.1.58", True, checkpoint)
             configdb_onefield_checkpoint(dut2, configdb_key, "enabled", "true", True, checkpoint)
@@ -297,27 +297,27 @@ def check_bfd_session_configdb(bfd_mode, configdb_key, default, checkpoint):
     elif bfd_mode == 'bfd-multi-v6': 
         if configdb_key == 'BFD_PEER|BFD_MULTI_V6_DEFAULT':
             configdb_onefield_checkpoint(dut1, configdb_key, "mode", "bfd", True, checkpoint)
-            configdb_onefield_checkpoint(dut1, configdb_key, "local-address", "fd00:300::58", True, checkpoint)
+            configdb_onefield_checkpoint(dut1, configdb_key, "local_address", "fd00:300::58", True, checkpoint)
             configdb_onefield_checkpoint(dut1, configdb_key, "multihop", "true", True, checkpoint)
             configdb_onefield_checkpoint(dut1, configdb_key, "peer", "fd00:300::59", True, checkpoint)
             configdb_onefield_checkpoint(dut1, configdb_key, "enabled", "true", True, checkpoint)
 
             configdb_onefield_checkpoint(dut2, configdb_key, "mode", "bfd", True, checkpoint)
-            configdb_onefield_checkpoint(dut2, configdb_key, "local-address", "fd00:300::59", True, checkpoint)
+            configdb_onefield_checkpoint(dut2, configdb_key, "local_address", "fd00:300::59", True, checkpoint)
             configdb_onefield_checkpoint(dut2, configdb_key, "multihop", "true", True, checkpoint)
             configdb_onefield_checkpoint(dut2, configdb_key, "peer", "fd00:300::58", True, checkpoint)
             configdb_onefield_checkpoint(dut2, configdb_key, "enabled", "true", True, checkpoint)
 
         elif configdb_key == 'BFD_PEER|BFD_MULTI_V6_VRF':
             configdb_onefield_checkpoint(dut1, configdb_key, "mode", "bfd", True, checkpoint)
-            configdb_onefield_checkpoint(dut1, configdb_key, "local-address", "fd00:400::58", True, checkpoint)
+            configdb_onefield_checkpoint(dut1, configdb_key, "local_address", "fd00:400::58", True, checkpoint)
             configdb_onefield_checkpoint(dut1, configdb_key, "multihop", "true", True, checkpoint)
             configdb_onefield_checkpoint(dut1, configdb_key, "peer", "fd00:400::59", True, checkpoint)
             configdb_onefield_checkpoint(dut1, configdb_key, "enabled", "true", True, checkpoint)
             configdb_onefield_checkpoint(dut1, configdb_key, "vrf", "Test1", True, checkpoint)
 
             configdb_onefield_checkpoint(dut2, configdb_key, "mode", "bfd", True, checkpoint)
-            configdb_onefield_checkpoint(dut2, configdb_key, "local-address", "fd00:400::59", True, checkpoint)
+            configdb_onefield_checkpoint(dut2, configdb_key, "local_address", "fd00:400::59", True, checkpoint)
             configdb_onefield_checkpoint(dut2, configdb_key, "multihop", "true", True, checkpoint)
             configdb_onefield_checkpoint(dut2, configdb_key, "peer", "fd00:400::58", True, checkpoint)
             configdb_onefield_checkpoint(dut2, configdb_key, "enabled", "true", True, checkpoint)
@@ -325,51 +325,51 @@ def check_bfd_session_configdb(bfd_mode, configdb_key, default, checkpoint):
 
     elif bfd_mode == 'sbfd-echo-v4':
             configdb_onefield_checkpoint(dut1, configdb_key, "mode", "sbfd-echo", True, checkpoint)
-            configdb_onefield_checkpoint(dut1, configdb_key, "segment-list", "fd00:303:2022:fff1:eee::", True, checkpoint)
-            configdb_onefield_checkpoint(dut1, configdb_key, "source-ipv6", "2000::58", True, checkpoint)
-            configdb_onefield_checkpoint(dut1, configdb_key, "local-address", "20.20.20.58", True, checkpoint)
+            configdb_onefield_checkpoint(dut1, configdb_key, "segment_list", "fd00:303:2022:fff1:eee::", True, checkpoint)
+            configdb_onefield_checkpoint(dut1, configdb_key, "source_ipv6", "2000::58", True, checkpoint)
+            configdb_onefield_checkpoint(dut1, configdb_key, "local_address", "20.20.20.58", True, checkpoint)
             configdb_onefield_checkpoint(dut1, configdb_key, "multihop", "false", True, checkpoint)
             configdb_onefield_checkpoint(dut1, configdb_key, "peer", "20.20.20.58", True, checkpoint)
             configdb_onefield_checkpoint(dut1, configdb_key, "enabled", "true", True, checkpoint)
     elif bfd_mode == 'sbfd-echo-v6':
             configdb_onefield_checkpoint(dut1, configdb_key, "mode", "sbfd-echo", True, checkpoint)
-            configdb_onefield_checkpoint(dut1, configdb_key, "segment-list", "fd00:303:2022:fff1:eee::", True, checkpoint)
-            configdb_onefield_checkpoint(dut1, configdb_key, "source-ipv6", "2000::58", True, checkpoint)
-            configdb_onefield_checkpoint(dut1, configdb_key, "local-address", "2000::58", True, checkpoint)
+            configdb_onefield_checkpoint(dut1, configdb_key, "segment_list", "fd00:303:2022:fff1:eee::", True, checkpoint)
+            configdb_onefield_checkpoint(dut1, configdb_key, "source_ipv6", "2000::58", True, checkpoint)
+            configdb_onefield_checkpoint(dut1, configdb_key, "local_address", "2000::58", True, checkpoint)
             configdb_onefield_checkpoint(dut1, configdb_key, "multihop", "false", True, checkpoint)
             configdb_onefield_checkpoint(dut1, configdb_key, "peer", "2000::58", True, checkpoint)
             configdb_onefield_checkpoint(dut1, configdb_key, "enabled", "true", True, checkpoint)
     elif bfd_mode == 'sbfd-init-v4':
             configdb_onefield_checkpoint(dut1, configdb_key, "mode", "sbfd", True, checkpoint)
-            configdb_onefield_checkpoint(dut1, configdb_key, "segment-list", "fd00:303:2022:fff1:eee::", True, checkpoint)
-            configdb_onefield_checkpoint(dut1, configdb_key, "source-ipv6", "2000::58", True, checkpoint)
-            configdb_onefield_checkpoint(dut1, configdb_key, "remote-discr", "10086", True, checkpoint)
-            configdb_onefield_checkpoint(dut1, configdb_key, "local-address", "20.20.20.58", True, checkpoint)
+            configdb_onefield_checkpoint(dut1, configdb_key, "segment_list", "fd00:303:2022:fff1:eee::", True, checkpoint)
+            configdb_onefield_checkpoint(dut1, configdb_key, "source_ipv6", "2000::58", True, checkpoint)
+            configdb_onefield_checkpoint(dut1, configdb_key, "remote_discr", "10086", True, checkpoint)
+            configdb_onefield_checkpoint(dut1, configdb_key, "local_address", "20.20.20.58", True, checkpoint)
             configdb_onefield_checkpoint(dut1, configdb_key, "multihop", "false", True, checkpoint)
             configdb_onefield_checkpoint(dut1, configdb_key, "peer", "20.20.20.59", True, checkpoint)
             configdb_onefield_checkpoint(dut1, configdb_key, "enabled", "true", True, checkpoint)
     elif bfd_mode == 'sbfd-init-v6':
             configdb_onefield_checkpoint(dut1, configdb_key, "mode", "sbfd", True, checkpoint)
-            configdb_onefield_checkpoint(dut1, configdb_key, "segment-list", "fd00:303:2022:fff1:eee::", True, checkpoint)
-            configdb_onefield_checkpoint(dut1, configdb_key, "source-ipv6", "2000::58", True, checkpoint)
-            configdb_onefield_checkpoint(dut1, configdb_key, "remote-discr", "10087", True, checkpoint)
-            configdb_onefield_checkpoint(dut1, configdb_key, "local-address", "2000::58", True, checkpoint)
+            configdb_onefield_checkpoint(dut1, configdb_key, "segment_list", "fd00:303:2022:fff1:eee::", True, checkpoint)
+            configdb_onefield_checkpoint(dut1, configdb_key, "source_ipv6", "2000::58", True, checkpoint)
+            configdb_onefield_checkpoint(dut1, configdb_key, "remote_discr", "10087", True, checkpoint)
+            configdb_onefield_checkpoint(dut1, configdb_key, "local_address", "2000::58", True, checkpoint)
             configdb_onefield_checkpoint(dut1, configdb_key, "multihop", "false", True, checkpoint)
             configdb_onefield_checkpoint(dut1, configdb_key, "peer", "2000::59", True, checkpoint)
             configdb_onefield_checkpoint(dut1, configdb_key, "enabled", "true", True, checkpoint)
 
     if default == False:
         if bfd_mode == 'sbfd-echo-v4' or bfd_mode == 'sbfd-echo-v6':
-            configdb_onefield_checkpoint(dut1, configdb_key, "echo-tx-interval", "100", True, checkpoint)
-            configdb_onefield_checkpoint(dut1, configdb_key, "echo-rx-interval", "100", True, checkpoint)
+            configdb_onefield_checkpoint(dut1, configdb_key, "echo_tx_interval", "100", True, checkpoint)
+            configdb_onefield_checkpoint(dut1, configdb_key, "echo_rx_interval", "100", True, checkpoint)
         else:
-            configdb_onefield_checkpoint(dut1, configdb_key, "min-tx-interval", "100", True, checkpoint)
-            configdb_onefield_checkpoint(dut1, configdb_key, "min-rx-interval", "100", True, checkpoint)
-        configdb_onefield_checkpoint(dut1, configdb_key, "detection-multiplier", "5", True, checkpoint)
+            configdb_onefield_checkpoint(dut1, configdb_key, "min_tx_interval", "100", True, checkpoint)
+            configdb_onefield_checkpoint(dut1, configdb_key, "min_rx_interval", "100", True, checkpoint)
+        configdb_onefield_checkpoint(dut1, configdb_key, "detect_multiplier", "5", True, checkpoint)
         if bfd_mode != 'sbfd-echo-v4' and  bfd_mode != 'sbfd-echo-v6' and bfd_mode != 'sbfd-init-v6' and bfd_mode != 'sbfd-init-v4':
-            configdb_onefield_checkpoint(dut2, configdb_key, "min-tx-interval", "100", True, checkpoint)
-            configdb_onefield_checkpoint(dut2, configdb_key, "min-rx-interval", "100", True, checkpoint)
-            configdb_onefield_checkpoint(dut2, configdb_key, "detection-multiplier", "5", True, checkpoint)     
+            configdb_onefield_checkpoint(dut2, configdb_key, "min_tx_interval", "100", True, checkpoint)
+            configdb_onefield_checkpoint(dut2, configdb_key, "min_rx_interval", "100", True, checkpoint)
+            configdb_onefield_checkpoint(dut2, configdb_key, "detect_multiplier", "5", True, checkpoint)     
 
 def check_bfd_session_status(bfd_mode, check_field, offload=True, delete=False):
     if bfd_mode == 'bfd-single-v4':

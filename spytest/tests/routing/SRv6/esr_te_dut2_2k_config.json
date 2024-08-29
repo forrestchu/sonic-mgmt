@@ -9,39 +9,39 @@
     "BFD_PEER": {
         "a": {
             "enabled": "true",
-            "local-address": "1000::178",
+            "local_address": "1000::178",
             "mode": "sbfd-echo",
             "multihop": "false",
             "peer": "1000::178",
-            "segment-list": "fd00:202:202:fff1:111::",
-            "source-ipv6": "1000::178"
+            "segment_list": "fd00:202:202:fff1:111::",
+            "source_ipv6": "1000::178"
         },
         "b": {
             "enabled": "true",
-            "local-address": "2000::178",
+            "local_address": "2000::178",
             "mode": "sbfd-echo",
             "multihop": "false",
             "peer": "2000::178",
-            "segment-list": "fd00:202:202:fff1:112::",
-            "source-ipv6": "2000::178"
+            "segment_list": "fd00:202:202:fff1:112::",
+            "source_ipv6": "2000::178"
         },
         "c": {
             "enabled": "true",
-            "local-address": "1000::178",
+            "local_address": "1000::178",
             "mode": "sbfd-echo",
             "multihop": "false",
             "peer": "1000::178",
-            "segment-list": "fd00:202:202:fff1:113::",
-            "source-ipv6": "1000::178"
+            "segment_list": "fd00:202:202:fff1:113::",
+            "source_ipv6": "1000::178"
         },
         "d": {
             "enabled": "true",
-            "local-address": "2000::178",
+            "local_address": "2000::178",
             "mode": "sbfd-echo",
             "multihop": "false",
             "peer": "2000::178",
-            "segment-list": "fd00:202:202:fff1:114::",
-            "source-ipv6": "2000::178"
+            "segment_list": "fd00:202:202:fff1:114::",
+            "source_ipv6": "2000::178"
         }
     },
     "BGP_NEIGHBOR": {

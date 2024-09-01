@@ -436,6 +436,14 @@ def test_base_config_srvpn_locator_01():
         st.log ("step 5 test_base_config_srvpn_locator_01_failed")
         st.report_fail("step 5 test_base_config_srvpn_locator_01_failed")
 
+    # step 7 : del srv6-locator
+    vrf_name = 'PUBLIC-TC11'
+    bgp_as = '100'
+    locator_name = 'lsid1'
+
+    st.config(dut1, 'cli -c "config t" -c "router bgp {} vrf {}" -c "no srv6-locator {}"'.format(bgp_as, vrf_name, locator_name))
+    vrf_name = 'Vrf1'
+    st.config(dut1, 'cli -c "config t" -c "router bgp {} vrf {}" -c "no srv6-locator {}"'.format(bgp_as, vrf_name, locator_name))
 
     # step 6 : del locator
 #    locator lsid1 prefix fd00:201:201::/48 block-len 32 node-len 16 func-bits 32 argu-bits 48
@@ -453,12 +461,6 @@ def test_base_config_srvpn_locator_01():
         st.log ("step 6 test_base_config_srvpn_locator_01_failed")
         st.report_fail("step 5 test_base_config_srvpn_locator_01_failed")
 
-    # step 7 : del srv6-locator
-    vrf_name = 'PUBLIC-TC11'
-    bgp_as = '100'
-    locator_name = 'lsid1'
-
-    st.config(dut1, 'cli -c "config t" -c "router bgp {} vrf {}" -c "no srv6-locator {}"'.format(bgp_as, vrf_name, locator_name))
 
     # records = st.show(dut1, "show bgp ipv4 vpn", type='alicli')
     cmd = "cli -c 'no page' -c 'show bgp ipv4 vpn 192.100.1.0/24'"

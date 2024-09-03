@@ -1,0 +1,18 @@
+Value CIPHER_SUITE (\S+)
+Value TX_AN (\d+)
+Value TX_PN (\d+)
+Value TX_ACTIVE (\S+)
+Value RX_AN (\d+)
+Value RX_PN (\d+)
+Value RX_ACTIVE (\S+)
+
+Start
+  ^\s*Cipher Suite:\s*${CIPHER_SUITE}\s*
+  ^\s*TXSC.*\s* -> TxState
+
+TxState
+  ^\s*AN:\s*${TX_AN}\s*Active:\s*${TX_ACTIVE}\s*PN:\s*${TX_PN}\s* -> RxState
+
+RxState
+  ^\s*RXSC.*\s*
+  ^\s*AN:\s*${RX_AN}\s*Active:\s*${RX_ACTIVE}\s*PN:\s*${RX_PN}\s* -> Record

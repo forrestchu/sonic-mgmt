@@ -1,0 +1,14 @@
+Value Filldown RDROUTE (\d+\:\d+\:\d+\.\d+\.\d+\.\d+/\d+)
+Value Filldown SECETCED (.*)
+Value Filldown PEERV6 (^([0-9a-fA-F]{1,4}:){7,7}([0-9a-fA-F]{1,4}|:)|([0-9a-fA-F]{1,4}:){1,6}(:[0-9a-fA-F]{1,4}|:)|([0-9a-fA-F]{1,4}:){1,5}((:[0-9a-fA-F]{1,4}){1,2}|:)|([0-9a-fA-F]{1,4}:){1,4}((:[0-9a-fA-F]{1,4}){1,3}|:)|([0-9a-fA-F]{1,4}:){1,3}((:[0-9a-fA-F]{1,4}){1,4}|:)|([0-9a-fA-F]{1,4}:){1,2}((:[0-9a-fA-F]{1,4}){1,5}|:)|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6}|:)|:((:[0-9a-fA-F]{1,4}){1,7}|:))
+Value Filldown SID (\S+)
+Value Filldown COLOR (\d+)
+Value Filldown POLICY (.*)
+
+Start
+  ^\s*BGP routing table entry for ${RDROUTE}, version \d+\s*$$
+  ^\s*Paths: \(${SECETCED}\)\s*$$
+  ^\s*${PEERV6}\s*$$
+  ^\s*Relay-Nexthop\(tunnel\): srv6-tunnel:${POLICY}\(endpoint\|color\),\s*$$
+  ^\s*Extended Community:.* Color:${COLOR}\s*$$
+  ^\s*Remote SID: ${SID}\s*$$ -> Record

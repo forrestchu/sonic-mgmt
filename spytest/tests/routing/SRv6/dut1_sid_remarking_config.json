@@ -1,0 +1,1605 @@
+{
+    "BGP_NEIGHBOR": {
+        "101.1.0.2|global|Vrf1": {
+            "asn": "9000"
+        },
+        "101.1.0.2|ipv4|Vrf1": {
+            "activate": "true"
+        },
+        "101.2.0.2|global|Vrf1": {
+            "asn": "9000"
+        },
+        "101.2.0.2|ipv4|Vrf1": {
+            "activate": "true"
+        },
+        "101.1.1.2|global|Vrf2": {
+            "asn": "9001"
+        },
+        "101.1.1.2|ipv4|Vrf2": {
+            "activate": "true"
+        },
+        "101.2.1.2|global|Vrf2": {
+            "asn": "9001"
+        },
+        "101.2.1.2|ipv4|Vrf2": {
+            "activate": "true"
+        },
+        "101.1.2.2|global|Vrf3": {
+            "asn": "9002"
+        },
+        "101.1.2.2|ipv4|Vrf3": {
+            "activate": "true"
+        },
+        "101.2.2.2|global|Vrf3": {
+            "asn": "9002"
+        },
+        "101.2.2.2|ipv4|Vrf3": {
+            "activate": "true"
+        },
+        "101.1.3.2|global|Vrf4": {
+            "asn": "9003"
+        },
+        "101.1.3.2|ipv4|Vrf4": {
+            "activate": "true"
+        },
+        "101.2.3.2|global|Vrf4": {
+            "asn": "9003"
+        },
+        "101.2.3.2|ipv4|Vrf4": {
+            "activate": "true"
+        },
+        "101.1.4.2|global|Vrf5": {
+            "asn": "9004"
+        },
+        "101.1.4.2|ipv4|Vrf5": {
+            "activate": "true"
+        },
+        "101.2.4.2|global|Vrf5": {
+            "asn": "9004"
+        },
+        "101.2.4.2|ipv4|Vrf5": {
+            "activate": "true"
+        },
+        "101.1.5.2|global|Vrf6": {
+            "asn": "9005"
+        },
+        "101.1.5.2|ipv4|Vrf6": {
+            "activate": "true"
+        },
+        "101.2.5.2|global|Vrf6": {
+            "asn": "9005"
+        },
+        "101.2.5.2|ipv4|Vrf6": {
+            "activate": "true"
+        },
+        "101.1.6.2|global|Vrf7": {
+            "asn": "9006"
+        },
+        "101.1.6.2|ipv4|Vrf7": {
+            "activate": "true"
+        },
+        "101.2.6.2|global|Vrf7": {
+            "asn": "9006"
+        },
+        "101.2.6.2|ipv4|Vrf7": {
+            "activate": "true"
+        },
+        "101.1.7.2|global|Vrf8": {
+            "asn": "9007"
+        },
+        "101.1.7.2|ipv4|Vrf8": {
+            "activate": "true"
+        },
+        "101.2.7.2|global|Vrf8": {
+            "asn": "9007"
+        },
+        "101.2.7.2|ipv4|Vrf8": {
+            "activate": "true"
+        },
+        "101.1.8.2|global|Vrf9": {
+            "asn": "9008"
+        },
+        "101.1.8.2|ipv4|Vrf9": {
+            "activate": "true"
+        },
+        "101.2.8.2|global|Vrf9": {
+            "asn": "9008"
+        },
+        "101.2.8.2|ipv4|Vrf9": {
+            "activate": "true"
+        },
+        "101.1.9.2|global|Vrf10": {
+            "asn": "9009"
+        },
+        "101.1.9.2|ipv4|Vrf10": {
+            "activate": "true"
+        },
+        "101.2.9.2|global|Vrf10": {
+            "asn": "9009"
+        },
+        "101.2.9.2|ipv4|Vrf10": {
+            "activate": "true"
+        },
+        "101.1.10.2|global|Vrf11": {
+            "asn": "9010"
+        },
+        "101.1.10.2|ipv4|Vrf11": {
+            "activate": "true"
+        },
+        "101.2.10.2|global|Vrf11": {
+            "asn": "9010"
+        },
+        "101.2.10.2|ipv4|Vrf11": {
+            "activate": "true"
+        },
+        "101.1.11.2|global|Vrf12": {
+            "asn": "9011"
+        },
+        "101.1.11.2|ipv4|Vrf12": {
+            "activate": "true"
+        },
+        "101.2.11.2|global|Vrf12": {
+            "asn": "9011"
+        },
+        "101.2.11.2|ipv4|Vrf12": {
+            "activate": "true"
+        },
+        "101.1.12.2|global|Vrf13": {
+            "asn": "9012"
+        },
+        "101.1.12.2|ipv4|Vrf13": {
+            "activate": "true"
+        },
+        "101.2.12.2|global|Vrf13": {
+            "asn": "9012"
+        },
+        "101.2.12.2|ipv4|Vrf13": {
+            "activate": "true"
+        },
+        "101.1.13.2|global|Vrf14": {
+            "asn": "9013"
+        },
+        "101.1.13.2|ipv4|Vrf14": {
+            "activate": "true"
+        },
+        "101.2.13.2|global|Vrf14": {
+            "asn": "9013"
+        },
+        "101.2.13.2|ipv4|Vrf14": {
+            "activate": "true"
+        },
+        "101.1.14.2|global|Vrf15": {
+            "asn": "9014"
+        },
+        "101.1.14.2|ipv4|Vrf15": {
+            "activate": "true"
+        },
+        "101.2.14.2|global|Vrf15": {
+            "asn": "9014"
+        },
+        "101.2.14.2|ipv4|Vrf15": {
+            "activate": "true"
+        },
+        "101.1.15.2|global|Vrf16": {
+            "asn": "9015"
+        },
+        "101.1.15.2|ipv4|Vrf16": {
+            "activate": "true"
+        },
+        "101.2.15.2|global|Vrf16": {
+            "asn": "9015"
+        },
+        "101.2.15.2|ipv4|Vrf16": {
+            "activate": "true"
+        },
+        "2000:0:1:1::2|global|Vrf1": {
+            "asn": "9000"
+        },
+        "2000:0:1:1::2|ipv6|Vrf1": {
+            "activate": "true"
+        },
+        "2000:0:2:1::2|global|Vrf1": {
+            "asn": "9000"
+        },
+        "2000:0:2:1::2|ipv6|Vrf1": {
+            "activate": "true"
+        },
+        "2000:0:1:2::2|global|Vrf2": {
+            "asn": "9001"
+        },
+        "2000:0:1:2::2|ipv6|Vrf2": {
+            "activate": "true"
+        },
+        "2000:0:2:2::2|global|Vrf2": {
+            "asn": "9001"
+        },
+        "2000:0:2:2::2|ipv6|Vrf2": {
+            "activate": "true"
+        },
+        "2000:0:1:3::2|global|Vrf3": {
+            "asn": "9002"
+        },
+        "2000:0:1:3::2|ipv6|Vrf3": {
+            "activate": "true"
+        },
+        "2000:0:2:3::2|global|Vrf3": {
+            "asn": "9002"
+        },
+        "2000:0:2:3::2|ipv6|Vrf3": {
+            "activate": "true"
+        },
+        "2000:0:1:4::2|global|Vrf4": {
+            "asn": "9003"
+        },
+        "2000:0:1:4::2|ipv6|Vrf4": {
+            "activate": "true"
+        },
+        "2000:0:2:4::2|global|Vrf4": {
+            "asn": "9003"
+        },
+        "2000:0:2:4::2|ipv6|Vrf4": {
+            "activate": "true"
+        },
+        "2000:0:1:5::2|global|Vrf5": {
+            "asn": "9004"
+        },
+        "2000:0:1:5::2|ipv6|Vrf5": {
+            "activate": "true"
+        },
+        "2000:0:2:5::2|global|Vrf5": {
+            "asn": "9004"
+        },
+        "2000:0:2:5::2|ipv6|Vrf5": {
+            "activate": "true"
+        },
+        "2000:0:1:6::2|global|Vrf6": {
+            "asn": "9005"
+        },
+        "2000:0:1:6::2|ipv6|Vrf6": {
+            "activate": "true"
+        },
+        "2000:0:2:6::2|global|Vrf6": {
+            "asn": "9005"
+        },
+        "2000:0:2:6::2|ipv6|Vrf6": {
+            "activate": "true"
+        },
+        "2000:0:1:7::2|global|Vrf7": {
+            "asn": "9006"
+        },
+        "2000:0:1:7::2|ipv6|Vrf7": {
+            "activate": "true"
+        },
+        "2000:0:2:7::2|global|Vrf7": {
+            "asn": "9006"
+        },
+        "2000:0:2:7::2|ipv6|Vrf7": {
+            "activate": "true"
+        },
+        "2000:0:1:8::2|global|Vrf8": {
+            "asn": "9007"
+        },
+        "2000:0:1:8::2|ipv6|Vrf8": {
+            "activate": "true"
+        },
+        "2000:0:2:8::2|global|Vrf8": {
+            "asn": "9007"
+        },
+        "2000:0:2:8::2|ipv6|Vrf8": {
+            "activate": "true"
+        },
+        "2000:0:1:9::2|global|Vrf9": {
+            "asn": "9008"
+        },
+        "2000:0:1:9::2|ipv6|Vrf9": {
+            "activate": "true"
+        },
+        "2000:0:2:9::2|global|Vrf9": {
+            "asn": "9008"
+        },
+        "2000:0:2:9::2|ipv6|Vrf9": {
+            "activate": "true"
+        },
+        "2000:0:1:a::2|global|Vrf10": {
+            "asn": "9009"
+        },
+        "2000:0:1:a::2|ipv6|Vrf10": {
+            "activate": "true"
+        },
+        "2000:0:2:a::2|global|Vrf10": {
+            "asn": "9009"
+        },
+        "2000:0:2:a::2|ipv6|Vrf10": {
+            "activate": "true"
+        },
+        "2000:0:1:b::2|global|Vrf11": {
+            "asn": "9010"
+        },
+        "2000:0:1:b::2|ipv6|Vrf11": {
+            "activate": "true"
+        },
+        "2000:0:2:b::2|global|Vrf11": {
+            "asn": "9010"
+        },
+        "2000:0:2:b::2|ipv6|Vrf11": {
+            "activate": "true"
+        },
+        "2000:0:1:c::2|global|Vrf12": {
+            "asn": "9011"
+        },
+        "2000:0:1:c::2|ipv6|Vrf12": {
+            "activate": "true"
+        },
+        "2000:0:2:c::2|global|Vrf12": {
+            "asn": "9011"
+        },
+        "2000:0:2:c::2|ipv6|Vrf12": {
+            "activate": "true"
+        },
+        "2000:0:1:d::2|global|Vrf13": {
+            "asn": "9012"
+        },
+        "2000:0:1:d::2|ipv6|Vrf13": {
+            "activate": "true"
+        },
+        "2000:0:2:d::2|global|Vrf13": {
+            "asn": "9012"
+        },
+        "2000:0:2:d::2|ipv6|Vrf13": {
+            "activate": "true"
+        },
+        "2000:0:1:e::2|global|Vrf14": {
+            "asn": "9013"
+        },
+        "2000:0:1:e::2|ipv6|Vrf14": {
+            "activate": "true"
+        },
+        "2000:0:2:e::2|global|Vrf14": {
+            "asn": "9013"
+        },
+        "2000:0:2:e::2|ipv6|Vrf14": {
+            "activate": "true"
+        },
+        "2000:0:1:f::2|global|Vrf15": {
+            "asn": "9014"
+        },
+        "2000:0:1:f::2|ipv6|Vrf15": {
+            "activate": "true"
+        },
+        "2000:0:2:f::2|global|Vrf15": {
+            "asn": "9014"
+        },
+        "2000:0:2:f::2|ipv6|Vrf15": {
+            "activate": "true"
+        },
+        "2000:0:1:10::2|global|Vrf16": {
+            "asn": "9015"
+        },
+        "2000:0:1:10::2|ipv6|Vrf16": {
+            "activate": "true"
+        },
+        "2000:0:2:10::2|global|Vrf16": {
+            "asn": "9015"
+        },
+        "2000:0:2:10::2|ipv6|Vrf16": {
+            "activate": "true"
+        },
+        "2000::178|global": {
+            "asn": "100",
+            "connect": "10",
+            "extnh": "true",
+            "update_source": "2000::179"
+        },
+        "2000::178|ipv4_vpn": {
+            "activate": "true"
+        },
+        "2033::178|global": {
+            "asn": "100",
+            "connect": "10"
+        },
+        "2033::178|ipv6": {
+            "activate": "true"
+        },
+        "2044::178|global": {
+            "asn": "100",
+            "connect": "10"
+        },
+        "2044::178|ipv6": {
+            "activate": "true"
+        },
+        "3000::178|global": {
+            "asn": "100",
+            "connect": "10",
+            "extnh": "true",
+            "update_source": "3000::179"
+        },
+        "3000::178|ipv4_vpn": {
+            "activate": "true"
+        },
+        "3000::178|ipv6_vpn": {
+            "activate": "true"
+        }
+    },
+    "BGP_NETWORK": {
+        "2000::179/128|ipv6": {},
+        "3000::179/128|ipv6": {},
+        "fd00:201:201:fff1:11::/80|ipv6": {},
+        "fd00:201:201:fff1:1::/80|ipv6": {}
+    },
+    "BGP_PARAMETERS": {
+        "100|global": {
+            "bgp_router_id": "1.1.1.179",
+            "bgp_start_timer": "1",
+            "bgp_timers": "10 30"
+        },
+        "100|global|Vrf1": {
+            "bgp_router_id": "13.3.3.1",
+            "bgp_start_timer": "1",
+            "bgp_timers": "10 30",
+            "srv6_locator": "lsid1"
+        },
+        "100|ipv4|Vrf1": {
+            "export_vpn": "true",
+            "import_vpn": "true",
+            "rd": "2:2",
+            "rt_export": "3:3"
+        },
+        "100|ipv6|Vrf1": {
+            "export_vpn": "true",
+            "import_vpn": "true",
+            "rd": "2:2",
+            "rt_export": "3:3"
+        },
+        "100|global|Vrf2": {
+            "bgp_router_id": "13.3.3.2",
+            "bgp_start_timer": "1",
+            "bgp_timers": "10 30",
+            "srv6_locator": "lsid1"
+        },
+        "100|ipv4|Vrf2": {
+            "export_vpn": "true",
+            "import_vpn": "true",
+            "rd": "2:2",
+            "rt_export": "3:3"
+        },
+        "100|ipv6|Vrf2": {
+            "export_vpn": "true",
+            "import_vpn": "true",
+            "rd": "2:2",
+            "rt_export": "3:3"
+        },
+        "100|global|Vrf3": {
+            "bgp_router_id": "13.3.3.3",
+            "bgp_start_timer": "1",
+            "bgp_timers": "10 30",
+            "srv6_locator": "lsid1"
+        },
+        "100|ipv4|Vrf3": {
+            "export_vpn": "true",
+            "import_vpn": "true",
+            "rd": "2:2",
+            "rt_export": "3:3"
+        },
+        "100|ipv6|Vrf3": {
+            "export_vpn": "true",
+            "import_vpn": "true",
+            "rd": "2:2",
+            "rt_export": "3:3"
+        },
+        "100|global|Vrf4": {
+            "bgp_router_id": "13.3.3.4",
+            "bgp_start_timer": "1",
+            "bgp_timers": "10 30",
+            "srv6_locator": "lsid1"
+        },
+        "100|ipv4|Vrf4": {
+            "export_vpn": "true",
+            "import_vpn": "true",
+            "rd": "2:2",
+            "rt_export": "3:3"
+        },
+        "100|ipv6|Vrf4": {
+            "export_vpn": "true",
+            "import_vpn": "true",
+            "rd": "2:2",
+            "rt_export": "3:3"
+        },
+        "100|global|Vrf5": {
+            "bgp_router_id": "13.3.3.5",
+            "bgp_start_timer": "1",
+            "bgp_timers": "10 30",
+            "srv6_locator": "lsid1"
+        },
+        "100|ipv4|Vrf5": {
+            "export_vpn": "true",
+            "import_vpn": "true",
+            "rd": "2:2",
+            "rt_export": "3:3"
+        },
+        "100|ipv6|Vrf5": {
+            "export_vpn": "true",
+            "import_vpn": "true",
+            "rd": "2:2",
+            "rt_export": "3:3"
+        },
+        "100|global|Vrf6": {
+            "bgp_router_id": "13.3.3.6",
+            "bgp_start_timer": "1",
+            "bgp_timers": "10 30",
+            "srv6_locator": "lsid1"
+        },
+        "100|ipv4|Vrf6": {
+            "export_vpn": "true",
+            "import_vpn": "true",
+            "rd": "2:2",
+            "rt_export": "3:3"
+        },
+        "100|ipv6|Vrf6": {
+            "export_vpn": "true",
+            "import_vpn": "true",
+            "rd": "2:2",
+            "rt_export": "3:3"
+        },
+        "100|global|Vrf7": {
+            "bgp_router_id": "13.3.3.7",
+            "bgp_start_timer": "1",
+            "bgp_timers": "10 30",
+            "srv6_locator": "lsid1"
+        },
+        "100|ipv4|Vrf7": {
+            "export_vpn": "true",
+            "import_vpn": "true",
+            "rd": "2:2",
+            "rt_export": "3:3"
+        },
+        "100|ipv6|Vrf7": {
+            "export_vpn": "true",
+            "import_vpn": "true",
+            "rd": "2:2",
+            "rt_export": "3:3"
+        },
+        "100|global|Vrf8": {
+            "bgp_router_id": "13.3.3.8",
+            "bgp_start_timer": "1",
+            "bgp_timers": "10 30",
+            "srv6_locator": "lsid1"
+        },
+        "100|ipv4|Vrf8": {
+            "export_vpn": "true",
+            "import_vpn": "true",
+            "rd": "2:2",
+            "rt_export": "3:3"
+        },
+        "100|ipv6|Vrf8": {
+            "export_vpn": "true",
+            "import_vpn": "true",
+            "rd": "2:2",
+            "rt_export": "3:3"
+        },
+        "100|global|Vrf9": {
+            "bgp_router_id": "13.3.3.9",
+            "bgp_start_timer": "1",
+            "bgp_timers": "10 30",
+            "srv6_locator": "lsid1"
+        },
+        "100|ipv4|Vrf9": {
+            "export_vpn": "true",
+            "import_vpn": "true",
+            "rd": "2:2",
+            "rt_export": "3:3"
+        },
+        "100|ipv6|Vrf9": {
+            "export_vpn": "true",
+            "import_vpn": "true",
+            "rd": "2:2",
+            "rt_export": "3:3"
+        },
+        "100|global|Vrf10": {
+            "bgp_router_id": "13.3.3.10",
+            "bgp_start_timer": "1",
+            "bgp_timers": "10 30",
+            "srv6_locator": "lsid1"
+        },
+        "100|ipv4|Vrf10": {
+            "export_vpn": "true",
+            "import_vpn": "true",
+            "rd": "2:2",
+            "rt_export": "3:3"
+        },
+        "100|ipv6|Vrf10": {
+            "export_vpn": "true",
+            "import_vpn": "true",
+            "rd": "2:2",
+            "rt_export": "3:3"
+        },
+        "100|global|Vrf11": {
+            "bgp_router_id": "13.3.3.11",
+            "bgp_start_timer": "1",
+            "bgp_timers": "10 30",
+            "srv6_locator": "lsid1"
+        },
+        "100|ipv4|Vrf11": {
+            "export_vpn": "true",
+            "import_vpn": "true",
+            "rd": "2:2",
+            "rt_export": "3:3"
+        },
+        "100|ipv6|Vrf11": {
+            "export_vpn": "true",
+            "import_vpn": "true",
+            "rd": "2:2",
+            "rt_export": "3:3"
+        },
+        "100|global|Vrf12": {
+            "bgp_router_id": "13.3.3.12",
+            "bgp_start_timer": "1",
+            "bgp_timers": "10 30",
+            "srv6_locator": "lsid1"
+        },
+        "100|ipv4|Vrf12": {
+            "export_vpn": "true",
+            "import_vpn": "true",
+            "rd": "2:2",
+            "rt_export": "3:3"
+        },
+        "100|ipv6|Vrf12": {
+            "export_vpn": "true",
+            "import_vpn": "true",
+            "rd": "2:2",
+            "rt_export": "3:3"
+        },
+        "100|global|Vrf13": {
+            "bgp_router_id": "13.3.3.13",
+            "bgp_start_timer": "1",
+            "bgp_timers": "10 30",
+            "srv6_locator": "lsid1"
+        },
+        "100|ipv4|Vrf13": {
+            "export_vpn": "true",
+            "import_vpn": "true",
+            "rd": "2:2",
+            "rt_export": "3:3"
+        },
+        "100|ipv6|Vrf13": {
+            "export_vpn": "true",
+            "import_vpn": "true",
+            "rd": "2:2",
+            "rt_export": "3:3"
+        },
+        "100|global|Vrf14": {
+            "bgp_router_id": "13.3.3.14",
+            "bgp_start_timer": "1",
+            "bgp_timers": "10 30",
+            "srv6_locator": "lsid1"
+        },
+        "100|ipv4|Vrf14": {
+            "export_vpn": "true",
+            "import_vpn": "true",
+            "rd": "2:2",
+            "rt_export": "3:3"
+        },
+        "100|ipv6|Vrf14": {
+            "export_vpn": "true",
+            "import_vpn": "true",
+            "rd": "2:2",
+            "rt_export": "3:3"
+        },
+        "100|global|Vrf15": {
+            "bgp_router_id": "13.3.3.15",
+            "bgp_start_timer": "1",
+            "bgp_timers": "10 30",
+            "srv6_locator": "lsid1"
+        },
+        "100|ipv4|Vrf15": {
+            "export_vpn": "true",
+            "import_vpn": "true",
+            "rd": "2:2",
+            "rt_export": "3:3"
+        },
+        "100|ipv6|Vrf15": {
+            "export_vpn": "true",
+            "import_vpn": "true",
+            "rd": "2:2",
+            "rt_export": "3:3"
+        },
+        "100|global|Vrf16": {
+            "bgp_router_id": "13.3.3.16",
+            "bgp_start_timer": "1",
+            "bgp_timers": "10 30",
+            "srv6_locator": "lsid1"
+        },
+        "100|ipv4|Vrf16": {
+            "export_vpn": "true",
+            "import_vpn": "true",
+            "rd": "2:2",
+            "rt_export": "3:3"
+        },
+        "100|ipv6|Vrf16": {
+            "export_vpn": "true",
+            "import_vpn": "true",
+            "rd": "2:2",
+            "rt_export": "3:3"
+        }
+    },
+    "DEVICE_METADATA": {
+        "localhost": {
+            "asic": "cisco",
+            "hostname": "MC-58",
+            "port_form": "64x100G+32x200G+4x10G",
+            "type": "MetroCoreRouter"
+        }
+    },
+    "INTERFACE": {
+        "Ethernet3|2033::179/64": {
+            "family": "IPv6",
+            "scope": "global"
+        },
+        "Ethernet4|2044::179/64": {
+            "family": "IPv6",
+            "scope": "global"
+        }
+    },
+    "LOOPBACK_INTERFACE": {
+        "Loopback1|2000::179/128": {},
+        "Loopback2|3000::179/128": {}
+    },
+    "MGMT_INTERFACE": {
+        "eth0|21.135.163.58/26": {
+            "gwaddr": "21.135.163.62"
+        }
+    },
+    "PORT": {
+        "Ethernet1": {
+            "admin_status": "up",
+            "alias": "Ethernet1"
+        },
+        "Ethernet10": {
+            "admin_status": "up",
+            "alias": "Ethernet10"
+        },
+        "Ethernet100": {
+            "admin_status": "up",
+            "alias": "Ethernet100"
+        },
+        "Ethernet101": {
+            "admin_status": "up",
+            "alias": "Ethernet101"
+        },
+        "Ethernet102": {
+            "admin_status": "up",
+            "alias": "Ethernet102"
+        },
+        "Ethernet103": {
+            "admin_status": "up",
+            "alias": "Ethernet103"
+        },
+        "Ethernet104": {
+            "admin_status": "up",
+            "alias": "Ethernet104"
+        },
+        "Ethernet105": {
+            "admin_status": "up",
+            "alias": "Ethernet105"
+        },
+        "Ethernet106": {
+            "admin_status": "up",
+            "alias": "Ethernet106"
+        },
+        "Ethernet107": {
+            "admin_status": "up",
+            "alias": "Ethernet107"
+        },
+        "Ethernet108": {
+            "admin_status": "up",
+            "alias": "Ethernet108"
+        },
+        "Ethernet109": {
+            "admin_status": "up",
+            "alias": "Ethernet109"
+        },
+        "Ethernet11": {
+            "admin_status": "up",
+            "alias": "Ethernet11"
+        },
+        "Ethernet110": {
+            "admin_status": "up",
+            "alias": "Ethernet110"
+        },
+        "Ethernet111": {
+            "admin_status": "up",
+            "alias": "Ethernet111"
+        },
+        "Ethernet112": {
+            "admin_status": "up",
+            "alias": "Ethernet112"
+        },
+        "Ethernet12": {
+            "admin_status": "up",
+            "alias": "Ethernet12"
+        },
+        "Ethernet13": {
+            "admin_status": "up",
+            "alias": "Ethernet13"
+        },
+        "Ethernet14": {
+            "admin_status": "up",
+            "alias": "Ethernet14"
+        },
+        "Ethernet15": {
+            "admin_status": "up",
+            "alias": "Ethernet15"
+        },
+        "Ethernet16": {
+            "admin_status": "up",
+            "alias": "Ethernet16"
+        },
+        "Ethernet17": {
+            "admin_status": "up",
+            "alias": "Ethernet17"
+        },
+        "Ethernet18": {
+            "admin_status": "up",
+            "alias": "Ethernet18"
+        },
+        "Ethernet19": {
+            "admin_status": "up",
+            "alias": "Ethernet19"
+        },
+        "Ethernet2": {
+            "admin_status": "up",
+            "alias": "Ethernet2"
+        },
+        "Ethernet20": {
+            "admin_status": "up",
+            "alias": "Ethernet20"
+        },
+        "Ethernet21": {
+            "admin_status": "up",
+            "alias": "Ethernet21"
+        },
+        "Ethernet22": {
+            "admin_status": "up",
+            "alias": "Ethernet22"
+        },
+        "Ethernet23": {
+            "admin_status": "up",
+            "alias": "Ethernet23"
+        },
+        "Ethernet24": {
+            "admin_status": "up",
+            "alias": "Ethernet24"
+        },
+        "Ethernet25": {
+            "admin_status": "up",
+            "alias": "Ethernet25"
+        },
+        "Ethernet26": {
+            "admin_status": "up",
+            "alias": "Ethernet26"
+        },
+        "Ethernet27": {
+            "admin_status": "up",
+            "alias": "Ethernet27"
+        },
+        "Ethernet28": {
+            "admin_status": "up",
+            "alias": "Ethernet28"
+        },
+        "Ethernet29": {
+            "admin_status": "up",
+            "alias": "Ethernet29"
+        },
+        "Ethernet3": {
+            "admin_status": "up",
+            "alias": "Ethernet3"
+        },
+        "Ethernet30": {
+            "admin_status": "up",
+            "alias": "Ethernet30"
+        },
+        "Ethernet31": {
+            "admin_status": "up",
+            "alias": "Ethernet31"
+        },
+        "Ethernet32": {
+            "admin_status": "up",
+            "alias": "Ethernet32"
+        },
+        "Ethernet33": {
+            "admin_status": "up",
+            "alias": "Ethernet33"
+        },
+        "Ethernet34": {
+            "admin_status": "up",
+            "alias": "Ethernet34"
+        },
+        "Ethernet35": {
+            "admin_status": "up",
+            "alias": "Ethernet35"
+        },
+        "Ethernet36": {
+            "admin_status": "up",
+            "alias": "Ethernet36"
+        },
+        "Ethernet37": {
+            "admin_status": "up",
+            "alias": "Ethernet37"
+        },
+        "Ethernet38": {
+            "admin_status": "up",
+            "alias": "Ethernet38"
+        },
+        "Ethernet39": {
+            "admin_status": "up",
+            "alias": "Ethernet39"
+        },
+        "Ethernet4": {
+            "admin_status": "up",
+            "alias": "Ethernet4"
+        },
+        "Ethernet40": {
+            "admin_status": "up",
+            "alias": "Ethernet40"
+        },
+        "Ethernet41": {
+            "admin_status": "up",
+            "alias": "Ethernet41"
+        },
+        "Ethernet42": {
+            "admin_status": "up",
+            "alias": "Ethernet42"
+        },
+        "Ethernet43": {
+            "admin_status": "up",
+            "alias": "Ethernet43"
+        },
+        "Ethernet44": {
+            "admin_status": "up",
+            "alias": "Ethernet44"
+        },
+        "Ethernet45": {
+            "admin_status": "up",
+            "alias": "Ethernet45"
+        },
+        "Ethernet46": {
+            "admin_status": "up",
+            "alias": "Ethernet46"
+        },
+        "Ethernet47": {
+            "admin_status": "up",
+            "alias": "Ethernet47"
+        },
+        "Ethernet48": {
+            "admin_status": "up",
+            "alias": "Ethernet48"
+        },
+        "Ethernet49": {
+            "admin_status": "up",
+            "alias": "Ethernet49"
+        },
+        "Ethernet5": {
+            "admin_status": "up",
+            "alias": "Ethernet5"
+        },
+        "Ethernet50": {
+            "admin_status": "up",
+            "alias": "Ethernet50"
+        },
+        "Ethernet51": {
+            "admin_status": "up",
+            "alias": "Ethernet51"
+        },
+        "Ethernet52": {
+            "admin_status": "up",
+            "alias": "Ethernet52"
+        },
+        "Ethernet53": {
+            "admin_status": "up",
+            "alias": "Ethernet53"
+        },
+        "Ethernet54": {
+            "admin_status": "up",
+            "alias": "Ethernet54"
+        },
+        "Ethernet55": {
+            "admin_status": "up",
+            "alias": "Ethernet55"
+        },
+        "Ethernet56": {
+            "admin_status": "up",
+            "alias": "Ethernet56"
+        },
+        "Ethernet57": {
+            "admin_status": "up",
+            "alias": "Ethernet57"
+        },
+        "Ethernet58": {
+            "admin_status": "up",
+            "alias": "Ethernet58"
+        },
+        "Ethernet59": {
+            "admin_status": "up",
+            "alias": "Ethernet59"
+        },
+        "Ethernet6": {
+            "admin_status": "up",
+            "alias": "Ethernet6"
+        },
+        "Ethernet60": {
+            "admin_status": "up",
+            "alias": "Ethernet60"
+        },
+        "Ethernet61": {
+            "admin_status": "up",
+            "alias": "Ethernet61"
+        },
+        "Ethernet62": {
+            "admin_status": "up",
+            "alias": "Ethernet62"
+        },
+        "Ethernet63": {
+            "admin_status": "up",
+            "alias": "Ethernet63"
+        },
+        "Ethernet64": {
+            "admin_status": "up",
+            "alias": "Ethernet64"
+        },
+        "Ethernet65_1": {
+            "admin_status": "up",
+            "alias": "Ethernet65_1"
+        },
+        "Ethernet65_2": {
+            "admin_status": "up",
+            "alias": "Ethernet65_2"
+        },
+        "Ethernet65_3": {
+            "admin_status": "up",
+            "alias": "Ethernet65_3"
+        },
+        "Ethernet65_4": {
+            "admin_status": "up",
+            "alias": "Ethernet65_4"
+        },
+        "Ethernet7": {
+            "admin_status": "up",
+            "alias": "Ethernet7"
+        },
+        "Ethernet8": {
+            "admin_status": "up",
+            "alias": "Ethernet8"
+        },
+        "Ethernet81": {
+            "admin_status": "up",
+            "alias": "Ethernet81"
+        },
+        "Ethernet82": {
+            "admin_status": "up",
+            "alias": "Ethernet82"
+        },
+        "Ethernet83": {
+            "admin_status": "up",
+            "alias": "Ethernet83"
+        },
+        "Ethernet84": {
+            "admin_status": "up",
+            "alias": "Ethernet84"
+        },
+        "Ethernet85": {
+            "admin_status": "up",
+            "alias": "Ethernet85"
+        },
+        "Ethernet86": {
+            "admin_status": "up",
+            "alias": "Ethernet86"
+        },
+        "Ethernet87": {
+            "admin_status": "up",
+            "alias": "Ethernet87"
+        },
+        "Ethernet88": {
+            "admin_status": "up",
+            "alias": "Ethernet88"
+        },
+        "Ethernet89": {
+            "admin_status": "up",
+            "alias": "Ethernet89"
+        },
+        "Ethernet9": {
+            "admin_status": "up",
+            "alias": "Ethernet9"
+        },
+        "Ethernet90": {
+            "admin_status": "up",
+            "alias": "Ethernet90"
+        },
+        "Ethernet91": {
+            "admin_status": "up",
+            "alias": "Ethernet91"
+        },
+        "Ethernet92": {
+            "admin_status": "up",
+            "alias": "Ethernet92"
+        },
+        "Ethernet93": {
+            "admin_status": "up",
+            "alias": "Ethernet93"
+        },
+        "Ethernet94": {
+            "admin_status": "up",
+            "alias": "Ethernet94"
+        },
+        "Ethernet95": {
+            "admin_status": "up",
+            "alias": "Ethernet95"
+        },
+        "Ethernet96": {
+            "admin_status": "up",
+            "alias": "Ethernet96"
+        },
+        "Ethernet98": {
+            "admin_status": "up",
+            "alias": "Ethernet98"
+        },
+        "Ethernet99": {
+            "admin_status": "up",
+            "alias": "Ethernet99"
+        }
+    },
+    "SRV6_LOCATOR": {
+        "lsid1": {
+            "argu_len": "48",
+            "block_len": "32",
+            "func_len": "32",
+            "node_len": "16",
+            "opcode": [
+                "::fff0:f0:0:0:0|end-dt46|Vrf1",
+                "::fff0:f1:0:0:0|end-dt46|Vrf2",
+                "::fff0:f2:0:0:0|end-dt46|Vrf3",
+                "::fff0:f3:0:0:0|end-dt46|Vrf4",
+                "::fff0:f4:0:0:0|end-dt46|Vrf5",
+                "::fff0:f5:0:0:0|end-dt46|Vrf6",
+                "::fff0:f6:0:0:0|end-dt46|Vrf7",
+                "::fff0:f7:0:0:0|end-dt46|Vrf8",
+                "::fff0:f8:0:0:0|end-dt46|Vrf9",
+                "::fff0:f9:0:0:0|end-dt46|Vrf10",
+                "::fff0:fa:0:0:0|end-dt46|Vrf11",
+                "::fff0:fb:0:0:0|end-dt46|Vrf12",
+                "::fff0:fc:0:0:0|end-dt46|Vrf13",
+                "::fff0:fd:0:0:0|end-dt46|Vrf14",
+                "::fff0:fe:0:0:0|end-dt46|Vrf15",
+                "::fff0:ff:0:0:0|end-dt46|Vrf16"
+            ],
+            "prefix": "fd00:201:201::/48"
+        }
+    },
+    "SUB_INTERFACE": {
+        "Eth33.1|101.1.0.1/24": {
+            "family": "IPv4",
+            "scope": "global"
+        },
+        "Eth34.1|101.2.0.1/24": {
+            "family": "IPv4",
+            "scope": "global"
+        },
+        "Eth33.2|101.1.1.1/24": {
+            "family": "IPv4",
+            "scope": "global"
+        },
+        "Eth34.2|101.2.1.1/24": {
+            "family": "IPv4",
+            "scope": "global"
+        },
+        "Eth33.3|101.1.2.1/24": {
+            "family": "IPv4",
+            "scope": "global"
+        },
+        "Eth34.3|101.2.2.1/24": {
+            "family": "IPv4",
+            "scope": "global"
+        },
+        "Eth33.4|101.1.3.1/24": {
+            "family": "IPv4",
+            "scope": "global"
+        },
+        "Eth34.4|101.2.3.1/24": {
+            "family": "IPv4",
+            "scope": "global"
+        },
+        "Eth33.5|101.1.4.1/24": {
+            "family": "IPv4",
+            "scope": "global"
+        },
+        "Eth34.5|101.2.4.1/24": {
+            "family": "IPv4",
+            "scope": "global"
+        },
+        "Eth33.6|101.1.5.1/24": {
+            "family": "IPv4",
+            "scope": "global"
+        },
+        "Eth34.6|101.2.5.1/24": {
+            "family": "IPv4",
+            "scope": "global"
+        },
+        "Eth33.7|101.1.6.1/24": {
+            "family": "IPv4",
+            "scope": "global"
+        },
+        "Eth34.7|101.2.6.1/24": {
+            "family": "IPv4",
+            "scope": "global"
+        },
+        "Eth33.8|101.1.7.1/24": {
+            "family": "IPv4",
+            "scope": "global"
+        },
+        "Eth34.8|101.2.7.1/24": {
+            "family": "IPv4",
+            "scope": "global"
+        },
+        "Eth33.9|101.1.8.1/24": {
+            "family": "IPv4",
+            "scope": "global"
+        },
+        "Eth34.9|101.2.8.1/24": {
+            "family": "IPv4",
+            "scope": "global"
+        },
+        "Eth33.10|101.1.9.1/24": {
+            "family": "IPv4",
+            "scope": "global"
+        },
+        "Eth34.10|101.2.9.1/24": {
+            "family": "IPv4",
+            "scope": "global"
+        },
+        "Eth33.11|101.1.10.1/24": {
+            "family": "IPv4",
+            "scope": "global"
+        },
+        "Eth34.11|101.2.10.1/24": {
+            "family": "IPv4",
+            "scope": "global"
+        },
+        "Eth33.12|101.1.11.1/24": {
+            "family": "IPv4",
+            "scope": "global"
+        },
+        "Eth34.12|101.2.11.1/24": {
+            "family": "IPv4",
+            "scope": "global"
+        },
+        "Eth33.13|101.1.12.1/24": {
+            "family": "IPv4",
+            "scope": "global"
+        },
+        "Eth34.13|101.2.12.1/24": {
+            "family": "IPv4",
+            "scope": "global"
+        },
+        "Eth33.14|101.1.13.1/24": {
+            "family": "IPv4",
+            "scope": "global"
+        },
+        "Eth34.14|101.2.13.1/24": {
+            "family": "IPv4",
+            "scope": "global"
+        },
+        "Eth33.15|101.1.14.1/24": {
+            "family": "IPv4",
+            "scope": "global"
+        },
+        "Eth34.15|101.2.14.1/24": {
+            "family": "IPv4",
+            "scope": "global"
+        },
+        "Eth33.16|101.1.15.1/24": {
+            "family": "IPv4",
+            "scope": "global"
+        },
+        "Eth34.16|101.2.15.1/24": {
+            "family": "IPv4",
+            "scope": "global"
+        },
+        "Eth33.1|2000:0:1:1::1/64": {
+            "family": "IPv6",
+            "scope": "global"
+        },
+        "Eth34.1|2000:0:2:1::1/64": {
+            "family": "IPv6",
+            "scope": "global"
+        },
+        "Eth33.2|2000:0:1:2::1/64": {
+            "family": "IPv6",
+            "scope": "global"
+        },
+        "Eth34.2|2000:0:2:2::1/64": {
+            "family": "IPv6",
+            "scope": "global"
+        },
+        "Eth33.3|2000:0:1:3::1/64": {
+            "family": "IPv6",
+            "scope": "global"
+        },
+        "Eth34.3|2000:0:2:3::1/64": {
+            "family": "IPv6",
+            "scope": "global"
+        },
+        "Eth33.4|2000:0:1:4::1/64": {
+            "family": "IPv6",
+            "scope": "global"
+        },
+        "Eth34.4|2000:0:2:4::1/64": {
+            "family": "IPv6",
+            "scope": "global"
+        },
+        "Eth33.5|2000:0:1:5::1/64": {
+            "family": "IPv6",
+            "scope": "global"
+        },
+        "Eth34.5|2000:0:2:5::1/64": {
+            "family": "IPv6",
+            "scope": "global"
+        },
+        "Eth33.6|2000:0:1:6::1/64": {
+            "family": "IPv6",
+            "scope": "global"
+        },
+        "Eth34.6|2000:0:2:6::1/64": {
+            "family": "IPv6",
+            "scope": "global"
+        },
+        "Eth33.7|2000:0:1:7::1/64": {
+            "family": "IPv6",
+            "scope": "global"
+        },
+        "Eth34.7|2000:0:2:7::1/64": {
+            "family": "IPv6",
+            "scope": "global"
+        },
+        "Eth33.8|2000:0:1:8::1/64": {
+            "family": "IPv6",
+            "scope": "global"
+        },
+        "Eth34.8|2000:0:2:8::1/64": {
+            "family": "IPv6",
+            "scope": "global"
+        },
+        "Eth33.9|2000:0:1:9::1/64": {
+            "family": "IPv6",
+            "scope": "global"
+        },
+        "Eth34.9|2000:0:2:9::1/64": {
+            "family": "IPv6",
+            "scope": "global"
+        },
+        "Eth33.10|2000:0:1:a::1/64": {
+            "family": "IPv6",
+            "scope": "global"
+        },
+        "Eth34.10|2000:0:2:a::1/64": {
+            "family": "IPv6",
+            "scope": "global"
+        },
+        "Eth33.11|2000:0:1:b::1/64": {
+            "family": "IPv6",
+            "scope": "global"
+        },
+        "Eth34.11|2000:0:2:b::1/64": {
+            "family": "IPv6",
+            "scope": "global"
+        },
+        "Eth33.12|2000:0:1:c::1/64": {
+            "family": "IPv6",
+            "scope": "global"
+        },
+        "Eth34.12|2000:0:2:c::1/64": {
+            "family": "IPv6",
+            "scope": "global"
+        },
+        "Eth33.13|2000:0:1:d::1/64": {
+            "family": "IPv6",
+            "scope": "global"
+        },
+        "Eth34.13|2000:0:2:d::1/64": {
+            "family": "IPv6",
+            "scope": "global"
+        },
+        "Eth33.14|2000:0:1:e::1/64": {
+            "family": "IPv6",
+            "scope": "global"
+        },
+        "Eth34.14|2000:0:2:e::1/64": {
+            "family": "IPv6",
+            "scope": "global"
+        },
+        "Eth33.15|2000:0:1:f::1/64": {
+            "family": "IPv6",
+            "scope": "global"
+        },
+        "Eth34.15|2000:0:2:f::1/64": {
+            "family": "IPv6",
+            "scope": "global"
+        },
+        "Eth33.16|2000:0:1:10::1/64": {
+            "family": "IPv6",
+            "scope": "global"
+        },
+        "Eth34.16|2000:0:2:10::1/64": {
+            "family": "IPv6",
+            "scope": "global"
+        }
+    },
+    "SUB_PORT": {
+        "Eth33.1": {
+            "admin_status": "up",
+            "vrf_name": "Vrf1"
+        },
+        "Eth34.1": {
+            "admin_status": "up",
+            "vrf_name": "Vrf1"
+        },
+        "Eth33.2": {
+            "admin_status": "up",
+            "vrf_name": "Vrf2"
+        },
+        "Eth34.2": {
+            "admin_status": "up",
+            "vrf_name": "Vrf2"
+        },
+        "Eth33.3": {
+            "admin_status": "up",
+            "vrf_name": "Vrf3"
+        },
+        "Eth34.3": {
+            "admin_status": "up",
+            "vrf_name": "Vrf3"
+        },
+        "Eth33.4": {
+            "admin_status": "up",
+            "vrf_name": "Vrf4"
+        },
+        "Eth34.4": {
+            "admin_status": "up",
+            "vrf_name": "Vrf4"
+        },
+        "Eth33.5": {
+            "admin_status": "up",
+            "vrf_name": "Vrf5"
+        },
+        "Eth34.5": {
+            "admin_status": "up",
+            "vrf_name": "Vrf5"
+        },
+        "Eth33.6": {
+            "admin_status": "up",
+            "vrf_name": "Vrf6"
+        },
+        "Eth34.6": {
+            "admin_status": "up",
+            "vrf_name": "Vrf6"
+        },
+        "Eth33.7": {
+            "admin_status": "up",
+            "vrf_name": "Vrf7"
+        },
+        "Eth34.7": {
+            "admin_status": "up",
+            "vrf_name": "Vrf7"
+        },
+        "Eth33.8": {
+            "admin_status": "up",
+            "vrf_name": "Vrf8"
+        },
+        "Eth34.8": {
+            "admin_status": "up",
+            "vrf_name": "Vrf8"
+        },
+        "Eth33.9": {
+            "admin_status": "up",
+            "vrf_name": "Vrf9"
+        },
+        "Eth34.9": {
+            "admin_status": "up",
+            "vrf_name": "Vrf9"
+        },
+        "Eth33.10": {
+            "admin_status": "up",
+            "vrf_name": "Vrf10"
+        },
+        "Eth34.10": {
+            "admin_status": "up",
+            "vrf_name": "Vrf10"
+        },
+        "Eth33.11": {
+            "admin_status": "up",
+            "vrf_name": "Vrf11"
+        },
+        "Eth34.11": {
+            "admin_status": "up",
+            "vrf_name": "Vrf11"
+        },
+        "Eth33.12": {
+            "admin_status": "up",
+            "vrf_name": "Vrf12"
+        },
+        "Eth34.12": {
+            "admin_status": "up",
+            "vrf_name": "Vrf12"
+        },
+        "Eth33.13": {
+            "admin_status": "up",
+            "vrf_name": "Vrf13"
+        },
+        "Eth34.13": {
+            "admin_status": "up",
+            "vrf_name": "Vrf13"
+        },
+        "Eth33.14": {
+            "admin_status": "up",
+            "vrf_name": "Vrf14"
+        },
+        "Eth34.14": {
+            "admin_status": "up",
+            "vrf_name": "Vrf14"
+        },
+        "Eth33.15": {
+            "admin_status": "up",
+            "vrf_name": "Vrf15"
+        },
+        "Eth34.15": {
+            "admin_status": "up",
+            "vrf_name": "Vrf15"
+        },
+        "Eth33.16": {
+            "admin_status": "up",
+            "vrf_name": "Vrf16"
+        },
+        "Eth34.16": {
+            "admin_status": "up",
+            "vrf_name": "Vrf16"
+        }
+    },
+    "SWITCH": {
+        "FDB": {
+            "fdb_aging_time": "1800",
+            "fdb_broadcast_miss_packet_action": "forward",
+            "fdb_multicast_miss_packet_action": "forward",
+            "fdb_unicast_miss_packet_action": "forward"
+        }
+    },
+    "TELEMETRY": {
+        "gnmi": {
+            "port": "8080"
+        }
+    },
+    "USER_METADATA": {
+        "admin": {
+            "groups": "sudo,docker",
+            "role": "ADMIN",
+            "secret": "$1$WFtM/P.X$vXxpA7rUt1h7TL0WfcUuF/",
+            "shell": "/bin/bash"
+        }
+    },
+    "VRF": {
+        "Vrf1": {},
+        "Vrf2": {},
+        "Vrf3": {},
+        "Vrf4": {},
+        "Vrf5": {},
+        "Vrf6": {},
+        "Vrf7": {},
+        "Vrf8": {},
+        "Vrf9": {},
+        "Vrf10": {},
+        "Vrf11": {},
+        "Vrf12": {},
+        "Vrf13": {},
+        "Vrf14": {},
+        "Vrf15": {},
+        "Vrf16": {}
+    },
+    "VRF_ALIAS": {
+    }
+}

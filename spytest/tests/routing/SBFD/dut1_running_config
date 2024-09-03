@@ -1,0 +1,109 @@
+MC-58# show running-config quagga 
+ Building configuration...
+
+Current configuration:
+!
+frr version 8.2.2
+frr defaults traditional
+hostname MC-58
+log syslog informational
+log facility local4
+allow-external-route-update
+bgp route-map delay-timer 20
+log syslog errors
+service integrated-vtysh-config
+!
+password zebra
+enable password zebra
+!
+ip route 20.20.20.58/32 lo
+ip route 20.20.20.59/32 192.168.1.59
+ip route 20.20.20.59/32 192.168.2.59
+ip route 192.168.1.58/32 lo
+ip route 192.168.2.58/32 lo
+ipv6 route 2000::58/128 lo
+ipv6 route 2000::59/128 fd00:abcd::59
+ipv6 route 2000::59/128 fd00:ccdd::59                          
+ipv6 route fd00:abcd::58/128 lo
+ipv6 route fd00:ccdd::58/128 lo
+!
+segment-routing
+ srv6
+  locators
+   locator loc_endx prefix fd00:101:2022::/48 block-len 32 node-len 16 func-bits 32 argu-bits 48
+    opcode ::fff1:1:0:0:0 end-x interface Ethernet1 nexthop 192.168.1.59
+    opcode ::fff1:2:0:0:0 end-x interface Ethernet2 nexthop fd00:abcd::59
+    opcode ::fff1:3:0:0:0 end-x interface Ethernet3 nexthop 192.168.2.59
+    opcode ::fff1:4:0:0:0 end-x interface Ethernet4 nexthop fd00:ccdd::59
+   exit
+   !
+  exit
+  !
+ !
+ traffic-eng
+  segment-list sl1_ipv4
+  exit
+  segment-list sl2_ipv6
+  exit
+  segment-list sl3_ipv4                                        
+  exit
+  segment-list sl4_ipv6
+  exit
+  segment-list sl5_ipv4
+   index 20 ipv6-address fd00:202:2022:fff1:1::
+  exit
+  segment-list sl6_ipv6
+   index 20 ipv6-address fd00:202:2022:fff1:2::
+  exit
+  segment-list sl7_ipv4
+   index 20 ipv6-address fd00:202:2022:fff1:3::
+  exit
+  segment-list sl8_ipv6
+   index 20 ipv6-address fd00:202:2022:fff1:4::
+  exit
+  segment-list sl9_sbfd
+   index 30 ipv6-address fd00:303:2022:fff1:eee::         
+  exit
+  segment-list sla_sbfd
+   index 40 ipv6-address fd00:303:2022:fff1:eee::
+  exit
+  policy color 1 endpoint 2000::59
+   candidate-path preference 100 name cp1_ipv4 explicit segment-list sl1_ipv4 weight 1
+  exit
+  policy color 2 endpoint 2000::59
+   candidate-path preference 100 name cp1_ipv6 explicit segment-list sl2_ipv6 weight 1
+  exit
+  policy color 3 endpoint 2000::59
+   candidate-path preference 100 name cp1_ipv4 explicit segment-list sl1_ipv4 weight 1
+   candidate-path preference 100 name cp2_ipv4 explicit segment-list sl3_ipv4 weight 1
+  exit
+  policy color 4 endpoint 2000::59
+   candidate-path preference 100 name cp1_ipv6 explicit segment-list sl2_ipv6 weight 1
+   candidate-path preference 100 name cp2_ipv6 explicit segment-list sl4_ipv6 weight 1
+  exit
+  policy color 5 endpoint 2000::59
+   candidate-path preference 100 name cp1_ipv4 explicit segment-list sl1_ipv4 weight 1
+   candidate-path preference 100 name cp2_ipv6 explicit segment-list sl2_ipv6 weight 1
+  exit
+  policy color 6 endpoint 2000::59                             
+   candidate-path preference 200 name cp1_ipv4 explicit segment-list sl1_ipv4 weight 1
+   candidate-path preference 100 name cp2_ipv4 explicit segment-list sl3_ipv4 weight 1
+  exit
+  policy color 7 endpoint 2000::59
+   candidate-path preference 200 name cp1_ipv6 explicit segment-list sl2_ipv6 weight 1
+   candidate-path preference 100 name cp2_ipv6 explicit segment-list sl4_ipv6 weight 1
+  exit
+  policy color 8 endpoint 2000::59
+   candidate-path preference 100 name cp1_ipv4_two_endx explicit segment-list sl5_ipv4 weight 1
+   candidate-path preference 200 name cp2_ipv4_two_endx explicit segment-list sl7_ipv4 weight 1
+   candidate-path preference 200 name cp3_ipv4_signle_endx explicit segment-list sl1_ipv4 weight 1
+  exit
+  policy color 9 endpoint 2000::59
+   candidate-path preference 100 name cp1_sbfd explicit segment-list sl9_sbfd weight 1
+   candidate-path preference 100 name cp2_sbfd explicit segment-list sla_sbfd weight 1
+  exit
+ exit
+ srv6
+exit
+!
+end

@@ -1,0 +1,21 @@
+Value endpoint ([.:\dabcdefABCDEF]+)
+Value color (\d+)
+Value name (\S*)
+Value bsid (\S*)
+Value policy_status (\S+)
+Value preference (\d+)
+Value active_members (\d+)
+Value preference_status (\S+)
+Value cpath_name ([\S\d\_]+)
+Value cpath_type (\S+)
+Value sidlist ([\S\d\_]+)
+Value weight (\d+)
+Value bfd ([\S\s]+)
+Value cpath_status (\S+)
+Value select ([\*]*)
+
+Start
+  ^\s*$$
+  ^\s*Endpoint:\s+${endpoint}\s+Color:\s+${color}\s+Name:\s+${name}\s+BSID:\s+${bsid}\s+Status:\s+${policy_status}\s*$$
+  ^\s*${select}\s+Preference:\s+${preference}\s+ActiveMembers:\s+${active_members}\s+Status:\s+${preference_status}\s*$$
+  ^\s*Candidate\sName:\s+${cpath_name}\s+Type:\s+${cpath_type}\s+Segment-List:\s+${sidlist}\s+Weight:\s+${weight}\s+BindingBFD:\s+${bfd}\s+Status:\s+${cpath_status}\s*$$ -> Record

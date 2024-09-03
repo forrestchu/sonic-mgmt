@@ -1,0 +1,14 @@
+Value Name (\S+)
+Value MaxLatency (\d+)
+Value MinLatency (\d+)
+Value AvgLatency (\d+)
+Value RxPkts (\d+)
+Value RxBytes (\d+)
+Value TxPkts (\d+)
+Value TxBytes (\d+)
+Value DropPkts (\d+)
+
+Start
+  ^Name\s+MAX_LATENCY\(ns\)\s+MIN_LATENCY\(ns\)\s+AVG_LATENCY\(ns\)\s+RX_PKTS\s+RX_BYTES\s+TX_PKTS\s+TX_BYTES\s+DROP_PKTS
+  ^(-+\s*)*$$
+  ^${Name}\s+${MaxLatency}\s+${MinLatency}\s+${AvgLatency}\s+${RxPkts}\s+${RxBytes}\s+${TxPkts}\s+${TxBytes}\s+${DropPkts}$$ -> Record

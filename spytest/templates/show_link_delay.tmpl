@@ -1,0 +1,13 @@
+Value upOrDown (\S+)
+Value time (\d+)
+Value interface (\S+)
+Value interfaceList (\S+)
+
+
+Start
+  ^\s*Delay\s+${upOrDown}\s+time:\s*${time}\s*millisecond$$ 
+  ^\s*Interfaces:\s*${interface}\s*$$ -> Record
+  ^\s*Interface\s+list:\s*$$ 
+  ^\s*${interfaceList}\s*$$ 
+
+EOF

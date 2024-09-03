@@ -1,0 +1,26 @@
+version: 2.0
+
+services: {default: !include sonic_services.yaml}
+
+params: !include sonic_params.yaml
+builds: !include sonic_builds.yaml
+speeds: !include sonic_speeds.yaml
+errors: !include sonic_errors.yaml
+instrument: !include sonic_instrument.yaml
+
+configs:
+    default: !include sonic_configs.yaml
+    empty: {current: [], restore: []}
+
+devices:
+    MC-01:
+        device_type: DevSonic
+        access: {protocol: ssh, ip: 192.0.0.182, port: 22}
+        rps: {model: None, ip: 2.3.4.5, outlet: 10, username: admin, password: admin}
+        credentials: {username: root, password: admin, altpassword: admin}
+        properties: {config: default, build: default, services: default, params: def_dut, speed: default}
+
+
+topology:
+    MC-01:
+        interfaces:

@@ -1,0 +1,17 @@
+Value Filldown devIsolate (\S+)
+Value Filldown bmcIsolate (\S+)
+Value Filldown forbiddenNeighors (\S*)
+Value vrf (\S+)
+Value addressFamily (\S+)
+Value neighbor (\S+)
+Value status (\S+)
+Value outRouteMap (\S+)
+
+
+Start
+  ^\s*Device Status\:${devIsolate}$$
+  ^\s*Isolate from BMC\:${bmcIsolate}$$
+  ^(-+\s*)*$$
+  ^\s*${vrf}\s+${addressFamily}\s+${neighbor}\s+${status}\s+${outRouteMap}\s*$$ -> Record
+
+EOF

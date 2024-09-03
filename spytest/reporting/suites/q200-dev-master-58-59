@@ -1,0 +1,27 @@
++file:routing/VRF/test_vrf.py
++file:qos/acl/test_acls_l3_forwarding.py
++file:routing/MC_SCALE/test_mc_scale.py
++file:routing/test_ip.py
++file:routing/SRv6/test_esr_srvpn.py
++file:routing/SRv6/test_esr_srte_policy.py
++file:routing/SBFD/test_esr_sbfd.py
++file:routing/SBFD/test_esr_sbfd_bfdname.py
+
+-test:test_ft_verify_interfaces_order
+-test:test_srvpn_performance_1M
+# test cases for traffic verification with Ruijie
+-test:test_subintf_501_502_traffic
+# -test:test_srte_policy_2k_vrf_1k_policy_color_only_02
+# -test:test_srte_policy_2k_vrf_2k_policy_color_only_04
+# -test:test_srte_policy_2k_vrf_4k_policy_05
+# -test:test_srte_policy_2k_vrf_4k_policy_falp_06
+
+#+args:--skip-init-config
+#+args:--skip-load-config base
++args:--force-keep-minimize-config
++args:--load-config-method force-reboot
++args:--get-tech-support none
++args:--fetch-core-files none
+# +args:--build-url http://21.135.167.180:8888/dailybuild/SONiC-dev-master/cisco/q200/latest/sonic-cisco.bin
++args:--load-image installer
++args:--tc-max-timeout 1200

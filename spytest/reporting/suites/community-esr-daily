@@ -1,0 +1,26 @@
++file:routing/VRF/test_vrf_basic.py
++file:qos/test_cos.py
++file:switching/test_portchannel.py
++file:routing/SRv6/test_esr_srvpn.py
+
+-test:test_ft_cos_cpu_counters
+-test:test_ft_cos_set_copp_rate
+-test:test_ft_cos_bypass_pkt_verify
+-test:test_ft_cos_tc_queue_map
+
+-test:test_ft_portchannel_behavior_with_tagged_traffic
+-test:test_ft_untagged_traffic_on_portchannel
+-test:test_ft_member_state_after_interchanged_the_members_across_portchannels
+-test:test_ft_portchannel_with_vlan_variations
+-test:test_ft_lacp_graceful_restart_with_cold_boot
+-test:test_ft_lacp_graceful_restart_with_save_reload
+
+#+args:--skip-init-config
+#+args:--skip-load-config base
++args:--force-keep-minimize-config
++args:--load-config-method force-reboot
++args:--get-tech-support none
++args:--fetch-core-files none
++args:--build-url http://21.135.167.180:8888/dailybuild/AliNOS-rel-v5.2/latest/sonic-cisco.bin
++args:--load-image installer
++args:--tc-max-timeout 1200

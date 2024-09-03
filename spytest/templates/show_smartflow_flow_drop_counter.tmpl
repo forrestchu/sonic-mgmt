@@ -1,0 +1,18 @@
+Value SrcIP (\[\]|\S+)
+Value DstIP (\[\]|\S+)
+Value Protocol (\S+)
+Value SrcPort (\[\]|\d+)
+Value DstPort (\[\]|\d+)
+Value DSCP (\S+)
+Value InPort (Ethernet\S+)
+Value InnerSrcIP (\S+)
+Value InnerDstIP (\S+)
+Value InnerProtocol (\S+)
+Value InnerSrcPort (\[\]|\d+)
+Value InnerDstPort (\[\]|\d+)
+Value InnerDSCP (\S+)
+
+Start
+  ^\s*\d+\s+Underlay\s+.*$$ -> Continue.Record
+  ^\s*\d+\s+Underlay\s+${SrcIP}\s+${DstIP}\s+${Protocol}\s+${SrcPort}\s+${DstPort}\s+${DSCP}\s+.*${InPort}.*$$
+  ^\s+Overlay\s+${InnerSrcIP}\s+${InnerDstIP}\s+${InnerProtocol}\s+${InnerSrcPort}\s+${InnerDstPort}\s+${InnerDSCP}.*$$

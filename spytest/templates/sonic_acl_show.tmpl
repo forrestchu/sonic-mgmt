@@ -1,0 +1,14 @@
+Value TableName (\S+)
+Value RuleName (\S+)
+Value Match (\S+)
+Value Match_val (\S+)
+Value PacketsCnt (\d+|N/A)
+Value BytesCnt (\d+|N/A)
+
+
+Start
+  ^\s*TABLE NAME\s+RULE NAME\s+RULE MATCH\s+PACKETS COUNT\s+BYTES COUNT
+  ^(-+\s*)*$$
+  ^\s*${TableName}\s+${RuleName}\s+${Match}\s+${Match_val}\s+${PacketsCnt}\s+${BytesCnt}\s*$$ -> Record
+  ^\s*${TableName}\s+${RuleName}\s+${Match}\s+${PacketsCnt}\s+${BytesCnt}\s*$$ -> Record
+

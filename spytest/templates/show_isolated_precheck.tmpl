@@ -1,0 +1,15 @@
+Value Filldown precheck (\S+)
+Value Filldown forbiddenNeighors (\S*)
+Value vrf (\S+)
+Value addressFamily (\S+)
+Value neighbor (\S+)
+Value outRouteMap (\S+)
+Value isolateOutRouteMap (\S+)
+
+
+Start
+  ^\s*\[Precheck\]\:${precheck}$$
+  ^(-+\s*)*$$
+  ^\s*${vrf}\s+${addressFamily}\s+${neighbor}\s+${outRouteMap}\s+${isolateOutRouteMap}\s*$$ -> Record
+
+EOF

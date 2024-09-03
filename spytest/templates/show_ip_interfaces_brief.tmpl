@@ -1,0 +1,18 @@
+Value Filldown Interface (\S+)
+Value Filldown State (\S+)
+Value IP (\S+)
+Value MTU (\d+)
+Value MAC (\S+)
+Value Vrf (\S+)
+
+Start
+  ^(-+\s*)*$$ -> Brief
+
+
+Brief
+  ^\s*${Interface}\s+${State}\s+${IP}\s+${MTU}\s+${MAC}\s+${Vrf} -> Record
+  ^\s*${Interface}\s+${State}\s+${IP}\s+${MTU}\s+${MAC} -> Record
+  ^\s+${IP}\s+${MTU}\s+${MAC}\s+${Vrf}$$ -> Record
+  ^\s+${IP}\s+${MTU}\s+${MAC} -> Record
+
+

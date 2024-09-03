@@ -1,0 +1,38 @@
+Value Filldown BGP_VERSION (\d+)
+Value Filldown ROUTER_ID (\d+\.\d+\.\d+\.\d+)
+Value Filldown RD (\d+\:\d+|\d+\.\d+\.\d+\.\d+)
+Value Filldown STATUS_CODE (\S+[i|e|>])
+Value METRIC (\s|\d)
+Value WEIGHT (\d+|\s{1,4}\d+)
+Value Filldown PATH ([\d+\s]+|\s{0})
+Value ORIGIN_CODE (i|e|\?)
+Value Filldown VRF_ID (\d+)
+Value Filldown IP_ADDRESS (\d+\.\d+\.\d+\.\d+/\d+)
+Value Filldown IPV6_ADDRESS (^([0-9a-fA-F]{1,4}:){7,7}([0-9a-fA-F]{1,4}|:)|([0-9a-fA-F]{1,4}:){1,6}(:[0-9a-fA-F]{1,4}|:)|([0-9a-fA-F]{1,4}:){1,5}((:[0-9a-fA-F]{1,4}){1,2}|:)|([0-9a-fA-F]{1,4}:){1,4}((:[0-9a-fA-F]{1,4}){1,3}|:)|([0-9a-fA-F]{1,4}:){1,3}((:[0-9a-fA-F]{1,4}){1,4}|:)|([0-9a-fA-F]{1,4}:){1,2}((:[0-9a-fA-F]{1,4}){1,5}|:)|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6}|:)|:((:[0-9a-fA-F]{1,4}){1,7}|:))(\/[0-9]{1,3})
+Value Filldown NEXT_HOP_V4 (\d+\.\d+\.\d+\.\d+@\d+<)
+Value Filldown NEXT_HOP_V6 (^([0-9a-fA-F]{1,4}:){7,7}([0-9a-fA-F]{1,4}|:)|([0-9a-fA-F]{1,4}:){1,6}(:[0-9a-fA-F]{1,4}|:)|([0-9a-fA-F]{1,4}:){1,5}((:[0-9a-fA-F]{1,4}){1,2}|:)|([0-9a-fA-F]{1,4}:){1,4}((:[0-9a-fA-F]{1,4}){1,3}|:)|([0-9a-fA-F]{1,4}:){1,3}((:[0-9a-fA-F]{1,4}){1,4}|:)|([0-9a-fA-F]{1,4}:){1,2}((:[0-9a-fA-F]{1,4}){1,5}|:)|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6}|:)|:((:[0-9a-fA-F]{1,4}){1,7}|:))
+Value Filldown UN (\S+)
+Value Filldown EC (\S+)
+Value Filldown LABEL (\d+)
+Value Filldown SID (\S+)
+Value Filldown SID_STRUCTURE (\S+)
+Value Filldown TYPE (\S+)
+Value Filldown SUBTYPE (\d+)
+
+Start
+  ^\s*BGP table version is ${BGP_VERSION},\s*local router ID is ${ROUTER_ID},\s*vrf id ${VRF_ID}\s*$$
+  ^\s*Route Distinguisher:\s${RD}\s*$$ -> Bgp_route
+
+Bgp_route  
+  ^\s*${STATUS_CODE}\s*${IP_ADDRESS}\s*${NEXT_HOP_V4}\s*${METRIC}\s*${WEIGHT}\s${PATH}\s{0,1}${ORIGIN_CODE}\s*$$ -> Continue
+  ^\s*UN=${UN}\s*EC${EC}\s*label=${LABEL}\s*sid=${SID}\s*sid_structure=${SID_STRUCTURE}\s*type=${TYPE},\ssubtype=${SUBTYPE} -> Record
+  ^\s*${STATUS_CODE}\s*${IP_ADDRESS}\s*${NEXT_HOP_V6}\s*${METRIC}\s*${WEIGHT}\s${PATH}\s{0,1}${ORIGIN_CODE}\s*$$ -> Continue
+  ^\s*UN=${UN}\s*EC${EC}\s*label=${LABEL}\s*sid=${SID}\s*sid_structure=${SID_STRUCTURE}\s*type=${TYPE},\ssubtype=${SUBTYPE} -> Record
+  ^\s*${STATUS_CODE}\s*${IPV6_ADDRESS}\s*${NEXT_HOP_V6}\s*${METRIC}\s*${WEIGHT}\s${PATH}\s{0,1}${ORIGIN_CODE}\s*$$ -> Continue
+  ^\s*UN=${UN}\s*EC${EC}\s*label=${LABEL}\s*sid=${SID}\s*sid_structure=${SID_STRUCTURE}\s*type=${TYPE},\ssubtype=${SUBTYPE} -> Record
+  ^\s*${STATUS_CODE}\s*${IP_ADDRESS}\s*${NEXT_HOP_V6}\s*$$ -> Continue
+  ^\s*${STATUS_CODE}\s*${IPV6_ADDRESS}\s*${NEXT_HOP_V6}\s*$$ -> Continue
+  ^\s*${METRIC}\s+${WEIGHT}\s*${PATH}\s{0,1}${ORIGIN_CODE}\s*$$ -> Continue
+  ^\s*UN=${UN}\s*EC${EC}\s*label=${LABEL}\s*sid=${SID}\s*sid_structure=${SID_STRUCTURE}\s*type=${TYPE},\ssubtype=${SUBTYPE} -> Record
+
+EOF

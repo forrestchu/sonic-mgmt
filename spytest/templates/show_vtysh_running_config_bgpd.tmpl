@@ -1,0 +1,22 @@
+##################################################################
+#Command: show running-config bgpd
+#Author: wumu.zsl@alibaba-inc.com
+##################################################################
+Value COMMUNITY_NAME_NUM (\d+)
+Value COMMUNITY_NAME_EXP (\w+)
+Value COMMUNITY_NAME_STD (\w+)
+Value ACCESS_LIST_NAME (\w+)
+Value PARAM_TYPE (\w+)
+Value PARAM_VAL (.*)
+
+Start
+  ^bgp\s+community-list\s+standard\s+${COMMUNITY_NAME_STD}\s+seq\s+\d+\s+${PARAM_TYPE}\s+${PARAM_VAL}$$ -> Record
+  ^bgp\s+community-list\s+expanded\s+${COMMUNITY_NAME_EXP}\s+seq\s+\d+\s+${PARAM_TYPE}\s+${PARAM_VAL}$$ -> Record
+  ^bgp\s+community-list\s+${COMMUNITY_NAME_NUM}\s+seq\s+\d+\s+${PARAM_TYPE}\s+${PARAM_VAL}$$ -> Record
+  ^bgp\s+as-path\s+access-list\s+${ACCESS_LIST_NAME}\s+seq\s+\d+\s+${PARAM_TYPE}\s+${PARAM_VAL}$$ -> Record
+  ^bgp\s+community-list\s+standard\s+${COMMUNITY_NAME_STD}\s+${PARAM_TYPE}\s+${PARAM_VAL}$$ -> Record
+  ^bgp\s+community-list\s+expanded\s+${COMMUNITY_NAME_EXP}\s+${PARAM_TYPE}\s+${PARAM_VAL}$$ -> Record
+  ^bgp\s+community-list\s+${COMMUNITY_NAME_NUM}\s+${PARAM_TYPE}\s+${PARAM_VAL}$$ -> Record
+  ^bgp\s+as-path\s+access-list\s+${ACCESS_LIST_NAME}\s+${PARAM_TYPE}\s+${PARAM_VAL}$$ -> Record
+
+EOF

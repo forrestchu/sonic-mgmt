@@ -1,0 +1,67 @@
++file:qos/test_cos.py
++file:sanity/test_sanity_l3.py
++file:routing/test_arp.py
++file:routing/test_route_miscellaneous.py
++file:routing/test_l3_performance.py
++file:routing/BGP/test_bgp.py
++file:routing/VRF/test_vrf_basic.py
++file:routing/VRF/test_vrf.py
++file:routing/test_bfd.py
++file:qos/acl/test_acls_l3_forwarding.py
++file:qos/acl/test_acls.py
++file:system/test_interface.py
++file:system/test_lldp.py
++file:switching/test_portchannel.py
++file:routing/VRF/test_mgmt_vrf.py
++file:routing/MC_SCALE/test_mc_scale.py
++file:routing/BGP/cli/test_bgp_cli.py
++file:routing/BGP/cli/test_route_map_cli.py
++file:routing/test_ip.py
++file:routing/BGP/bmp/test_bmp.py
++file:macsec/test_macsec_conf.py
++file:macsec/test_macsec_data.py
++file:macsec/test_macsec_reboot.py
+
+# test cases requiring link state propagation
+-test:test_ft_cos_tc_queue_map
+-test:TestBGPRif.test_ft_bgp_rmap_out
+-test:test_ft_lldp_docker_restart
+-test:test_ft_portchannel_behavior_with_tagged_traffic
+-test:test_ft_untagged_traffic_on_portchannel
+-test:test_ft_member_state_after_interchanged_the_members_across_portchannels
+-test:test_ft_portchannel_with_vlan_variations
+-test:test_ft_lacp_graceful_restart_with_cold_boot
+-test:test_ft_lacp_graceful_restart_with_save_reload
+-test:test_ft_verify_interfaces_order
+-test:test_cli_routemap_set_extcommunity_bandwidth
+-test:test_cli_routemap_set_extcommunity_color
+-test:test_cli_routemap_set_extcommunity_rt
+-test:test_cli_routemap_set_extcommunity_soo
+-test:test_cli_routemap_match_local_preference
+-test:test_cli_routemap_match_extcommunity
+-test:test_cli_bgp_distance
+-test:test_cli_bgp_redistribute_vrf
+-test:test_cli_bgp_advertise_track_route
+-test:test_cli_bgp_advertise_delay
+-test:test_cli_bgp_redistribute
+-test:test_cli_network_non_connected
+-test:test_cli_route_map_vpn
+-test:test_cli_bgp_route_map_delay
+-test:test_cli_bgp_bestpath_aspath
+-test:test_cli_bgp_extcommunity_list
+-test:test_cli_bgp_network_import_check
+-test:test_cli_bgp_reflector_client
+-test:test_cli_bgp_maximum_paths
+-test:test_cli_ip_nht_bgp_route_map
+-test:test_ft_acl_pbr_setvrf_ipv4_l3_forwarding
+-test:test_ft_acl_pbr_setvrf_ipv6_l3_forwarding
+
+#+args:--skip-init-config
+#+args:--skip-load-config base
++args:--force-keep-minimize-config
++args:--load-config-method force-reboot
++args:--get-tech-support none
++args:--fetch-core-files none
++args:--build-url http://21.135.167.180:8888/dailybuild/SONiC-dev-master-mc/latest/sonic-cisco.bin
++args:--load-image installer
++args:--tc-max-timeout 1200

@@ -1,0 +1,12 @@
+Value COPP (\S+)
+Value QUEUE (\S+)
+Value CIR (\S+)
+Value ACCEPT (\S+)
+Value DROP (\d+)
+
+Start
+ ^\s*Copp\s+Queue\s+CIR(pps)\s+Accept\s+Drop
+ ^(-+\s*)*$$
+ ^\s*${COPP}\s+${QUEUE}\s+${CIR}\s+${ACCEPT}\s+${DROP} -> Record
+
+EOF

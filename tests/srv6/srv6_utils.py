@@ -4,6 +4,7 @@ from tests.common.helpers.assertions import pytest_assert
 
 logger = logging.getLogger(__name__)
 
+
 #
 # Helper func for print a set of lines
 #

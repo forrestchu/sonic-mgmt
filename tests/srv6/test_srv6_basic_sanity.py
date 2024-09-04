@@ -24,6 +24,7 @@ test_vm_names = ["PE1", "PE2", "PE3", "P2", "P3", "P4"]
 # The number of routes published by each CE
 num_ce_routes = 10
 
+
 #
 # Initialize the testbed
 #

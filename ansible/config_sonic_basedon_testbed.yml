@@ -583,7 +583,7 @@
       - name: execute cli "config load_minigraph -y" to apply new minigraph
         become: true
         shell: config load_minigraph -y
-        when: 
+        when:
         - "'no such option: --override_config' in load_minigraph_result.stderr"
         - dut_cfg_file_loc is not defined
 

@@ -43,10 +43,10 @@ The main scopes for this document include the following information
 2. Install TRex in 7-node PTF testbed
    1. testbed enhancements
    2. install TRex
+   3. How we use TRex
 3. The Traffic test based on TRex
-   1. Basic Sanity
-   2. SRv6 VPN
-   3. SRv6 Policy
+   1. SRv6 VPN
+   2. SRv6 Policy
 
 
 ## Why we need TRex
@@ -94,7 +94,7 @@ return STLPktBuilder(pkt = pkt_base/pkt_pyld, vm  = vm)
 - 3 ways to use TRex:
 
 <figure align=center>
-    <img src="https://trex-tgn.cisco.com/trex/doc/images/trex_architecture_01.png" width="800" height="330">
+    <img src="images/srv6_7node_trex_arch.png" width="800" height="330">
     <figcaption>Figure 1. 1-Trex introduction <figcaption>
 </figure> 
 
@@ -371,7 +371,7 @@ Configure multiple candidate-paths for one policy, and run traffic from PE3 to P
 - packet encapsulation check: from PE3 to P4, is IPinIPv6SRH packet with correct vpn sid and Low-prio cpath sids
 - packet encapsulation check: from P1/P3 to PE1/PE2, is IPinIPv6 packet with vpn correct vpn sid
   
-1. Configure multiple candidate-paths with identical preference (P2 and P4) and enable S-BFD, Run TRex stream for 10s, verify that traffic behaves as expected (ECMP over candidate-paths).
+2. Configure multiple candidate-paths with identical preference (P2 and P4) and enable S-BFD, Run TRex stream for 10s, verify that traffic behaves as expected (ECMP over candidate-paths).
 - no packet loss: check {"ptf_tot_rx": 10000, "ptf_tot_tx": 10000}
 - traffic ecmp from ingress PE to P: check {'PE3_tx_to_P2': 5000, 'PE3_tx_to_P4': 5000}
 - traffic ecmp from egress P to PE: check {'P1_tx_to_PE1': 2500, 'P1_tx_to_PE2': 2500, 'P3_tx_to_PE1': 2500, 'P3_tx_to_PE2': 2500}

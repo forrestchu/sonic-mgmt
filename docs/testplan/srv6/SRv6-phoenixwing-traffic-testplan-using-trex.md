@@ -11,12 +11,12 @@
 - [Overview](#overview)
   - [Scopes](#scopes)
 - [Why we need TRex](#why-we-need-trex)
-- [Install trex in 7-node PTF testbed](#install-trex-in-7-node-ptf-testbed)
+- [Install TRex in 7-node PTF testbed](#install-trex-in-7-node-ptf-testbed)
     - [7-node PTF Testbed](#7-node-ptf-testbed)
-    - [Use ovs links](#use-ovs-links)
-    - [Install trex](#install-trex)
-    - [trex agent](#trex-agent)
-    - [trex tcp port NAT for GUI](#trex-tcp-port-nat-for-gui)
+    - [Use OVS links](#use-ovs-links)
+    - [Install TRex](#install-trex)
+    - [TRex agent](#trex-agent)
+    - [TRex tcp port NAT for GUI](#trex-tcp-port-nat-for-gui)
   - [new functions based on TRex](#new-functions-based-on-trex)
     - [how to run Trex traffic](#how-to-run-trex-traffic)
     - [how to check packet encapsulation](#how-to-check-packet-encapsulation)
@@ -52,8 +52,8 @@ The main scopes for this document include the following information
 ## Why we need TRex
 TRex is a fast realistic open source traffic generation tool based on DPDK,  which is initialy designed for DPDK supported NICs to get a maximum performance. Also, TRex can run on a hypervisor with virtual NICs (with reduced performance).
 - advantages of TRex compared to PTF
-  
-  Use scapy to build packet templates, can rewrite any specified changed parts
+
+1) Use scapy to build packet templates, can rewrite any specified changed parts
 
 ```
 src = {'start': "0.0.0.1", 'end': "255.255.255.254"}
@@ -67,9 +67,9 @@ vm = [ STLVmFlowVar(name="src",min_value=src['start'],max_value=src['end'],size=
 return STLPktBuilder(pkt = pkt_base/pkt_pyld, vm  = vm)
 ```
 
-  Use dpdk to send packets
+2) Use dpdk to send packets
 
-  Traffic statistics on all ports
+3) Traffic statistics on all ports
 
 ```
   #stats example on a port
@@ -98,21 +98,21 @@ return STLPktBuilder(pkt = pkt_base/pkt_pyld, vm  = vm)
     <figcaption>Figure 1. 1-Trex introduction <figcaption>
 </figure> 
 
-## Install trex in 7-node PTF testbed
+## Install TRex in 7-node PTF testbed
 
 #### 7-node PTF Testbed
 
 In the previous 7-node PTF Testbed, three vSONiC instatnces are used as PE (Provider Edge) devices. They are connected with PTF via Ethernet24 from each node. These ports are VRF ports, a.k.a customer facing ports. The remaining four vSONiC instances are used as P (Provider) devices. They form a v6 only fabric which is used to connect PE devices. 
 
-We will make some enchancements to the 7-node PTF testbed to make TRex work properly.
+We will apply some changes to this 7-node PTF testbed to make TRex work properly.
 
 <figure align=center>
     <img src="images/srv6_7node_trex_testbed.png" >
     <figcaption>Figure 2. 1- trex Testbed <figcaption>
 </figure> 
 
-#### Use ovs links
-To observe the traffics on all paths, we replace all the device connections in the testbed with OVS links. This allows us to get traffic copis for all links into PTF, and Trex can calculate the traffic on each link.
+#### Use OVS links
+To observe the traffics on all paths, we replace all the device connections in the testbed with OVS links. This allows us to get a traffic copy for each link in PTF, and Trex can calculate the traffic on each link.
 
 ```
   OVS_LINKs:
@@ -135,7 +135,7 @@ To observe the traffics on all paths, we replace all the device connections in t
     ...
 ```
 
-#### Install trex
+#### Install TRex
 
 TRex will be installed in ptf docker, and works in stateless mode. "Stateless" mode is meant to test networking gear that does not manage any state per flow (instead operating on a per packet basis). This is usually done by injecting customized packet streams to the device under test.
 
@@ -176,7 +176,7 @@ cat /etc/trex_cfg.yaml
             src_mac    : 'c2:68:6a:7b:c2:28'
 ```
 
-trex daemon:
+TRex daemon:
 
 ```
 root@aa04c8ee2253:~# ps -ef | grep t-rex
@@ -184,13 +184,13 @@ root         905       1  0 Oct15 ?        00:00:00 /bin/bash /var/log/v2.87/t-r
 root         955     905 99 Oct15 ?        20:43:32 ./_t-rex-64 -i --stl
 ```
 
-#### trex agent
+#### TRex agent
 
-When integrating the trex api into pytest test cases, we encountered a scapy library conflicting issue, as shown in the figure below.
+When integrating the TRex api into pytest test cases, we encountered a scapy library conflicting issue, as shown in the figure below.
 
 The standard scapy library in sonic-mgmt conflicts with the customized version of the scapy library that comes with TRex, We cannot load both in a same process. 
 
-To resolve this issue, we introduced trex_agent. trex_agent is a standalone process which communicates directly with trex to implement traffic generation and return statistical results. Pytest cases connect to trex_agent via a socket, send requests to it and wait for the result.
+To resolve this issue, we introduced trex_agent. trex_agent is a standalone process which communicates directly with TRex to implement traffic generation and return statistical results. Pytest cases connect to trex_agent via a socket, send requests to it and wait for the result.
 
 <figure align=center>
     <img src="images/srv6_7node_trex_agent.png" >
@@ -198,8 +198,8 @@ To resolve this issue, we introduced trex_agent. trex_agent is a standalone proc
 </figure> 
 
 
-#### trex tcp port NAT for GUI 
-When designing test cases or troubleshooting issues, we usually need to connect to the testbed through the trex GUI directly, for example to do some manually traffic testing. Trex runs on the following three TCP ports, and we need to configure the port mapping on pytest_vm to make this work. This is done by figuring the NAT ports during topo construction.
+#### TRex tcp port NAT for GUI 
+When designing test cases or troubleshooting issues, we usually need to connect to the testbed through the TRex GUI directly, for example to do some manually traffic testing. Trex runs on the following three TCP ports, and we need to configure the port mapping on pytest_vm to make this work. This is done by figuring the NAT ports during topo construction.
 
 
 ```
@@ -233,7 +233,7 @@ cat ansible/roles/vm_set/tasks/add_topo.yml
     become: yes
 ```
 
-trex GUI example:
+TRex GUI example:
 
 <figure align=center>
     <img src="images/srv6_7node_trex_gui.png" >
@@ -246,7 +246,7 @@ trex GUI example:
 
 To simplify the traffic generation process, We encapsulated the TRex functions in a more simple way, two types of APIs are provided for test cases:
 
-- trex sync mode: 
+- TRex sync mode: 
   
   run trex with a fixed duration, will block and wait for the result. (traffic is fixed to 1K/pps.)
 
@@ -255,7 +255,7 @@ To simplify the traffic generation process, We encapsulated the TRex functions i
    #result example {'ptf_tot_tx': 10000, 'ptf_tot_rx': 10000, 'P1_tx_to_PE2': 2500, 'P1_tx_to_PE1': 2500, 'P3_tx_to_PE2': 2500, 'P3_tx_to_PE1': 2500, 'PE3_tx_to_P2': 5000, 'PE3_tx_to_P4': 5000, ...}
 ```
 
-- trex async mode
+- TRex async mode
   mainly used in convergence test scenarios. start trex and stop trex at your choice, stop will return the result. (traffic is fixed to 1K/pps.)
 
 ```
@@ -267,8 +267,10 @@ To simplify the traffic generation process, We encapsulated the TRex functions i
 
 
 #### how to check packet encapsulation
-PTF provides a complete set of packet inspection capabilities. Packet sent by Trex, is transmitted in topo links, and can all be captured by the PTF framework. We will reuse PTF's packet verification capabilities to check packet encapsulation, However we can do some simple encapsulation on the ptf functions, to make them more easy-to-use for check SRv6 traffic.
- to check if the received IP packets in the topo, IPinIPv6P packets (VPN scenario), and IPinIPv6withSRH (TE scenario) packets meet expectations.
+PTF provides a complete set of packet inspection capabilities. Packet sent by Trex, is transmitted in topo links, and can all be captured by the PTF framework. We will reuse PTF's packet verification capabilities to check packet encapsulation, However we can do some simple encapsulation on the ptf functions, to make them more easy-to-use for SRv6 traffic. 
+
+3 APIs are provided to:
+ 1) check raw IP(v6) packet, 2) check IP(v6)inIPv6 packet (VPN case), 3) IP(v6)inIPv6withSRH packet (TE case).
 
 ```
 ptf_port_for_backplane = 18
